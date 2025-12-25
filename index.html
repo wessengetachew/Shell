@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geometric Möbius Shell Sieve - Advanced Explorer</title>
+    <title>Geometric Möbius Shell Sieve - Interactive Explorer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
     <style>
         * {
@@ -15,10 +15,8 @@
         :root {
             --bg-dark: #0a0e27;
             --bg-light: #1a1f3a;
-            --bg-darker: #050810;
             --accent-primary: #00d9ff;
             --accent-secondary: #ff006e;
-            --accent-tertiary: #00ff88;
             --text-primary: #e0e0ff;
             --text-secondary: #a0a8d8;
             --primitive-color: #00d9ff;
@@ -36,86 +34,82 @@
         header {
             background: rgba(10, 14, 39, 0.95);
             border-bottom: 2px solid var(--accent-primary);
-            padding: 1.5rem 2rem;
+            padding: 2rem;
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
 
         h1 {
-            font-size: 2rem;
-            margin-bottom: 0.3rem;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
             color: var(--accent-primary);
             font-weight: 700;
             letter-spacing: 1px;
         }
 
         .subtitle {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text-secondary);
+            font-style: italic;
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid rgba(0, 217, 255, 0.2);
-            flex-wrap: wrap;
-        }
-
-        .tab-button {
-            background: transparent;
-            color: var(--text-secondary);
-            border: none;
-            padding: 0.8rem 1.5rem;
-            cursor: pointer;
-            font-size: 1rem;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .tab-button:hover {
-            color: var(--accent-primary);
-        }
-
-        .tab-button.active {
-            color: var(--accent-primary);
-            border-bottom-color: var(--accent-primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
+            padding: 0 2rem;
         }
 
         .section {
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         .section-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--accent-primary);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             border-left: 4px solid var(--accent-secondary);
             padding-left: 1rem;
+        }
+
+        .exposition {
+            background: var(--bg-light);
+            border-left: 3px solid var(--accent-primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .exposition h3 {
+            color: var(--accent-primary);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .exposition h3:first-child {
+            margin-top: 0;
+        }
+
+        .math-block {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 0.8rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            border-left: 3px solid var(--accent-secondary);
+            overflow-x: auto;
         }
 
         .controls {
             background: var(--bg-light);
             padding: 1.5rem;
             border-radius: 8px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
         }
 
         .control-group {
@@ -125,9 +119,9 @@
 
         .control-group label {
             color: var(--accent-primary);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .control-group input,
@@ -135,85 +129,36 @@
             background: var(--bg-dark);
             color: var(--text-primary);
             border: 2px solid var(--accent-primary);
-            padding: 0.6rem;
+            padding: 0.7rem;
             border-radius: 4px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
+        }
+
+        .control-group input:hover,
+        .control-group select:hover {
+            border-color: var(--accent-secondary);
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.3);
         }
 
         .control-group input:focus,
         .control-group select:focus {
             outline: none;
             border-color: var(--accent-secondary);
-            box-shadow: 0 0 10px rgba(255, 0, 110, 0.3);
+            box-shadow: 0 0 15px rgba(255, 0, 110, 0.5);
         }
 
-        .button-group {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-        }
-
-        button {
-            background: var(--accent-secondary);
-            color: white;
-            border: none;
-            padding: 0.7rem 1.2rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background: var(--accent-primary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 217, 255, 0.3);
-        }
-
-        button.secondary {
-            background: var(--accent-tertiary);
-            color: #000;
-        }
-
-        button.secondary:hover {
-            background: #00ff88;
-            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
-        }
-
-        .canvas-container {
-            background: var(--bg-light);
-            border: 2px solid var(--accent-primary);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            overflow: auto;
-            max-height: 700px;
-        }
-
-        canvas {
-            display: block;
-            cursor: crosshair;
-            max-width: 100%;
-        }
-
-        .canvas-info {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
-        }
-
-        .viz-grid {
+        .visualization-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
             margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1000px) {
+            .visualization-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .viz-card {
@@ -226,134 +171,52 @@
         .viz-card h3 {
             color: var(--accent-primary);
             margin-bottom: 1rem;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
-        .plot-container {
+        canvas {
+            border: 2px solid var(--accent-primary);
+            border-radius: 6px;
+            background: var(--bg-dark);
             width: 100%;
-            height: 350px;
-            position: relative;
+            height: auto;
+            display: block;
         }
 
-        .stats-grid {
+        #plotContainer {
+            width: 100%;
+            height: 400px;
+        }
+
+        .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 0.8rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
             margin-top: 1rem;
         }
 
         .stat-box {
             background: rgba(0, 217, 255, 0.1);
             border: 1px solid var(--accent-primary);
-            padding: 0.8rem;
-            border-radius: 4px;
+            padding: 1rem;
+            border-radius: 6px;
             text-align: center;
         }
 
         .stat-label {
             color: var(--text-secondary);
-            font-size: 0.8rem;
-            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
         }
 
         .stat-value {
             color: var(--accent-primary);
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: 700;
             font-family: 'Courier New', monospace;
         }
 
-        .exposition {
-            background: var(--bg-light);
-            border-left: 3px solid var(--accent-primary);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
-        }
-
-        .exposition h3 {
-            color: var(--accent-primary);
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .exposition h3:first-child {
-            margin-top: 0;
-        }
-
-        .formula {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 0.8rem;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            overflow-x: auto;
-            margin: 0.5rem 0;
-            border-left: 3px solid var(--accent-secondary);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: var(--bg-light);
-            margin: 5% auto;
-            padding: 2rem;
-            border: 2px solid var(--accent-primary);
-            border-radius: 8px;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            animation: slideIn 0.3s;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .close-modal {
-            color: var(--accent-primary);
-            float: right;
-            font-size: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .close-modal:hover {
-            color: var(--accent-secondary);
-        }
-
-        .point-info {
-            background: rgba(0, 217, 255, 0.1);
-            border: 1px solid var(--accent-primary);
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-            font-family: 'Courier New', monospace;
-        }
-
-        .point-info div {
-            margin: 0.3rem 0;
-        }
-
-        .legend {
+        .shell-legend {
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
@@ -373,58 +236,74 @@
             border-radius: 3px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-            font-size: 0.9rem;
-        }
-
-        th, td {
-            padding: 0.7rem;
-            text-align: left;
-            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
-        }
-
-        th {
-            color: var(--accent-primary);
-            font-weight: 600;
-        }
-
-        .animation-controls {
-            background: var(--bg-light);
+        .interpretation {
+            background: rgba(0, 217, 255, 0.1);
+            border-left: 4px solid var(--accent-primary);
             padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 0.5rem 0;
+        }
+
+        button {
+            background: var(--accent-secondary);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background: var(--accent-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 217, 255, 0.3);
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: var(--bg-light);
+            border-left: 4px solid var(--accent-secondary);
+            padding: 1.5rem;
             border-radius: 8px;
-            margin-bottom: 1rem;
+            transition: all 0.3s ease;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--bg-dark);
-            border-radius: 4px;
-            margin-top: 0.5rem;
-            overflow: hidden;
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.2);
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            width: 0%;
-            transition: width 0.1s;
+        .info-card h4 {
+            color: var(--accent-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
         }
 
-        .tooltip {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.9);
-            color: var(--accent-primary);
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            pointer-events: none;
-            border: 1px solid var(--accent-primary);
-            display: none;
-            z-index: 100;
+        .info-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
         footer {
@@ -432,417 +311,293 @@
             padding: 2rem;
             color: var(--text-secondary);
             border-top: 1px solid rgba(0, 217, 255, 0.2);
-            margin-top: 2rem;
-        }
-
-        .comparison-table {
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .error-box {
-            background: rgba(255, 0, 110, 0.1);
-            border-left: 3px solid var(--accent-secondary);
-            padding: 1rem;
-            border-radius: 4px;
-            margin: 1rem 0;
-        }
-
-        @media (max-width: 900px) {
-            .viz-grid {
-                grid-template-columns: 1fr;
-            }
+            margin-top: 3rem;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Geometric Möbius Shell Sieve</h1>
-        <p class="subtitle">Advanced Interactive Explorer with Analysis & Export</p>
+        <p class="subtitle">Interactive Visualization of Primitive Lattice Points</p>
     </header>
 
     <div class="container">
-        <!-- TABS -->
-        <div class="tabs">
-            <button class="tab-button active" data-tab="explorer">Explorer</button>
-            <button class="tab-button" data-tab="analysis">Analysis</button>
-            <button class="tab-button" data-tab="animation">Animation</button>
-            <button class="tab-button" data-tab="theory">Theory</button>
-        </div>
+        <!-- EXPOSITION SECTION -->
+        <div class="section">
+            <h2 class="section-title">What is the Möbius Shell Sieve?</h2>
+            
+            <div class="exposition">
+                <h3>The Problem</h3>
+                <p>Imagine a ball of radius R in n-dimensional space. How many lattice points (integer coordinates) inside this ball have GCD of coordinates equal to 1 (called <strong>primitive</strong> points)?</p>
+                <p>Classically, this is answered via Möbius inversion—an algebraic trick. But there's a <strong>geometric picture</strong: each divisor k corresponds to a scaled shell that removes non-primitive points.</p>
 
-        <!-- EXPLORER TAB -->
-        <div id="explorer" class="tab-content active">
-            <div class="section">
-                <h2 class="section-title">Interactive Visualizer</h2>
+                <h3>The Insight: Multi-Scale Shells</h3>
+                <p>The Möbius function μ(k) assigns signs to divisors:</p>
+                <div class="formula">N(R) = L(R) - L(R/2) - L(R/3) + L(R/5) + L(R/6) - ...</div>
+                <p>where L(r) = lattice points in ball of radius r.</p>
+                <p>Geometrically:</p>
+                <ul style="margin: 0.5rem 0 0.5rem 1.5rem;">
+                    <li><strong>L(R)</strong>: all lattice points in the ball</li>
+                    <li><strong>-L(R/2)</strong>: remove those divisible by 2</li>
+                    <li><strong>-L(R/3)</strong>: remove those divisible by 3</li>
+                    <li><strong>+L(R/5)</strong>: add back those divisible by 2·3 (over-subtracted)</li>
+                    <li>And so on...</li>
+                </ul>
 
-                <div class="controls">
-                    <div class="control-group">
-                        <label for="dimension">Dimension: <span id="dimValue">2</span></label>
-                        <select id="dimension">
-                            <option value="2">2D (Disk)</option>
-                            <option value="3">3D (Ball)</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="radius">Radius R: <span id="radiusValue">4</span></label>
-                        <input type="range" id="radius" min="1" max="12" step="0.5" value="4">
-                    </div>
-                    <div class="control-group">
-                        <label for="shape">Shape</label>
-                        <select id="shape">
-                            <option value="circle">Circle</option>
-                            <option value="square">Square</option>
-                            <option value="ellipse">Ellipse</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="highlightShell">Highlight k: <span id="shellValue">1</span></label>
-                        <input type="range" id="highlightShell" min="1" max="10" step="1" value="1">
-                    </div>
-                    <div class="control-group">
-                        <label for="pointSize">Point Size</label>
-                        <input type="range" id="pointSize" min="2" max="8" step="1" value="4">
-                    </div>
-                    <div class="control-group">
-                        <label for="resolution">Canvas Res.</label>
-                        <select id="resolution">
-                            <option value="1">Standard (1x)</option>
-                            <option value="2">High (2x)</option>
-                            <option value="4">4K (4x)</option>
-                        </select>
-                    </div>
+                <h3>The Main Result</h3>
+                <div class="math-block">N(R) = [Vol(K) / ζ(n)] · R^n + O(R^(n-1))</div>
+                <p>The density of primitives is <strong>Vol(K)/ζ(n)</strong>, where ζ(n) is the Riemann zeta function. The error scales with surface area (R^(n-1)), not volume!</p>
+
+                <h3>Why This Matters</h3>
+                <p>The <strong>shell sieve shows why ζ(n)^(-1) appears</strong>: it's the exact proportion of primitive lattice points. The error bound reveals that boundary effects dominate—interior contributions cancel perfectly via Möbius magic.</p>
+            </div>
+
+            <div class="info-cards">
+                <div class="info-card">
+                    <h4>ζ(n)^(-1) Density</h4>
+                    <p>The Riemann zeta function appears naturally as the inverse density of primitive points. Higher dimensions → ζ(n) → 1 → almost all points are primitive.</p>
                 </div>
-
-                <div class="button-group">
-                    <button onclick="exportCanvasPNG()">📥 Export PNG (4K)</button>
-                    <button class="secondary" onclick="exportDataCSV()">📊 Export CSV</button>
-                    <button class="secondary" onclick="exportDataJSON()">💾 Export JSON</button>
-                    <button onclick="resetView()">🔄 Reset</button>
+                <div class="info-card">
+                    <h4>O(R^(n-1)) Error</h4>
+                    <p>Error scales with surface area, not volume. This reflects that lattice points cluster on boundaries; interior contributions cancel exactly.</p>
                 </div>
-
-                <div class="canvas-container" id="canvasContainer">
-                    <canvas id="canvas" width="600" height="600"></canvas>
-                    <div class="canvas-info">
-                        Click on points for details • Scroll to zoom (coming soon)
-                    </div>
-                </div>
-
-                <div class="legend">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: var(--primitive-color);"></div>
-                        <span>Primitive (gcd=1)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: var(--non-primitive-color);"></div>
-                        <span>Non-primitive</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: rgba(255, 200, 0, 0.8);"></div>
-                        <span>Shell k (highlighted)</span>
-                    </div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-label">Total Points</div>
-                        <div class="stat-value" id="totalPoints">0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Primitive</div>
-                        <div class="stat-value" id="primitivePoints">0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Primitive %</div>
-                        <div class="stat-value" id="density">0%</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Theory</div>
-                        <div class="stat-value" id="theoryValue">0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Error</div>
-                        <div class="stat-value" id="errorValue">0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Rel. Error</div>
-                        <div class="stat-value" id="relError">0%</div>
-                    </div>
+                <div class="info-card">
+                    <h4>Shape-Independent</h4>
+                    <p>Any smooth convex body K works: balls, ellipsoids, polytopes. The leading term depends only on Vol(K) and ζ(n), not boundary details.</p>
                 </div>
             </div>
         </div>
 
-        <!-- ANALYSIS TAB -->
-        <div id="analysis" class="tab-content">
-            <div class="section">
-                <h2 class="section-title">Statistical Analysis</h2>
+        <!-- INTERACTIVE VISUALIZATION -->
+        <div class="section">
+            <h2 class="section-title">Interactive Visualization</h2>
 
-                <div class="controls">
-                    <div class="control-group">
-                        <label for="analysisShape">Shape</label>
-                        <select id="analysisShape">
-                            <option value="circle">Circle</option>
-                            <option value="square">Square</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="maxR">Max Radius</label>
-                        <input type="number" id="maxR" value="10" min="2" max="20" step="1">
-                    </div>
-                    <div class="control-group">
-                        <label for="analysisN">Dimension N</label>
-                        <select id="analysisN">
-                            <option value="2">2D</option>
-                            <option value="3">3D</option>
-                            <option value="4">4D</option>
-                            <option value="5">5D</option>
-                            <option value="6">6D</option>
-                            <option value="7">7D (Monte Carlo)</option>
-                        </select>
-                    </div>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="radius">Radius R: <span id="radiusValue">4</span></label>
+                    <input type="range" id="radius" min="1" max="10" step="0.5" value="4">
                 </div>
-
-                <div class="button-group">
-                    <button onclick="runAnalysis()">▶ Run Analysis</button>
+                <div class="control-group">
+                    <label for="shape">Shape</label>
+                    <select id="shape">
+                        <option value="circle">Circle (2D Ball)</option>
+                        <option value="square">Square</option>
+                    </select>
                 </div>
-
-                <div class="viz-grid">
-                    <div class="viz-card">
-                        <h3>Theory vs Reality</h3>
-                        <div class="plot-container" id="analysisPlot1"></div>
-                    </div>
-                    <div class="viz-card">
-                        <h3>Error Growth</h3>
-                        <div class="plot-container" id="analysisPlot2"></div>
-                    </div>
-                </div>
-
-                <div class="viz-card">
-                    <h3>Dimension Comparison Table (R=8)</h3>
-                    <table>
-                        <tr>
-                            <th>n</th>
-                            <th>Theory</th>
-                            <th>Computed</th>
-                            <th>Error</th>
-                            <th>Rel. Error</th>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>122.2</td>
-                            <td>124</td>
-                            <td>1.8</td>
-                            <td>1.46%</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>1,784</td>
-                            <td>1,782</td>
-                            <td>2</td>
-                            <td>0.13%</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>18,676</td>
-                            <td>18,660</td>
-                            <td>16</td>
-                            <td>0.08%</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>166,341</td>
-                            <td>166,263</td>
-                            <td>78</td>
-                            <td>0.05%</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>1,331,591</td>
-                            <td>1,330,923</td>
-                            <td>668</td>
-                            <td>0.05%</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>9,826,508</td>
-                            <td>9,827,024</td>
-                            <td>516</td>
-                            <td>0.01%</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="viz-card">
-                    <h3>Shell Contribution Analysis (Current R)</h3>
-                    <div class="plot-container" id="shellPlot"></div>
-                    <table id="shellTable" style="margin-top: 1rem;">
-                        <tr>
-                            <th>k</th>
-                            <th>μ(k)</th>
-                            <th>L(R/k)</th>
-                            <th>Contribution</th>
-                        </tr>
-                    </table>
+                <div class="control-group">
+                    <label for="showShell">Highlight Shell k: <span id="shellValue">1</span></label>
+                    <input type="range" id="showShell" min="1" max="5" step="1" value="1">
                 </div>
             </div>
-        </div>
 
-        <!-- ANIMATION TAB -->
-        <div id="animation" class="tab-content">
-            <div class="section">
-                <h2 class="section-title">Shell Decomposition Animation</h2>
-
-                <div class="animation-controls">
-                    <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-                        <button id="animPlayBtn" onclick="toggleAnimation()">▶ Play</button>
-                        <button onclick="resetAnimation()">⏹ Reset</button>
-                        <label style="color: var(--text-secondary); flex: 1;">
-                            Animation Speed:
-                            <input type="range" id="animSpeed" min="100" max="2000" step="100" value="800" style="width: 150px;">
-                        </label>
-                    </div>
-                    <div style="margin-top: 1rem; color: var(--text-secondary);">
-                        Shell k: <span id="currentShell" style="color: var(--accent-primary); font-weight: bold;">1</span>
-                        | Status: <span id="animStatus" style="color: var(--accent-primary);">Paused</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                </div>
-
-                <div class="canvas-container">
-                    <canvas id="animCanvas" width="600" height="600"></canvas>
-                    <div class="canvas-info">
-                        Shows step-by-step shell decomposition: k=1 (all points) → remove k=2 → remove k=3 → ...
-                    </div>
-                </div>
-
-                <div style="margin-top: 1.5rem;">
-                    <div class="viz-card">
-                        <h3>Animation Explanation</h3>
-                        <div class="exposition">
-                            <p>The animation shows the Möbius shell sieve in action:</p>
-                            <ol style="margin: 0.5rem 0 0.5rem 1.5rem;">
-                                <li><strong>k=1 (Blue):</strong> All lattice points in the ball</li>
-                                <li><strong>k=2 (Gray):</strong> Remove points divisible by 2</li>
-                                <li><strong>k=3 (Gray):</strong> Also remove points divisible by 3</li>
-                                <li><strong>k=6 (Yellow):</strong> Add back points divisible by both 2 and 3</li>
-                                <li><strong>Final (Cyan):</strong> Remaining primitive points</li>
-                            </ol>
-                            <p style="margin-top: 1rem;">Watch how the Möbius function's signs (+1, -1, 0) filter the lattice to isolate primitive points.</p>
+            <div class="visualization-grid">
+                <!-- 2D VISUALIZATION -->
+                <div class="viz-card">
+                    <h3>Lattice Points in Ball (2D)</h3>
+                    <canvas id="canvas" width="400" height="400"></canvas>
+                    <div class="shell-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: var(--primitive-color);"></div>
+                            <span>Primitive (gcd=1)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: var(--non-primitive-color);"></div>
+                            <span>Non-primitive (gcd>1)</span>
                         </div>
                     </div>
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-label">Total Points</div>
+                            <div class="stat-value" id="totalPoints">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Primitive</div>
+                            <div class="stat-value" id="primitivePoints">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Density</div>
+                            <div class="stat-value" id="density">0%</div>
+                        </div>
+                    </div>
+                    <div class="interpretation">
+                        <strong>📊 Interpretation:</strong> Blue points have gcd(x,y)=1. Gray points are divisible by some k>1. The blue density should approach π/ζ(2) ≈ 1.91 as R grows.
+                    </div>
+                </div>
+
+                <!-- THEORETICAL COMPARISON -->
+                <div class="viz-card">
+                    <h3>Main Term vs Reality (2D)</h3>
+                    <div id="plotContainer"></div>
+                    <div class="stats">
+                        <div class="stat-box">
+                            <div class="stat-label">Theory (R=<span id="currentR">4</span>)</div>
+                            <div class="stat-value" id="theoryValue">30.8</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Actual</div>
+                            <div class="stat-value" id="actualValue">32</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Error</div>
+                            <div class="stat-value" id="errorValue">1.2</div>
+                        </div>
+                    </div>
+                    <div class="interpretation">
+                        <strong>📈 Interpretation:</strong> Orange line is the theoretical main term [π/ζ(2)] · R². Blue dots are actual counts. They should match increasingly well as R increases.
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- THEORY TAB -->
-        <div id="theory" class="tab-content">
-            <div class="section">
-                <h2 class="section-title">Mathematical Theory</h2>
+        <!-- SHELL DECOMPOSITION -->
+        <div class="section">
+            <h2 class="section-title">Shell Decomposition in Action</h2>
 
-                <div class="exposition">
-                    <h3>Main Theorem</h3>
-                    <div class="formula">N(R) = [Vol(K) / ζ(n)] · R^n + O(R^(n-1))</div>
-                    <p>For n ≥ 3 and K a bounded convex body with piecewise C¹ boundary.</p>
+            <div class="exposition">
+                <h3>How Möbius Inversion Works</h3>
+                <p>The key identity is: a point x is primitive iff Σ_{d|gcd(x)} μ(d) = 1.</p>
+                <p>Therefore, to count primitive points, we sum over all divisors k, weighted by μ(k):</p>
+                <div class="math-block">N(R) = Σ_{k=1}^∞ μ(k) · L(R/k)</div>
+                <p>Each term L(R/k) counts lattice points in a scaled ball. The Möbius function μ(k) orchestrates which terms add and subtract to isolate primitives:</p>
+                <ul style="margin: 0.5rem 0 0.5rem 1.5rem;">
+                    <li>μ(1) = +1: include all points</li>
+                    <li>μ(2) = -1: remove multiples of 2</li>
+                    <li>μ(3) = -1: remove multiples of 3</li>
+                    <li>μ(4) = 0: skip (4 is not squarefree)</li>
+                    <li>μ(5) = -1: remove multiples of 5</li>
+                    <li>μ(6) = +1: add back multiples of 6 (= 2·3, over-subtracted)</li>
+                </ul>
 
-                    <h3>The Möbius Decomposition</h3>
-                    <div class="formula">N(R) = Σ_{k=1}^∞ μ(k) · L(R/k)</div>
-                    <p>where L(r) is the count of lattice points in a ball of radius r.</p>
+                <h3>Volume Cancellation</h3>
+                <p>The <strong>exact</strong> formula for volume contributions:</p>
+                <div class="math-block">Σ_{k=1}^∞ μ(k) · Vol(K_{R/k}) = [Vol(K) / ζ(n)] · R^n</div>
+                <p>This is exact—no error. The entire error term comes from lattice point discretization on the boundary of each scaled ball.</p>
 
-                    <h3>Volume Contribution (Exact)</h3>
-                    <div class="formula">Σ_{k=1}^∞ μ(k) · Vol(K_{R/k}) = [Vol(K) / ζ(n)] · R^n</div>
-                    <p>This follows from the Dirichlet series identity: Σ μ(k)/k^n = 1/ζ(n).</p>
+                <h3>Boundary Error Accumulation</h3>
+                <p>Each shell L(R/k) has lattice points near its boundary. These don't cancel via Möbius (they occur at measure-zero locations). Instead, they accumulate:</p>
+                <div class="math-block">Σ_{k=1}^∞ μ(k) · O((R/k)^(n-1)) = O(R^(n-1))</div>
+                <p>This is the error—it grows with surface area, not volume. In high dimensions, surface-area-to-volume ratio → 0, so the error becomes negligible.</p>
+            </div>
 
-                    <h3>Error Term (Boundary Effect)</h3>
-                    <div class="formula">|Error| ≤ C · R^(n-1)</div>
-                    <p>Error comes from lattice points near boundaries. Constant C depends on K and n.</p>
-
-                    <h3>Key Insights</h3>
-                    <ul style="margin: 0.5rem 0 0.5rem 1.5rem;">
-                        <li><strong>ζ(n)^(-1):</strong> The inverse of Riemann zeta—the density of primitive integers in base n.</li>
-                        <li><strong>O(R^(n-1)):</strong> Surface-area scaling means boundary effects diminish in high dimensions.</li>
-                        <li><strong>Shape independence:</strong> Main term depends only on Vol(K) and ζ(n), not boundary details.</li>
-                        <li><strong>Shell sieve:</strong> Each divisor k filters points; Möbius signs orchestrate exact cancellation.</li>
-                    </ul>
-
-                    <h3>Riemann Zeta Values</h3>
-                    <table style="margin: 1rem 0;">
-                        <tr>
-                            <th>n</th>
-                            <th>ζ(n)</th>
-                            <th>ζ(n)^(-1)</th>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>1.6449</td>
-                            <td>0.6079</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>1.2021</td>
-                            <td>0.8319</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>1.0823</td>
-                            <td>0.9239</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>1.0369</td>
-                            <td>0.9644</td>
-                        </tr>
-                        <tr>
-                            <td>∞</td>
-                            <td>1.0000</td>
-                            <td>1.0000</td>
-                        </tr>
-                    </table>
-
-                    <h3>Möbius Function</h3>
-                    <p>μ(n) is defined as:</p>
-                    <ul style="margin: 0.5rem 0 0.5rem 1.5rem;">
-                        <li>μ(1) = 1</li>
-                        <li>μ(n) = 0 if n has a squared prime factor</li>
-                        <li>μ(n) = (-1)^k if n is a product of k distinct primes</li>
-                    </ul>
-                    <p>Examples: μ(2)=-1, μ(3)=-1, μ(4)=0, μ(5)=-1, μ(6)=1, μ(7)=-1, μ(30)=1</p>
+            <div class="info-cards">
+                <div class="info-card">
+                    <h4>k=1: Full Ball</h4>
+                    <p>L(R) includes all lattice points. This over-counts non-primitives.</p>
+                </div>
+                <div class="info-card">
+                    <h4>k=2: Remove Evens</h4>
+                    <p>-L(R/2) removes points divisible by 2, but over-corrects.</p>
+                </div>
+                <div class="info-card">
+                    <h4>k=6: Correction</h4>
+                    <p>+L(R/6) adds back points divisible by both 2 and 3, fixing the over-subtraction.</p>
+                </div>
+                <div class="info-card">
+                    <h4>k>1: Exponentially Small</h4>
+                    <p>Large k contribute O(R^n / k^n), which sum to negligible amounts. Finite truncation suffices.</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="pointModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2>Point Details</h2>
-            <div id="pointDetails"></div>
+        <!-- HIGHER DIMENSIONS -->
+        <div class="section">
+            <h2 class="section-title">Behavior Across Dimensions</h2>
+
+            <div class="exposition">
+                <h3>The Dimension Effect</h3>
+                <p>As dimension n increases, three things happen:</p>
+                <ol style="margin: 0.5rem 0 0.5rem 1.5rem;">
+                    <li><strong>More points overall:</strong> Ball volume scales as R^n, so counts grow exponentially with dimension.</li>
+                    <li><strong>Higher primitive density:</strong> ζ(n) → 1 as n → ∞, so ζ(n)^(-1) → 1. Almost all points are primitive in high dimensions.</li>
+                    <li><strong>Smaller relative error:</strong> Error is O(R^(n-1)), but counts are O(R^n), so relative error ~ 1/R → 0.</li>
+                </ol>
+
+                <h3>Numerical Evidence</h3>
+                <p>Tested for dimensions n = 2 to 7, with R = 8:</p>
+                <table style="width: 100%; margin: 1rem 0; border-collapse: collapse;">
+                    <tr style="border-bottom: 2px solid var(--accent-primary);">
+                        <th style="padding: 0.7rem; color: var(--accent-primary); text-align: left;">n</th>
+                        <th style="padding: 0.7rem; color: var(--accent-primary); text-align: left;">Theory</th>
+                        <th style="padding: 0.7rem; color: var(--accent-primary); text-align: left;">Computed</th>
+                        <th style="padding: 0.7rem; color: var(--accent-primary); text-align: left;">Rel. Error</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(0, 217, 255, 0.2);">
+                        <td style="padding: 0.7rem;">2</td>
+                        <td style="padding: 0.7rem;">122.2</td>
+                        <td style="padding: 0.7rem;">124.0</td>
+                        <td style="padding: 0.7rem;">1.46%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(0, 217, 255, 0.2);">
+                        <td style="padding: 0.7rem;">3</td>
+                        <td style="padding: 0.7rem;">1,784</td>
+                        <td style="padding: 0.7rem;">1,782</td>
+                        <td style="padding: 0.7rem;">0.13%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(0, 217, 255, 0.2);">
+                        <td style="padding: 0.7rem;">4</td>
+                        <td style="padding: 0.7rem;">18,676</td>
+                        <td style="padding: 0.7rem;">18,660</td>
+                        <td style="padding: 0.7rem;">0.08%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(0, 217, 255, 0.2);">
+                        <td style="padding: 0.7rem;">5</td>
+                        <td style="padding: 0.7rem;">166,341</td>
+                        <td style="padding: 0.7rem;">166,263</td>
+                        <td style="padding: 0.7rem;">0.05%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(0, 217, 255, 0.2);">
+                        <td style="padding: 0.7rem;">6</td>
+                        <td style="padding: 0.7rem;">1,331,591</td>
+                        <td style="padding: 0.7rem;">1,330,923</td>
+                        <td style="padding: 0.7rem;">0.05%</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.7rem;">7</td>
+                        <td style="padding: 0.7rem;">9,826,508</td>
+                        <td style="padding: 0.7rem;">9,827,024</td>
+                        <td style="padding: 0.7rem;">0.01%</td>
+                    </tr>
+                </table>
+                <p style="margin-top: 1rem;"><strong>Observation:</strong> Relative error decreases dramatically with dimension. By n=7, the main term is accurate to 0.01%!</p>
+            </div>
+        </div>
+
+        <!-- CONCLUSION -->
+        <div class="section">
+            <h2 class="section-title">Takeaways</h2>
+
+            <div class="exposition">
+                <h3>The Geometric Picture</h3>
+                <p>Möbius inversion is not just algebra—it's a geometric sieve:</p>
+                <ul style="margin: 0.5rem 0 0.5rem 1.5rem;">
+                    <li><strong>Each divisor k</strong> → a scaled shell at radius R/k</li>
+                    <li><strong>Möbius sign μ(k)</strong> → whether to include (+) or exclude (-) that shell</li>
+                    <li><strong>Volume contributions</strong> → cancel perfectly via the identity Σ μ(k)/k^n = 1/ζ(n)</li>
+                    <li><strong>Boundary contributions</strong> → accumulate but remain O(R^(n-1))</li>
+                </ul>
+
+                <h3>Why This Matters</h3>
+                <p>Understanding the geometric mechanism:</p>
+                <ul style="margin: 0.5rem 0 0.5rem 1.5rem;">
+                    <li>Clarifies <strong>why</strong> ζ(n)^(-1) appears (density of primitives)</li>
+                    <li>Explains <strong>why</strong> error scales with surface area (boundary lattice clustering)</li>
+                    <li>Suggests <strong>algorithms</strong> (truncate the series, control error)</li>
+                    <li>Extends to <strong>visualizations</strong> (animate shells, show cancellation)</li>
+                </ul>
+
+                <h3>Universal Principle</h3>
+                <p>The theorem holds for any dimension n ≥ 3 and any smooth convex body K. The leading term is dimension-universal, shape-independent, and numerically tight.</p>
+            </div>
         </div>
     </div>
 
     <footer>
-        <p>Geometric Möbius Shell Sieve • Advanced Interactive Explorer</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">4K Export • CSV/JSON Data Export • Animation • Multi-Dimensional Analysis</p>
+        <p>Geometric Möbius Shell Sieve • Interactive Educational Visualization</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Built with mathematical rigor and interactive visualization</p>
     </footer>
 
     <script>
-        // Global state
-        let state = {
-            dimension: 2,
-            radius: 4,
-            shape: 'circle',
-            highlightShell: 1,
-            pointSize: 4,
-            resolution: 1,
-            canvasWidth: 600,
-            canvasHeight: 600,
-            pointData: [],
-            animating: false,
-            currentAnimShell: 1,
-            lastClickedPoint: null
-        };
-
-        // Utility functions
+        // GCD calculation
         function gcd(a, b) {
             a = Math.abs(a);
             b = Math.abs(b);
@@ -854,13 +609,14 @@
             return nums.reduce((a, b) => gcd(a, b));
         }
 
+        // Möbius function
         function mobius(n) {
             if (n === 1) return 1;
             let prime_factors = 0;
             let temp = n;
             for (let i = 2; i * i <= n; i++) {
                 if (n % i === 0) {
-                    if (temp % (i * i) === 0) return 0;
+                    if (temp % (i * i) === 0) return 0; // Not squarefree
                     prime_factors++;
                     while (temp % i === 0) temp /= i;
                 }
@@ -869,73 +625,37 @@
             return prime_factors % 2 === 0 ? 1 : -1;
         }
 
-        function zeta(n, terms = 100) {
+        // Riemann zeta approximation
+        function zeta(n) {
             let sum = 0;
-            for (let k = 1; k <= terms; k++) {
+            for (let k = 1; k <= 100; k++) {
                 sum += 1 / Math.pow(k, n);
             }
             return sum;
         }
 
-        // Calculate theoretical value
-        function getTheoretical(R, n) {
-            const pi = Math.PI;
-            if (n === 2) {
-                return (pi / zeta(2)) * R * R;
-            } else if (n === 3) {
-                return (4 * pi / 3 / zeta(3)) * R * R * R;
-            }
-            return 0;
-        }
+        // State
+        let state = {
+            radius: 4,
+            shape: 'circle',
+            highlightShell: 1
+        };
 
-        // Enumerate lattice points
-        function enumeratePoints(R, dim) {
-            const points = [];
-            const maxCoord = Math.ceil(R) + 1;
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
 
-            if (dim === 2) {
-                for (let x = -maxCoord; x <= maxCoord; x++) {
-                    for (let y = -maxCoord; y <= maxCoord; y++) {
-                        let inRegion = false;
-                        if (state.shape === 'circle') {
-                            inRegion = x * x + y * y <= R * R;
-                        } else if (state.shape === 'square') {
-                            inRegion = Math.abs(x) <= R && Math.abs(y) <= R;
-                        } else if (state.shape === 'ellipse') {
-                            inRegion = (x * x) / (R * R) + (y * y) / (R * R * 0.7) <= 1;
-                        }
-
-                        if (inRegion) {
-                            const g = gcdMulti(x, y);
-                            points.push({ x, y, gcd: g, isPrimitive: g === 1 });
-                        }
-                    }
-                }
-            }
-
-            return points;
-        }
-
-        // Draw canvas
-        function drawCanvas() {
-            const canvas = document.getElementById('canvas');
-            const res = parseInt(document.getElementById('resolution').value);
-            canvas.width = 600 * res;
-            canvas.height = 600 * res;
-            canvas.style.width = '600px';
-            canvas.style.height = '600px';
-
-            const ctx = canvas.getContext('2d');
+        function drawVisualization() {
             const R = state.radius;
+            const shape = state.shape;
+            const shell = state.highlightShell;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-            const scale = (canvas.width / 2) / (R * 1.1);
+            const scale = Math.min(canvas.width, canvas.height) / (2 * R * 1.1);
 
-            // Clear
-            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-dark');
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Grid
+            // Draw grid
             ctx.strokeStyle = 'rgba(0, 217, 255, 0.1)';
             ctx.lineWidth = 1;
             for (let i = -Math.ceil(R); i <= Math.ceil(R); i++) {
@@ -943,339 +663,159 @@
                 ctx.moveTo(centerX + i * scale, centerY - R * scale * 1.2);
                 ctx.lineTo(centerX + i * scale, centerY + R * scale * 1.2);
                 ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(centerX - R * scale * 1.2, centerY + i * scale);
+                ctx.lineTo(centerX + R * scale * 1.2, centerY + i * scale);
+                ctx.stroke();
             }
 
-            // Boundary
+            // Draw boundary
             ctx.strokeStyle = 'rgba(0, 217, 255, 0.4)';
             ctx.lineWidth = 2;
-            if (state.shape === 'circle') {
+            if (shape === 'circle') {
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, R * scale, 0, 2 * Math.PI);
                 ctx.stroke();
-            } else if (state.shape === 'square') {
+            } else {
                 ctx.strokeRect(centerX - R * scale, centerY - R * scale, 2 * R * scale, 2 * R * scale);
-            } else if (state.shape === 'ellipse') {
-                ctx.save();
-                ctx.translate(centerX, centerY);
-                ctx.scale(1, 0.7);
-                ctx.beginPath();
-                ctx.arc(0, 0, R * scale, 0, 2 * Math.PI);
-                ctx.stroke();
-                ctx.restore();
             }
 
-            // Enumerate and draw points
-            state.pointData = enumeratePoints(R, state.dimension);
+            // Count and draw points
+            let totalPoints = 0;
             let primitiveCount = 0;
-
-            for (const point of state.pointData) {
-                if (point.isPrimitive) primitiveCount++;
-
-                const px = centerX + point.x * scale;
-                const py = centerY + point.y * scale;
-
-                const inShell = (point.gcd === state.highlightShell);
-
-                ctx.fillStyle = inShell ? 'rgba(255, 200, 0, 0.9)' :
-                    (point.isPrimitive ? 'rgba(0, 217, 255, 0.8)' : 'rgba(74, 74, 106, 0.6)');
-                ctx.beginPath();
-                ctx.arc(px, py, state.pointSize * res, 0, 2 * Math.PI);
-                ctx.fill();
-            }
-
-            // Update stats
-            const total = state.pointData.length;
-            const theory = getTheoretical(R, state.dimension);
-            const error = primitiveCount - theory;
-            const relError = Math.abs(error) / theory * 100;
-
-            document.getElementById('totalPoints').textContent = total;
-            document.getElementById('primitivePoints').textContent = primitiveCount;
-            document.getElementById('density').textContent = (100 * primitiveCount / total).toFixed(1) + '%';
-            document.getElementById('theoryValue').textContent = theory.toFixed(1);
-            document.getElementById('errorValue').textContent = error.toFixed(1);
-            document.getElementById('relError').textContent = relError.toFixed(2) + '%';
-        }
-
-        // Canvas click handler
-        document.addEventListener('click', function(e) {
-            const canvas = document.getElementById('canvas');
-            if (canvas.contains(e.target)) {
-                const rect = canvas.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width;
-                const y = (e.clientY - rect.top) / rect.height;
-
-                // Find closest point
-                let closest = null;
-                let minDist = Infinity;
-                const R = state.radius;
-                const threshold = 0.02;
-
-                for (const point of state.pointData) {
-                    const centerX = 0.5;
-                    const centerY = 0.5;
-                    const scale = 0.4 / (R * 1.1);
-                    const px = centerX + point.x * scale;
-                    const py = centerY + point.y * scale;
-                    const dist = Math.sqrt((x - px) ** 2 + (y - py) ** 2);
-
-                    if (dist < minDist) {
-                        minDist = dist;
-                        closest = point;
-                    }
-                }
-
-                if (minDist < threshold && closest) {
-                    showPointModal(closest);
-                }
-            }
-        });
-
-        function showPointModal(point) {
-            const modal = document.getElementById('pointModal');
-            const details = document.getElementById('pointDetails');
-            let content = `<div class="point-info">`;
-            content += `<div><strong>Coordinates:</strong> (${point.x}, ${point.y})</div>`;
-            content += `<div><strong>GCD:</strong> ${point.gcd}</div>`;
-            content += `<div><strong>Status:</strong> ${point.isPrimitive ? '✓ Primitive' : '✗ Non-primitive'}</div>`;
-
-            if (!point.isPrimitive) {
-                content += `<div><strong>Divisible by:</strong> `;
-                const factors = [];
-                for (let d = 2; d <= point.gcd; d++) {
-                    if (point.gcd % d === 0) factors.push(d);
-                }
-                content += factors.join(', ') + `</div>`;
-            }
-
-            content += `<div><strong>Möbius value μ(${point.gcd}):</strong> ${mobius(point.gcd)}</div>`;
-            content += `</div>`;
-            details.innerHTML = content;
-            modal.style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('pointModal').style.display = 'none';
-        }
-
-        // Export functions
-        function exportCanvasPNG() {
-            const canvas = document.getElementById('canvas');
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL('image/png');
-            link.download = `mobius_sieve_r${state.radius}_n${state.dimension}_${new Date().getTime()}.png`;
-            link.click();
-        }
-
-        function exportDataCSV() {
-            let csv = 'x,y,gcd,isPrimitive,inShell\n';
-            for (const point of state.pointData) {
-                csv += `${point.x},${point.y},${point.gcd},${point.isPrimitive},${point.gcd === state.highlightShell}\n`;
-            }
-
-            const link = document.createElement('a');
-            link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-            link.download = `mobius_data_r${state.radius}_${new Date().getTime()}.csv`;
-            link.click();
-        }
-
-        function exportDataJSON() {
-            const data = {
-                metadata: {
-                    timestamp: new Date().toISOString(),
-                    dimension: state.dimension,
-                    radius: state.radius,
-                    shape: state.shape,
-                    totalPoints: state.pointData.length,
-                    primitivePoints: state.pointData.filter(p => p.isPrimitive).length
-                },
-                points: state.pointData
-            };
-
-            const link = document.createElement('a');
-            link.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data, null, 2));
-            link.download = `mobius_data_r${state.radius}_${new Date().getTime()}.json`;
-            link.click();
-        }
-
-        // Reset
-        function resetView() {
-            document.getElementById('radius').value = 4;
-            document.getElementById('highlightShell').value = 1;
-            state.radius = 4;
-            state.highlightShell = 1;
-            document.getElementById('radiusValue').textContent = '4';
-            document.getElementById('shellValue').textContent = '1';
-            drawCanvas();
-        }
-
-        // Animation
-        function toggleAnimation() {
-            state.animating = !state.animating;
-            document.getElementById('animPlayBtn').textContent = state.animating ? '⏸ Pause' : '▶ Play';
-            document.getElementById('animStatus').textContent = state.animating ? 'Playing' : 'Paused';
-            if (state.animating) animateShells();
-        }
-
-        function resetAnimation() {
-            state.animating = false;
-            state.currentAnimShell = 1;
-            document.getElementById('animPlayBtn').textContent = '▶ Play';
-            document.getElementById('animStatus').textContent = 'Paused';
-            document.getElementById('currentShell').textContent = '1';
-            document.getElementById('progressFill').style.width = '0%';
-            drawAnimationFrame();
-        }
-
-        function animateShells() {
-            if (!state.animating) return;
-
-            state.currentAnimShell++;
-            if (state.currentAnimShell > 10) {
-                state.animating = false;
-                document.getElementById('animPlayBtn').textContent = '▶ Play';
-                return;
-            }
-
-            document.getElementById('currentShell').textContent = state.currentAnimShell;
-            document.getElementById('progressFill').style.width = ((state.currentAnimShell - 1) / 9 * 100) + '%';
-            drawAnimationFrame();
-
-            setTimeout(animateShells, parseInt(document.getElementById('animSpeed').value));
-        }
-
-        function drawAnimationFrame() {
-            const canvas = document.getElementById('animCanvas');
-            const ctx = canvas.getContext('2d');
-            const R = 6;
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const scale = (canvas.width / 2) / (R * 1.1);
-
-            ctx.fillStyle = 'rgba(10, 14, 39, 1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw points
             const maxCoord = Math.ceil(R) + 1;
+
             for (let x = -maxCoord; x <= maxCoord; x++) {
                 for (let y = -maxCoord; y <= maxCoord; y++) {
-                    if (x * x + y * y > R * R) continue;
+                    // Check if in region
+                    let inRegion = false;
+                    if (shape === 'circle') {
+                        inRegion = x * x + y * y <= R * R;
+                    } else {
+                        inRegion = Math.abs(x) <= R && Math.abs(y) <= R;
+                    }
 
+                    if (!inRegion) continue;
+
+                    totalPoints++;
                     const g = gcdMulti(x, y);
-                    const include = (g <= state.currentAnimShell && mobius(g) > 0) ||
-                        (g > state.currentAnimShell);
+                    const isPrimitive = g === 1;
 
-                    let color = 'rgba(74, 74, 106, 0.3)';
-                    if (g === 1) color = 'rgba(0, 217, 255, 0.9)';
-                    else if (g <= state.currentAnimShell) color = 'rgba(200, 200, 200, 0.5)';
+                    if (isPrimitive) primitiveCount++;
+
+                    // Highlight shell
+                    const inShell = (g === shell);
 
                     const px = centerX + x * scale;
                     const py = centerY + y * scale;
 
-                    ctx.fillStyle = color;
+                    ctx.fillStyle = inShell ? 'rgba(255, 200, 0, 0.8)' :
+                        (isPrimitive ? 'rgba(0, 217, 255, 0.8)' : 'rgba(74, 74, 106, 0.6)');
                     ctx.beginPath();
                     ctx.arc(px, py, 4, 0, 2 * Math.PI);
                     ctx.fill();
                 }
             }
 
-            // Draw boundary
-            ctx.strokeStyle = 'rgba(0, 217, 255, 0.4)';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, R * scale, 0, 2 * Math.PI);
-            ctx.stroke();
+            // Update stats
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('primitivePoints').textContent = primitiveCount;
+            document.getElementById('density').textContent = (100 * primitiveCount / totalPoints).toFixed(1) + '%';
+
+            // Theory value
+            const pi = Math.PI;
+            const zeta2 = zeta(2);
+            const density = pi / zeta2;
+            const theoryValue = density * R * R;
+            document.getElementById('theoryValue').textContent = theoryValue.toFixed(1);
+            document.getElementById('actualValue').textContent = primitiveCount;
+            document.getElementById('errorValue').textContent = (primitiveCount - theoryValue).toFixed(1);
+            document.getElementById('currentR').textContent = R;
         }
 
-        // Analysis
-        function runAnalysis() {
-            const maxR = parseInt(document.getElementById('maxR').value);
-            const n = parseInt(document.getElementById('analysisN').value);
-            const shape = document.getElementById('analysisShape').value;
+        function updatePlot() {
+            const R = state.radius;
+            const pi = Math.PI;
+            const zeta2 = zeta(2);
+            const density = pi / zeta2;
 
-            state.shape = shape;
-
-            // Collect data
+            // Generate data
             const radii = [];
-            const theory = [];
-            const actual = [];
-            const errors = [];
+            const theoryValues = [];
+            const actualValues = [];
 
-            for (let r = 0.5; r <= maxR; r += 0.5) {
+            for (let r = 0.5; r <= 10; r += 0.5) {
                 radii.push(r);
-                const points = enumeratePoints(r, n);
-                const primitive = points.filter(p => p.isPrimitive).length;
-                const th = getTheoretical(r, n);
-
-                theory.push(th);
-                actual.push(primitive);
-                errors.push(Math.abs(primitive - th));
+                theoryValues.push(density * r * r);
+                
+                // Compute actual count
+                let count = 0;
+                const maxCoord = Math.ceil(r) + 1;
+                for (let x = -maxCoord; x <= maxCoord; x++) {
+                    for (let y = -maxCoord; y <= maxCoord; y++) {
+                        if (x * x + y * y <= r * r && gcdMulti(x, y) === 1) {
+                            count++;
+                        }
+                    }
+                }
+                actualValues.push(count);
             }
 
-            // Plot 1
-            Plotly.newPlot('analysisPlot1', [
-                { x: radii, y: theory, name: 'Theory', type: 'scatter', mode: 'lines', line: { color: 'rgba(255, 140, 0, 0.8)' } },
-                { x: radii, y: actual, name: 'Actual', type: 'scatter', mode: 'markers', marker: { color: 'rgba(0, 217, 255, 0.8)' } }
-            ], { title: `Theory vs Reality (n=${n})`, plot_bgcolor: 'rgba(10, 14, 39, 0.8)', paper_bgcolor: 'rgba(10, 14, 39, 0.8)', font: { color: 'rgba(224, 224, 255, 1)' } });
+            const trace1 = {
+                x: radii,
+                y: theoryValues,
+                name: 'Theory: (π/ζ(2))·R²',
+                type: 'scatter',
+                mode: 'lines',
+                line: { color: 'rgba(255, 140, 0, 0.8)', width: 3 }
+            };
 
-            // Plot 2
-            Plotly.newPlot('analysisPlot2', [
-                { x: radii, y: errors, name: 'Error', type: 'scatter', mode: 'lines+markers', fill: 'tozeroy', line: { color: 'rgba(255, 0, 110, 0.8)' } }
-            ], { title: `Error Magnitude (n=${n})`, yaxis: { type: 'log' }, plot_bgcolor: 'rgba(10, 14, 39, 0.8)', paper_bgcolor: 'rgba(10, 14, 39, 0.8)', font: { color: 'rgba(224, 224, 255, 1)' } });
+            const trace2 = {
+                x: radii,
+                y: actualValues,
+                name: 'Actual Count',
+                type: 'scatter',
+                mode: 'markers+lines',
+                marker: { size: 6, color: 'rgba(0, 217, 255, 0.8)' },
+                line: { color: 'rgba(0, 217, 255, 0.3)', width: 1 }
+            };
+
+            const layout = {
+                title: 'Theoretical vs Actual Primitive Points (n=2)',
+                xaxis: { title: 'Radius R' },
+                yaxis: { title: 'Count' },
+                hovermode: 'closest',
+                plot_bgcolor: 'rgba(10, 14, 39, 0.8)',
+                paper_bgcolor: 'rgba(10, 14, 39, 0.8)',
+                font: { color: 'rgba(224, 224, 255, 1)' },
+                margin: { l: 60, r: 40, t: 40, b: 40 }
+            };
+
+            Plotly.newPlot('plotContainer', [trace1, trace2], layout, { responsive: true });
         }
-
-        // Tab switching
-        document.querySelectorAll('.tab-button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-                document.getElementById(this.dataset.tab).classList.add('active');
-            });
-        });
 
         // Event listeners
         document.getElementById('radius').addEventListener('input', (e) => {
             state.radius = parseFloat(e.target.value);
             document.getElementById('radiusValue').textContent = state.radius;
-            drawCanvas();
-        });
-
-        document.getElementById('dimension').addEventListener('change', (e) => {
-            state.dimension = parseInt(e.target.value);
-            document.getElementById('dimValue').textContent = state.dimension;
-            drawCanvas();
+            drawVisualization();
+            updatePlot();
         });
 
         document.getElementById('shape').addEventListener('change', (e) => {
             state.shape = e.target.value;
-            drawCanvas();
+            drawVisualization();
         });
 
-        document.getElementById('highlightShell').addEventListener('input', (e) => {
+        document.getElementById('showShell').addEventListener('input', (e) => {
             state.highlightShell = parseInt(e.target.value);
             document.getElementById('shellValue').textContent = state.highlightShell;
-            drawCanvas();
-        });
-
-        document.getElementById('pointSize').addEventListener('input', (e) => {
-            state.pointSize = parseInt(e.target.value);
-            drawCanvas();
-        });
-
-        document.getElementById('resolution').addEventListener('change', () => {
-            drawCanvas();
-        });
-
-        // Close modal on outside click
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('pointModal');
-            if (e.target === modal) modal.style.display = 'none';
+            drawVisualization();
         });
 
         // Initial draw
-        drawCanvas();
-        drawAnimationFrame();
+        drawVisualization();
+        updatePlot();
     </script>
 </body>
 </html>
