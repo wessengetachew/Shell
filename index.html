@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geometric Möbius Shell Sieve - Multi-Dimensional Explorer</title>
+    <title>Geometric Möbius Shell Sieve - Interactive Explorer</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
     <style>
         * {
@@ -32,19 +32,14 @@
         header {
             background: rgba(10, 14, 39, 0.95);
             border-bottom: 2px solid var(--accent-primary);
-            padding: 1.5rem 2rem;
+            padding: 1rem 2rem;
             text-align: center;
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--accent-primary);
-            margin-bottom: 0.3rem;
-        }
-
-        .subtitle {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            margin-bottom: 0.2rem;
         }
 
         .container {
@@ -56,7 +51,7 @@
         .tabs {
             display: flex;
             gap: 0.5rem;
-            margin: 1.5rem 0;
+            margin: 1rem 0;
             border-bottom: 2px solid rgba(0, 217, 255, 0.2);
             flex-wrap: wrap;
         }
@@ -65,9 +60,9 @@
             background: transparent;
             color: var(--text-secondary);
             border: none;
-            padding: 0.8rem 1.5rem;
+            padding: 0.7rem 1.2rem;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
         }
@@ -89,22 +84,14 @@
             display: block;
         }
 
-        .section-title {
-            font-size: 1.5rem;
-            color: var(--accent-primary);
-            margin: 1.5rem 0 1rem;
-            border-left: 4px solid var(--accent-secondary);
-            padding-left: 1rem;
-        }
-
         .controls {
             background: var(--bg-light);
-            padding: 1.5rem;
+            padding: 1rem;
             border-radius: 8px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.8rem;
         }
 
         .control-group {
@@ -114,9 +101,9 @@
 
         .control-group label {
             color: var(--accent-primary);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .control-group input,
@@ -124,9 +111,9 @@
             background: var(--bg-dark);
             color: var(--text-primary);
             border: 2px solid var(--accent-primary);
-            padding: 0.6rem;
+            padding: 0.5rem;
             border-radius: 4px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .control-group input:focus,
@@ -138,19 +125,19 @@
 
         .button-group {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.4rem;
             flex-wrap: wrap;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         button {
             background: var(--accent-secondary);
             color: white;
             border: none;
-            padding: 0.7rem 1.2rem;
+            padding: 0.6rem 1rem;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             transition: all 0.3s ease;
         }
@@ -173,28 +160,37 @@
         .viz-container {
             background: var(--bg-light);
             border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
             border: 1px solid rgba(0, 217, 255, 0.2);
         }
 
         .viz-container h3 {
             color: var(--accent-primary);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        canvas {
+            display: block;
+            border: 2px solid var(--accent-primary);
+            border-radius: 6px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 0.8rem;
         }
 
         .plot-container {
             width: 100%;
-            height: 450px;
-            margin-bottom: 1rem;
+            height: 420px;
+            margin-bottom: 0.8rem;
         }
 
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         @media (max-width: 1200px) {
@@ -206,8 +202,8 @@
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         @media (max-width: 1400px) {
@@ -222,39 +218,30 @@
             }
         }
 
-        canvas {
-            display: block;
-            border: 2px solid var(--accent-primary);
-            border-radius: 6px;
-            width: 100%;
-            height: auto;
-            margin-bottom: 1rem;
-        }
-
-        .stats-grid {
+        .stat-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 0.8rem;
-            margin-bottom: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 0.8rem;
         }
 
         .stat-box {
             background: rgba(0, 217, 255, 0.1);
             border: 1px solid var(--accent-primary);
-            padding: 0.8rem;
+            padding: 0.6rem;
             border-radius: 4px;
             text-align: center;
         }
 
         .stat-label {
             color: var(--text-secondary);
-            font-size: 0.8rem;
-            margin-bottom: 0.3rem;
+            font-size: 0.75rem;
+            margin-bottom: 0.2rem;
         }
 
         .stat-value {
             color: var(--accent-primary);
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             font-family: 'Courier New', monospace;
         }
@@ -262,12 +249,11 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1rem 0;
             font-size: 0.85rem;
         }
 
         th, td {
-            padding: 0.6rem;
+            padding: 0.5rem;
             text-align: left;
             border-bottom: 1px solid rgba(0, 217, 255, 0.2);
         }
@@ -278,169 +264,127 @@
             font-weight: 600;
         }
 
-        .dimension-card {
+        .card {
             background: var(--bg-light);
             border-left: 4px solid var(--accent-secondary);
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-
-        .dimension-card h4 {
-            color: var(--accent-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .dimension-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin: 0.3rem 0;
-            font-family: 'Courier New', monospace;
-        }
-
-        .formula {
-            background: rgba(0, 0, 0, 0.4);
             padding: 0.8rem;
             border-radius: 4px;
+            margin-bottom: 0.8rem;
+        }
+
+        .card h4 {
+            color: var(--accent-primary);
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin: 0.2rem 0;
             font-family: 'Courier New', monospace;
-            border-left: 3px solid var(--accent-secondary);
-            margin: 0.5rem 0;
-            overflow-x: auto;
         }
 
         .legend {
             display: flex;
-            gap: 1rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
             margin-top: 0.5rem;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
         }
 
         .legend-color {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 2px;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 1rem;
-            color: var(--accent-primary);
-            font-weight: 600;
         }
 
         footer {
             text-align: center;
-            padding: 2rem;
+            padding: 1.5rem;
             color: var(--text-secondary);
             border-top: 1px solid rgba(0, 217, 255, 0.2);
             margin-top: 2rem;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Geometric Möbius Shell Sieve</h1>
-        <p class="subtitle">Multi-Dimensional Explorer (n=2 to 7) with Dimension-Universal Validation</p>
     </header>
 
     <div class="container">
         <div class="tabs">
-            <button class="tab-button active" data-tab="explorer">Explorer (2D)</button>
-            <button class="tab-button" data-tab="dimensions">Dimensions (n=2-7)</button>
-            <button class="tab-button" data-tab="zeta">ζ(n) Analysis</button>
-            <button class="tab-button" data-tab="comparison">Dimension Comparison</button>
+            <button class="tab-button active" data-tab="2d">2D Explorer</button>
+            <button class="tab-button" data-tab="dimensions">Dimensions</button>
+            <button class="tab-button" data-tab="analysis">Analysis</button>
+            <button class="tab-button" data-tab="shells">Shells</button>
         </div>
 
-        <!-- EXPLORER TAB (2D) -->
-        <div id="explorer" class="tab-content active">
-            <div class="section-title">2D Interactive Visualizer</div>
-
+        <!-- 2D EXPLORER -->
+        <div id="2d" class="tab-content active">
             <div class="controls">
                 <div class="control-group">
-                    <label for="radius2d">Radius R: <span id="radiusValue2d">4</span></label>
-                    <input type="range" id="radius2d" min="1" max="50" step="0.5" value="4">
+                    <label for="r2d">Radius R: <span id="rv2d">4</span></label>
+                    <input type="range" id="r2d" min="1" max="50" step="0.5" value="4">
                 </div>
                 <div class="control-group">
-                    <label for="shape2d">Shape</label>
-                    <select id="shape2d">
+                    <label for="s2d">Shape</label>
+                    <select id="s2d">
                         <option value="circle">Circle</option>
                         <option value="square">Square</option>
                     </select>
                 </div>
                 <div class="control-group">
-                    <label for="canvasScale2d">Canvas Size</label>
-                    <select id="canvasScale2d">
-                        <option value="0.8">Small (800)</option>
-                        <option value="1" selected>Standard (1000)</option>
-                        <option value="1.5">Large (1500)</option>
+                    <label for="cs2d">Canvas</label>
+                    <select id="cs2d">
+                        <option value="0.8">Small</option>
+                        <option value="1" selected>Standard</option>
+                        <option value="1.5">Large</option>
                     </select>
                 </div>
             </div>
 
             <div class="button-group">
-                <button onclick="exportCanvas2D()">📥 Export Canvas (PNG)</button>
-                <button class="secondary" onclick="exportData2D()">📊 Export CSV</button>
-                <button onclick="reset2D()">🔄 Reset</button>
+                <button onclick="exp2D()">📥 PNG</button>
+                <button class="secondary" onclick="csv2D()">📊 CSV</button>
+                <button onclick="res2D()">Reset</button>
             </div>
 
             <div class="viz-container">
-                <h3>Lattice Points (n=2, Disk)</h3>
-                <canvas id="canvas2d" width="1000" height="1000"></canvas>
+                <h3>Lattice Points</h3>
+                <canvas id="c2d" width="1000" height="1000"></canvas>
                 <div class="legend">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: rgba(0, 217, 255, 0.8);"></div>
-                        <span>Primitive (gcd=1)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: rgba(74, 74, 106, 0.6);"></div>
-                        <span>Non-primitive</span>
-                    </div>
+                    <div class="legend-item"><div class="legend-color" style="background: rgba(0, 217, 255, 0.8);"></div><span>Primitive</span></div>
+                    <div class="legend-item"><div class="legend-color" style="background: rgba(74, 74, 106, 0.6);"></div><span>Non-primitive</span></div>
                 </div>
-
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-label">Total Points</div>
-                        <div class="stat-value" id="total2d">0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Primitive</div>
-                        <div class="stat-value" id="prim2d">0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Density %</div>
-                        <div class="stat-value" id="dens2d">0%</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Theory</div>
-                        <div class="stat-value" id="theory2d">0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Error %</div>
-                        <div class="stat-value" id="err2d">0%</div>
-                    </div>
+                <div class="stat-grid">
+                    <div class="stat-box"><div class="stat-label">Total</div><div class="stat-value" id="st2d">0</div></div>
+                    <div class="stat-box"><div class="stat-label">Primitive</div><div class="stat-value" id="sp2d">0</div></div>
+                    <div class="stat-box"><div class="stat-label">Density %</div><div class="stat-value" id="sd2d">0%</div></div>
+                    <div class="stat-box"><div class="stat-label">Theory</div><div class="stat-value" id="sth2d">0</div></div>
+                    <div class="stat-box"><div class="stat-label">Error %</div><div class="stat-value" id="se2d">0%</div></div>
                 </div>
             </div>
         </div>
 
-        <!-- DIMENSIONS TAB -->
+        <!-- DIMENSIONS -->
         <div id="dimensions" class="tab-content">
-            <div class="section-title">Multi-Dimensional Analysis (n=2 to 7)</div>
-
             <div class="controls">
                 <div class="control-group">
-                    <label for="radiusDim">Radius R: <span id="radiusValueDim">8</span></label>
-                    <input type="range" id="radiusDim" min="1" max="50" step="0.5" value="8">
+                    <label for="rdim">Radius R: <span id="rvdim">8</span></label>
+                    <input type="range" id="rdim" min="1" max="50" step="0.5" value="8">
                 </div>
                 <div class="control-group">
-                    <label for="mcSamples">Monte Carlo Samples (n≥6)</label>
-                    <select id="mcSamples">
+                    <label for="mc">MC Samples</label>
+                    <select id="mc">
                         <option value="1000000">1M</option>
                         <option value="2000000" selected>2M</option>
                         <option value="5000000">5M</option>
@@ -448,598 +392,434 @@
                 </div>
             </div>
 
-            <button onclick="computeAllDimensions()">▶ Compute All Dimensions</button>
-
-            <div id="dimLoadingMessage" class="loading" style="display:none;">Computing n=2-7... This may take a moment for n≥6.</div>
+            <button onclick="computeDim()">▶ Compute (n=2-7)</button>
 
             <div class="grid-3">
-                <div class="dimension-card">
-                    <h4>n=2 (Disk)</h4>
-                    <p>Method: Exact enumeration</p>
-                    <p>ζ(2) = 1.6449</p>
-                    <p id="card2">Computing...</p>
-                </div>
-                <div class="dimension-card">
-                    <h4>n=3 (Ball)</h4>
-                    <p>Method: Exact enumeration</p>
-                    <p>ζ(3) = 1.2021</p>
-                    <p id="card3">Computing...</p>
-                </div>
-                <div class="dimension-card">
-                    <h4>n=4 (4-Ball)</h4>
-                    <p>Method: Exact enumeration</p>
-                    <p>ζ(4) = 1.0823</p>
-                    <p id="card4">Computing...</p>
-                </div>
-                <div class="dimension-card">
-                    <h4>n=5 (5-Ball)</h4>
-                    <p>Method: Exact enumeration</p>
-                    <p>ζ(5) = 1.0369</p>
-                    <p id="card5">Computing...</p>
-                </div>
-                <div class="dimension-card">
-                    <h4>n=6 (6-Ball)</h4>
-                    <p>Method: Monte Carlo (2M samples)</p>
-                    <p>ζ(6) = 1.0173</p>
-                    <p id="card6">Computing...</p>
-                </div>
-                <div class="dimension-card">
-                    <h4>n=7 (7-Ball)</h4>
-                    <p>Method: Monte Carlo (2M samples)</p>
-                    <p>ζ(7) = 1.0084</p>
-                    <p id="card7">Computing...</p>
-                </div>
+                <div class="card"><h4>n=2</h4><p id="d2">Computing...</p></div>
+                <div class="card"><h4>n=3</h4><p id="d3">Computing...</p></div>
+                <div class="card"><h4>n=4</h4><p id="d4">Computing...</p></div>
+                <div class="card"><h4>n=5</h4><p id="d5">Computing...</p></div>
+                <div class="card"><h4>n=6</h4><p id="d6">Computing...</p></div>
+                <div class="card"><h4>n=7</h4><p id="d7">Computing...</p></div>
             </div>
 
             <div class="viz-container">
-                <h3>Dimension Comparison Table (R = <span id="tableR">8</span>)</h3>
-                <table id="dimTable">
-                    <tr>
-                        <th>n</th>
-                        <th>Shape</th>
-                        <th>Vol(B_n)</th>
-                        <th>ζ(n)</th>
-                        <th>Density Vol/ζ(n)</th>
-                        <th>Theory</th>
-                        <th>Computed</th>
-                        <th>Error</th>
-                        <th>Rel. Error %</th>
-                    </tr>
+                <h3>Dimension Table</h3>
+                <table id="dtable">
+                    <tr><th>n</th><th>Vol(B_n)</th><th>ζ(n)</th><th>Theory</th><th>Computed</th><th>Error</th><th>Error %</th></tr>
                 </table>
             </div>
 
             <div class="button-group">
-                <button class="secondary" onclick="exportDimensionData()">📊 Export Dimension Data (CSV)</button>
+                <button class="secondary" onclick="csvDim()">📊 CSV</button>
             </div>
         </div>
 
-        <!-- ZETA TAB -->
-        <div id="zeta" class="tab-content">
-            <div class="section-title">Riemann Zeta Function Analysis</div>
-
-            <div class="viz-container">
-                <h3>ζ(n) and Density Vol(B_n)/ζ(n)</h3>
-                <div class="plot-container" id="zetaPlot"></div>
+        <!-- ANALYSIS -->
+        <div id="analysis" class="tab-content">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="amax">Max R</label>
+                    <input type="number" id="amax" value="20" min="2" max="50" step="1">
+                </div>
+                <div class="control-group">
+                    <label for="ash">Shape</label>
+                    <select id="ash">
+                        <option value="circle">Circle</option>
+                        <option value="square">Square</option>
+                    </select>
+                </div>
             </div>
+
+            <button onclick="runAnalysis()">▶ Run</button>
 
             <div class="grid-2">
                 <div class="viz-container">
-                    <h3>Zeta Values Reference</h3>
-                    <table>
-                        <tr>
-                            <th>n</th>
-                            <th>ζ(n)</th>
-                            <th>ζ(n)^(-1)</th>
-                            <th>Interpretation</th>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>1.64493</td>
-                            <td>0.60793</td>
-                            <td>~61% of integers coprime</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>1.20205</td>
-                            <td>0.83190</td>
-                            <td>~83% of triples coprime</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>1.08232</td>
-                            <td>0.92391</td>
-                            <td>~92% of 4-tuples coprime</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>1.03693</td>
-                            <td>0.96449</td>
-                            <td>~96% of 5-tuples coprime</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>1.01734</td>
-                            <td>0.98296</td>
-                            <td>~98% of 6-tuples coprime</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>1.00835</td>
-                            <td>0.99170</td>
-                            <td>~99% of 7-tuples coprime</td>
-                        </tr>
-                        <tr style="border-top: 2px solid var(--accent-primary);">
-                            <td>∞</td>
-                            <td>1.00000</td>
-                            <td>1.00000</td>
-                            <td>Almost all ∞-tuples coprime</td>
-                        </tr>
-                    </table>
+                    <h3>Theory vs Actual</h3>
+                    <div class="plot-container" id="p1"></div>
                 </div>
-
                 <div class="viz-container">
-                    <h3>Key Formula</h3>
-                    <div class="formula">N_K(R) = [Vol(K) / ζ(n)] · R^n + O(R^(n-1))</div>
-                    <p style="margin-top: 1rem; color: var(--text-secondary);">
-                        The main term depends on:
-                    </p>
-                    <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
-                        <li><strong>Vol(K):</strong> Volume of the bounded convex body</li>
-                        <li><strong>ζ(n):</strong> Riemann zeta at n (≈ density inverse)</li>
-                        <li><strong>R^n:</strong> Scaling with dimension</li>
-                    </ul>
-                    <p style="margin-top: 1rem; color: var(--accent-tertiary);">
-                        As n → ∞, ζ(n) → 1, so almost all lattice points become primitive.
-                    </p>
+                    <h3>Error & Running Average</h3>
+                    <div class="plot-container" id="p2"></div>
                 </div>
+            </div>
+
+            <div class="viz-container">
+                <h3>Relative Count & Predictions</h3>
+                <div class="plot-container" id="p3"></div>
+            </div>
+
+            <div class="viz-container">
+                <h3>Data Table</h3>
+                <table id="atable">
+                    <tr><th>R</th><th>Theory</th><th>Actual</th><th>Error</th><th>Rel %</th><th>Running Avg</th></tr>
+                </table>
             </div>
         </div>
 
-        <!-- COMPARISON TAB -->
-        <div id="comparison" class="tab-content">
-            <div class="section-title">Dimension-Universal Theorem Validation</div>
-
-            <div class="viz-container">
-                <h3>Theory vs Computed Across All Dimensions</h3>
-                <div class="plot-container" id="comparisonPlot"></div>
+        <!-- SHELLS -->
+        <div id="shells" class="tab-content">
+            <div class="controls">
+                <div class="control-group">
+                    <label for="sr">Radius R: <span id="srv">6</span></label>
+                    <input type="range" id="sr" min="1" max="50" step="0.5" value="6">
+                </div>
+                <div class="control-group">
+                    <label for="sk">Max k</label>
+                    <input type="number" id="sk" value="10" min="1" max="30" step="1">
+                </div>
             </div>
+
+            <button onclick="analyzeShells()">▶ Analyze</button>
 
             <div class="grid-2">
                 <div class="viz-container">
-                    <h3>Relative Error by Dimension</h3>
-                    <div class="plot-container" id="errorPlot"></div>
+                    <h3>Shell Contributions</h3>
+                    <div class="plot-container" id="sp"></div>
                 </div>
-
                 <div class="viz-container">
-                    <h3>Density Convergence to ζ(n)^(-1)</h3>
-                    <div class="plot-container" id="densityPlot"></div>
+                    <h3>Cumulative Effect</h3>
+                    <div class="plot-container" id="sc"></div>
                 </div>
             </div>
 
             <div class="viz-container">
-                <h3>Analysis Summary</h3>
-                <p style="margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.8;">
-                    <strong>Observation 1:</strong> Main term [Vol/ζ(n)]·R^n matches actual counts across all n=2-7. 
-                    Validates dimension-universal formula.
-                </p>
-                <p style="margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.8;">
-                    <strong>Observation 2:</strong> Relative error decreases with dimension. 
-                    For n=7, error is <0.1%, confirming O(R^(n-1)) dominates boundary effects.
-                </p>
-                <p style="margin-bottom: 1rem; color: var(--text-secondary); line-height: 1.8;">
-                    <strong>Observation 3:</strong> Primitive density ζ(n)^(-1) increases toward 1 as n increases. 
-                    In high dimensions, almost all lattice points are primitive.
-                </p>
-                <p style="color: var(--accent-tertiary); line-height: 1.8;">
-                    <strong>Conclusion:</strong> The Geometric Möbius Shell Sieve theorem holds universally 
-                    across all tested dimensions, with exact agreement to empirical data.
-                </p>
+                <h3>Shell Table</h3>
+                <table id="stable">
+                    <tr><th>k</th><th>μ(k)</th><th>L(R/k)</th><th>Contrib</th><th>Cumulative</th></tr>
+                </table>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>Geometric Möbius Shell Sieve • Multi-Dimensional Explorer</p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Dimension-Universal Validation • n=2-7 Support • Exact + Monte Carlo Methods</p>
+        Interactive Explorer • Export PNG/CSV • Exact + Monte Carlo Methods
     </footer>
 
     <script>
-        // Global state
         let state = {
-            radius2d: 4,
-            radiusDim: 8,
-            shape2d: 'circle',
-            pointData2d: [],
-            dimensionResults: {}
+            r2d: 4, s2d: 'circle', pd2d: [], 
+            rdim: 8, dimRes: {}, 
+            sr: 6, sk: 10, shellRes: {}
         };
 
-        // Utilities
         function gcd(a, b) {
-            a = Math.abs(a);
-            b = Math.abs(b);
+            a = Math.abs(a); b = Math.abs(b);
             while (b) [a, b] = [b, a % b];
             return a || 1;
         }
 
-        function gcdMulti(...nums) {
-            return nums.reduce((a, b) => gcd(a, b));
+        function gcdMulti(...n) {
+            return n.reduce((a, b) => gcd(a, b));
         }
 
-        function zeta(n, terms = 150) {
-            let sum = 0;
-            for (let k = 1; k <= terms; k++) {
-                sum += 1 / Math.pow(k, n);
-            }
-            return sum;
+        function zeta(n, t = 150) {
+            let s = 0;
+            for (let k = 1; k <= t; k++) s += 1 / Math.pow(k, n);
+            return s;
         }
 
-        function volumeBall(n) {
-            const pi = Math.PI;
-            if (n === 1) return 2;
-            if (n === 2) return pi;
-            if (n === 3) return 4 * pi / 3;
-            if (n === 4) return pi * pi / 2;
-            if (n === 5) return 8 * pi * pi / 15;
-            if (n === 6) return pi * pi * pi / 6;
-            if (n === 7) return 16 * pi * pi * pi / 105;
-            return 0;
+        function vol(n) {
+            const p = Math.PI;
+            const vols = [0, 2, p, 4*p/3, p*p/2, 8*p*p/15, p*p*p/6, 16*p*p*p/105];
+            return vols[n] || 0;
         }
 
-        function getTheoretical(R, n) {
-            return (volumeBall(n) / zeta(n)) * Math.pow(R, n);
+        function theory(R, n) {
+            return (vol(n) / zeta(n)) * Math.pow(R, n);
         }
 
-        // 2D Enumeration
-        function enumerate2D(R) {
-            const points = [];
-            const maxCoord = Math.ceil(R) + 1;
-
-            for (let x = -maxCoord; x <= maxCoord; x++) {
-                for (let y = -maxCoord; y <= maxCoord; y++) {
-                    let inRegion = false;
-                    if (state.shape2d === 'circle') {
-                        inRegion = x * x + y * y <= R * R;
-                    } else {
-                        inRegion = Math.abs(x) <= R && Math.abs(y) <= R;
-                    }
-
-                    if (inRegion) {
+        function enum2D(R) {
+            const pts = [];
+            const m = Math.ceil(R) + 1;
+            for (let x = -m; x <= m; x++) {
+                for (let y = -m; y <= m; y++) {
+                    let in_r = state.s2d === 'circle' ? x*x + y*y <= R*R : Math.abs(x) <= R && Math.abs(y) <= R;
+                    if (in_r) {
                         const g = gcdMulti(x, y);
-                        points.push({ x, y, gcd: g, isPrimitive: g === 1 });
+                        pts.push({x, y, g, p: g === 1});
                     }
                 }
             }
-            return points;
+            return pts;
         }
 
-        // N-D Enumeration (exact for n≤5)
-        function enumerateND(R, n) {
-            const points = [];
-            const maxCoord = Math.ceil(R) + 1;
-
-            function generatePoints(coords) {
-                if (coords.length === n) {
-                    const dist = Math.sqrt(coords.reduce((sum, c) => sum + c * c, 0));
-                    if (dist <= R) {
-                        const g = gcdMulti(...coords);
-                        points.push({ coords: [...coords], gcd: g, isPrimitive: g === 1 });
+        function enumND(R, n) {
+            const pts = [];
+            const m = Math.ceil(R) + 1;
+            function gen(c) {
+                if (c.length === n) {
+                    if (Math.sqrt(c.reduce((s, x) => s + x*x, 0)) <= R) {
+                        const g = gcdMulti(...c);
+                        pts.push({c: [...c], g, p: g === 1});
                     }
                     return;
                 }
-
-                for (let c = -maxCoord; c <= maxCoord; c++) {
-                    generatePoints([...coords, c]);
-                }
+                for (let i = -m; i <= m; i++) gen([...c, i]);
             }
-
-            generatePoints([]);
-            return points;
+            gen([]);
+            return pts;
         }
 
-        // Monte Carlo for n≥6
-        function monteCarlo(R, n, samples) {
-            let count = 0;
-            let primitiveCount = 0;
-
+        function mc(R, n, samples) {
+            let cnt = 0, prim = 0;
             for (let i = 0; i < samples; i++) {
-                const coords = [];
-                for (let j = 0; j < n; j++) {
-                    coords.push(Math.random() * 2 * R - R);
-                }
-
-                const dist = Math.sqrt(coords.reduce((sum, c) => sum + c * c, 0));
-                if (dist <= R) {
-                    count++;
-                    // Round to nearest integer for lattice point
-                    const intCoords = coords.map(c => Math.round(c));
-                    const g = gcdMulti(...intCoords);
-                    if (g === 1) primitiveCount++;
+                const c = [];
+                for (let j = 0; j < n; j++) c.push(Math.random() * 2 * R - R);
+                if (Math.sqrt(c.reduce((s, x) => s + x*x, 0)) <= R) {
+                    cnt++;
+                    if (gcdMulti(...c.map(x => Math.round(x))) === 1) prim++;
                 }
             }
-
-            const volumeBallR = volumeBall(n) * Math.pow(R, n);
-            const primitiveEstimate = (primitiveCount / count) * volumeBallR;
-
-            return {
-                total: Math.round((count / samples) * volumeBallR),
-                primitive: primitiveEstimate,
-                method: 'Monte Carlo'
-            };
+            return (prim / cnt) * vol(n) * Math.pow(R, n);
         }
 
-        // Draw 2D canvas
         function draw2D() {
-            const canvas = document.getElementById('canvas2d');
-            const scale = parseFloat(document.getElementById('canvasScale2d').value);
-            canvas.width = 1000 * scale;
-            canvas.height = 1000 * scale;
+            const c = document.getElementById('c2d');
+            const sc = parseFloat(document.getElementById('cs2d').value);
+            c.width = 1000 * sc; c.height = 1000 * sc;
+            const x = c.getContext('2d');
+            const R = state.r2d;
+            const cx = c.width / 2, cy = c.height / 2;
+            const ps = (c.width / 2) / (R * 1.1);
 
-            const ctx = canvas.getContext('2d');
-            const R = state.radius2d;
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const pixelScale = (canvas.width / 2) / (R * 1.1);
+            x.fillStyle = 'rgba(10, 14, 39, 1)';
+            x.fillRect(0, 0, c.width, c.height);
 
-            ctx.fillStyle = 'rgba(10, 14, 39, 1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Grid
-            ctx.strokeStyle = 'rgba(0, 217, 255, 0.1)';
-            ctx.lineWidth = 1;
+            x.strokeStyle = 'rgba(0, 217, 255, 0.1)';
+            x.lineWidth = 1;
             for (let i = -Math.ceil(R); i <= Math.ceil(R); i++) {
-                ctx.beginPath();
-                ctx.moveTo(centerX + i * pixelScale, centerY - R * pixelScale * 1.2);
-                ctx.lineTo(centerX + i * pixelScale, centerY + R * pixelScale * 1.2);
-                ctx.stroke();
+                x.beginPath();
+                x.moveTo(cx + i*ps, cy - R*ps*1.2);
+                x.lineTo(cx + i*ps, cy + R*ps*1.2);
+                x.stroke();
             }
 
-            // Boundary
-            ctx.strokeStyle = 'rgba(0, 217, 255, 0.5)';
-            ctx.lineWidth = 2;
-            if (state.shape2d === 'circle') {
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, R * pixelScale, 0, 2 * Math.PI);
-                ctx.stroke();
+            x.strokeStyle = 'rgba(0, 217, 255, 0.5)';
+            x.lineWidth = 2;
+            if (state.s2d === 'circle') {
+                x.beginPath();
+                x.arc(cx, cy, R*ps, 0, 2*Math.PI);
+                x.stroke();
             } else {
-                ctx.strokeRect(centerX - R * pixelScale, centerY - R * pixelScale, 2 * R * pixelScale, 2 * R * pixelScale);
+                x.strokeRect(cx - R*ps, cy - R*ps, 2*R*ps, 2*R*ps);
             }
 
-            // Points
-            state.pointData2d = enumerate2D(R);
-            let primitiveCount = 0;
-
-            for (const p of state.pointData2d) {
-                if (p.isPrimitive) primitiveCount++;
-
-                const px = centerX + p.x * pixelScale;
-                const py = centerY + p.y * pixelScale;
-
-                ctx.fillStyle = p.isPrimitive ? 'rgba(0, 217, 255, 0.8)' : 'rgba(74, 74, 106, 0.6)';
-                ctx.beginPath();
-                ctx.arc(px, py, 3 * scale, 0, 2 * Math.PI);
-                ctx.fill();
+            state.pd2d = enum2D(R);
+            let p = 0;
+            for (const pt of state.pd2d) {
+                if (pt.p) p++;
+                const px = cx + pt.x*ps, py = cy + pt.y*ps;
+                x.fillStyle = pt.p ? 'rgba(0, 217, 255, 0.8)' : 'rgba(74, 74, 106, 0.6)';
+                x.beginPath();
+                x.arc(px, py, 3*sc, 0, 2*Math.PI);
+                x.fill();
             }
 
-            // Stats
-            const total = state.pointData2d.length;
-            const theory = getTheoretical(R, 2);
-            const err = Math.abs(primitiveCount - theory) / theory * 100;
+            const tot = state.pd2d.length;
+            const th = theory(R, 2);
+            const err = Math.abs(p - th) / th * 100;
 
-            document.getElementById('total2d').textContent = total;
-            document.getElementById('prim2d').textContent = primitiveCount;
-            document.getElementById('dens2d').textContent = (100 * primitiveCount / total).toFixed(1) + '%';
-            document.getElementById('theory2d').textContent = theory.toFixed(1);
-            document.getElementById('err2d').textContent = err.toFixed(2) + '%';
+            document.getElementById('st2d').textContent = tot;
+            document.getElementById('sp2d').textContent = p;
+            document.getElementById('sd2d').textContent = (100*p/tot).toFixed(1) + '%';
+            document.getElementById('sth2d').textContent = th.toFixed(1);
+            document.getElementById('se2d').textContent = err.toFixed(2) + '%';
         }
 
-        // Compute all dimensions
-        async function computeAllDimensions() {
-            const R = parseFloat(document.getElementById('radiusDim').value);
-            const samples = parseInt(document.getElementById('mcSamples').value);
-
-            document.getElementById('dimLoadingMessage').style.display = 'block';
-            state.dimensionResults = {};
+        function computeDim() {
+            const R = parseFloat(document.getElementById('rdim').value);
+            const samples = parseInt(document.getElementById('mc').value);
+            state.rdim = R;
+            state.dimRes = {};
 
             for (let n = 2; n <= 7; n++) {
                 setTimeout(() => {
-                    let result;
-
+                    let prim;
                     if (n <= 5) {
-                        const points = enumerateND(R, n);
-                        const prim = points.filter(p => p.isPrimitive).length;
-                        result = {
-                            n,
-                            total: points.length,
-                            primitive: prim,
-                            method: 'Exact',
-                            theory: getTheoretical(R, n)
-                        };
+                        const pts = enumND(R, n);
+                        prim = pts.filter(p => p.p).length;
                     } else {
-                        const mc = monteCarlo(R, n, samples);
-                        result = {
-                            n,
-                            total: mc.total,
-                            primitive: mc.primitive,
-                            method: 'Monte Carlo',
-                            theory: getTheoretical(R, n)
-                        };
+                        prim = mc(R, n, samples);
                     }
-
-                    const vol = volumeBall(n);
-                    const z = zeta(n);
-                    const density = vol / z;
-                    const err = Math.abs(result.primitive - result.theory);
-                    const relErr = err / result.theory * 100;
-
-                    state.dimensionResults[n] = { ...result, vol, zeta: z, density, err, relErr };
-
-                    document.getElementById(`card${n}`).innerHTML = 
-                        `Method: ${result.method}<br>
-                        Primitive: ${Math.round(result.primitive)}<br>
-                        Theory: ${result.theory.toFixed(1)}<br>
-                        Error: ${relErr.toFixed(2)}%`;
-                }, (n - 2) * 100);
+                    const th = theory(R, n);
+                    const err = Math.abs(prim - th);
+                    const rel = err / th * 100;
+                    state.dimRes[n] = {prim, th, err, rel, v: vol(n), z: zeta(n)};
+                    document.getElementById(`d${n}`).textContent = `Prim: ${Math.round(prim)}\nTheory: ${th.toFixed(1)}\nError: ${rel.toFixed(2)}%`;
+                }, (n-2)*100);
             }
 
             setTimeout(() => {
-                document.getElementById('dimLoadingMessage').style.display = 'none';
-                updateDimensionTable(R);
-                plotDimensionComparisons(R);
-            }, 800);
-        }
-
-        function updateDimensionTable(R) {
-            const table = document.getElementById('dimTable');
-            table.innerHTML = '<tr><th>n</th><th>Shape</th><th>Vol(B_n)</th><th>ζ(n)</th><th>Density</th><th>Theory</th><th>Computed</th><th>Error</th><th>Rel. Error %</th></tr>';
-            
-            document.getElementById('tableR').textContent = R.toFixed(1);
-
-            for (let n = 2; n <= 7; n++) {
-                if (!state.dimensionResults[n]) continue;
-                const r = state.dimensionResults[n];
-                const row = table.insertRow();
-                row.insertCell(0).textContent = n;
-                row.insertCell(1).textContent = 'Ball';
-                row.insertCell(2).textContent = r.vol.toFixed(4);
-                row.insertCell(3).textContent = r.zeta.toFixed(6);
-                row.insertCell(4).textContent = r.density.toFixed(4);
-                row.insertCell(5).textContent = r.theory.toFixed(1);
-                row.insertCell(6).textContent = Math.round(r.primitive);
-                row.insertCell(7).textContent = r.err.toFixed(1);
-                row.insertCell(8).textContent = r.relErr.toFixed(2) + '%';
-            }
-        }
-
-        function plotDimensionComparisons(R) {
-            const ns = [2, 3, 4, 5, 6, 7];
-            const theories = [];
-            const computed = [];
-            const relErrors = [];
-            const densities = [];
-
-            for (let n of ns) {
-                if (state.dimensionResults[n]) {
-                    const r = state.dimensionResults[n];
-                    theories.push(r.theory);
-                    computed.push(r.primitive);
-                    relErrors.push(r.relErr);
-                    densities.push(1 / r.zeta);
+                const t = document.getElementById('dtable');
+                t.innerHTML = '<tr><th>n</th><th>Vol(B_n)</th><th>ζ(n)</th><th>Theory</th><th>Computed</th><th>Error</th><th>Error %</th></tr>';
+                for (let n = 2; n <= 7; n++) {
+                    if (state.dimRes[n]) {
+                        const r = state.dimRes[n];
+                        const row = t.insertRow();
+                        row.insertCell(0).textContent = n;
+                        row.insertCell(1).textContent = r.v.toFixed(4);
+                        row.insertCell(2).textContent = r.z.toFixed(6);
+                        row.insertCell(3).textContent = r.th.toFixed(1);
+                        row.insertCell(4).textContent = Math.round(r.prim);
+                        row.insertCell(5).textContent = r.err.toFixed(1);
+                        row.insertCell(6).textContent = r.rel.toFixed(2);
+                    }
                 }
-            }
-
-            // Comparison plot
-            Plotly.newPlot('comparisonPlot', [
-                { x: ns, y: theories, name: 'Theory', type: 'scatter', mode: 'lines+markers', line: { color: 'rgba(255, 140, 0, 0.8)', width: 3 } },
-                { x: ns, y: computed, name: 'Computed', type: 'scatter', mode: 'markers', marker: { color: 'rgba(0, 217, 255, 0.8)', size: 8 } }
-            ], { title: `Theory vs Computed (R=${R.toFixed(1)})`, xaxis: { title: 'Dimension n' }, yaxis: { title: 'Primitive Count' }, plot_bgcolor: 'rgba(10, 14, 39, 0.8)', paper_bgcolor: 'rgba(10, 14, 39, 0.8)', font: { color: 'rgba(224, 224, 255, 1)' } });
-
-            // Error plot
-            Plotly.newPlot('errorPlot', [
-                { x: ns, y: relErrors, type: 'scatter', mode: 'lines+markers', fill: 'tozeroy', marker: { color: 'rgba(255, 0, 110, 0.8)', size: 8 }, line: { color: 'rgba(255, 0, 110, 0.8)', width: 2 }, name: 'Rel. Error %' }
-            ], { title: 'Relative Error by Dimension', xaxis: { title: 'Dimension n' }, yaxis: { title: 'Error %' }, plot_bgcolor: 'rgba(10, 14, 39, 0.8)', paper_bgcolor: 'rgba(10, 14, 39, 0.8)', font: { color: 'rgba(224, 224, 255, 1)' } });
-
-            // Density plot
-            Plotly.newPlot('densityPlot', [
-                { x: ns, y: densities, type: 'scatter', mode: 'lines+markers', fill: 'tozeroy', marker: { color: 'rgba(0, 255, 136, 0.8)', size: 8 }, line: { color: 'rgba(0, 255, 136, 0.8)', width: 2 }, name: 'ζ(n)^(-1)' }
-            ], { title: 'Primitive Density ζ(n)^(-1)', xaxis: { title: 'Dimension n' }, yaxis: { title: 'Density' }, plot_bgcolor: 'rgba(10, 14, 39, 0.8)', paper_bgcolor: 'rgba(10, 14, 39, 0.8)', font: { color: 'rgba(224, 224, 255, 1)' } });
+            }, 700);
         }
 
-        function plotZeta() {
-            const ns = Array.from({length: 21}, (_, i) => (i + 2) * 0.5);
-            const zetaVals = ns.map(n => zeta(n));
-            const volDensity = ns.map(n => volumeBall(n) / zeta(n));
+        function runAnalysis() {
+            const max_r = parseFloat(document.getElementById('amax').value);
+            const s = document.getElementById('ash').value;
+            state.s2d = s;
 
-            Plotly.newPlot('zetaPlot', [
-                { x: ns, y: zetaVals, name: 'ζ(n)', type: 'scatter', mode: 'lines', line: { color: 'rgba(255, 140, 0, 0.8)', width: 3 }, yaxis: 'y1' },
-                { x: ns, y: volDensity, name: 'Vol(B_n)/ζ(n)', type: 'scatter', mode: 'lines', line: { color: 'rgba(0, 217, 255, 0.8)', width: 3 }, yaxis: 'y2' }
-            ], {
-                title: 'Riemann Zeta and Primitive Density',
-                xaxis: { title: 'Dimension n' },
-                yaxis: { title: 'ζ(n)', side: 'left' },
-                yaxis2: { title: 'Vol/ζ(n)', overlaying: 'y', side: 'right' },
-                plot_bgcolor: 'rgba(10, 14, 39, 0.8)',
-                paper_bgcolor: 'rgba(10, 14, 39, 0.8)',
-                font: { color: 'rgba(224, 224, 255, 1)' }
+            const rs = [], ths = [], acts = [], errs = [], rels = [], avgs = [];
+            let avg = 0;
+
+            for (let r = 0.5; r <= max_r; r += 0.5) {
+                rs.push(r);
+                const pts = enum2D(r);
+                const p = pts.filter(x => x.p).length;
+                const th = theory(r, 2);
+                ths.push(th);
+                acts.push(p);
+                errs.push(Math.abs(p - th));
+                rels.push(100*p/pts.length);
+                avg = 0.7*avg + 0.3*Math.abs(p - th);
+                avgs.push(avg);
+            }
+
+            Plotly.newPlot('p1', [
+                {x: rs, y: ths, name: 'Theory', type: 'scatter', mode: 'lines', line: {color: 'rgba(255,140,0,0.8)', width: 3}},
+                {x: rs, y: acts, name: 'Actual', type: 'scatter', mode: 'markers', marker: {color: 'rgba(0,217,255,0.8)'}}
+            ], {plot_bgcolor: 'rgba(10,14,39,0.8)', paper_bgcolor: 'rgba(10,14,39,0.8)', font: {color: 'rgba(224,224,255,1)'}, margin: {l:60,r:40,t:40,b:40}});
+
+            Plotly.newPlot('p2', [
+                {x: rs, y: errs, name: 'Error', type: 'scatter', mode: 'markers', marker: {color: 'rgba(255,0,110,0.6)', size: 4}},
+                {x: rs, y: avgs, name: 'Running Avg', type: 'scatter', mode: 'lines', line: {color: 'rgba(0,255,136,0.9)', width: 3}}
+            ], {yaxis: {type: 'log'}, plot_bgcolor: 'rgba(10,14,39,0.8)', paper_bgcolor: 'rgba(10,14,39,0.8)', font: {color: 'rgba(224,224,255,1)'}, margin: {l:60,r:40,t:40,b:40}});
+
+            Plotly.newPlot('p3', [
+                {x: rs, y: rels, name: 'Rel %', type: 'scatter', mode: 'lines+markers', line: {color: 'rgba(0,217,255,0.8)'}, yaxis: 'y1'},
+                {x: rs, y: ths, name: 'Predicted', type: 'scatter', mode: 'lines', line: {color: 'rgba(255,140,0,0.8)', dash: 'dash'}, yaxis: 'y2'}
+            ], {yaxis: {title: 'Rel %', side: 'left'}, yaxis2: {title: 'Count', overlaying: 'y', side: 'right'}, plot_bgcolor: 'rgba(10,14,39,0.8)', paper_bgcolor: 'rgba(10,14,39,0.8)', font: {color: 'rgba(224,224,255,1)'}, margin: {l:80,r:80,t:40,b:40}});
+
+            const t = document.getElementById('atable');
+            t.innerHTML = '<tr><th>R</th><th>Theory</th><th>Actual</th><th>Error</th><th>Rel %</th><th>Running Avg</th></tr>';
+            for (let i = 0; i < rs.length; i++) {
+                const row = t.insertRow();
+                row.insertCell(0).textContent = rs[i].toFixed(1);
+                row.insertCell(1).textContent = ths[i].toFixed(1);
+                row.insertCell(2).textContent = acts[i];
+                row.insertCell(3).textContent = errs[i].toFixed(1);
+                row.insertCell(4).textContent = rels[i].toFixed(1);
+                row.insertCell(5).textContent = avgs[i].toFixed(1);
+            }
+        }
+
+        function analyzeShells() {
+            const R = parseFloat(document.getElementById('sr').value);
+            const maxK = parseInt(document.getElementById('sk').value);
+
+            const ks = [], contribs = [], cumuls = [];
+            let cum = 0;
+
+            for (let k = 1; k <= maxK; k++) {
+                const pts = enum2D(R/k);
+                const L = pts.length;
+                const m = k === 1 ? 1 : (k === 2 || k === 3 || k === 5 ? -1 : (k === 6 ? 1 : 0));
+                const c = m * L;
+                ks.push(k);
+                contribs.push(c);
+                cum += c;
+                cumuls.push(cum);
+            }
+
+            Plotly.newPlot('sp', [{x: ks, y: contribs, type: 'bar', marker: {color: contribs.map(x => x > 0 ? 'rgba(0,255,136,0.7)' : 'rgba(255,0,110,0.7)')}}], {plot_bgcolor: 'rgba(10,14,39,0.8)', paper_bgcolor: 'rgba(10,14,39,0.8)', font: {color: 'rgba(224,224,255,1)'}, margin: {l:60,r:40,t:40,b:40}});
+            Plotly.newPlot('sc', [{x: ks, y: cumuls, type: 'scatter', mode: 'lines+markers', fill: 'tozeroy', line: {color: 'rgba(0,217,255,0.8)', width: 3}, marker: {size: 6}}], {plot_bgcolor: 'rgba(10,14,39,0.8)', paper_bgcolor: 'rgba(10,14,39,0.8)', font: {color: 'rgba(224,224,255,1)'}, margin: {l:60,r:40,t:40,b:40}});
+
+            const t = document.getElementById('stable');
+            t.innerHTML = '<tr><th>k</th><th>μ(k)</th><th>L(R/k)</th><th>Contrib</th><th>Cumulative</th></tr>';
+            for (let i = 0; i < ks.length; i++) {
+                const row = t.insertRow();
+                row.insertCell(0).textContent = ks[i];
+                row.insertCell(1).textContent = (contribs[i] / (enum2D(R/ks[i]).length || 1)).toFixed(0);
+                row.insertCell(2).textContent = enum2D(R/ks[i]).length;
+                row.insertCell(3).textContent = contribs[i];
+                row.insertCell(4).textContent = cumuls[i].toFixed(1);
+            }
+        }
+
+        function exp2D() {
+            document.getElementById('c2d').toBlob(b => {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(b);
+                a.download = `mobius_2d_${Date.now()}.png`;
+                a.click();
             });
         }
 
-        // Export functions
-        function exportCanvas2D() {
-            const canvas = document.getElementById('canvas2d');
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL('image/png');
-            link.download = `mobius_2d_r${state.radius2d}_${Date.now()}.png`;
-            link.click();
+        function csv2D() {
+            let csv = 'x,y,gcd,primitive\n';
+            for (const p of state.pd2d) csv += `${p.x},${p.y},${p.g},${p.p}\n`;
+            const a = document.createElement('a');
+            a.href = 'data:text/csv,' + encodeURIComponent(csv);
+            a.download = `mobius_2d_${Date.now()}.csv`;
+            a.click();
         }
 
-        function exportData2D() {
-            let csv = 'x,y,gcd,isPrimitive\n';
-            for (const p of state.pointData2d) {
-                csv += `${p.x},${p.y},${p.gcd},${p.isPrimitive}\n`;
-            }
-            const link = document.createElement('a');
-            link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-            link.download = `mobius_2d_r${state.radius2d}_${Date.now()}.csv`;
-            link.click();
-        }
-
-        function exportDimensionData() {
-            let csv = 'n,Vol(B_n),zeta(n),Density,Theory,Computed,Error,RelError%,Method\n';
+        function csvDim() {
+            let csv = 'n,vol,zeta,theory,computed,error,error%\n';
             for (let n = 2; n <= 7; n++) {
-                if (state.dimensionResults[n]) {
-                    const r = state.dimensionResults[n];
-                    csv += `${n},${r.vol.toFixed(4)},${r.zeta.toFixed(6)},${r.density.toFixed(4)},${r.theory.toFixed(1)},${Math.round(r.primitive)},${r.err.toFixed(1)},${r.relErr.toFixed(2)},${r.method}\n`;
+                if (state.dimRes[n]) {
+                    const r = state.dimRes[n];
+                    csv += `${n},${r.v.toFixed(4)},${r.z.toFixed(6)},${r.th.toFixed(1)},${Math.round(r.prim)},${r.err.toFixed(1)},${r.rel.toFixed(2)}\n`;
                 }
             }
-            const link = document.createElement('a');
-            link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-            link.download = `mobius_dimensions_${Date.now()}.csv`;
-            link.click();
+            const a = document.createElement('a');
+            a.href = 'data:text/csv,' + encodeURIComponent(csv);
+            a.download = `mobius_dim_${Date.now()}.csv`;
+            a.click();
         }
 
-        function reset2D() {
-            document.getElementById('radius2d').value = 4;
-            state.radius2d = 4;
-            document.getElementById('radiusValue2d').textContent = '4';
+        function res2D() {
+            document.getElementById('r2d').value = 4;
+            state.r2d = 4;
+            document.getElementById('rv2d').textContent = '4';
             draw2D();
         }
 
-        // Tab switching
-        document.querySelectorAll('.tab-button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(b => {
+            b.addEventListener('click', function() {
+                document.querySelectorAll('.tab-button').forEach(x => x.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
                 this.classList.add('active');
                 document.getElementById(this.dataset.tab).classList.add('active');
-                
-                if (this.dataset.tab === 'zeta') {
-                    plotZeta();
-                }
             });
         });
 
-        // Event listeners
-        document.getElementById('radius2d').addEventListener('input', (e) => {
-            state.radius2d = parseFloat(e.target.value);
-            document.getElementById('radiusValue2d').textContent = state.radius2d.toFixed(1);
+        document.getElementById('r2d').addEventListener('input', e => {
+            state.r2d = parseFloat(e.target.value);
+            document.getElementById('rv2d').textContent = state.r2d.toFixed(1);
             draw2D();
         });
 
-        document.getElementById('radiusDim').addEventListener('input', (e) => {
-            state.radiusDim = parseFloat(e.target.value);
-            document.getElementById('radiusValueDim').textContent = state.radiusDim.toFixed(1);
-        });
-
-        document.getElementById('shape2d').addEventListener('change', (e) => {
-            state.shape2d = e.target.value;
+        document.getElementById('s2d').addEventListener('change', e => {
+            state.s2d = e.target.value;
             draw2D();
         });
 
-        document.getElementById('canvasScale2d').addEventListener('change', () => {
-            draw2D();
+        document.getElementById('cs2d').addEventListener('change', () => draw2D());
+
+        document.getElementById('rdim').addEventListener('input', e => {
+            document.getElementById('rvdim').textContent = e.target.value;
         });
 
-        // Initial draw
+        document.getElementById('sr').addEventListener('input', e => {
+            document.getElementById('srv').textContent = e.target.value;
+        });
+
         draw2D();
     </script>
 </body>
