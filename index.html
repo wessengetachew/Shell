@@ -441,17 +441,36 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="bg"><button onclick="screenshot2D()">Screenshot</button><button onclick="exp2D()">PNG Export</button><button class="s" onclick="csv2D()">CSV Export</button></div>
 <div class="g2">
 <div class="viz"><h3>2D Lattice Points Visualization (Click any point for details)</h3><canvas id="c2d" width="800" height="800"></canvas><div class="al" id="al2d"></div><div class="sg" id="st2d"></div></div>
-<div class="viz"><h3>Live Statistics Dashboard</h3><div id="stats2dLive" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
+<div class="viz"><h3>Live Statistics Dashboard <button onclick="screenshotDashboard('stats2dLive','2D_Lattice_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K Screenshot</button></h3><div id="stats2dLive" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
 </div>
 <div style="padding:1rem;background:rgba(0,255,136,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">2D Lattice & Basel Problem Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+P(gcd(x,y) = 1) = 6/π² = 1/ζ(2) ≈ 0.6079271
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Coprime Probability:</strong> P(gcd(x,y)=1) = 6/π² ≈ 60.79%</div>
-<div><strong>Basel Problem:</strong> ζ(2) = Σ1/n² = π²/6 ≈ 1.6449</div>
-<div><strong>Euler Product:</strong> ζ(2) = Π(1-p⁻²)⁻¹ over primes p</div>
+<div><strong>Basel Problem:</strong> ζ(2) = Σ1/n² = π²/6 ≈ 1.6449 (Euler, 1734)</div>
+<div><strong>Euler Product:</strong> ζ(2) = Π(1-p⁻²)⁻¹ over all primes p</div>
 <div><strong>Visible Points:</strong> Point (x,y) visible from origin iff gcd(x,y)=1</div>
 <div><strong>Asymptotic:</strong> #{primitive in B_R} ~ πR²/ζ(2) as R→∞</div>
-<div><strong>Smith Chart:</strong> w = (1+e^iθ)/(1-e^iθ) = i·cot(θ/2)</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Worked Examples:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.5rem">
+<div>• gcd(3,5)=1 → primitive (visible)</div>
+<div>• gcd(4,6)=2 → not primitive</div>
+<div>• gcd(7,11)=1 → primitive</div>
+<div>• gcd(12,18)=6 → not primitive</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('r2dv').value=4;document.getElementById('r2d').value=4;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=4 (Small)</button>
+<button onclick="document.getElementById('r2dv').value=10;document.getElementById('r2d').value=10;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=10 (Medium)</button>
+<button onclick="document.getElementById('r2dv').value=25;document.getElementById('r2d').value=25;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=25 (Large)</button>
+<button onclick="document.getElementById('r2dv').value=50;document.getElementById('r2d').value=50;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=50 (Dense)</button>
+</div>
 </div>
 </div>
 </div>
@@ -485,17 +504,36 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="bg"><button onclick="screenshot3D()">Screenshot</button><button onclick="screenshot3D4K()">4K Export</button><button onclick="anim3d=!anim3d">Auto Rotate</button><button class="s" onclick="rx=0;ry=0;rz=0;panX=0;panY=0;document.getElementById('zm3d').value=1;document.getElementById('zmv').textContent='1x';document.getElementById('rotX').value=0;document.getElementById('rotY').value=0;document.getElementById('rotZ').value=0;document.getElementById('rotXr').value=0;document.getElementById('rotYr').value=0;document.getElementById('rotZr').value=0;draw3D()">Reset View</button><button class="s" onclick="csv3D()">Export Points</button></div>
 <div class="g2">
 <div class="viz"><h3>3D Ball Visualization (Drag to rotate | Scroll to zoom | Right-click to pan)</h3><canvas id="c3d" width="700" height="700"></canvas><div class="al" id="al3d"></div><div class="sg" id="st3d"></div></div>
-<div class="viz"><h3>Live Statistics Dashboard</h3><div id="stats3dLive" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
+<div class="viz"><h3>Live Statistics Dashboard <button onclick="screenshotDashboard('stats3dLive','3D_Ball_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K Screenshot</button></h3><div id="stats3dLive" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
 </div>
 <div style="padding:1rem;background:rgba(0,217,255,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">3D Lattice & Apéry's Constant Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+P(gcd(x,y,z) = 1) = 1/ζ(3) ≈ 0.8319073
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Coprime Probability:</strong> P(gcd(x,y,z)=1) = 1/ζ(3) ≈ 83.19%</div>
-<div><strong>Apéry's Constant:</strong> ζ(3) = Σ1/n³ ≈ 1.2021 (irrational)</div>
-<div><strong>Euler Product:</strong> ζ(3) = Π(1-p⁻³)⁻¹ over primes</div>
+<div><strong>Apéry's Constant:</strong> ζ(3) = Σ1/n³ ≈ 1.2021 (proved irrational 1978)</div>
+<div><strong>Euler Product:</strong> ζ(3) = Π(1-p⁻³)⁻¹ over all primes</div>
 <div><strong>Ball Volume:</strong> V₃ = (4/3)πR³</div>
 <div><strong>Asymptotic:</strong> #{primitive in B_R} ~ (4/3)πR³/ζ(3)</div>
-<div><strong>Visibility:</strong> Point (x,y,z) visible iff gcd(x,y,z)=1</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Worked Examples:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.5rem">
+<div>• gcd(2,3,5)=1 → primitive</div>
+<div>• gcd(4,6,8)=2 → not primitive</div>
+<div>• gcd(1,1,1)=1 → primitive</div>
+<div>• gcd(6,9,12)=3 → not primitive</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('r3dv').value=3;document.getElementById('r3d').value=3;draw3D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=3 (Small)</button>
+<button onclick="document.getElementById('r3dv').value=6;document.getElementById('r3d').value=6;draw3D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=6 (Medium)</button>
+<button onclick="document.getElementById('r3dv').value=12;document.getElementById('r3d').value=12;draw3D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=12 (Large)</button>
+<button onclick="document.getElementById('r3dv').value=20;document.getElementById('r3d').value=20;draw3D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=20 (Dense)</button>
+</div>
 </div>
 </div>
 <p style="color:var(--txt2);font-size:.9rem;padding:1rem;background:rgba(0,217,255,.05);border-radius:4px"><strong>Controls:</strong> Left-drag to rotate | Scroll to zoom | Right-drag to pan | Inverted flips inner↔outer</p>
@@ -522,17 +560,40 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Möbius Function μ(n) — The Heart of the Sieve</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">μ(n) = (-1)^k if n = p₁p₂...pₖ (k distinct primes), 0 if n has squared factor. Core identity: Σ_{d|n} μ(d) = [n=1]</p>
 <canvas id="cmob" width="800" height="500"></canvas><div class="al" id="almob"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="mobLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('mobLiveStats','Mobius_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="mobLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Distribution</h3><div class="pc" id="pmobDist"></div></div>
 </div>
 <div class="viz"><h3>Möbius Data Table (Click rows)</h3><div style="max-height:300px;overflow-y:auto"><table id="tmobT"><tr><th>n</th><th>μ(n)</th><th>M(n)</th><th>Factorization</th><th>Squarefree</th></tr></table></div></div>
 <div style="padding:1rem;background:rgba(150,100,255,.08);border-radius:8px;margin-top:1rem">
-<h4 style="color:var(--acc);margin-bottom:.5rem">Key Identities</h4>
+<h4 style="color:var(--acc);margin-bottom:.5rem">Möbius Function μ(n) Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+μ(n) = (-1)^k if n = p₁p₂...pₖ distinct primes, else 0 &nbsp;|&nbsp; Σ_{d|n} μ(d) = [n=1]
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
 <div><strong>Möbius Inversion:</strong> If g(n) = Σ_{d|n} f(d), then f(n) = Σ_{d|n} μ(d)g(n/d)</div>
 <div><strong>Euler Product:</strong> 1/ζ(s) = Σ μ(n)/nˢ = Π(1 - p⁻ˢ)</div>
-<div><strong>Totient Connection:</strong> φ(n) = n · Σ_{d|n} μ(d)/d</div>
-<div><strong>Mertens Bound:</strong> |M(x)| = |Σ_{n≤x} μ(n)| = O(x^½) (RH equivalent)</div>
+<div><strong>Totient:</strong> φ(n) = n · Σ_{d|n} μ(d)/d</div>
+<div><strong>Mertens:</strong> |M(x)| = O(x^½) equivalent to RH</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Examples:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem">
+<div>• μ(1) = 1</div>
+<div>• μ(2) = -1 (prime)</div>
+<div>• μ(6) = 1 (2·3)</div>
+<div>• μ(4) = 0 (2²)</div>
+<div>• μ(30) = -1 (2·3·5)</div>
+<div>• μ(12) = 0 (2²·3)</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('mobNv').value=50;document.getElementById('mobN').value=50;drawMobius()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=50</button>
+<button onclick="document.getElementById('mobNv').value=100;document.getElementById('mobN').value=100;drawMobius()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100</button>
+<button onclick="document.getElementById('mobNv').value=500;document.getElementById('mobN').value=500;drawMobius()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=500</button>
+<button onclick="document.getElementById('mobNv').value=1000;drawMobius()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+</div>
 </div>
 </div>
 </div>
@@ -562,18 +623,36 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Cayley Transform: 𝔻 → ℍ Upper Half-Plane</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">w = i(1+z)/(1-z) maps unit disk to ℍ. PSL(2,ℤ) acts by Möbius transformations. Geodesics are semicircles ⊥ to ℝ.</p>
 <canvas id="ccay" width="850" height="550"></canvas><div class="al" id="alcay"></div><div class="sg" id="stcay"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="cayLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('cayLiveStats','Cayley_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="cayLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Im(w) Distribution</h3><div class="pc" id="pcayDist"></div></div>
 </div>
 <div style="padding:1rem;background:rgba(0,217,255,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Hyperbolic Geometry & Modular Group</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²)/y²
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Cayley Transform:</strong> w = i(1+z)/(1-z) maps 𝔻 → ℍ</div>
-<div><strong>Hyperbolic Metric:</strong> ds² = (dx² + dy²)/y²</div>
-<div><strong>Geodesics:</strong> Vertical lines and semicircles ⊥ ℝ</div>
+<div><strong>Geodesics:</strong> Vertical lines and semicircles ⊥ to ℝ</div>
 <div><strong>PSL(2,ℤ):</strong> Generated by T: z↦z+1 and S: z↦-1/z</div>
-<div><strong>Ford Circles:</strong> C(p/q) has center (p/q, 1/2q²) and radius 1/2q²</div>
-<div><strong>Farey Neighbors:</strong> p/q, r/s are neighbors iff |ps-qr|=1</div>
+<div><strong>Ford Circles:</strong> C(p/q) center (p/q, 1/2q²), radius 1/2q²</div>
+<div><strong>Farey Neighbors:</strong> p/q, r/s neighbors iff |ps-qr|=1</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Examples:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.5rem">
+<div>• C(0/1) tangent to C(1/1)</div>
+<div>• 1/2 and 1/3 are Farey neighbors</div>
+<div>• Fundamental domain: |z|≥1, |Re(z)|≤½</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('rcayv').value=4;document.getElementById('rcay').value=4;drawCayley()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=4</button>
+<button onclick="document.getElementById('rcayv').value=8;document.getElementById('rcay').value=8;drawCayley()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=8</button>
+<button onclick="document.getElementById('cayFord').checked=true;document.getElementById('cayFordQ').value=10;drawCayley()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Ford Circles</button>
+<button onclick="document.getElementById('cayFund').checked=true;drawCayley()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Fund. Domain</button>
+</div>
 </div>
 </div>
 </div>
@@ -603,7 +682,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Cyclic Group (ℤ/Mℤ)×</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">g is a primitive root ⟺ ord(g) = φ(M) ⟺ ⟨g⟩ = (ℤ/Mℤ)×</p>
 <canvas id="cprim" width="700" height="700"></canvas><div class="al" id="alprim"></div><div class="sg" id="stprim"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="primLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('primLiveStats','PrimRoot_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="primLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Order Distribution</h3><div class="pc" id="pprimord"></div>
 <h3 style="margin-top:1rem">Power Sequence gⁿ mod M</h3><div class="pc" id="pprimseq"></div></div>
 </div>
@@ -618,8 +697,15 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div><strong>Existence:</strong> Prim roots exist for M = 1,2,4,pᵏ,2pᵏ (p odd prime)</div>
 <div><strong>Count:</strong> If exists, exactly φ(φ(M)) primitive roots</div>
 <div><strong>Discrete Log:</strong> If g prim root, every unit k = gⁱ for unique i</div>
-<div><strong>Quadratic Residues:</strong> QR ⟺ k = g²ⁱ ⟺ k^(φ(M)/2) ≡ 1</div>
-<div><strong>Subgroups:</strong> For each d|φ(M), unique subgroup of order d</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Examples:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem">
+<div>• 3 is prim root mod 7</div>
+<div>• 2 is prim root mod 5</div>
+<div>• No prim root mod 8</div>
+<div>• 2 is prim root mod 11</div>
+</div>
 </div>
 </div>
 </div>
@@ -661,7 +747,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Farey Sequence F<sub id="fareyQdisp">8</sub></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">F_Q = {p/q : 0≤p≤q≤Q, gcd(p,q)=1} ordered by value. Neighbors satisfy |ps-qr|=1.</p>
 <canvas id="cfarey" width="850" height="550"></canvas><div class="al" id="alfarey"></div><div class="sg" id="stfarey"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="fareyLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('fareyLiveStats','Farey_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="fareyLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">|F_Q| Growth</h3><div class="pc" id="pfareyGrowth"></div>
 <h3 style="margin-top:1rem">Denominator Distribution</h3><div class="pc" id="pfareyDenom"></div></div>
 </div>
@@ -671,13 +757,29 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(0,255,136,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Farey Sequence Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+|F_Q| = 1 + Σ_{k=1}^Q φ(k) ≈ 3Q²/π² &nbsp;|&nbsp; Neighbors: |ps - qr| = 1
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
 <div><strong>Definition:</strong> F_Q = {p/q : 0≤p≤q≤Q, gcd(p,q)=1}</div>
-<div><strong>Size:</strong> |F_Q| = 1 + Σφ(k) for k=1..Q ≈ 3Q²/π²</div>
-<div><strong>Neighbor Property:</strong> p/q, r/s neighbors ⟺ |ps-qr|=1</div>
 <div><strong>Mediant:</strong> Between p/q, r/s insert (p+r)/(q+s)</div>
-<div><strong>Ford Circles:</strong> C(p/q) has center (p/q, 1/2q²), radius 1/2q²</div>
-<div><strong>Tangency:</strong> C(p/q), C(r/s) tangent ⟺ |ps-qr|=1</div>
+<div><strong>Ford Circles:</strong> C(p/q) center (p/q, 1/2q²), radius 1/2q²</div>
+<div><strong>Tangency:</strong> C(p/q), C(r/s) tangent iff neighbors</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Examples (F₅):</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem">
+0/1, 1/5, 1/4, 1/3, 2/5, 1/2, 3/5, 2/3, 3/4, 4/5, 1/1 &nbsp;(|F₅|=11)
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="setFareyQ(5)" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">F₅ (11)</button>
+<button onclick="setFareyQ(10)" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">F₁₀ (33)</button>
+<button onclick="setFareyQ(20)" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">F₂₀ (129)</button>
+<button onclick="document.getElementById('fareyViz').value='ford';drawFarey()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Ford Circles</button>
+</div>
 </div>
 </div>
 </div>
@@ -726,17 +828,36 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Modular Ring System: θ = 2πr/M</h3><p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Concentric rings show residue classes. Gold points have GCD(r,M)=1 (Dirichlet character support χ(r)≠0). Direct lifts connect same residue across moduli.</p><canvas id="cmod" width="800" height="800"></canvas><div class="al" id="almod"></div><div class="sg" id="stmod"></div></div>
 <div class="g2">
 <div class="viz"><h3>Totient Density φ(M)/M</h3><div class="pc" id="pmodphi"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="modLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('modLiveStats','ModRings_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="modLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
 </div>
 <div style="padding:1rem;background:rgba(150,100,255,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Modular Arithmetic & Totient Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+φ(M) = M · ∏_{p|M}(1 - 1/p) &nbsp;|&nbsp; |(ℤ/Mℤ)*| = φ(M)
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Euler's Totient:</strong> φ(M) = #{r : 1≤r≤M, gcd(r,M)=1}</div>
-<div><strong>Product Formula:</strong> φ(M) = M·Π(1-1/p) for p|M</div>
-<div><strong>Totient Density:</strong> φ(M)/M → 0 as M→∞ (highly composite)</div>
+<div><strong>Euler's Totient:</strong> φ(M) = #{r : gcd(r,M)=1}</div>
 <div><strong>Unit Group:</strong> (ℤ/Mℤ)* has order φ(M)</div>
-<div><strong>Dirichlet Characters:</strong> χ: (ℤ/Mℤ)* → ℂ*, χ(r)≠0 iff gcd(r,M)=1</div>
-<div><strong>Direct Lift:</strong> r mod M lifts to r mod kM for k∈ℤ⁺</div>
+<div><strong>Euler's Theorem:</strong> a^φ(M) ≡ 1 (mod M)</div>
+<div><strong>CRT:</strong> ℤ/MN ≅ ℤ/M × ℤ/N if gcd(M,N)=1</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Examples:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.5rem">
+<div>• φ(6) = 2</div>
+<div>• φ(10) = 4</div>
+<div>• φ(12) = 4</div>
+<div>• φ(30) = 8</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('modMax').value=6;drawModRings()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M≤6</button>
+<button onclick="document.getElementById('modMax').value=12;drawModRings()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M≤12</button>
+<button onclick="document.getElementById('modMax').value=30;drawModRings()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M≤30</button>
+<button onclick="document.getElementById('smithMod').checked=true;drawModRings()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Smith Chart</button>
+</div>
 </div>
 </div>
 </div>
@@ -759,7 +880,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="bg"><button onclick="runErrNew()">Analyze</button><button onclick="runErrConvergence()">Convergence Study</button><button onclick="screenshotErr()">Screenshot</button><button class="s" onclick="csvErr()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Theory vs Actual Count</h3><div class="pc" id="pe1"></div><div class="al" id="ale1"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="errLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('errLiveStats','Error_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="errLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
 </div>
 <div class="g2">
 <div class="viz"><h3>Absolute Error |Actual - Theory|</h3><div class="pc" id="pe2"></div><div class="al" id="ale2"></div></div>
@@ -775,13 +896,23 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(255,0,110,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Error Analysis Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+N(R) = Vol(K)·R^n / ζ(n) + O(R^(n-1)) &nbsp;|&nbsp; |Error| = O(R^θ)
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Circle:</strong> N(R) = πR² + O(R^θ), best θ ≈ 0.63</div>
-<div><strong>Square:</strong> N(R) = (2R+1)² exactly for integers</div>
-<div><strong>Primitive (Circle):</strong> P(R) = πR²/ζ(2) + O(R·log R)</div>
-<div><strong>Primitive (Square):</strong> P(R) = (2R+1)²/ζ(2) + O(R·log R)</div>
-<div><strong>RMS Error:</strong> √(Σ(err²)/n) measures typical deviation</div>
-<div><strong>Boundary Effect:</strong> Error grows with perimeter O(R)</div>
+<div><strong>Circle:</strong> N(R) = πR² + O(R^θ), best θ≈0.63</div>
+<div><strong>Primitive:</strong> P(R) = πR²/ζ(2) + O(R log R)</div>
+<div><strong>Boundary:</strong> Error grows with perimeter</div>
+<div><strong>RMS:</strong> √(Σ err²/n) measures deviation</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('errRv').value=25;runErrNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤25</button>
+<button onclick="document.getElementById('errRv').value=50;runErrNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤50</button>
+<button onclick="document.getElementById('errRv').value=100;runErrNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤100</button>
+<button onclick="document.getElementById('errSh').value='square';runErrNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Square</button>
+</div>
 </div>
 </div>
 </div>
@@ -799,7 +930,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="bg"><button onclick="runDimNew()">Compute All Dimensions</button><button onclick="screenshotDim()">Screenshot</button><button class="s" onclick="csvDim()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>ζ(n) Convergence to 1</h3><div class="pc" id="pdimZeta"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="dimLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('dimLiveStats','Dimension_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="dimLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
 </div>
 <div class="g2">
 <div class="viz"><h3>1/ζ(n) Coprime Density</h3><div class="pc" id="pdimDens"></div></div>
@@ -808,13 +939,23 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Dimension Analysis (Click rows)</h3><div style="max-height:350px;overflow-y:auto"><table id="tdimT"><tr><th>n</th><th>Vol(Bⁿ)</th><th>ζ(n)</th><th>1/ζ(n)</th><th>Computed</th><th>Error</th><th>Method</th></tr></table></div></div>
 <div style="padding:1rem;background:rgba(255,140,0,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Dimension Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+P(gcd = 1) = 1/ζ(n) → 1 as n → ∞ &nbsp;|&nbsp; Vol(Bⁿ) = π^(n/2) / Γ(n/2+1)
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Volume Formula:</strong> Vol(Bⁿ) = πⁿ/²/Γ(n/2+1)</div>
-<div><strong>Coprime Density:</strong> P(gcd=1) = 1/ζ(n) → 1 as n→∞</div>
-<div><strong>ζ(n) values:</strong> ζ(2)=π²/6, ζ(4)=π⁴/90, ζ(2k)=rational×π²ᵏ</div>
-<div><strong>Apéry:</strong> ζ(3)≈1.202 is irrational (proved 1978)</div>
-<div><strong>Peak Volume:</strong> n-ball volume peaks near n≈5 for R=1</div>
-<div><strong>High Dimensions:</strong> Volume concentrates near surface as n→∞</div>
+<div><strong>ζ(2):</strong> π²/6 → 60.8% coprime</div>
+<div><strong>ζ(3):</strong> Apéry ≈ 1.202 → 83.2% coprime</div>
+<div><strong>ζ(4):</strong> π⁴/90 → 92.4% coprime</div>
+<div><strong>ζ(∞):</strong> → 1 → 100% coprime</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('dimMaxV').value=10;runDimNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n≤10</button>
+<button onclick="document.getElementById('dimMaxV').value=20;runDimNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n≤20</button>
+<button onclick="document.getElementById('rdimv').value=3;runDimNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=3</button>
+<button onclick="document.getElementById('dimMode').value='full';runDimNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Full Compute</button>
+</div>
 </div>
 </div>
 </div>
@@ -839,7 +980,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Möbius Shell Contributions</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Primitive count P(R) = Σ μ(k)·L(R/k) where L counts all lattice points</p>
 <div class="pc" id="psh"></div><div class="al" id="alsh"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="shLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('shLiveStats','Shell_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="shLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
 </div>
 <div class="g2">
 <div class="viz"><h3>Cumulative Sum Convergence</h3><div class="pc" id="pshCum"></div></div>
@@ -855,13 +996,29 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(0,255,136,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Möbius Shell Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+P(R) = Σ_{k=1}^R μ(k) · L(R/k) &nbsp;|&nbsp; L(r) = lattice points in ball
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Möbius Inversion:</strong> P(R) = Σ_{k=1}^∞ μ(k)·L(R/k)</div>
-<div><strong>μ(k) values:</strong> μ(1)=1, μ(p)=−1, μ(p²)=0, μ(pq)=1</div>
-<div><strong>Convergence:</strong> Sum truncates when R/k < 1</div>
-<div><strong>Cancellation:</strong> Positive & negative terms cancel to give P(R)</div>
 <div><strong>Main Term:</strong> k=1 gives L(R) (all points)</div>
-<div><strong>First Correction:</strong> k=2 removes even-gcd points</div>
+<div><strong>Correction:</strong> k=2 removes even-gcd</div>
+<div><strong>Cancellation:</strong> ± terms sum to primitive count</div>
+<div><strong>Truncates:</strong> When R/k < 1</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Example (R=6):</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem">
+P(6) = L(6) - L(3) - L(2) + L(1) - L(1.5) - L(1.2) + ...
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('rshv').value=5;runShNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=5</button>
+<button onclick="document.getElementById('rshv').value=10;runShNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=10</button>
+<button onclick="document.getElementById('rshv').value=25;runShNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=25</button>
+<button onclick="animateShells()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Animate</button>
+</div>
 </div>
 </div>
 </div>
@@ -877,7 +1034,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="bg"><button onclick="runGCD()">Analyze GCD</button><button onclick="runGCDConvergence()">Convergence Study</button><button onclick="screenshotGCD()">Screenshot</button><button class="s" onclick="csvGCD()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>GCD Frequency Distribution</h3><div class="pc" id="pgcd1"></div><div class="al" id="algcd1"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="gcdLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('gcdLiveStats','GCD_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="gcdLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
 </div>
 <div class="g2">
 <div class="viz"><h3>Cumulative Distribution</h3><div class="pc" id="pgcd2"></div><div class="al" id="algcd2"></div></div>
@@ -893,13 +1050,23 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(0,217,255,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">GCD Distribution Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+P(gcd = k) = 1/(k² · ζ(2)) = 6/(π²k²) &nbsp;|&nbsp; P(gcd = 1) ≈ 60.79%
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>P(gcd=1):</strong> 1/ζ(2) = 6/π² ≈ 60.79%</div>
-<div><strong>P(gcd=k):</strong> 1/(k²·ζ(2)) for coprime scaling</div>
-<div><strong>Average GCD:</strong> Grows like √(log R) asymptotically</div>
-<div><strong>Squarefree Density:</strong> 6/π² ≈ 60.79%</div>
-<div><strong>Möbius Connection:</strong> Σμ(d) over d|gcd encodes coprimality</div>
-<div><strong>Expected GCD=k:</strong> ≈ N·μ(k)/k² where N = total points</div>
+<div><strong>P(gcd=1):</strong> 6/π² ≈ 60.79%</div>
+<div><strong>P(gcd=2):</strong> 6/(4π²) ≈ 15.20%</div>
+<div><strong>P(gcd=3):</strong> 6/(9π²) ≈ 6.75%</div>
+<div><strong>Average GCD:</strong> ~ √(log R)</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('rgcdv').value=10;runGCD()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=10</button>
+<button onclick="document.getElementById('rgcdv').value=25;runGCD()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=25</button>
+<button onclick="document.getElementById('rgcdv').value=50;runGCD()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=50</button>
+<button onclick="document.getElementById('gcdShape').value='square';runGCD()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Square</button>
+</div>
 </div>
 </div>
 </div>
@@ -942,19 +1109,38 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="bg"><button onclick="screenshotGaus()">Screenshot</button><button onclick="drawGaus()">Analyze</button><button class="s" onclick="expGaus()">PNG Export</button><button class="s" onclick="csvGaus()">CSV Export</button></div>
 <div class="g2">
 <div class="viz"><h3>Complex Plane ℤ[i] (Click points)</h3><canvas id="cgaus" width="700" height="700"></canvas><div class="al" id="algaus1"></div></div>
-<div class="viz"><h3>Live Statistics Dashboard</h3><div id="gausLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('gausLiveStats','Gaussian_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="gausLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Norm Distribution</h3><div class="pc" id="pgaus"></div><div class="al" id="algaus2"></div></div>
 </div>
 <div class="sg" id="stgaus"></div>
 <div style="padding:1rem;background:rgba(255,215,0,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Gaussian Integers ℤ[i] Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+N(a+bi) = a² + b² &nbsp;|&nbsp; p = a²+b² ⟺ p=2 or p≡1 (mod 4)
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Norm:</strong> N(a+bi) = a² + b² (multiplicative)</div>
-<div><strong>Units:</strong> ±1, ±i (exactly 4 elements)</div>
-<div><strong>Gaussian Primes:</strong> N(z) prime, OR z=p with p≡3 (mod 4)</div>
-<div><strong>Fermat's Theorem:</strong> p=2 or p≡1(mod 4) ⟺ p=a²+b²</div>
-<div><strong>GCD in ℤ[i]:</strong> Euclidean algorithm works (UFD)</div>
-<div><strong>Sum of Two Squares:</strong> n = Σr₂(k) counts representations</div>
+<div><strong>Units:</strong> {±1, ±i} exactly 4</div>
+<div><strong>Gaussian Prime:</strong> N(z) prime OR p≡3(mod 4)</div>
+<div><strong>UFD:</strong> Unique factorization domain</div>
+<div><strong>Fermat:</strong> Two squares theorem</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Examples:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem">
+<div>• 5 = (2+i)(2-i)</div>
+<div>• 3 is Gaussian prime</div>
+<div>• 13 = (3+2i)(3-2i)</div>
+<div>• 2 = -i(1+i)²</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('rgausv').value=5;drawGaus()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=5</button>
+<button onclick="document.getElementById('rgausv').value=10;drawGaus()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=10</button>
+<button onclick="document.getElementById('colGaus').value='gprime';drawGaus()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Gaussian Primes</button>
+<button onclick="document.getElementById('colGaus').value='norm';drawGaus()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">By Norm</button>
+</div>
 </div>
 </div>
 </div>
@@ -974,7 +1160,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Gauss Circle Visualization</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Lattice points inside circle of radius R. Count ≈ πR² with error O(R^θ).</p>
 <canvas id="ccirc" width="600" height="600"></canvas></div>
-<div class="viz"><h3>Live Statistics</h3><div id="circLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('circLiveStats','Circle_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="circLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Error Function r(R) = N(R) - πR²</h3><div class="pc" id="pc2"></div><div class="al" id="alc2"></div></div>
 </div>
 <div class="g2">
@@ -991,13 +1177,32 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(255,100,150,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Gauss Circle Problem Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+N(R) = πR² + r(R) &nbsp;where&nbsp; |r(R)| = O(R^θ), θ ≤ 131/208 ≈ 0.63
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Count Formula:</strong> N(R) = #{(x,y)∈ℤ² : x²+y²≤R²}</div>
-<div><strong>Main Term:</strong> N(R) = πR² + r(R)</div>
-<div><strong>Gauss Bound:</strong> |r(R)| = O(R) (trivial)</div>
-<div><strong>Best Known:</strong> |r(R)| = O(R^(131/208)) ≈ O(R^0.63)</div>
+<div><strong>Count:</strong> N(R) = #{(x,y)∈ℤ² : x²+y²≤R²}</div>
 <div><strong>Hardy Conjecture:</strong> r(R) = O(R^(1/2+ε)) for all ε>0</div>
-<div><strong>Omega Result:</strong> r(R) = Ω(R^(1/2)(log R)^(1/4))</div>
+<div><strong>Omega Result:</strong> r(R) = Ω(R^½ (log R)^¼)</div>
+<div><strong>Gauss (1834):</strong> First studied, trivial bound O(R)</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Examples:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem">
+<div>• N(1) = 5</div>
+<div>• N(2) = 13</div>
+<div>• N(5) = 81</div>
+<div>• N(10) = 317</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('circRv').value=10;document.getElementById('circR').value=10;drawCircleViz();runCircNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤10</button>
+<button onclick="document.getElementById('circRv').value=25;document.getElementById('circR').value=25;drawCircleViz();runCircNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤25</button>
+<button onclick="document.getElementById('circRv').value=50;document.getElementById('circR').value=50;drawCircleViz();runCircNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤50</button>
+<button onclick="document.getElementById('circRv').value=100;runCircNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤100</button>
+</div>
 </div>
 </div>
 </div>
@@ -1023,7 +1228,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Euler Product Verification</h3><div class="pc" id="pdensEuler"></div></div>
 </div>
 <div class="g2">
-<div class="viz"><h3>Live Statistics</h3><div id="densLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('densLiveStats','Density_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="densLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
 <div class="viz"><h3>Convergence to Limit</h3><div class="pc" id="pdensConv"></div></div>
 </div>
 <div class="viz"><h3>Comprehensive Density Table (Click rows)</h3>
@@ -1032,13 +1237,23 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(255,140,0,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Zeta Function & Primitive Density Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+P(gcd(x₁,...,xₖ)=1) = 1/ζ(k) → 1 as k → ∞
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Riemann Zeta:</strong> ζ(s) = Σ n⁻ˢ = Π(1-p⁻ˢ)⁻¹</div>
-<div><strong>Coprime Density:</strong> P(gcd(x₁,...,xₖ)=1) = 1/ζ(k)</div>
-<div><strong>Basel Problem:</strong> ζ(2) = π²/6 ≈ 1.6449</div>
-<div><strong>Apéry's Constant:</strong> ζ(3) ≈ 1.2021 (irrational)</div>
-<div><strong>Even Values:</strong> ζ(2n) = (-1)ⁿ⁺¹ B₂ₙ(2π)²ⁿ/(2(2n)!)</div>
-<div><strong>Limit:</strong> lim_{k→∞} ζ(k) = 1, so P(coprime) → 1</div>
+<div><strong>ζ(2):</strong> π²/6 → 60.8% coprime pairs</div>
+<div><strong>ζ(3):</strong> Apéry ≈ 1.202 → 83.2%</div>
+<div><strong>ζ(10):</strong> ≈ 1.00099 → 99.9%</div>
+<div><strong>Euler Product:</strong> ζ(s) = Π(1-p⁻ˢ)⁻¹</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('densMaxKv').textContent=10;runDensNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">k≤10</button>
+<button onclick="document.getElementById('densMaxKv').textContent=15;runDensNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">k≤15</button>
+<button onclick="document.getElementById('densMode').value='sample';runDensNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Monte Carlo</button>
+<button onclick="runConvergence()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Convergence</button>
+</div>
 </div>
 </div>
 </div>
@@ -1077,7 +1292,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Dirichlet Character χ mod <span id="dirMdisp">12</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">χ(r) ≠ 0 (gold) when gcd(r,M)=1. χ(r) = 0 (gray) when gcd(r,M) > 1. Characters map units to roots of unity.</p>
 <canvas id="cdir" width="750" height="550"></canvas><div class="al" id="aldir"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="dirLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('dirLiveStats','Dirichlet_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="dirLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Character Value Distribution</h3><div class="pc" id="pdirDist"></div></div>
 </div>
 <div class="g2">
@@ -1090,15 +1305,29 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(255,215,0,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Dirichlet Character Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 for χ≠χ₀
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Definition:</strong> χ: ℤ → ℂ, completely multiplicative, periodic mod M</div>
-<div><strong>Support:</strong> χ(r) ≠ 0 iff gcd(r,M) = 1 (φ(M) values)</div>
-<div><strong>Vanishing:</strong> χ(r) = 0 when gcd(r,M) > 1</div>
-<div><strong>Principal χ₀:</strong> χ₀(r) = 1 if gcd(r,M)=1, else 0</div>
-<div><strong>Character Count:</strong> Exactly φ(M) characters mod M</div>
-<div><strong>L-function:</strong> L(s,χ) = Σ χ(n)/nˢ = Π(1-χ(p)p⁻ˢ)⁻¹</div>
-<div><strong>Orthogonality:</strong> Σᵣ χ(r)χ̄'(r) = φ(M)·δ_{χ,χ'}</div>
-<div><strong>Dirichlet's Theorem:</strong> Primes ≡ a (mod M) infinite if gcd(a,M)=1</div>
+<div><strong>Principal χ₀:</strong> χ₀(r)=1 if gcd(r,M)=1</div>
+<div><strong>Count:</strong> φ(M) characters mod M</div>
+<div><strong>Orthogonality:</strong> Σχ(r)χ̄'(r) = φ(M)δ_{χχ'}</div>
+<div><strong>Dirichlet:</strong> ∞ primes in each class</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Examples (mod 5):</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem">
+χ₀: 1→1, 2→1, 3→1, 4→1 | χ₁: 1→1, 2→i, 3→-i, 4→-1
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('dirMv').value=5;drawDirichlet()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M=5</button>
+<button onclick="document.getElementById('dirMv').value=12;drawDirichlet()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M=12</button>
+<button onclick="document.getElementById('dirViz').value='table';drawDirichlet()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Full Table</button>
+<button onclick="showAllChars()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">All χ</button>
+</div>
 </div>
 </div>
 </div>
@@ -1141,7 +1370,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Prime Gap Analysis up to N = <span id="twinNdisp">1000</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Twin primes (p, p+2) become rarer but are conjectured infinite. Brun proved Σ1/p (twin) converges.</p>
 <canvas id="ctwin" width="800" height="500"></canvas><div class="al" id="altwin"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="twinLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('twinLiveStats','TwinPrime_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="twinLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Gap Frequency</h3><div class="pc" id="ptwinGap"></div></div>
 </div>
 <div class="g2">
@@ -1154,15 +1383,29 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(255,100,150,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Twin Prime Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+π₂(x) ~ 2C₂ · x/(ln x)² &nbsp;|&nbsp; B₂ = Σ(1/p + 1/(p+2)) ≈ 1.902
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Twin Primes:</strong> Pairs (p, p+2) where both prime</div>
-<div><strong>Twin Prime Conjecture:</strong> Infinitely many twin primes (unproved)</div>
-<div><strong>Brun's Theorem:</strong> Σ(1/p + 1/(p+2)) converges to B₂ ≈ 1.902</div>
-<div><strong>Hardy-Littlewood:</strong> π₂(x) ~ 2C₂ x/(ln x)² where C₂ ≈ 0.66</div>
-<div><strong>Cousin Primes:</strong> (p, p+4) — also conjectured infinite</div>
-<div><strong>Sexy Primes:</strong> (p, p+6) — gap divisible by 6</div>
-<div><strong>Prime k-tuples:</strong> Admissible patterns conjectured infinite</div>
-<div><strong>Zhang (2013):</strong> Proved gaps ≤ 70,000,000 infinitely often</div>
+<div><strong>Conjecture:</strong> Infinitely many twin primes (unproved)</div>
+<div><strong>Brun (1919):</strong> Sum over twins converges</div>
+<div><strong>Zhang (2013):</strong> Gaps ≤ 70M infinitely often</div>
+<div><strong>Current:</strong> Gaps ≤ 246 infinitely often (Polymath)</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">First Twin Primes:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem">
+(3,5), (5,7), (11,13), (17,19), (29,31), (41,43), (59,61), (71,73)...
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('twinNv').value=1000;drawTwin()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N≤1K</button>
+<button onclick="document.getElementById('twinNv').value=10000;drawTwin()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N≤10K</button>
+<button onclick="document.getElementById('twinNv').value=50000;drawTwin()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N≤50K</button>
+<button onclick="document.getElementById('twinGap').value=4;drawTwin()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Cousins (g=4)</button>
+</div>
 </div>
 </div>
 </div>
@@ -1202,7 +1445,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Prime Counting Function π(x) up to <span id="piXdisp">10000</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">π(x) counts primes ≤ x. PNT: π(x) ~ x/ln(x). Li(x) is the best elementary approximation.</p>
 <canvas id="cpi" width="800" height="500"></canvas><div class="al" id="alpi"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="piLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('piLiveStats','PrimeCount_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="piLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Approximation Errors</h3><div class="pc" id="ppiErr"></div></div>
 </div>
 <div class="g2">
@@ -1215,15 +1458,32 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(0,255,136,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Prime Number Theorem</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+π(x) ~ x/ln(x) ~ Li(x) = ∫₂ˣ dt/ln(t) &nbsp;(Hadamard, de la Vallée Poussin, 1896)
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>PNT:</strong> π(x) ~ x/ln(x) as x → ∞</div>
-<div><strong>Li(x):</strong> ∫₂ˣ dt/ln(t) — logarithmic integral</div>
-<div><strong>Better Approx:</strong> π(x) = Li(x) + O(x·e^(-c√ln x))</div>
+<div><strong>Error:</strong> π(x) = Li(x) + O(x·e^(-c√ln x))</div>
 <div><strong>Riemann R(x):</strong> Σ μ(n)/n · Li(x^(1/n)) — very accurate</div>
-<div><strong>Chebyshev:</strong> 0.92 x/ln(x) < π(x) < 1.11 x/ln(x) for x≥30</div>
-<div><strong>Prime Density:</strong> ~1/ln(x) primes near x</div>
-<div><strong>RH Connection:</strong> Best error bound needs Riemann Hypothesis</div>
-<div><strong>Bertrand:</strong> Always a prime between n and 2n</div>
+<div><strong>Chebyshev:</strong> 0.92x/ln x < π(x) < 1.11x/ln x</div>
+<div><strong>RH ⟹:</strong> |π(x) - Li(x)| = O(√x ln x)</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Key Values:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.5rem">
+<div>• π(100) = 25</div>
+<div>• π(1000) = 168</div>
+<div>• π(10⁴) = 1229</div>
+<div>• π(10⁶) = 78498</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('piXv').value=1000;drawPi()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">x≤1K</button>
+<button onclick="document.getElementById('piXv').value=10000;drawPi()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">x≤10K</button>
+<button onclick="document.getElementById('piXv').value=100000;drawPi()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">x≤100K</button>
+<button onclick="document.getElementById('piViz').value='error';drawPi()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Error View</button>
+</div>
 </div>
 </div>
 </div>
@@ -1268,7 +1528,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Composite Channel Projection: M = <span id="compMdisp">60</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Cyan = coprime (gcd=1), Red = reducible (gcd>1). Lines show projection r/M → r'/M' where M'=M/gcd(r,M).</p>
 <canvas id="ccomp" width="750" height="600"></canvas><div class="al" id="alcomp"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="compLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('compLiveStats','Composite_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="compLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Channel Distribution</h3><div class="pc" id="pcompDist"></div></div>
 </div>
 <div class="g2">
@@ -1281,15 +1541,29 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(255,100,50,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Composite Channel Projection Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+r/M → r'/M' where M' = M/gcd(r,M) &nbsp;|&nbsp; φ(M)/M = coprime density
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Coprime Residues:</strong> gcd(r,M)=1 form the unit group (ℤ/Mℤ)×</div>
-<div><strong>Reducible Residues:</strong> gcd(r,M)>1 project to simpler channels</div>
-<div><strong>Channel M':</strong> M' = M/gcd(r,M) is the reduced modulus</div>
-<div><strong>Multiplicity:</strong> d = M/M' residues map to each channel</div>
-<div><strong>Coprime Density:</strong> φ(M)/M → 0 for highly composite M</div>
-<div><strong>Farey Connection:</strong> r/M reduces to r'/M' in lowest terms</div>
-<div><strong>Sieve Principle:</strong> Primes > max(p|M) lie in coprime channels</div>
-<div><strong>Divisor Count:</strong> τ(M) distinct channels from divisors of M</div>
+<div><strong>Coprime:</strong> gcd(r,M)=1 → (ℤ/Mℤ)×</div>
+<div><strong>Reducible:</strong> gcd(r,M)>1 → smaller channel</div>
+<div><strong>Channels:</strong> τ(M) from divisors</div>
+<div><strong>φ(60)/60:</strong> 16/60 ≈ 26.7%</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Example M=12:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem">
+Coprime: 1,5,7,11 | Channels: 12,6,4,3,2,1
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('compMv').value=12;drawComp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M=12</button>
+<button onclick="document.getElementById('compMv').value=30;drawComp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M=30</button>
+<button onclick="document.getElementById('compMv').value=60;drawComp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M=60</button>
+<button onclick="document.getElementById('compMv').value=210;drawComp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M=210</button>
+</div>
 </div>
 </div>
 </div>
@@ -1343,7 +1617,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Coprime Lattice: 1 ≤ a,b ≤ <span id="copairNdisp">60</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Primitive vectors (gcd=1) are visible from origin. V(R)/πR² → 6/π² connects to Riemann Hypothesis.</p>
 <canvas id="ccopair" width="700" height="700"></canvas><div class="al" id="alcopair"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="copairLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('copairLiveStats','Coprime_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="copairLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">GCD Distribution</h3><div class="pc" id="pcopairGcd"></div></div>
 </div>
 <div class="g2">
@@ -1360,15 +1634,23 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(0,255,136,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Coprime Density & Riemann Hypothesis Connection</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+V(R) = 6R²/π + E(R) &nbsp;|&nbsp; RH ⟺ |E(R)| = O(R^(½+ε))
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Density:</strong> P(gcd(a,b)=1) = 6/π² = 1/ζ(2) ≈ 0.6079</div>
-<div><strong>Disc Count:</strong> V(R) = #{gcd(a,b)=1, a²+b²≤R²}</div>
-<div><strong>Main Term:</strong> V(R) ~ (6/π²)πR² = 6R²/π</div>
-<div><strong>Error:</strong> E(R) = V(R) - 6R²/π</div>
-<div><strong>RH Connection:</strong> |E(R)| = O(R^(½+ε)) ⟺ RH true</div>
-<div><strong>Critical Line:</strong> Exponent ½ matches Re(s)=½</div>
-<div><strong>Möbius Sum:</strong> M(N) = Σμ(n), bounded by O(N^½) if RH</div>
-<div><strong>Euler Product:</strong> 1/ζ(s) = Σμ(n)/nˢ = Π(1-p⁻ˢ)</div>
+<div><strong>Density:</strong> 6/π² = 1/ζ(2) ≈ 60.79%</div>
+<div><strong>Möbius:</strong> M(N) = Σμ(n) bounded if RH</div>
+<div><strong>Disc:</strong> V(R) = #{gcd(a,b)=1, a²+b²≤R²}</div>
+<div><strong>Critical Line:</strong> Exponent ½ = Re(s)</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('copairNv').value=50;drawCopair()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=50</button>
+<button onclick="document.getElementById('copairNv').value=100;drawCopair()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100</button>
+<button onclick="document.getElementById('copairViz').value='disc';drawCopair()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">RH Analysis</button>
+<button onclick="startCopairAnim()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Animate</button>
+</div>
 </div>
 </div>
 </div>
@@ -1408,7 +1690,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Sierpiński Coverage: n ≤ <span id="sierpNdisp">200</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Green = expressible as 6ab±a±b. Red = uncovered (Sierpiński candidates). Status: UNSOLVED since 1964.</p>
 <canvas id="csierp" width="750" height="500"></canvas><div class="al" id="alsierp"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="sierpLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('sierpLiveStats','Sierpinski_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="sierpLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Coverage by Form</h3><div class="pc" id="psierpForm"></div></div>
 </div>
 <div class="g2">
@@ -1421,15 +1703,29 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(255,100,0,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Sierpiński Problem Theory (1964)</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+n = 6ab ± a ± b &nbsp;|&nbsp; Are infinitely many integers uncovered?
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Form 1:</strong> 6ab + a + b = (3a+1)(2b+1) - 1</div>
-<div><strong>Form 2:</strong> 6ab + a - b = (3a+1)(2b-1) - 1</div>
-<div><strong>Form 3:</strong> 6ab - a + b = (3a-1)(2b+1) - 1</div>
-<div><strong>Form 4:</strong> 6ab - a - b = (3a-1)(2b-1) - 1</div>
-<div><strong>Question:</strong> Are there ∞ many integers not in any form?</div>
-<div><strong>Known:</strong> 78 uncovered integers ≤ 1000</div>
-<div><strong>GCD Link:</strong> When gcd(a,b)|6, enhanced coverage</div>
-<div><strong>Search:</strong> If n = 6ab±a±b, need a ≤ √(n/6)</div>
+<div><strong>Form 1:</strong> 6ab + a + b</div>
+<div><strong>Form 2:</strong> 6ab + a - b</div>
+<div><strong>Form 3:</strong> 6ab - a + b</div>
+<div><strong>Form 4:</strong> 6ab - a - b</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">First Uncovered:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem">
+1, 2, 4, 5, 8, 10, 14, 16, 20, 26, 32, 40... (78 values ≤1000)
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('sierpNv').value=100;drawSierp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N≤100</button>
+<button onclick="document.getElementById('sierpNv').value=500;drawSierp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N≤500</button>
+<button onclick="document.getElementById('sierpNv').value=1000;drawSierp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N≤1000</button>
+<button onclick="document.getElementById('sierpViz').value='lattice';drawSierp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Lattice</button>
+</div>
 </div>
 </div>
 </div>
@@ -1460,7 +1756,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>k-Free Integers: k=<span id="kfreeKdisp">2</span>, N=<span id="kfreeNdisp">1000</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">n is k-free if no prime p has p^k | n. Count Q_k(N) ~ N/ζ(k) with error O(N^(1/k)).</p>
 <canvas id="ckfree" width="750" height="500"></canvas><div class="al" id="alkfree"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="kfreeLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('kfreeLiveStats','kFree_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="kfreeLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Zeta Reference</h3><div class="pc" id="pkfreeZeta"></div></div>
 </div>
 <div class="g2">
@@ -1472,16 +1768,30 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <table id="tkfreeT"><tr><th>n</th><th>Factorization</th><th>Divisible by p^k</th><th>Smallest p</th></tr></table>
 </div></div>
 <div style="padding:1rem;background:rgba(0,200,255,.08);border-radius:8px;margin-top:1rem">
-<h4 style="color:var(--acc);margin-bottom:.5rem">Boundary Cancellation Principle</h4>
+<h4 style="color:var(--acc);margin-bottom:.5rem">k-Free Integers & Boundary Cancellation</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>k-Free:</strong> n is k-free iff μ_k(n) ≠ 0 (no p^k | n)</div>
-<div><strong>Density:</strong> Q_k(N)/N → 1/ζ(k) as N→∞</div>
-<div><strong>Error:</strong> E(N) = Q_k(N) - N/ζ(k) = O(N^(1/k))</div>
-<div><strong>Squarefree:</strong> k=2, density 6/π² ≈ 0.6079</div>
-<div><strong>Cubefree:</strong> k=3, density 1/ζ(3) ≈ 0.8319</div>
-<div><strong>Geometric:</strong> Error from (k-1)-dim boundary</div>
-<div><strong>Exponent:</strong> Critical error exponent is (k-1)/k</div>
-<div><strong>Möbius:</strong> Σμ(d)/d^k = 1/ζ(k) = Π(1-1/p^k)</div>
+<div><strong>Squarefree:</strong> k=2, 1/ζ(2) ≈ 60.79%</div>
+<div><strong>Cubefree:</strong> k=3, 1/ζ(3) ≈ 83.19%</div>
+<div><strong>4th-free:</strong> k=4, 1/ζ(4) ≈ 92.39%</div>
+<div><strong>Error:</strong> Comes from (k-1)-dim boundary</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">First Non-Squarefree:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem">
+4, 8, 9, 12, 16, 18, 20, 24, 25, 27, 28, 32... (divisible by p²)
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('kfreeK').value='2';drawKfree()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Squarefree</button>
+<button onclick="document.getElementById('kfreeK').value='3';drawKfree()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Cubefree</button>
+<button onclick="document.getElementById('kfreeNv').value=5000;drawKfree()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=5K</button>
+<button onclick="document.getElementById('kfreeViz').value='compare';drawKfree()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Compare k</button>
+</div>
 </div>
 </div>
 </div>
@@ -1521,7 +1831,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Euler Product: ζ(s) = ∏<sub>p</sub>(1-p<sup>-s</sup>)<sup>-1</sup></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Computing <span id="eulerTargetDisp">π</span> using primes ≤ <span id="eulerPmaxDisp">1000</span>. Basel: ζ(2)=π²/6.</p>
 <canvas id="ceuler" width="750" height="500"></canvas><div class="al" id="aleuler"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="eulerLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('eulerLiveStats','Euler_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="eulerLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">Zeta Values Reference</h3><div class="pc" id="peulerZeta"></div></div>
 </div>
 <div class="g2">
@@ -1534,15 +1844,32 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div>
 <div style="padding:1rem;background:rgba(255,200,0,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Euler Product & Basel Problem</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+ζ(s) = Σ n⁻ˢ = ∏_p (1 - p⁻ˢ)⁻¹ &nbsp;|&nbsp; π = √(6 · ζ(2))
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Euler Product:</strong> ζ(s) = ∏<sub>p</sub>(1-p<sup>-s</sup>)<sup>-1</sup></div>
-<div><strong>Basel (1734):</strong> ζ(2) = 1+1/4+1/9+... = π²/6</div>
-<div><strong>Compute π:</strong> π = √(6·ζ(2)) = √(6·∏<sub>p</sub>(1-p<sup>-2</sup>)<sup>-1</sup>)</div>
-<div><strong>Gap-Class:</strong> Group primes by gap g = p<sub>next</sub>-p</div>
-<div><strong>Residue Channels:</strong> φ(m) channels for gcd(a,m)=1</div>
-<div><strong>Convergence:</strong> Error ~ 1/P<sub>max</sub> for ζ(2)</div>
+<div><strong>Basel (Euler 1734):</strong> ζ(2) = π²/6 ≈ 1.6449</div>
 <div><strong>ζ(4):</strong> π⁴/90 ≈ 1.0823</div>
 <div><strong>ζ(6):</strong> π⁶/945 ≈ 1.0173</div>
+<div><strong>Convergence:</strong> Error ~ 1/P_max for ζ(2)</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Partial Products:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.5rem">
+<div>• p≤2: π ≈ 2.449</div>
+<div>• p≤5: π ≈ 2.924</div>
+<div>• p≤11: π ≈ 3.075</div>
+<div>• p≤101: π ≈ 3.1337</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('eulerPmaxv').value=100;drawEuler()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">P≤100</button>
+<button onclick="document.getElementById('eulerPmaxv').value=1000;drawEuler()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">P≤1K</button>
+<button onclick="document.getElementById('eulerPmaxv').value=10000;drawEuler()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">P≤10K</button>
+<button onclick="document.getElementById('eulerTarget').value='zeta4';drawEuler()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Compute ζ(4)</button>
+</div>
 </div>
 </div>
 </div>
@@ -1567,7 +1894,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="viz"><h3>Chord Length Uniformity: CV(n) = σ/μ</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Primes have uniform coprime spacing (low CV). Composites have irregular gaps (high CV). Separation grows with n.</p>
 <canvas id="cchord" width="750" height="500"></canvas><div class="al" id="alchord"></div></div>
-<div class="viz"><h3>Live Statistics</h3><div id="chordLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('chordLiveStats','ChordCV_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="chordLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
 <h3 style="margin-top:1rem">CV Distribution</h3><div class="pc" id="pchordDist"></div></div>
 </div>
 <div class="g2">
@@ -1580,15 +1907,32 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div></div>
 <div style="padding:1rem;background:rgba(0,255,200,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">Chord Length Uniformity Heuristic (Getachew 2025)</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+CV(n) = σ_L / μ_L &nbsp;|&nbsp; L_i = 2·sin(π·gap_i/n) &nbsp;|&nbsp; Prime: CV → 0
+</div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Chord:</strong> L_i = 2·sin(π·gap_i/n) between consecutive coprimes</div>
-<div><strong>CV:</strong> Coefficient of Variation = σ_L / μ_L</div>
-<div><strong>Prime signature:</strong> CV → 0 as n → ∞ (uniform)</div>
-<div><strong>Composite signature:</strong> CV ≈ 0.30 (irregular)</div>
-<div><strong>Separation:</strong> 32.7% at n≤50 → 92.3% at n≤10000</div>
+<div><strong>Prime signature:</strong> CV → 0 as n → ∞ (uniform gaps)</div>
+<div><strong>Composite:</strong> CV ≈ 0.30 (irregular gaps)</div>
 <div><strong>Decision:</strong> CV < 0.22 → likely prime</div>
-<div><strong>Gap Ratio:</strong> max(L)/min(L), primes ≈ 1.87</div>
-<div><strong>Application:</strong> Fast primality prefilter</div>
+<div><strong>Separation:</strong> 92.3% accuracy at n≤10000</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Example CV Values:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.5rem">
+<div>• n=97 (P): CV≈0.08</div>
+<div>• n=100 (C): CV≈0.35</div>
+<div>• n=101 (P): CV≈0.07</div>
+<div>• n=105 (C): CV≈0.42</div>
+</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quick Presets:</strong>
+<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+<button onclick="document.getElementById('chordNv').value=100;drawChord()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n≤100</button>
+<button onclick="document.getElementById('chordNv').value=500;drawChord()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n≤500</button>
+<button onclick="document.getElementById('chordTest').value=97;document.getElementById('chordViz').value='single';drawChord()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Test n=97</button>
+<button onclick="document.getElementById('chordViz').value='histogram';drawChord()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Histogram</button>
+</div>
 </div>
 </div>
 </div>
@@ -1735,6 +2079,29 @@ const bordC=()=>isDark()?'rgba(0,217,255,0.5)':'rgba(0,102,204,0.6)';
 function toggleTheme(){document.body.classList.toggle('light');document.getElementById('thm').textContent=isDark()?'D':'L';draw2D();if(document.getElementById('t3d').classList.contains('active'))draw3D();}
 function showSec(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.snav .nbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
 function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();}
+
+async function screenshotDashboard(elemId, title='Dashboard'){
+const el=document.getElementById(elemId);if(!el)return;
+const scale=4;
+const w=el.offsetWidth,h=el.offsetHeight;
+const c=document.createElement('canvas');c.width=w*scale;c.height=h*scale;
+const ctx=c.getContext('2d');
+ctx.scale(scale,scale);
+ctx.fillStyle=isDark()?'#1a1a2e':'#ffffff';ctx.fillRect(0,0,w,h);
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 16px Segoe UI';ctx.fillText(title+' — Möbius Shell Sieve',10,24);
+ctx.fillStyle=isDark()?'rgba(255,255,255,0.5)':'rgba(0,0,0,0.5)';ctx.font='10px Segoe UI';ctx.fillText(new Date().toISOString().slice(0,19).replace('T',' '),10,h-8);
+try{
+const html2canvas=(await import('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/+esm')).default;
+const snap=await html2canvas(el,{scale:scale,backgroundColor:isDark()?'#1a1a2e':'#ffffff',logging:false});
+ctx.drawImage(snap,0,36,w,h-44);
+c.toBlob(blob=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${title.replace(/[^a-zA-Z0-9]/g,'_')}_4K_${Date.now()}.png`;a.click();URL.revokeObjectURL(a.href);},'image/png');
+}catch(e){
+ctx.fillStyle=isDark()?'#e0e0e0':'#333';ctx.font='12px Segoe UI';
+const lines=el.innerText.split('\n').slice(0,30);
+lines.forEach((line,i)=>ctx.fillText(line.substring(0,80),10,50+i*16));
+c.toBlob(blob=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${title.replace(/[^a-zA-Z0-9]/g,'_')}_4K_${Date.now()}.png`;a.click();URL.revokeObjectURL(a.href);},'image/png');
+}}
+
 function legend(id,title,data){const d=document.getElementById(id);if(!d)return;d.innerHTML=`<h4>${title}</h4><div class="lg">${data.map(([l,v,c])=>`<div class="li" style="border-left-color:${c}"><strong>${l}</strong><span class="v">${fmt(v)}</span></div>`).join('')}</div>`;}
 function modal(title,data){document.getElementById('mtitle').textContent=title;document.getElementById('mbody').innerHTML=data.map(([l,v])=>`<div class="ds"><div class="dr"><span class="dl">${l}:</span><span class="dv">${typeof v==='number'?fmt(v):v}</span></div></div>`).join('');document.getElementById('modal').classList.add('active');}
 function dl(c,f){const a=document.createElement('a');a.href='data:text/csv,'+encodeURIComponent(c);a.download=f;a.click();}
@@ -2805,7 +3172,7 @@ const z2=zeta(2),baselRatio=tot>0?(prim/tot)/(1/z2):0;
 const norms=Object.entries(nc).sort((a,b)=>+a[0]-+b[0]).slice(0,25);
 const uniqueNorms=Object.keys(nc).length;
 const sum2sqCount=Object.keys(nc).filter(n=>+n>0).length;
-legend('algaus1','ℤ[i] Theory',[['1/ζ(2) Pred',fmt(tot/z2),'#9664ff'],['Basel 6/π²',fmt(100/z2)+'%','#ff8c00']]);
+legend('algaus1','ℤ[i] Theory',[['1/ζ(2) Pred',fmt(tot/z2),'#9664ff'],['Coprime 6/π²',fmt(100/z2)+'%','#ff8c00']]);
 legend('algaus2','Norm Analysis',[['Unique |z|²',uniqueNorms,'#9664ff'],['Max Norm²',Math.max(...gausP.map(p=>p.n2)),'#ff8c00']]);
 Plotly.newPlot('pgaus',[{x:norms.map(x=>+x[0]),y:norms.map(x=>x[1]),type:'bar',marker:{color:norms.map((_,i)=>`hsl(${i*12},70%,55%)`)}}],{...plo(),xaxis:{title:'|z|² (Norm²)'},yaxis:{title:'Count'}});
 document.getElementById('stgaus').innerHTML='';
@@ -2825,10 +3192,10 @@ document.getElementById('gausLiveStats').innerHTML=`
 </div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
-<strong style="color:var(--acc)">Basel Problem (2D)</strong>
+<strong style="color:var(--acc)">Coprime Density (ℤ[i] Lattice)</strong>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.8rem">
 <span>Prim Density:</span><span style="color:#ffd700;font-weight:bold">${fmt(100*prim/tot)}%</span>
-<span>6/π² ≈:</span><span style="color:#9664ff">${fmt(100/z2)}%</span>
+<span>Theory 1/ζ(2):</span><span style="color:#9664ff">${fmt(100/z2)}%</span>
 <span>Ratio:</span><span style="color:${baselRatio>.95&&baselRatio<1.05?'#00ff88':'#ff8c00'}">${fmt(baselRatio*100)}%</span>
 </div>
 </div>
@@ -6168,11 +6535,12 @@ document.getElementById('eulerLiveStats').innerHTML=`
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#ff006e">${tgt.exact.toFixed(10)}</div><div style="font-size:.65rem;color:var(--txt2)">${tgt.name} EXACT</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
-<strong style="color:var(--acc)">Accuracy</strong>
+<strong style="color:var(--acc)">Accuracy Analysis</strong>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
 <span>Absolute Error:</span><span style="color:#ffd700">${error.toExponential(4)}</span>
 <span>Relative Error:</span><span style="color:#9664ff">${(relError*100).toExponential(3)}%</span>
 <span>Correct Digits:</span><span style="color:#00ff88">~${Math.max(0,-Math.floor(Math.log10(relError))).toFixed(0)}</span>
+<span>Convergence Rate:</span><span style="color:#00d9ff">~1/P_max</span>
 </div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
@@ -6181,6 +6549,16 @@ document.getElementById('eulerLiveStats').innerHTML=`
 <span>ζ(${s}) computed:</span><span style="color:#00d9ff">${zeta.toFixed(10)}</span>
 <span>Largest prime:</span><span style="color:#ffd700">${primes[primes.length-1]}</span>
 <span>Gap classes:</span><span style="color:#ff8c00">${Object.keys(gapClasses).length}</span>
+<span>P_max / π(P_max):</span><span style="color:#9664ff">${(primes[primes.length-1]/primes.length).toFixed(2)}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Reference Zeta Values</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>ζ(2) = π²/6:</span><span style="color:#00ff88">${(Math.PI*Math.PI/6).toFixed(8)}</span>
+<span>ζ(4) = π⁴/90:</span><span style="color:#00d9ff">${(Math.pow(Math.PI,4)/90).toFixed(8)}</span>
+<span>ζ(6) = π⁶/945:</span><span style="color:#ffd700">${(Math.pow(Math.PI,6)/945).toFixed(8)}</span>
+<span>ζ(8) = π⁸/9450:</span><span style="color:#9664ff">${(Math.pow(Math.PI,8)/9450).toFixed(8)}</span>
 </div>
 </div>
 <div style="background:rgba(0,255,136,.1);padding:8px;border-radius:6px;font-size:.75rem">
@@ -6407,11 +6785,21 @@ document.getElementById('chordLiveStats').innerHTML=`
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff4040">${compCount}</div><div style="font-size:.65rem;color:var(--txt2)">COMPOSITES</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
-<strong style="color:var(--acc)">Average CV</strong>
+<strong style="color:var(--acc)">CV Statistics</strong>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
-<span>Primes:</span><span style="color:#00ff88">${primeAvg.toFixed(4)}</span>
-<span>Composites:</span><span style="color:#ff4040">${compAvg.toFixed(4)}</span>
+<span>Prime Avg CV:</span><span style="color:#00ff88">${primeAvg.toFixed(4)}</span>
+<span>Composite Avg CV:</span><span style="color:#ff4040">${compAvg.toFixed(4)}</span>
 <span>Separation:</span><span style="color:#00d9ff;font-weight:bold">${separation.toFixed(1)}%</span>
+<span>Threshold:</span><span style="color:#ffd700">CV < 0.22</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Classification Accuracy</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>True Positive:</span><span style="color:#00ff88">${results.filter(r=>r.prime&&r.cv<0.22).length}</span>
+<span>True Negative:</span><span style="color:#00ff88">${results.filter(r=>!r.prime&&r.cv>=0.22).length}</span>
+<span>False Positive:</span><span style="color:#ff6496">${results.filter(r=>!r.prime&&r.cv<0.22).length}</span>
+<span>False Negative:</span><span style="color:#ff6496">${results.filter(r=>r.prime&&r.cv>=0.22).length}</span>
 </div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
