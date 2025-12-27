@@ -188,6 +188,12 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <button class="tbtn" onclick="showTab('tdir',this)">Dirichlet χ</button>
 <button class="tbtn" onclick="showTab('ttwin',this)">Twin Primes</button>
 <button class="tbtn" onclick="showTab('tpi',this)">π(x)</button>
+<button class="tbtn" onclick="showTab('tcomp',this)">Composite</button>
+<button class="tbtn" onclick="showTab('tcopair',this)">Coprime Pairs</button>
+<button class="tbtn" onclick="showTab('tsierp',this)">Sierpiński</button>
+<button class="tbtn" onclick="showTab('tkfree',this)">k-Free</button>
+<button class="tbtn" onclick="showTab('teuler',this)">Euler ∏</button>
+<button class="tbtn" onclick="showTab('tchord',this)">Chord CV</button>
 </div>
 
 <div id="t2d" class="tab active">
@@ -999,120 +1005,468 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div>
 </div>
 
+<div id="tcomp" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Composite M <span class="tip" title="Composite modulus to analyze">?</span></label><div class="sig"><input type="range" id="compM" min="4" max="500" value="60" oninput="document.getElementById('compMv').value=this.value;drawComp()"><input type="number" id="compMv" value="60" min="4" max="2000" onchange="document.getElementById('compM').value=Math.min(500,this.value);drawComp()"></div></div>
+<div class="cg"><label>Visualization</label><select id="compViz" onchange="drawComp()">
+<option value="projection">Channel Projections</option>
+<option value="rings">Ring View</option>
+<option value="channels">Channel Diagram</option>
+<option value="factorization">Factor Tree</option>
+</select></div>
+<div class="cg"><label>Color Mode</label><select id="compCol" onchange="drawComp()">
+<option value="type">By Channel Type</option>
+<option value="gcd">By GCD Value</option>
+<option value="spf">By Smallest Prime Factor</option>
+<option value="lpf">By Largest Prime Factor</option>
+<option value="depth">By Channel Depth</option>
+</select></div>
+<div class="cg"><label>Presets</label>
+<button onclick="document.getElementById('compMv').value=6;drawComp()" style="padding:2px 6px">6</button>
+<button onclick="document.getElementById('compMv').value=12;drawComp()" style="padding:2px 6px">12</button>
+<button onclick="document.getElementById('compMv').value=30;drawComp()" style="padding:2px 6px">30</button>
+<button onclick="document.getElementById('compMv').value=60;drawComp()" style="padding:2px 6px">60</button>
+<button onclick="document.getElementById('compMv').value=210;drawComp()" style="padding:2px 6px">210</button>
+</div>
+</div>
+<div class="ctrl">
+<div class="cg"><label>Display</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="compProj" checked onchange="drawComp()"> Projection Lines</label>
+<label><input type="checkbox" id="compLabels" onchange="drawComp()"> Channel Labels</label>
+<label><input type="checkbox" id="compMult" onchange="drawComp()"> Multiplicity</label>
+<label><input type="checkbox" id="compCoprime" checked onchange="drawComp()"> Show Coprime</label>
+</div></div>
+<div class="cg"><label>Line Opacity</label><input type="range" id="compLineOp" min="0.05" max="0.5" step="0.05" value="0.15" onchange="drawComp()"></div>
+<div class="cg"><label>Point Size</label><input type="range" id="compPtSz" min="3" max="15" value="6" onchange="drawComp()"></div>
+<div class="cg"><label>Sweep</label><button onclick="startCompSweep()">Play</button><button onclick="stopCompSweep()">Stop</button><span id="compSweepR" style="margin-left:8px;color:#ffd700">r=1</span></div>
+</div>
+<div class="bg"><button onclick="drawComp()">Analyze</button><button onclick="screenshotComp()">Screenshot</button><button class="s" onclick="csvComp()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Composite Channel Projection: M = <span id="compMdisp">60</span></h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Cyan = coprime (gcd=1), Red = reducible (gcd>1). Lines show projection r/M → r'/M' where M'=M/gcd(r,M).</p>
+<canvas id="ccomp" width="750" height="600"></canvas><div class="al" id="alcomp"></div></div>
+<div class="viz"><h3>Live Statistics</h3><div id="compLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<h3 style="margin-top:1rem">Channel Distribution</h3><div class="pc" id="pcompDist"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Reducibility by Divisor</h3><div class="pc" id="pcompDiv"></div></div>
+<div class="viz"><h3>φ(M)/M Density</h3><div class="pc" id="pcompPhi"></div></div>
+</div>
+<div class="viz"><h3>Residue Channel Data (Click rows)</h3>
+<div style="max-height:300px;overflow-y:auto">
+<table id="tcompT"><tr><th>r</th><th>gcd(r,M)</th><th>Channel M'</th><th>Reduced r'</th><th>Type</th><th>Multiplicity</th></tr></table>
+</div></div>
+<div style="padding:1rem;background:rgba(255,100,50,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Composite Channel Projection Theory</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>Coprime Residues:</strong> gcd(r,M)=1 form the unit group (ℤ/Mℤ)×</div>
+<div><strong>Reducible Residues:</strong> gcd(r,M)>1 project to simpler channels</div>
+<div><strong>Channel M':</strong> M' = M/gcd(r,M) is the reduced modulus</div>
+<div><strong>Multiplicity:</strong> d = M/M' residues map to each channel</div>
+<div><strong>Coprime Density:</strong> φ(M)/M → 0 for highly composite M</div>
+<div><strong>Farey Connection:</strong> r/M reduces to r'/M' in lowest terms</div>
+<div><strong>Sieve Principle:</strong> Primes > max(p|M) lie in coprime channels</div>
+<div><strong>Divisor Count:</strong> τ(M) distinct channels from divisors of M</div>
+</div>
+</div>
+</div>
+
+<div id="tcopair" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Grid Size N <span class="tip" title="Count coprime pairs in N×N grid">?</span></label><div class="sig"><input type="range" id="copairN" min="10" max="200" value="60" oninput="document.getElementById('copairNv').value=this.value"><input type="number" id="copairNv" value="60" min="5" max="500" onchange="document.getElementById('copairN').value=Math.min(200,this.value)"></div></div>
+<div class="cg"><label>Visualization</label><select id="copairViz" onchange="drawCopair()">
+<option value="grid">Grid Heatmap</option>
+<option value="density">Density Convergence</option>
+<option value="scatter">Scatter (Coprime Only)</option>
+<option value="gcdmap">GCD Value Map</option>
+<option value="disc">Disc Analysis (RH)</option>
+</select></div>
+<div class="cg"><label>Color Scheme</label><select id="copairCol" onchange="drawCopair()">
+<option value="classic">Classic (Green/Gray)</option>
+<option value="gcd">By GCD Value</option>
+<option value="neon">Neon (Cyan/Magenta)</option>
+<option value="heatmap">Heatmap</option>
+<option value="highcontrast">High Contrast</option>
+<option value="angle">By Angle arctan(b/a)</option>
+<option value="norm">By Norm a²+b²</option>
+</select></div>
+<div class="cg"><label>Overlays</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="copairCircle" onchange="drawCopair()"> Radius Circle</label>
+<label><input type="checkbox" id="copairDiag" onchange="drawCopair()"> Diagonals</label>
+<label><input type="checkbox" id="copairPrime" onchange="drawCopair()"> Prime Filter</label>
+</div></div>
+</div>
+<div class="ctrl">
+<div class="cg"><label>Circle R</label><div class="sig"><input type="range" id="copairR" min="10" max="100" value="40" oninput="document.getElementById('copairRv').textContent=this.value+'%';drawCopair()"><span id="copairRv" style="color:var(--txt2)">40%</span></div></div>
+<div class="cg"><label>Modular Highlight</label><select id="copairMod" onchange="drawCopair()">
+<option value="none">None</option>
+<option value="2">mod 2</option>
+<option value="3">mod 3</option>
+<option value="4">mod 4</option>
+<option value="5">mod 5</option>
+<option value="6">mod 6</option>
+</select></div>
+<div class="cg"><label>Display</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="copairAxes" checked onchange="drawCopair()"> Axes</label>
+<label><input type="checkbox" id="copairLabels" onchange="drawCopair()"> Labels</label>
+</div></div>
+<div class="cg"><label>Animation</label>
+<button onclick="startCopairAnim()">▶ Play</button>
+<button onclick="stopCopairAnim()">Stop</button>
+<span id="copairAnimN" style="margin-left:8px;color:#ffd700">N=60</span></div>
+</div>
+<div class="bg"><button onclick="drawCopair()">Compute</button><button onclick="screenshotCopair()">Screenshot</button><button class="s" onclick="csvCopair()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Coprime Lattice: 1 ≤ a,b ≤ <span id="copairNdisp">60</span></h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Primitive vectors (gcd=1) are visible from origin. V(R)/πR² → 6/π² connects to Riemann Hypothesis.</p>
+<canvas id="ccopair" width="700" height="700"></canvas><div class="al" id="alcopair"></div></div>
+<div class="viz"><h3>Live Statistics</h3><div id="copairLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<h3 style="margin-top:1rem">GCD Distribution</h3><div class="pc" id="pcopairGcd"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Disc Analysis V(R) & Error E(R)</h3><div class="pc" id="pcopairDisc"></div></div>
+<div class="viz"><h3>Convergence to 6/π²</h3><div class="pc" id="pcopairConv"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Möbius Function M(N) = Σμ(n)</h3><div class="pc" id="pcopairMob"></div></div>
+<div class="viz"><h3>|E(R)|/R^½ (RH Bound)</h3><div class="pc" id="pcopairRH"></div></div>
+</div>
+<div class="viz"><h3>Sample Pairs (Click rows)</h3>
+<div style="max-height:220px;overflow-y:auto">
+<table id="tcopairT"><tr><th>a</th><th>b</th><th>gcd</th><th>Norm</th><th>θ°</th><th>Coprime?</th></tr></table>
+</div></div>
+<div style="padding:1rem;background:rgba(0,255,136,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Coprime Density & Riemann Hypothesis Connection</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>Density:</strong> P(gcd(a,b)=1) = 6/π² = 1/ζ(2) ≈ 0.6079</div>
+<div><strong>Disc Count:</strong> V(R) = #{gcd(a,b)=1, a²+b²≤R²}</div>
+<div><strong>Main Term:</strong> V(R) ~ (6/π²)πR² = 6R²/π</div>
+<div><strong>Error:</strong> E(R) = V(R) - 6R²/π</div>
+<div><strong>RH Connection:</strong> |E(R)| = O(R^(½+ε)) ⟺ RH true</div>
+<div><strong>Critical Line:</strong> Exponent ½ matches Re(s)=½</div>
+<div><strong>Möbius Sum:</strong> M(N) = Σμ(n), bounded by O(N^½) if RH</div>
+<div><strong>Euler Product:</strong> 1/ζ(s) = Σμ(n)/nˢ = Π(1-p⁻ˢ)</div>
+</div>
+</div>
+</div>
+
+<div id="tsierp" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max N <span class="tip" title="Check which numbers 1..N can be expressed as 6ab±a±b">?</span></label><div class="sig"><input type="range" id="sierpN" min="50" max="500" value="200" oninput="document.getElementById('sierpNv').value=this.value"><input type="number" id="sierpNv" value="200" min="20" max="2000" onchange="document.getElementById('sierpN').value=Math.min(500,this.value)"></div></div>
+<div class="cg"><label>Visualization</label><select id="sierpViz" onchange="drawSierp()">
+<option value="coverage">Coverage Map</option>
+<option value="lattice">Lattice Structure</option>
+<option value="gaps">Gap Analysis</option>
+<option value="modular">Modular Patterns</option>
+</select></div>
+<div class="cg"><label>Form Filter</label><select id="sierpForm" onchange="drawSierp()">
+<option value="all">All 4 Forms</option>
+<option value="pp">6ab + a + b</option>
+<option value="pm">6ab + a - b</option>
+<option value="mp">6ab - a + b</option>
+<option value="mm">6ab - a - b</option>
+</select></div>
+<div class="cg"><label>Display</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="sierpLabels" onchange="drawSierp()"> Labels</label>
+<label><input type="checkbox" id="sierpGCD" onchange="drawSierp()"> GCD Highlight</label>
+</div></div>
+</div>
+<div class="ctrl">
+<div class="cg"><label>Search a,b ≤</label><div class="sig"><input type="range" id="sierpAB" min="10" max="100" value="50" oninput="document.getElementById('sierpABv').value=this.value"><input type="number" id="sierpABv" value="50" min="5" max="200"></div></div>
+<div class="cg"><label>Test Number</label><input type="number" id="sierpTest" value="1" min="1" style="width:80px"><button onclick="testSierpNum()" style="margin-left:5px">Test</button></div>
+<div class="cg"><label>Presets</label>
+<button onclick="document.getElementById('sierpNv').value=100;drawSierp()" style="padding:2px 6px">100</button>
+<button onclick="document.getElementById('sierpNv').value=500;drawSierp()" style="padding:2px 6px">500</button>
+<button onclick="document.getElementById('sierpNv').value=1000;drawSierp()" style="padding:2px 6px">1000</button>
+</div>
+</div>
+<div class="bg"><button onclick="drawSierp()">Analyze</button><button onclick="screenshotSierp()">Screenshot</button><button class="s" onclick="csvSierp()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Sierpiński Coverage: n ≤ <span id="sierpNdisp">200</span></h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Green = expressible as 6ab±a±b. Red = uncovered (Sierpiński candidates). Status: UNSOLVED since 1964.</p>
+<canvas id="csierp" width="750" height="500"></canvas><div class="al" id="alsierp"></div></div>
+<div class="viz"><h3>Live Statistics</h3><div id="sierpLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<h3 style="margin-top:1rem">Coverage by Form</h3><div class="pc" id="psierpForm"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Uncovered Numbers Distribution</h3><div class="pc" id="psierpGaps"></div></div>
+<div class="viz"><h3>Coverage Rate vs N</h3><div class="pc" id="psierpRate"></div></div>
+</div>
+<div class="viz"><h3>Uncovered Integers (Sierpiński Candidates)</h3>
+<div style="max-height:200px;overflow-y:auto">
+<table id="tsierpT"><tr><th>n</th><th>n mod 6</th><th>n mod 12</th><th>Factorization</th><th>Neighbors</th></tr></table>
+</div></div>
+<div style="padding:1rem;background:rgba(255,100,0,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Sierpiński Problem Theory (1964)</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>Form 1:</strong> 6ab + a + b = (3a+1)(2b+1) - 1</div>
+<div><strong>Form 2:</strong> 6ab + a - b = (3a+1)(2b-1) - 1</div>
+<div><strong>Form 3:</strong> 6ab - a + b = (3a-1)(2b+1) - 1</div>
+<div><strong>Form 4:</strong> 6ab - a - b = (3a-1)(2b-1) - 1</div>
+<div><strong>Question:</strong> Are there ∞ many integers not in any form?</div>
+<div><strong>Known:</strong> 78 uncovered integers ≤ 1000</div>
+<div><strong>GCD Link:</strong> When gcd(a,b)|6, enhanced coverage</div>
+<div><strong>Search:</strong> If n = 6ab±a±b, need a ≤ √(n/6)</div>
+</div>
+</div>
+</div>
+
+<div id="tkfree" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max N <span class="tip" title="Count k-free integers up to N">?</span></label><div class="sig"><input type="range" id="kfreeN" min="100" max="5000" value="1000" oninput="document.getElementById('kfreeNv').value=this.value"><input type="number" id="kfreeNv" value="1000" min="50" max="50000" onchange="document.getElementById('kfreeN').value=Math.min(5000,this.value)"></div></div>
+<div class="cg"><label>k (power)</label><select id="kfreeK" onchange="drawKfree()">
+<option value="2">k=2 (Squarefree)</option>
+<option value="3">k=3 (Cubefree)</option>
+<option value="4">k=4 (4th-power-free)</option>
+<option value="5">k=5</option>
+<option value="6">k=6</option>
+</select></div>
+<div class="cg"><label>Visualization</label><select id="kfreeViz" onchange="drawKfree()">
+<option value="density">Density Convergence</option>
+<option value="error">Error Analysis</option>
+<option value="grid">Number Grid</option>
+<option value="compare">Compare k values</option>
+</select></div>
+<div class="cg"><label>Display</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="kfreeTheory" checked onchange="drawKfree()"> Theory Line</label>
+<label><input type="checkbox" id="kfreeBound" checked onchange="drawKfree()"> Error Bound</label>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawKfree()">Compute</button><button onclick="screenshotKfree()">Screenshot</button><button class="s" onclick="csvKfree()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>k-Free Integers: k=<span id="kfreeKdisp">2</span>, N=<span id="kfreeNdisp">1000</span></h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">n is k-free if no prime p has p^k | n. Count Q_k(N) ~ N/ζ(k) with error O(N^(1/k)).</p>
+<canvas id="ckfree" width="750" height="500"></canvas><div class="al" id="alkfree"></div></div>
+<div class="viz"><h3>Live Statistics</h3><div id="kfreeLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<h3 style="margin-top:1rem">Zeta Reference</h3><div class="pc" id="pkfreeZeta"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Error Term E(N) = Q_k(N) - N/ζ(k)</h3><div class="pc" id="pkfreeErr"></div></div>
+<div class="viz"><h3>|E(N)|/N^(1/k) Ratio</h3><div class="pc" id="pkfreeRatio"></div></div>
+</div>
+<div class="viz"><h3>First Non-k-free Integers</h3>
+<div style="max-height:200px;overflow-y:auto">
+<table id="tkfreeT"><tr><th>n</th><th>Factorization</th><th>Divisible by p^k</th><th>Smallest p</th></tr></table>
+</div></div>
+<div style="padding:1rem;background:rgba(0,200,255,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Boundary Cancellation Principle</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>k-Free:</strong> n is k-free iff μ_k(n) ≠ 0 (no p^k | n)</div>
+<div><strong>Density:</strong> Q_k(N)/N → 1/ζ(k) as N→∞</div>
+<div><strong>Error:</strong> E(N) = Q_k(N) - N/ζ(k) = O(N^(1/k))</div>
+<div><strong>Squarefree:</strong> k=2, density 6/π² ≈ 0.6079</div>
+<div><strong>Cubefree:</strong> k=3, density 1/ζ(3) ≈ 0.8319</div>
+<div><strong>Geometric:</strong> Error from (k-1)-dim boundary</div>
+<div><strong>Exponent:</strong> Critical error exponent is (k-1)/k</div>
+<div><strong>Möbius:</strong> Σμ(d)/d^k = 1/ζ(k) = Π(1-1/p^k)</div>
+</div>
+</div>
+</div>
+
+<div id="teuler" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Compute</label><select id="eulerTarget" onchange="drawEuler()">
+<option value="pi">π (from ζ(2)=π²/6)</option>
+<option value="z2">ζ(2) = π²/6</option>
+<option value="z4">ζ(4) = π⁴/90</option>
+<option value="z6">ζ(6) = π⁶/945</option>
+<option value="z8">ζ(8)</option>
+</select></div>
+<div class="cg"><label>Prime Limit <span class="tip" title="Use primes up to this value">?</span></label><div class="sig"><input type="range" id="eulerPmax" min="100" max="10000" value="1000" oninput="document.getElementById('eulerPmaxv').value=this.value"><input type="number" id="eulerPmaxv" value="1000" min="10" max="100000" onchange="document.getElementById('eulerPmax').value=Math.min(10000,this.value)"></div></div>
+<div class="cg"><label>Visualization</label><select id="eulerViz" onchange="drawEuler()">
+<option value="convergence">Convergence</option>
+<option value="contributions">Prime Contributions</option>
+<option value="gaps">Gap-Class Analysis</option>
+<option value="residue">Residue Channels</option>
+</select></div>
+<div class="cg"><label>Modulus</label><input type="number" id="eulerMod" value="30" min="2" max="210" style="width:60px" onchange="drawEuler()"></div>
+</div>
+<div class="ctrl">
+<div class="cg"><label>Display</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="eulerRef" checked onchange="drawEuler()"> Reference Line</label>
+<label><input type="checkbox" id="eulerError" checked onchange="drawEuler()"> Show Error</label>
+</div></div>
+<div class="cg"><label>Presets</label>
+<button onclick="document.getElementById('eulerPmaxv').value=100;drawEuler()" style="padding:2px 6px">100</button>
+<button onclick="document.getElementById('eulerPmaxv').value=1000;drawEuler()" style="padding:2px 6px">1K</button>
+<button onclick="document.getElementById('eulerPmaxv').value=10000;drawEuler()" style="padding:2px 6px">10K</button>
+<button onclick="document.getElementById('eulerPmaxv').value=50000;drawEuler()" style="padding:2px 6px">50K</button>
+</div>
+</div>
+<div class="bg"><button onclick="drawEuler()">Compute</button><button onclick="screenshotEuler()">Screenshot</button><button class="s" onclick="csvEuler()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Euler Product: ζ(s) = ∏<sub>p</sub>(1-p<sup>-s</sup>)<sup>-1</sup></h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Computing <span id="eulerTargetDisp">π</span> using primes ≤ <span id="eulerPmaxDisp">1000</span>. Basel: ζ(2)=π²/6.</p>
+<canvas id="ceuler" width="750" height="500"></canvas><div class="al" id="aleuler"></div></div>
+<div class="viz"><h3>Live Statistics</h3><div id="eulerLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<h3 style="margin-top:1rem">Zeta Values Reference</h3><div class="pc" id="peulerZeta"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Convergence to Target</h3><div class="pc" id="peulerConv"></div></div>
+<div class="viz"><h3>Error Decay</h3><div class="pc" id="peulerErr"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Gap-Class Contributions</h3><div class="pc" id="peulerGap"></div></div>
+<div class="viz"><h3>Residue Channel Contributions</h3><div class="pc" id="peulerRes"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,200,0,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Euler Product & Basel Problem</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>Euler Product:</strong> ζ(s) = ∏<sub>p</sub>(1-p<sup>-s</sup>)<sup>-1</sup></div>
+<div><strong>Basel (1734):</strong> ζ(2) = 1+1/4+1/9+... = π²/6</div>
+<div><strong>Compute π:</strong> π = √(6·ζ(2)) = √(6·∏<sub>p</sub>(1-p<sup>-2</sup>)<sup>-1</sup>)</div>
+<div><strong>Gap-Class:</strong> Group primes by gap g = p<sub>next</sub>-p</div>
+<div><strong>Residue Channels:</strong> φ(m) channels for gcd(a,m)=1</div>
+<div><strong>Convergence:</strong> Error ~ 1/P<sub>max</sub> for ζ(2)</div>
+<div><strong>ζ(4):</strong> π⁴/90 ≈ 1.0823</div>
+<div><strong>ζ(6):</strong> π⁶/945 ≈ 1.0173</div>
+</div>
+</div>
+</div>
+
+<div id="tchord" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max n <span class="tip" title="Analyze chord uniformity for moduli up to n">?</span></label><div class="sig"><input type="range" id="chordN" min="50" max="500" value="200" oninput="document.getElementById('chordNv').value=this.value"><input type="number" id="chordNv" value="200" min="20" max="2000" onchange="document.getElementById('chordN').value=Math.min(500,this.value)"></div></div>
+<div class="cg"><label>Visualization</label><select id="chordViz" onchange="drawChord()">
+<option value="scatter">CV Scatter (Prime vs Comp)</option>
+<option value="histogram">CV Histogram</option>
+<option value="separation">Separation by Range</option>
+<option value="single">Single Modulus Detail</option>
+</select></div>
+<div class="cg"><label>Test Single n</label><input type="number" id="chordTest" value="97" min="3" style="width:70px"><button onclick="drawChord()" style="margin-left:5px">Test</button></div>
+<div class="cg"><label>Display</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="chordThresh" checked onchange="drawChord()"> Threshold</label>
+<label><input type="checkbox" id="chordLabels" onchange="drawChord()"> Labels</label>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawChord()">Analyze</button><button onclick="screenshotChord()">Screenshot</button><button class="s" onclick="csvChord()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Chord Length Uniformity: CV(n) = σ/μ</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Primes have uniform coprime spacing (low CV). Composites have irregular gaps (high CV). Separation grows with n.</p>
+<canvas id="cchord" width="750" height="500"></canvas><div class="al" id="alchord"></div></div>
+<div class="viz"><h3>Live Statistics</h3><div id="chordLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<h3 style="margin-top:1rem">CV Distribution</h3><div class="pc" id="pchordDist"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Separation by Range</h3><div class="pc" id="pchordSep"></div></div>
+<div class="viz"><h3>Prime vs Composite Average CV</h3><div class="pc" id="pchordAvg"></div></div>
+</div>
+<div class="viz"><h3>Sample Moduli (Click rows)</h3>
+<div style="max-height:200px;overflow-y:auto">
+<table id="tchordT"><tr><th>n</th><th>Type</th><th>φ(n)</th><th>CV</th><th>Gap Ratio</th><th>Verdict</th></tr></table>
+</div></div>
+<div style="padding:1rem;background:rgba(0,255,200,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Chord Length Uniformity Heuristic (Getachew 2025)</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>Chord:</strong> L_i = 2·sin(π·gap_i/n) between consecutive coprimes</div>
+<div><strong>CV:</strong> Coefficient of Variation = σ_L / μ_L</div>
+<div><strong>Prime signature:</strong> CV → 0 as n → ∞ (uniform)</div>
+<div><strong>Composite signature:</strong> CV ≈ 0.30 (irregular)</div>
+<div><strong>Separation:</strong> 32.7% at n≤50 → 92.3% at n≤10000</div>
+<div><strong>Decision:</strong> CV < 0.22 → likely prime</div>
+<div><strong>Gap Ratio:</strong> max(L)/min(L), primes ≈ 1.87</div>
+<div><strong>Application:</strong> Fast primality prefilter</div>
+</div>
+</div>
+</div>
+
 <div id="ref" class="sec">
-<div class="rs"><h3>Complete Feature Overview</h3><p>This comprehensive research platform integrates 9 interactive visualization tools with full mathematical verification and automatic statistical legends.</p></div>
-<div class="rs"><h3>Automatic Legend System</h3><p>Each visualization displays color-coordinated legends showing:</p><ul><li><strong>Count:</strong> Total and primitive point counts</li><li><strong>Relation to 1/ζ(k):</strong> Empirical density vs theory</li><li><strong>Absolute Error:</strong> Numerical difference</li><li><strong>Relative Error:</strong> Percentage deviation</li><li><strong>Color Coordination:</strong> Matches visualization colors</li></ul></div>
-<div class="rs"><h3>Interactive Tools (9 Tabs)</h3>
-<h4>Core Visualizations</h4>
-<div class="fb"><strong>2D Explorer</strong> - Lattice points in circle/square with GCD coloring, distance gradient, or primitive status. Click any point for full analysis.</div>
-<div class="fb"><strong>3D Ball</strong> - Three-dimensional visualization with drag rotation. Shows primitive density in 3D space.</div>
-<div class="fb"><strong>Error Analysis</strong> - Four plots: theory vs actual, absolute error, relative error %, boundary term comparison.</div>
-<h4>Dimensional Analysis</h4>
-<div class="fb"><strong>Dimensions</strong> - Computes primitive density for k=2-7 showing convergence to 1/ζ(k).</div>
-<div class="fb"><strong>Primitive Density 1/ζ(k)</strong> - Empirically verifies the fundamental formula.</div>
-<h4>Advanced Number Theory</h4>
-<div class="fb"><strong>GCD Metrics</strong> - Statistical analysis: mean/median/mode, squarefree breakdown.</div>
-<div class="fb"><strong>Gaussian Integers ℤ[i]</strong> - Complex plane visualization with norm distribution.</div>
-<div class="fb"><strong>Circle Problem</strong> - Dirichlet's classical problem with r(R) = Count - π·R².</div>
-<div class="fb"><strong>Shells</strong> - Möbius decomposition showing divisor contributions.</div>
+<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>23 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
+
+<div class="rs"><h3>Mathematical Credits & Historical Attribution</h3>
+<p style="color:var(--txt2);margin-bottom:1rem">This platform visualizes theorems and concepts developed by brilliant mathematicians over centuries:</p>
+<div class="fb"><strong>Leonhard Euler (1707-1783)</strong> — Euler product ζ(s)=∏(1-p⁻ˢ)⁻¹, Basel problem ζ(2)=π²/6, totient function φ(n), discovered e and formalized much of number theory.</div>
+<div class="fb"><strong>Carl Friedrich Gauss (1777-1855)</strong> — Gaussian integers ℤ[i], quadratic reciprocity, prime counting conjecture π(x)~x/ln(x), Circle Problem lattice point counting.</div>
+<div class="fb"><strong>Bernhard Riemann (1826-1866)</strong> — Riemann zeta function analytic continuation, Riemann Hypothesis (all nontrivial zeros have Re(s)=½), prime distribution via zeros.</div>
+<div class="fb"><strong>August Ferdinand Möbius (1790-1868)</strong> — Möbius function μ(n), Möbius inversion formula, foundational to inclusion-exclusion in number theory.</div>
+<div class="fb"><strong>Peter Gustav Lejeune Dirichlet (1805-1859)</strong> — Dirichlet L-functions L(s,χ), primes in arithmetic progressions, Dirichlet characters, hyperbola method.</div>
+<div class="fb"><strong>Arthur Cayley (1821-1895)</strong> — Cayley transform mapping disk↔half-plane, foundational to hyperbolic geometry and modular forms.</div>
+<div class="fb"><strong>John Farey (1766-1826)</strong> — Farey sequences F_n of reduced fractions, mediant property, connection to Ford circles.</div>
+<div class="fb"><strong>Lester R. Ford (1886-1967)</strong> — Ford circles tangent to real axis at rationals, geometric visualization of Farey sequences.</div>
+<div class="fb"><strong>G.H. Hardy (1877-1947) & J.E. Littlewood (1885-1977)</strong> — Prime race analysis, circle method, asymptotic analysis of prime distribution.</div>
+<div class="fb"><strong>Wacław Sierpiński (1882-1969)</strong> — Sierpiński problem (1964): integers not expressible as 6ab±a±b, contributions to number theory and set theory.</div>
+<div class="fb"><strong>Viggo Brun (1885-1978)</strong> — Brun sieve for twin primes, proved Σ1/p (twin primes) converges (Brun's constant ≈1.902).</div>
+<div class="fb"><strong>Alphonse de Polignac (1826-1863)</strong> — Twin prime conjecture (1849): infinitely many primes p where p+2 is also prime.</div>
 </div>
-<div class="rs"><h3>Coloring Schemes (2D & 3D)</h3>
-<h4>By GCD (Recommended)</h4><p style="color:var(--acc);font-weight:600">Cyan = GCD:1 (Primitive) | Blue = GCD:2 | Purple = GCD:3 | Pink = Other</p>
-<p style="color:var(--txt2)">Colors points by their GCD value, revealing the shell structure of the Möbius sieve. Primitive points (GCD=1) form the outer layer.</p>
-<h4>By Distance</h4><p style="color:var(--acc);font-weight:600">Gradient from near (blue) to far (red) from origin</p>
-<p style="color:var(--txt2)">HSL gradient based on Euclidean distance from origin. Visualizes radial distribution.</p>
-<h4>Primitive vs Non</h4><p style="color:var(--acc);font-weight:600">Cyan = Primitive (GCD=1) | Red = Non-Primitive (GCD>1)</p>
-<p style="color:var(--txt2)">Binary coloring highlighting the fundamental primitive/non-primitive distinction.</p>
-<h4>Rainbow (Cyclic)</h4><p style="color:var(--acc);font-weight:600">Full spectrum based on angular position</p>
-<p style="color:var(--txt2)">Colors by angle from origin (atan2). Reveals rotational patterns in the lattice. The lattice is essentially a bounded GCD multiplication table.</p>
-<h4>Quadratic Residues</h4><p style="color:var(--acc);font-weight:600">Gold = Quadratic residue | Purple = Non-residue</p>
-<p style="color:var(--txt2)">Colors based on whether x²+y² (mod R) is a perfect square. Connects to quadratic forms and Fermat's theorem on sums of squares.</p>
-<h4>Primality (Product)</h4><p style="color:var(--acc);font-weight:600">Green = |x·y| prime | Pink = Composite | Blue = 0 or 1</p>
-<p style="color:var(--txt2)">Highlights points where the product of coordinates is prime. Reveals prime-generating patterns.</p>
-<h4>Modular Distance</h4><p style="color:var(--acc);font-weight:600">Spectrum by min(|x|,|y|)</p>
-<p style="color:var(--txt2)">Colors by the minimum absolute coordinate value. Shows proximity to axes.</p>
-<h4>Symmetry Pattern</h4><p style="color:var(--acc);font-weight:600">Gold = Diagonal (|x|=|y|) | Spectrum by asymmetry</p>
-<p style="color:var(--txt2)">Highlights points along diagonals and colors others by deviation from diagonal symmetry.</p>
-<h4>Heatmap (Density)</h4><p style="color:var(--acc);font-weight:600">Dark Blue → Cyan → Yellow → Red by distance</p>
-<p style="color:var(--txt2)">Classic thermal gradient visualization of radial distance.</p>
-<h4>Divisibility</h4><p style="color:var(--acc);font-weight:600">Hue by divisor count of GCD</p>
-<p style="color:var(--txt2)">Colors based on how many divisors the GCD has. Highly composite GCDs have distinct colors.</p>
-<h4>Discrete GCD</h4><p style="color:var(--acc);font-weight:600">20 distinct colors cycling through GCD values</p>
-<p style="color:var(--txt2)">Maximum contrast coloring for distinguishing individual GCD values.</p>
-<h4>Fire Gradient</h4><p style="color:var(--acc);font-weight:600">Black → Red → Orange → Yellow by distance</p>
-<p style="color:var(--txt2)">Thermal gradient emphasizing radial density. Points near origin are dark, outer points glow hot.</p>
-<h4>Plasma</h4><p style="color:var(--acc);font-weight:600">Purple → Pink → Yellow scientific colormap</p>
-<p style="color:var(--txt2)">Perceptually uniform gradient from matplotlib. Excellent for revealing subtle density variations.</p>
-<h4>Viridis</h4><p style="color:var(--acc);font-weight:600">Purple → Green → Yellow scientific colormap</p>
-<p style="color:var(--txt2)">Perceptually uniform and colorblind-friendly. Standard for scientific visualization.</p>
-<h4>Ocean</h4><p style="color:var(--acc);font-weight:600">Deep Blue → Cyan by distance</p>
-<p style="color:var(--txt2)">Cool tones gradient emphasizing depth perception.</p>
+
+<div class="rs"><h3>All 23 Interactive Tabs</h3>
+<h4>Lattice & Geometry (Tabs 1-3)</h4>
+<div class="fb"><strong>2D Lattice</strong> — Gauss circle problem: count lattice points in disk. Primitive density → 6/π² (Euler). 15+ color schemes.</div>
+<div class="fb"><strong>3D Ball</strong> — Extends to 3D sphere. Primitive density → 1/ζ(3) ≈ 0.832 (Apéry's constant). Drag rotation.</div>
+<div class="fb"><strong>Möbius μ(n)</strong> — Visualize Möbius function: μ(n)=(-1)^k if squarefree with k prime factors, else 0. Mertens function M(x).</div>
+
+<h4>Modular Arithmetic (Tabs 4-7)</h4>
+<div class="fb"><strong>Modular Rings</strong> — Concentric rings at angles θ=2πr/M. Foundation for Dirichlet characters. Gap connections.</div>
+<div class="fb"><strong>Cayley ℍ</strong> — Cayley transform w=i(1+z)/(1-z) mapping disk to upper half-plane. Ford circles, hyperbolic geodesics.</div>
+<div class="fb"><strong>Farey</strong> — Farey sequence F_n: all reduced fractions p/q with q≤n. Mediant property, |F_n|~3n²/π².</div>
+<div class="fb"><strong>Primitive Roots</strong> — Generator g of (ℤ/Mℤ)×. Exists iff M∈{1,2,4,p^k,2p^k}. Power sequences g^n mod M.</div>
+
+<h4>Analysis & Error (Tabs 8-10)</h4>
+<div class="fb"><strong>Error Analysis</strong> — Deviation from 1/ζ(k) density. Theory vs actual, absolute/relative error, boundary terms.</div>
+<div class="fb"><strong>Dimensions</strong> — Primitive density in k-dimensional balls converges to 1/ζ(k). Compare k=2 through k=7.</div>
+<div class="fb"><strong>Shells</strong> — Möbius shell decomposition: points at each GCD level. Divisor contributions to total count.</div>
+
+<h4>Classical Problems (Tabs 11-14)</h4>
+<div class="fb"><strong>GCD Analysis</strong> — Statistical GCD distribution: mean, median, mode. Squarefree proportion → 6/π².</div>
+<div class="fb"><strong>Gaussian ℤ[i]</strong> — Gauss: complex integers a+bi. Norm N(z)=a²+b². Gaussian primes, unit group {±1,±i}.</div>
+<div class="fb"><strong>Circle Problem</strong> — Gauss-Dirichlet: N(R)=πR²+E(R). Error E(R)=O(R^θ), θ between 1/4 and 1/2. RH connection.</div>
+<div class="fb"><strong>Density 1/ζ</strong> — Empirical verification: primitive lattice point density approaches 1/ζ(k) exactly.</div>
+
+<h4>Characters & Primes (Tabs 15-17)</h4>
+<div class="fb"><strong>Dirichlet χ</strong> — Dirichlet characters mod q. L-functions L(s,χ)=Σχ(n)n⁻ˢ. Prime distribution in residue classes.</div>
+<div class="fb"><strong>Twin Primes</strong> — Polignac conjecture: infinitely many (p, p+2). Brun's constant B₂≈1.902. Hardy-Littlewood conjecture.</div>
+<div class="fb"><strong>Prime Counting π(x)</strong> — Gauss/Riemann: π(x)~x/ln(x)~Li(x). Prime number theorem. Chebyshev bounds.</div>
+
+<h4>Advanced Topics (Tabs 18-23)</h4>
+<div class="fb"><strong>Composite Channels</strong> — How composite moduli project residues onto Farey channels. Reducibility analysis, channel multiplicities.</div>
+<div class="fb"><strong>Coprime Pairs</strong> — Density theorem: P(gcd(a,b)=1)=6/π². Disc analysis V(R), error E(R), RH connection |E(R)|=O(R^½⁺ᵋ).</div>
+<div class="fb"><strong>Sierpiński</strong> — Sierpiński problem (1964): integers not expressible as 6ab±a±b. 78 known uncovered ≤1000. Unsolved.</div>
+<div class="fb"><strong>k-Free</strong> — Boundary cancellation principle: k-free integers have density 1/ζ(k), error O(N^(1/k)) from boundary.</div>
+<div class="fb"><strong>Euler ∏</strong> — Compute π and ζ(2n) via Euler product. Gap-class decomposition, residue channel analysis mod m.</div>
+<div class="fb"><strong>Chord CV</strong> — Chord length uniformity heuristic (Getachew 2025): CV separates primes (low) from composites (high). 92% separation at n≤10000.</div>
 </div>
-<div class="rs"><h3>New Tabs: Cayley Transform & Primitive Roots</h3>
-<h4>Cayley ℍ (Upper Half-Plane)</h4>
-<p style="color:var(--txt2)">The Cayley transform w = i(1+z)/(1-z) maps the unit disk to the upper half-plane ℍ. This conformal mapping is fundamental to hyperbolic geometry and modular forms. Primitive lattice points (GCD=1) transform to create patterns related to Ford circles and Farey sequences.</p>
-<div class="fb"><strong>Ford Circles:</strong> For rational p/q, the Ford circle has center (p/q, 1/(2q²)) and radius 1/(2q²). Adjacent Farey fractions have tangent Ford circles.</div>
-<div class="fb"><strong>Geodesics:</strong> In ℍ, hyperbolic geodesics are semicircles perpendicular to the real axis. The modular group PSL(2,ℤ) acts by isometries.</div>
-<h4>Primitive Roots</h4>
-<p style="color:var(--txt2)">An element g ∈ (ℤ/Mℤ)× is a primitive root if its multiplicative order equals φ(M). When primitive roots exist, the unit group is cyclic: (ℤ/Mℤ)× ≅ ℤ/φ(M)ℤ.</p>
-<div class="fb"><strong>Existence:</strong> Primitive roots exist mod M iff M ∈ {1, 2, 4, p^k, 2p^k} where p is odd prime.</div>
-<div class="fb"><strong>Power Sequence:</strong> g^n mod M for n=0,1,...,φ(M)-1 cycles through all units exactly once.</div>
+
+<div class="rs"><h3>Key Theorems Visualized</h3>
+<div class="fb"><strong>Euler Product (1737):</strong> ζ(s) = ∏<sub>p prime</sub>(1-p⁻ˢ)⁻¹ for Re(s)>1. Connects primes to zeta function.</div>
+<div class="fb"><strong>Basel Problem (Euler 1734):</strong> ζ(2) = 1+1/4+1/9+... = π²/6. First exact value of ζ(2n).</div>
+<div class="fb"><strong>Möbius Inversion (1832):</strong> If g(n)=Σ_{d|n}f(d), then f(n)=Σ_{d|n}μ(d)g(n/d). Fundamental identity.</div>
+<div class="fb"><strong>Primitive Density:</strong> #{gcd=1 in B_k(R)}/#{all in B_k(R)} → 1/ζ(k) as R→∞.</div>
+<div class="fb"><strong>Dirichlet's Theorem (1837):</strong> Infinitely many primes in arithmetic progression a+nd when gcd(a,n)=1.</div>
+<div class="fb"><strong>Prime Number Theorem (1896):</strong> π(x) ~ x/ln(x). Proved independently by Hadamard and de la Vallée Poussin.</div>
+<div class="fb"><strong>Riemann Hypothesis (1859):</strong> All nontrivial zeros of ζ(s) satisfy Re(s)=½. Millennium Prize problem.</div>
+<div class="fb"><strong>Hardy-Littlewood Conjecture:</strong> Twin prime count ~ 2C₂∫dx/(ln x)² where C₂≈0.66 is twin prime constant.</div>
 </div>
-<div class="rs"><h3>New Tab: Modular Rings 2πr/M</h3>
-<p style="color:var(--txt2)">Concentric ring visualization showing residue classes at angular positions θ = 2πr/M. This is the geometric foundation for understanding Dirichlet characters and the Generalized Riemann Hypothesis.</p>
-<h4>Ring Spacing Options</h4>
-<div class="fb"><strong>Uniform:</strong> Equal spacing between rings regardless of modulus value.</div>
-<div class="fb"><strong>Linear (c·m):</strong> Ring radius proportional to modulus. Outer rings are larger moduli.</div>
-<div class="fb"><strong>Square Root (√m):</strong> Compressed outer rings. Better for large modulus ranges.</div>
-<div class="fb"><strong>Logarithmic:</strong> Even more compression. Good for M=1 to M=100+.</div>
-<div class="fb"><strong>Totient φ(m):</strong> Radius proportional to number of coprime residues. Reveals totient structure.</div>
-<h4>Connection Lines</h4>
-<div class="fb"><strong>Direct Lifts:</strong> r → r across consecutive rings. Shows how residues persist across moduli.</div>
-<div class="fb"><strong>Gap-g Lines:</strong> r → r+g within same ring. Gap 2 = twin primes, Gap 6 = sexy primes.</div>
-<h4>Color Schemes</h4>
-<div class="fb"><strong>By GCD:</strong> Gold for GCD(r,M)=1 (Dirichlet character support χ(r)≠0), gray otherwise.</div>
-<div class="fb"><strong>Rainbow:</strong> Hue by angular position 2πr/M.</div>
-<div class="fb"><strong>By Ring:</strong> Each modulus gets unique color.</div>
-<div class="fb"><strong>Prime vs Composite:</strong> Green for prime residues, pink for composite.</div>
+
+<div class="rs"><h3>References & Further Reading</h3>
+<div class="fb"><strong>Edwards, H.M.</strong> (1974). <em>Riemann's Zeta Function</em>. Academic Press. — Comprehensive treatment of ζ(s).</div>
+<div class="fb"><strong>Apostol, T.M.</strong> (1976). <em>Introduction to Analytic Number Theory</em>. Springer. — Standard graduate text.</div>
+<div class="fb"><strong>Hardy, G.H. & Wright, E.M.</strong> (2008). <em>An Introduction to the Theory of Numbers</em>. 6th ed. Oxford. — Classic reference.</div>
+<div class="fb"><strong>Davenport, H.</strong> (2000). <em>Multiplicative Number Theory</em>. 3rd ed. Springer. — Dirichlet L-functions and characters.</div>
+<div class="fb"><strong>Titchmarsh, E.C.</strong> (1986). <em>The Theory of the Riemann Zeta Function</em>. 2nd ed. Oxford. — Definitive ζ(s) reference.</div>
+<div class="fb"><strong>Montgomery, H.L. & Vaughan, R.C.</strong> (2007). <em>Multiplicative Number Theory I</em>. Cambridge. — Modern treatment.</div>
+<div class="fb"><strong>Iwaniec, H. & Kowalski, E.</strong> (2004). <em>Analytic Number Theory</em>. AMS. — Advanced techniques.</div>
+<div class="fb"><strong>OEIS</strong> — Online Encyclopedia of Integer Sequences: <a href="https://oeis.org" target="_blank" style="color:var(--acc)">oeis.org</a></div>
 </div>
-<div class="rs"><h3>Smith Chart / Cayley Transform</h3>
-<p style="color:var(--txt2)">Conformal mapping Γ = (z-1)/(z+1) from impedance plane to unit disk. Available in 2D, 3D, and Modular Rings tabs.</p>
-<h4>Transform Formula</h4>
-<div class="fb"><strong>Input:</strong> z = R·e^(iθ) where θ = angle + α (phase shift)</div>
-<div class="fb"><strong>Output:</strong> Γ = (z-1)/(z+1) maps to unit disk</div>
-<div class="fb"><strong>Real Part:</strong> Re(Γ) = (AC + B²)/(C² + B²) where A = R·cos(θ)-1, B = R·sin(θ), C = R·cos(θ)+1</div>
-<div class="fb"><strong>Imaginary Part:</strong> Im(Γ) = B(C-A)/(C² + B²)</div>
-<div class="fb"><strong>Special Case R=1:</strong> Γ(θ) = i·tan(θ/2) (pure imaginary axis)</div>
-<h4>Controls</h4>
-<div class="fb"><strong>Phase Shift α:</strong> Global rotation of all angles (0°-360°). Default 90° aligns with standard Smith chart.</div>
-<div class="fb"><strong>Radius Scale:</strong> Unit (all R=1), By Index (spreads points), By Distance/Modulus (varies R).</div>
-<div class="fb"><strong>Grid:</strong> Shows unit circle and axes.</div>
-<div class="fb"><strong>Const-R Circles:</strong> Circles of constant resistance (real part).</div>
-<div class="fb"><strong>Const-X Arcs:</strong> Arcs of constant reactance (imaginary part).</div>
-<h4>Mathematical Significance</h4>
-<div class="fb"><strong>Conformal:</strong> Preserves angles between curves.</div>
-<div class="fb"><strong>Möbius Transform:</strong> Special case mapping circles to circles.</div>
-<div class="fb"><strong>RF Engineering:</strong> Standard tool for impedance matching and transmission line analysis.</div>
-<div class="fb"><strong>Number Theory:</strong> Maps residue angles to patterns revealing arithmetic structure.</div>
+
+<div class="rs"><h3>Platform Features</h3>
+<ul>
+<li><strong>Live Dashboards:</strong> Real-time statistics with big number cards and detailed breakdowns</li>
+<li><strong>Theory Panels:</strong> 8 key facts per tab explaining the mathematics</li>
+<li><strong>Multiple Charts:</strong> Plotly-powered interactive charts (3-6 per tab)</li>
+<li><strong>Click Inspector:</strong> Click any point/cell for detailed modal analysis</li>
+<li><strong>CSV Export:</strong> Download data for external analysis</li>
+<li><strong>Screenshot:</strong> High-resolution PNG export with embedded dashboard</li>
+<li><strong>Dual Controls:</strong> Every slider has matching input box for precise values</li>
+<li><strong>Dark/Light Mode:</strong> Toggle in header, persists across sessions</li>
+<li><strong>Precision Control:</strong> 2-16 decimal places for all calculations</li>
+</ul>
 </div>
-<div class="rs"><h3>2D Connection Lines</h3>
-<p style="color:var(--txt2)">Connect lattice points to reveal structural patterns:</p>
-<div class="fb"><strong>GCD=1 Network:</strong> Links between primitive points within distance 2.</div>
-<div class="fb"><strong>Same GCD:</strong> Points with equal GCD values connected.</div>
-<div class="fb"><strong>Radial:</strong> Lines from origin to all primitive points.</div>
-<div class="fb"><strong>Diagonal:</strong> Connects points on x=±y lines.</div>
-</div>
-<div class="rs"><h3>Enhanced 3D Screenshot</h3>
-<p style="color:var(--txt2)">Professional export options for publications and presentations:</p>
-<div class="fb"><strong>Resolution:</strong> 1x Standard, 2x High, 4x for 4K output.</div>
-<div class="fb"><strong>Background:</strong> Theme default, black, white, or transparent.</div>
-<div class="fb"><strong>Options:</strong> Include/exclude title, legend, statistics panel.</div>
-<div class="fb"><strong>Custom Title:</strong> Set your own title text for the export.</div>
-</div>
-<div class="rs"><h3>Point Labeling Options</h3><ul><li><strong>None</strong> - Clean visualization</li><li><strong>Coordinates</strong> - Shows (x,y) above each point</li><li><strong>GCD Values</strong> - Displays GCD number</li></ul></div>
-<div class="rs"><h3>Precision Control (2-16 Decimal Places)</h3><p>Use the dropdown in the header. 2-4 for quick analysis, 6-8 for verification, 10+ for research.</p></div>
-<div class="rs"><h3>Mathematical Functions Verified</h3><ul><li><strong>GCD</strong> - Euclidean algorithm</li><li><strong>Möbius Function</strong> - Squarefree check via prime factorization</li><li><strong>Riemann Zeta</strong> - Dirichlet series, 150 terms</li><li><strong>Volume</strong> - Exact formulas for B_n, n=2-7</li><li><strong>Enumeration</strong> - Exhaustive for n≤3</li></ul></div>
-<div class="rs"><h3>Quick Start Guide</h3><ol><li>Read <strong>Theory</strong> tab</li><li>Try <strong>2D Explorer</strong> - adjust radius, change colors, click points</li><li>Explore <strong>3D Ball</strong> - drag to rotate</li><li>Check <strong>Primitive Density 1/ζ(k)</strong></li><li>Use <strong>GCD Metrics</strong></li><li>Check <strong>Gaussian Integers</strong></li><li>Analyze <strong>Circle Problem</strong></li><li>Run <strong>Error Analysis</strong></li><li>Examine <strong>Shells</strong></li></ol></div>
+
+<div class="rs"><h3>About</h3>
+<p><strong>Created by:</strong> Wessen Getachew (<a href="https://twitter.com/7dview" target="_blank" style="color:var(--acc)">@7dview</a>)</p>
+<p><strong>Philosophy:</strong> Making deep number theory accessible through interactive visualization. Every theorem deserves to be seen, not just read.</p>
+<p><strong>Technology:</strong> Pure HTML5/CSS3/JavaScript. No frameworks, no dependencies except Plotly.js for charts.</p>
+<p style="margin-top:1rem;color:var(--txt2);font-size:.85rem"><em>"The mathematician does not study pure mathematics because it is useful; he studies it because he delights in it and he delights in it because it is beautiful."</em> — Henri Poincaré</p>
 </div>
 </div>
 
@@ -1143,6 +1497,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 let P=4,D={},rx=0,ry=0,rz=0,panX=0,panY=0,anim3d=false,pts2d=[],pts3d=[],gausP=[];
 const fmt=n=>{if(n===0)return'0';if(n==null||isNaN(n)||!isFinite(n))return'—';return parseFloat(n).toFixed(P);};
 const gcd=(a,b)=>{a=Math.abs(Math.round(a));b=Math.abs(Math.round(b));while(b)[a,b]=[b,a%b];return a||1;};
+const isPrime=n=>{if(n<2)return false;if(n===2)return true;if(n%2===0)return false;for(let i=3;i*i<=n;i+=2)if(n%i===0)return false;return true;};
 const gcdM=(...n)=>n.reduce((a,b)=>gcd(a,b));
 const mob=n=>{if(n===1)return 1;let pf=0,t=n;for(let i=2;i*i<=n;i++){if(n%i===0){if(t%(i*i)===0)return 0;pf++;while(t%i===0)t/=i;}}if(t>1)pf++;return pf%2===0?1:-1;};
 const zeta=(n,t=150)=>{let s=0;for(let k=1;k<=t;k++)s+=1/Math.pow(k,n);return s;};
@@ -4350,6 +4705,1545 @@ ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='cent
 ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
 out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='prime_counting.png';a.click();},'image/png',1.0);}
 
+// Composite Channel Projection
+let compData={M:60,residues:[],channels:[]};
+let compSweepInterval=null,compSweepR=1;
+
+function factorize(n){
+const factors=[];
+let d=2;
+while(d*d<=n){
+while(n%d===0){factors.push(d);n/=d;}
+d++;}
+if(n>1)factors.push(n);
+return factors;}
+
+function getDivisors(n){
+const divs=[1];
+for(let i=2;i<=n;i++)if(n%i===0)divs.push(i);
+return divs;}
+
+function smallestPrimeFactor(n){
+if(n<=1)return 1;
+if(n%2===0)return 2;
+for(let i=3;i*i<=n;i+=2)if(n%i===0)return i;
+return n;}
+
+function largestPrimeFactor(n){
+const f=factorize(n);
+return f.length?f[f.length-1]:1;}
+
+function drawComp(){
+const c=document.getElementById('ccomp'),ctx=c.getContext('2d');
+const M=+document.getElementById('compMv').value||+document.getElementById('compM').value;
+const viz=document.getElementById('compViz').value;
+const col=document.getElementById('compCol').value;
+const showProj=document.getElementById('compProj').checked;
+const showLabels=document.getElementById('compLabels').checked;
+const showMult=document.getElementById('compMult').checked;
+const showCoprime=document.getElementById('compCoprime').checked;
+const lineOp=+document.getElementById('compLineOp').value;
+const ptSz=+document.getElementById('compPtSz').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+document.getElementById('compMdisp').textContent=M;
+
+compData.M=M;
+const phi=eulerPhi(M);
+const divs=getDivisors(M);
+const factors=factorize(M);
+const primeFactors=[...new Set(factors)];
+
+// Build residue data
+const residues=[];
+const channelCounts={};
+for(let r=0;r<M;r++){
+const g=gcd(r,M);
+const Mprime=M/g;
+const rprime=r/g;
+const isCoprime=g===1;
+const spf=smallestPrimeFactor(g);
+const lpf=largestPrimeFactor(g);
+residues.push({r,g,Mprime,rprime,isCoprime,spf,lpf});
+channelCounts[Mprime]=(channelCounts[Mprime]||0)+1;}
+compData.residues=residues;
+compData.channels=divs.map(d=>({M:d,count:channelCounts[d]||0,mult:M/d}));
+
+const cx=c.width/2,cy=c.height/2,R=Math.min(cx,cy)-60;
+
+if(viz==='projection'||viz==='rings'){
+// Draw main ring (M)
+ctx.strokeStyle=gridC();ctx.lineWidth=1;
+ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);ctx.stroke();
+
+// Draw channel rings (divisors of M)
+if(showProj){
+for(const d of divs){
+if(d===M)continue;
+const rRing=R*d/M;
+ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;
+ctx.beginPath();ctx.arc(cx,cy,rRing,0,2*Math.PI);ctx.stroke();}}
+
+// Draw projection lines for reducible residues
+if(showProj){
+ctx.globalAlpha=lineOp;
+for(const res of residues){
+if(res.isCoprime)continue;
+const ang1=-2*Math.PI*res.r/M;
+const x1=cx+R*Math.cos(ang1),y1=cy+R*Math.sin(ang1);
+const rTarget=R*res.Mprime/M;
+const ang2=-2*Math.PI*res.rprime/res.Mprime;
+const x2=cx+rTarget*Math.cos(ang2),y2=cy+rTarget*Math.sin(ang2);
+ctx.strokeStyle='#ff4040';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
+ctx.globalAlpha=1;}
+
+// Draw points
+for(const res of residues){
+if(!showCoprime&&res.isCoprime)continue;
+const ang=-2*Math.PI*res.r/M;
+const x=cx+R*Math.cos(ang),y=cy+R*Math.sin(ang);
+let clr;
+if(col==='type')clr=res.isCoprime?'#00d9ff':'#ff4040';
+else if(col==='gcd')clr=res.g===1?'#00d9ff':`hsl(${res.g*30},70%,50%)`;
+else if(col==='spf')clr=`hsl(${res.spf*40},80%,50%)`;
+else if(col==='lpf')clr=`hsl(${res.lpf*25},70%,55%)`;
+else if(col==='depth')clr=`hsl(${(1-res.Mprime/M)*280},70%,50%)`;
+else clr=res.isCoprime?'#00d9ff':'#ff4040';
+ctx.fillStyle=clr;
+ctx.beginPath();ctx.arc(x,y,ptSz,0,2*Math.PI);ctx.fill();
+if(res.isCoprime){ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.stroke();}
+if(showLabels&&M<=30){
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='9px Arial';ctx.textAlign='center';
+ctx.fillText(res.r,x,y-ptSz-3);}}}
+
+else if(viz==='channels'){
+// Bar chart of channels
+const barW=(c.width-100)/divs.length;
+const maxCount=Math.max(...compData.channels.map(ch=>ch.count));
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Channel Distribution for M=${M}`,cx,30);
+for(let i=0;i<compData.channels.length;i++){
+const ch=compData.channels[i];
+const x=50+i*barW;
+const barH=(c.height-100)*ch.count/maxCount;
+ctx.fillStyle=ch.M===M?'#00d9ff':`hsl(${i*360/divs.length},70%,50%)`;
+ctx.fillRect(x,c.height-50-barH,barW*0.8,barH);
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='10px Arial';
+ctx.fillText(`M'=${ch.M}`,x+barW*0.4,c.height-35);
+if(showMult)ctx.fillText(`×${ch.mult}`,x+barW*0.4,c.height-50-barH-5);}}
+
+else if(viz==='factorization'){
+// Factor tree visualization
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 16px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`M = ${M} = ${factors.join(' × ')}`,cx,40);
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='14px Segoe UI';
+ctx.fillText(`Prime factors: {${primeFactors.join(', ')}}`,cx,70);
+ctx.fillText(`φ(${M}) = ${phi}`,cx,100);
+ctx.fillText(`τ(${M}) = ${divs.length} divisors`,cx,130);
+// Draw divisor lattice
+const levels={};
+for(const d of divs){
+const nf=factorize(d).length;
+if(!levels[nf])levels[nf]=[];
+levels[nf].push(d);}
+const levelKeys=Object.keys(levels).map(Number).sort((a,b)=>a-b);
+const levelH=(c.height-200)/Math.max(levelKeys.length,1);
+for(let li=0;li<levelKeys.length;li++){
+const lv=levels[levelKeys[li]];
+const y=180+li*levelH;
+const xStep=c.width/(lv.length+1);
+for(let i=0;i<lv.length;i++){
+const x=xStep*(i+1);
+ctx.fillStyle=lv[i]===M?'#ffd700':lv[i]===1?'#00ff88':'#00d9ff';
+ctx.beginPath();ctx.arc(x,y,15,0,2*Math.PI);ctx.fill();
+ctx.fillStyle=isDark()?'#000':'#fff';ctx.font='bold 11px Arial';
+ctx.fillText(lv[i],x,y+4);}}}
+
+// Charts
+Plotly.newPlot('pcompDist',[{x:compData.channels.map(ch=>`M'=${ch.M}`),y:compData.channels.map(ch=>ch.count),type:'bar',marker:{color:compData.channels.map(ch=>ch.M===M?'#00d9ff':'#ff8c00')}}],{...plo(),xaxis:{title:'Channel'},yaxis:{title:'Residues'}});
+
+const divPhis=divs.map(d=>({d,phi:eulerPhi(d),ratio:eulerPhi(d)/d}));
+Plotly.newPlot('pcompDiv',[{x:divs,y:divs.map(d=>M/d),type:'bar',name:'Multiplicity',marker:{color:'#9664ff'}}],{...plo(),xaxis:{title:'Divisor M\''},yaxis:{title:'Multiplicity d=M/M\''}});
+
+Plotly.newPlot('pcompPhi',[{x:divs,y:divPhis.map(d=>d.ratio),mode:'lines+markers',line:{color:'#00ff88'},name:'φ(M\')/M\''},{x:[divs[0],divs[divs.length-1]],y:[6/Math.PI**2,6/Math.PI**2],mode:'lines',line:{color:'#ff006e',dash:'dash'},name:'6/π²'}],{...plo(),xaxis:{title:'Divisor'},yaxis:{title:'Coprime Density'}});
+
+// Legend
+const coprimeCount=residues.filter(r=>r.isCoprime).length;
+const reducibleCount=M-coprimeCount;
+legend('alcomp','Channel Stats',[['Coprime φ(M)',coprimeCount,'#00d9ff'],['Reducible',reducibleCount,'#ff4040'],['Channels τ(M)',divs.length,'#ffd700']]);
+
+// Live stats
+document.getElementById('compLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ffd700">${M}</div><div style="font-size:.7rem;color:var(--txt2)">MODULUS M</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00d9ff">${phi}</div><div style="font-size:.7rem;color:var(--txt2)">φ(M)</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ff4040">${reducibleCount}</div><div style="font-size:.7rem;color:var(--txt2)">REDUCIBLE</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Factorization</strong>
+<div style="margin-top:5px;font-size:.9rem;color:var(--txt)">M = ${factors.join(' × ')}</div>
+<div style="font-size:.8rem;color:var(--txt2)">Prime factors: {${primeFactors.join(', ')}}</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Density Analysis</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.8rem">
+<span>φ(M)/M:</span><span style="color:#00ff88">${(phi/M*100).toFixed(2)}%</span>
+<span>Reducible ratio:</span><span style="color:#ff4040">${(reducibleCount/M*100).toFixed(2)}%</span>
+<span>6/π² limit:</span><span style="color:#9664ff">60.79%</span>
+<span>Channels τ(M):</span><span style="color:#ffd700">${divs.length}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Divisors of M</strong>
+<div style="margin-top:5px;font-size:.75rem;color:var(--txt2)">{${divs.join(', ')}}</div>
+</div>
+<div>
+<strong style="color:var(--acc)">Channel Multiplicities</strong>
+<div style="margin-top:5px;font-size:.75rem;color:var(--txt2)">
+${compData.channels.slice(0,8).map(ch=>`M'=${ch.M}: ×${ch.mult}`).join(' | ')}${compData.channels.length>8?'...':''}
+</div>
+</div>`;
+
+// Table
+document.getElementById('tcompT').innerHTML='<tr><th>r</th><th>gcd(r,M)</th><th>Channel M\'</th><th>Reduced r\'</th><th>Type</th><th>Multiplicity</th></tr>'+
+residues.slice(0,100).map(res=>`<tr onclick="modal('Residue ${res.r} mod ${M}',[['r',${res.r}],['gcd(r,M)',${res.g}],['Channel M\\'',${res.Mprime}],['Reduced r\\'',${res.rprime}],['Type','${res.isCoprime?'Coprime':'Reducible'}'],['SPF',${res.spf}],['LPF',${res.lpf}]])" style="cursor:pointer;color:${res.isCoprime?'#00d9ff':'#ff4040'}"><td>${res.r}</td><td>${res.g}</td><td>${res.Mprime}</td><td>${res.rprime}</td><td>${res.isCoprime?'Coprime':'Reducible'}</td><td>${M/res.Mprime}</td></tr>`).join('');
+
+// Click handler
+c.onclick=e=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);
+const cx=c.width/2,cy=c.height/2,R=Math.min(cx,cy)-60;
+for(const res of residues){
+const ang=-2*Math.PI*res.r/M;
+const x=cx+R*Math.cos(ang),y=cy+R*Math.sin(ang);
+if(Math.hypot(mx-x,my-y)<ptSz+5){
+modal(`Residue ${res.r} mod ${M}`,[['r',res.r],['gcd(r,M)',res.g],['Channel M\'',res.Mprime],['Reduced r\'',res.rprime],['Type',res.isCoprime?'Coprime':'Reducible'],['Multiplicity',M/res.Mprime]]);break;}}};}
+
+function startCompSweep(){
+stopCompSweep();
+const M=+document.getElementById('compMv').value;
+const coprimes=compData.residues.filter(r=>r.isCoprime).map(r=>r.r);
+let idx=0;
+compSweepInterval=setInterval(()=>{
+compSweepR=coprimes[idx%coprimes.length];
+document.getElementById('compSweepR').textContent='r='+compSweepR;
+// Highlight current coprime
+drawComp();
+const c=document.getElementById('ccomp'),ctx=c.getContext('2d');
+const cx=c.width/2,cy=c.height/2,R=Math.min(cx,cy)-60;
+const ang=-2*Math.PI*compSweepR/M;
+const x=cx+R*Math.cos(ang),y=cy+R*Math.sin(ang);
+ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(x,y,12,0,2*Math.PI);ctx.fill();
+ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+idx++;},500);}
+
+function stopCompSweep(){if(compSweepInterval){clearInterval(compSweepInterval);compSweepInterval=null;}}
+
+function csvComp(){
+let s='r,gcd,channel_M,reduced_r,type,multiplicity,spf,lpf\n';
+for(const res of compData.residues)s+=`${res.r},${res.g},${res.Mprime},${res.rprime},${res.isCoprime?'coprime':'reducible'},${compData.M/res.Mprime},${res.spf},${res.lpf}\n`;
+dl(s,'composite_channels.csv');}
+
+async function screenshotComp(){
+const c=document.getElementById('ccomp'),dashData=extractDashboardData('compLiveStats');
+const M=document.getElementById('compMv').value;
+const scale=2,pad=30,dashH=350;
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Composite Channel Projection — M=${M}`,out.width/scale/2,pad);
+ctx.drawImage(c,pad,pad+25,c.width,c.height);
+const dashY=c.height+pad+45;
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
+ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='composite_channels.png';a.click();},'image/png',1.0);}
+
+// Coprime Pairs Grid
+let copairData={N:60,pairs:[],coprimeCount:0};
+let copairAnimInterval=null;
+
+function drawCopair(){
+const c=document.getElementById('ccopair'),ctx=c.getContext('2d');
+const N=+document.getElementById('copairNv').value||+document.getElementById('copairN').value;
+const viz=document.getElementById('copairViz').value;
+const col=document.getElementById('copairCol').value;
+const showCircle=document.getElementById('copairCircle').checked;
+const showDiag=document.getElementById('copairDiag').checked;
+const showPrime=document.getElementById('copairPrime').checked;
+const showLabels=document.getElementById('copairLabels').checked;
+const showAxes=document.getElementById('copairAxes').checked;
+const circleR=+document.getElementById('copairR').value/100;
+const modHighlight=document.getElementById('copairMod').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+document.getElementById('copairNdisp').textContent=N;
+document.getElementById('copairAnimN').textContent='N='+N;
+
+// Compute coprime pairs and disc statistics
+let coprimeCount=0,discCoprime=0,discTotal=0;
+const gcdCounts={};
+const R=N*circleR;
+const theory=6/Math.PI**2;
+
+// Möbius function
+function mobius(n){
+if(n===1)return 1;
+let result=1,temp=n;
+for(let p=2;p*p<=temp;p++){
+if(temp%p===0){
+temp/=p;
+if(temp%p===0)return 0;
+result*=-1;}}
+if(temp>1)result*=-1;
+return result;}
+
+// Compute M(N) = Σμ(n)
+let mobiusSum=0,mobiusSumN2=0;
+for(let n=1;n<=N;n++){
+const mu=mobius(n);
+mobiusSum+=mu;
+mobiusSumN2+=mu/(n*n);}
+
+for(let a=1;a<=N;a++){
+for(let b=1;b<=N;b++){
+const g=gcd(a,b);
+const isCoprime=g===1;
+if(isCoprime)coprimeCount++;
+gcdCounts[g]=(gcdCounts[g]||0)+1;
+const dist2=a*a+b*b;
+if(dist2<=R*R){
+discTotal++;
+if(isCoprime)discCoprime++;}}}
+
+const totalPairs=N*N;
+const ratio=coprimeCount/totalPairs;
+const expectedDisc=theory*Math.PI*R*R;
+const errorE=discCoprime-expectedDisc;
+const errorRatio=Math.abs(errorE)/Math.sqrt(R);
+
+const pad=40,w=c.width-2*pad,h=c.height-2*pad;
+const scale=Math.min(w,h)/N;
+
+// Color function
+function getColor(a,b,g,isCoprime){
+if(showPrime&&!isPrime(a)&&!isPrime(b))return 'rgba(50,50,50,0.3)';
+if(modHighlight!=='none'){
+const m=+modHighlight;
+if(a%m===0||b%m===0)return '#ffd700';}
+if(col==='classic')return isCoprime?'#00ff88':'#333';
+if(col==='gcd')return isCoprime?'#00ff88':`hsl(${g*40},60%,40%)`;
+if(col==='neon')return isCoprime?'#00ffff':'#ff00ff';
+if(col==='heatmap')return isCoprime?`hsl(${120-g*10},80%,50%)`:`hsl(${g*20},60%,35%)`;
+if(col==='highcontrast')return isCoprime?'#ffff00':'#000';
+if(col==='angle')return `hsl(${Math.atan2(b,a)*180/Math.PI*2},70%,${isCoprime?55:35}%)`;
+if(col==='norm')return `hsl(${(a*a+b*b)%360},70%,${isCoprime?55:35}%)`;
+return isCoprime?'#00ff88':'#333';}
+
+if(viz==='grid'||viz==='gcdmap'||viz==='disc'){
+// Draw grid
+const cellW=w/N,cellH=h/N;
+for(let a=1;a<=N;a++){
+for(let b=1;b<=N;b++){
+const g=gcd(a,b);
+const isCoprime=g===1;
+const x=pad+(a-1)*cellW;
+const y=pad+h-b*cellH;
+ctx.fillStyle=getColor(a,b,g,isCoprime);
+ctx.fillRect(x,y,cellW+0.5,cellH+0.5);}}
+
+// Axes
+if(showAxes){
+ctx.strokeStyle=gridC();ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(pad,pad+h);ctx.lineTo(pad+w,pad+h);ctx.stroke();
+ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,pad+h);ctx.stroke();
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='11px Segoe UI';ctx.textAlign='center';
+ctx.fillText('a',pad+w/2,pad+h+25);
+ctx.save();ctx.translate(15,pad+h/2);ctx.rotate(-Math.PI/2);ctx.fillText('b',0,0);ctx.restore();}
+
+// Diagonals
+if(showDiag){
+ctx.strokeStyle='#ffd700';ctx.lineWidth=1.5;ctx.setLineDash([5,5]);
+ctx.beginPath();ctx.moveTo(pad,pad+h);ctx.lineTo(pad+w,pad);ctx.stroke();
+ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad+w,pad+h);ctx.stroke();ctx.setLineDash([]);}
+
+// Radius circle
+if(showCircle||viz==='disc'){
+const cx=pad,cy=pad+h;
+const rPx=R*scale;
+ctx.strokeStyle='#ff006e';ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(cx,cy,rPx,0,-Math.PI/2,true);ctx.stroke();
+ctx.fillStyle='#ff006e';ctx.font='11px Arial';
+ctx.fillText(`R=${R.toFixed(1)}`,cx+rPx*0.7,cy-rPx*0.7);}
+
+// Labels
+if(showLabels&&N<=40){
+ctx.fillStyle=isDark()?'#888':'#555';ctx.font='8px Arial';ctx.textAlign='center';
+for(let i=1;i<=N;i+=Math.ceil(N/20)){
+ctx.fillText(i,pad+(i-0.5)*cellW,pad+h+12);
+ctx.fillText(i,pad-12,pad+h-(i-0.5)*cellH+3);}}}
+
+else if(viz==='density'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Coprime Density Convergence to 6/π²',c.width/2,25);
+const densities=[];
+for(let n=5;n<=N;n+=Math.max(1,Math.floor(N/50))){
+let cnt=0;
+for(let a=1;a<=n;a++)for(let b=1;b<=n;b++)if(gcd(a,b)===1)cnt++;
+densities.push({n,ratio:cnt/(n*n)});}
+ctx.strokeStyle='#ff006e';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+const y6pi=pad+h*(1-theory);
+ctx.beginPath();ctx.moveTo(pad,y6pi);ctx.lineTo(pad+w,y6pi);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff006e';ctx.font='11px Arial';ctx.textAlign='left';
+ctx.fillText('6/π² ≈ 0.6079',pad+5,y6pi-5);
+ctx.beginPath();ctx.strokeStyle='#00ff88';ctx.lineWidth=2;
+for(let i=0;i<densities.length;i++){
+const x=pad+w*i/(densities.length-1);
+const y=pad+h*(1-densities[i].ratio);
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();}
+
+else if(viz==='scatter'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Primitive Lattice Vectors (Visible from Origin)',c.width/2,25);
+const plotN=Math.min(N,120);
+for(let a=1;a<=plotN;a++){
+for(let b=1;b<=plotN;b++){
+if(gcd(a,b)!==1)continue;
+if(showPrime&&!isPrime(a)&&!isPrime(b))continue;
+const x=pad+w*a/plotN;
+const y=pad+h-h*b/plotN;
+ctx.fillStyle=`hsl(${Math.atan2(b,a)*180/Math.PI*2},70%,55%)`;
+ctx.beginPath();ctx.arc(x,y,2.5,0,2*Math.PI);ctx.fill();}}
+if(showCircle){
+ctx.strokeStyle='#ff006e';ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(pad,pad+h,R*w/plotN,0,-Math.PI/2,true);ctx.stroke();}}
+
+// Charts
+const gcdArr=Object.entries(gcdCounts).map(([g,c])=>({g:+g,count:c})).sort((a,b)=>a.g-b.g).slice(0,12);
+Plotly.newPlot('pcopairGcd',[{x:gcdArr.map(g=>`${g.g}`),y:gcdArr.map(g=>g.count),type:'bar',marker:{color:gcdArr.map(g=>g.g===1?'#00ff88':'#ff8c00')}}],{...plo(),xaxis:{title:'gcd'},yaxis:{title:'Count'}});
+
+// Disc analysis chart
+const discData=[];
+for(let r=10;r<=N;r+=Math.max(1,Math.floor(N/25))){
+let vr=0;
+for(let a=1;a<=r;a++)for(let b=1;b<=r;b++)if(a*a+b*b<=r*r&&gcd(a,b)===1)vr++;
+const exp=theory*Math.PI*r*r;
+discData.push({r,vr,exp,err:vr-exp,errRatio:Math.abs(vr-exp)/Math.sqrt(r)});}
+Plotly.newPlot('pcopairDisc',[
+{x:discData.map(d=>d.r),y:discData.map(d=>d.vr),mode:'lines',name:'V(R)',line:{color:'#00ff88'}},
+{x:discData.map(d=>d.r),y:discData.map(d=>d.exp),mode:'lines',name:'(6/π²)πR²',line:{color:'#ffd700',dash:'dash'}}
+],{...plo(),xaxis:{title:'Radius R'},yaxis:{title:'Coprime in Disc'}});
+
+// Convergence chart
+const convData=[];
+for(let n=10;n<=N;n+=Math.max(1,Math.floor(N/25))){
+let cnt=0;
+for(let a=1;a<=n;a++)for(let b=1;b<=n;b++)if(gcd(a,b)===1)cnt++;
+convData.push({n,ratio:cnt/(n*n)});}
+Plotly.newPlot('pcopairConv',[
+{x:convData.map(d=>d.n),y:convData.map(d=>d.ratio),mode:'lines+markers',line:{color:'#00ff88'},name:'A_N/N²'},
+{x:[10,N],y:[theory,theory],mode:'lines',line:{color:'#ff006e',dash:'dash'},name:'6/π²'}
+],{...plo(),xaxis:{title:'N'},yaxis:{title:'Ratio',range:[0.55,0.68]}});
+
+// Möbius chart
+const mobData=[];
+let mSum=0;
+for(let n=1;n<=Math.min(N,200);n+=Math.max(1,Math.floor(N/50))){
+for(let k=(mobData.length?mobData[mobData.length-1].n+1:1);k<=n;k++)mSum+=mobius(k);
+mobData.push({n,mSum,bound:Math.sqrt(n)});}
+Plotly.newPlot('pcopairMob',[
+{x:mobData.map(d=>d.n),y:mobData.map(d=>d.mSum),mode:'lines',name:'M(N)',line:{color:'#00d9ff'}},
+{x:mobData.map(d=>d.n),y:mobData.map(d=>d.bound),mode:'lines',name:'√N',line:{color:'#ffd700',dash:'dot'}},
+{x:mobData.map(d=>d.n),y:mobData.map(d=>-d.bound),mode:'lines',name:'-√N',line:{color:'#ffd700',dash:'dot'}}
+],{...plo(),xaxis:{title:'N'},yaxis:{title:'M(N) = Σμ(n)'}});
+
+// RH bound chart
+Plotly.newPlot('pcopairRH',[
+{x:discData.map(d=>d.r),y:discData.map(d=>d.errRatio),mode:'lines+markers',line:{color:'#ff006e'},name:'|E(R)|/R^½'}
+],{...plo(),xaxis:{title:'R'},yaxis:{title:'|E(R)|/√R',range:[0,Math.max(...discData.map(d=>d.errRatio))*1.2]}});
+
+// Legend
+legend('alcopair','Statistics',[['Coprime A_N',coprimeCount,'#00ff88'],['V(R) in disc',discCoprime,'#00d9ff'],['|E(R)|/√R',errorRatio.toFixed(2),'#ff006e']]);
+
+// Live stats
+const absErr=Math.abs(ratio-theory);
+document.getElementById('copairLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${N}</div><div style="font-size:.65rem;color:var(--txt2)">GRID N</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${coprimeCount.toLocaleString()}</div><div style="font-size:.65rem;color:var(--txt2)">COPRIME A_N</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${ratio.toFixed(5)}</div><div style="font-size:.65rem;color:var(--txt2)">A_N/N²</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Density Analysis</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>Theory 6/π²:</span><span style="color:#ff006e">${theory.toFixed(6)}</span>
+<span>Error:</span><span style="color:#ffd700">${absErr.toFixed(6)}</span>
+<span>Relative:</span><span style="color:#9664ff">${(100*absErr/theory).toFixed(3)}%</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Disc Analysis (R=${R.toFixed(1)})</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>V(R) coprime:</span><span style="color:#00ff88">${discCoprime}</span>
+<span>Expected:</span><span style="color:#ffd700">${expectedDisc.toFixed(1)}</span>
+<span>E(R):</span><span style="color:#ff006e">${errorE.toFixed(2)}</span>
+<span>|E(R)|/√R:</span><span style="color:#00d9ff;font-weight:bold">${errorRatio.toFixed(3)}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Möbius Analysis</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>M(N)=Σμ(n):</span><span style="color:#00d9ff">${mobiusSum}</span>
+<span>|M(N)|/√N:</span><span style="color:#ffd700">${(Math.abs(mobiusSum)/Math.sqrt(N)).toFixed(3)}</span>
+<span>Σμ(n)/n²:</span><span style="color:#00ff88">${mobiusSumN2.toFixed(6)}</span>
+</div>
+</div>
+<div style="background:rgba(255,0,110,.1);padding:8px;border-radius:6px;font-size:.75rem">
+<strong style="color:#ff006e">RH Connection</strong><br>
+<span style="color:var(--txt2)">|E(R)|=O(R^½⁺ᵋ) ⟺ RH true. Current |E|/√R = ${errorRatio.toFixed(3)}</span>
+</div>`;
+
+// Table
+const samplePairs=[];
+for(let a=1;a<=Math.min(12,N);a++){
+for(let b=1;b<=Math.min(12,N);b++){
+const g=gcd(a,b);
+samplePairs.push({a,b,g,norm:a*a+b*b,angle:(Math.atan2(b,a)*180/Math.PI).toFixed(1)});}}
+document.getElementById('tcopairT').innerHTML='<tr><th>a</th><th>b</th><th>gcd</th><th>Norm</th><th>θ°</th><th>Coprime?</th></tr>'+
+samplePairs.slice(0,100).map(p=>`<tr onclick="modal('Pair (${p.a},${p.b})',[['a',${p.a}],['b',${p.b}],['gcd(a,b)',${p.g}],['Norm a²+b²',${p.norm}],['Angle',${p.angle}+'°'],['Coprime',${p.g===1}],['Visible from origin',${p.g===1}]])" style="cursor:pointer;color:${p.g===1?'#00ff88':'#666'}"><td>${p.a}</td><td>${p.b}</td><td>${p.g}</td><td>${p.norm}</td><td>${p.angle}</td><td>${p.g===1?'✓':''}</td></tr>`).join('');
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const my=(e.clientY-rect.top)*(c.height/rect.height);
+const cellW=(c.width-80)/N,cellH=(c.height-80)/N;
+const a=Math.floor((mx-40)/cellW)+1;
+const b=N-Math.floor((my-40)/cellH);
+if(a>=1&&a<=N&&b>=1&&b<=N){
+const g=gcd(a,b);
+const norm=a*a+b*b;
+const angle=(Math.atan2(b,a)*180/Math.PI).toFixed(2);
+modal(`Lattice Point (${a}, ${b})`,[['a',a],['b',b],['gcd(a,b)',g],['Coprime (visible)?',g===1?'Yes':'No'],['Norm a²+b²',norm],['Distance √(a²+b²)',Math.sqrt(norm).toFixed(3)],['Angle θ',angle+'°'],['Gaussian z',`${a}+${b}i`],['In disc R=${R.toFixed(1)}?',norm<=R*R?'Yes':'No']]);}};}
+
+function startCopairAnim(){
+stopCopairAnim();
+let n=10;
+const maxN=+document.getElementById('copairNv').value;
+copairAnimInterval=setInterval(()=>{
+document.getElementById('copairNv').value=n;
+drawCopair();
+n+=2;
+if(n>maxN)stopCopairAnim();},200);}
+
+function stopCopairAnim(){if(copairAnimInterval){clearInterval(copairAnimInterval);copairAnimInterval=null;}}
+
+function csvCopair(){
+const N=copairData.N;
+let s='a,b,gcd,coprime,sum,product\n';
+for(let a=1;a<=Math.min(N,100);a++){
+for(let b=1;b<=Math.min(N,100);b++){
+const g=gcd(a,b);
+s+=`${a},${b},${g},${g===1?1:0},${a+b},${a*b}\n`;}}
+dl(s,'coprime_pairs.csv');}
+
+async function screenshotCopair(){
+const c=document.getElementById('ccopair'),dashData=extractDashboardData('copairLiveStats');
+const N=document.getElementById('copairNv').value;
+const scale=2,pad=30,dashH=350;
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Coprime Pairs Grid — N=${N}`,out.width/scale/2,pad);
+ctx.drawImage(c,pad,pad+25,c.width,c.height);
+const dashY=c.height+pad+45;
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
+ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='coprime_pairs.png';a.click();},'image/png',1.0);}
+
+// Sierpiński Problem: 6ab ± a ± b
+let sierpData={N:200,covered:new Set(),uncovered:[]};
+
+function sierpinski6ab(maxN,maxAB){
+const covered=new Set();
+const formCounts={pp:new Set(),pm:new Set(),mp:new Set(),mm:new Set()};
+const maxA=maxAB||Math.ceil(Math.sqrt(maxN/6))+5;
+for(let a=1;a<=maxA;a++){
+for(let b=1;b<=maxA;b++){
+const pp=6*a*b+a+b;
+const pm=6*a*b+a-b;
+const mp=6*a*b-a+b;
+const mm=6*a*b-a-b;
+if(pp>0&&pp<=maxN){covered.add(pp);formCounts.pp.add(pp);}
+if(pm>0&&pm<=maxN){covered.add(pm);formCounts.pm.add(pm);}
+if(mp>0&&mp<=maxN){covered.add(mp);formCounts.mp.add(mp);}
+if(mm>0&&mm<=maxN){covered.add(mm);formCounts.mm.add(mm);}}}
+const uncovered=[];
+for(let n=1;n<=maxN;n++)if(!covered.has(n))uncovered.push(n);
+return {covered,uncovered,formCounts};}
+
+function drawSierp(){
+const c=document.getElementById('csierp'),ctx=c.getContext('2d');
+const N=+document.getElementById('sierpNv').value||+document.getElementById('sierpN').value;
+const maxAB=+document.getElementById('sierpABv').value;
+const viz=document.getElementById('sierpViz').value;
+const form=document.getElementById('sierpForm').value;
+const showLabels=document.getElementById('sierpLabels').checked;
+const showGCD=document.getElementById('sierpGCD').checked;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+document.getElementById('sierpNdisp').textContent=N;
+
+const result=sierpinski6ab(N,maxAB);
+sierpData={N,covered:result.covered,uncovered:result.uncovered};
+
+const pad=40,w=c.width-2*pad,h=c.height-2*pad;
+
+if(viz==='coverage'){
+// Grid showing covered vs uncovered
+const cols=Math.ceil(Math.sqrt(N*1.5));
+const rows=Math.ceil(N/cols);
+const cellW=w/cols,cellH=h/rows;
+for(let n=1;n<=N;n++){
+const col=(n-1)%cols;
+const row=Math.floor((n-1)/cols);
+const x=pad+col*cellW;
+const y=pad+row*cellH;
+let isCovered=result.covered.has(n);
+if(form!=='all'){
+isCovered=result.formCounts[form].has(n);}
+ctx.fillStyle=isCovered?'#00ff88':'#ff4040';
+ctx.fillRect(x+1,y+1,cellW-2,cellH-2);
+if(showLabels&&N<=100){
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='8px Arial';ctx.textAlign='center';
+ctx.fillText(n,x+cellW/2,y+cellH/2+3);}}
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Coverage Map: ${result.covered.size} covered, ${result.uncovered.length} uncovered`,c.width/2,25);}
+
+else if(viz==='lattice'){
+// Show lattice points (a,b) and what they cover
+const maxPlot=Math.min(maxAB,50);
+const scale=Math.min(w,h)/maxPlot;
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Lattice (a,b): Each point generates 4 values via 6ab±a±b',c.width/2,25);
+for(let a=1;a<=maxPlot;a++){
+for(let b=1;b<=maxPlot;b++){
+const x=pad+a*scale;
+const y=pad+h-b*scale;
+const g=gcd(a,b);
+let clr='#00d9ff';
+if(showGCD){
+if(g%6===0)clr='#ffd700';
+else if(g%3===0)clr='#ff8c00';
+else if(g%2===0)clr='#9664ff';}
+ctx.fillStyle=clr;
+ctx.beginPath();ctx.arc(x,y,3,0,2*Math.PI);ctx.fill();}}
+// Axes
+ctx.strokeStyle=gridC();ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(pad,pad+h);ctx.lineTo(pad+w,pad+h);ctx.stroke();
+ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,pad+h);ctx.stroke();
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='11px Segoe UI';
+ctx.fillText('a',pad+w/2,pad+h+25);
+ctx.save();ctx.translate(15,pad+h/2);ctx.rotate(-Math.PI/2);ctx.fillText('b',0,0);ctx.restore();}
+
+else if(viz==='gaps'){
+// Show gaps between uncovered numbers
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Uncovered Numbers (${result.uncovered.length} total)`,c.width/2,25);
+if(result.uncovered.length>0){
+const maxU=result.uncovered[result.uncovered.length-1];
+for(let i=0;i<result.uncovered.length;i++){
+const n=result.uncovered[i];
+const x=pad+w*n/maxU;
+const y=pad+h/2;
+ctx.fillStyle='#ff4040';
+ctx.beginPath();ctx.arc(x,y,5,0,2*Math.PI);ctx.fill();
+if(showLabels&&result.uncovered.length<=50){
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='9px Arial';ctx.textAlign='center';
+ctx.fillText(n,x,y-10);}}}
+// Mark gaps
+ctx.strokeStyle='#ffd700';ctx.lineWidth=1;
+for(let i=1;i<result.uncovered.length;i++){
+const gap=result.uncovered[i]-result.uncovered[i-1];
+if(gap>10){
+const x1=pad+w*result.uncovered[i-1]/result.uncovered[result.uncovered.length-1];
+const x2=pad+w*result.uncovered[i]/result.uncovered[result.uncovered.length-1];
+ctx.beginPath();ctx.moveTo(x1,pad+h/2+20);ctx.lineTo(x2,pad+h/2+20);ctx.stroke();
+ctx.fillStyle='#ffd700';ctx.font='8px Arial';
+ctx.fillText(gap,(x1+x2)/2,pad+h/2+35);}}}
+
+else if(viz==='modular'){
+// Modular distribution of uncovered numbers
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Uncovered Numbers by Residue Class mod 6 and mod 12',c.width/2,25);
+const mod6=[0,0,0,0,0,0];
+const mod12=[0,0,0,0,0,0,0,0,0,0,0,0];
+for(const n of result.uncovered){
+mod6[n%6]++;
+mod12[n%12]++;}
+// Draw mod 6 bars
+const barW=w/2/6-10;
+for(let i=0;i<6;i++){
+const x=pad+i*(barW+10);
+const barH=mod6[i]*5;
+ctx.fillStyle=`hsl(${i*60},70%,50%)`;
+ctx.fillRect(x,pad+h/2-barH,barW,barH);
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='10px Arial';ctx.textAlign='center';
+ctx.fillText(`${i}`,x+barW/2,pad+h/2+15);
+ctx.fillText(mod6[i],x+barW/2,pad+h/2-barH-5);}
+ctx.fillText('mod 6',pad+w/4,pad+h/2+35);
+// Draw mod 12 bars
+const barW2=w/2/12-5;
+for(let i=0;i<12;i++){
+const x=pad+w/2+i*(barW2+5);
+const barH=mod12[i]*5;
+ctx.fillStyle=`hsl(${i*30},70%,50%)`;
+ctx.fillRect(x,pad+h/2-barH,barW2,barH);
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='8px Arial';ctx.textAlign='center';
+ctx.fillText(`${i}`,x+barW2/2,pad+h/2+12);
+ctx.fillText(mod12[i],x+barW2/2,pad+h/2-barH-5);}
+ctx.fillText('mod 12',pad+3*w/4,pad+h/2+35);}
+
+// Charts
+const formData=[
+{form:'6ab+a+b',count:result.formCounts.pp.size},
+{form:'6ab+a-b',count:result.formCounts.pm.size},
+{form:'6ab-a+b',count:result.formCounts.mp.size},
+{form:'6ab-a-b',count:result.formCounts.mm.size}];
+Plotly.newPlot('psierpForm',[{x:formData.map(f=>f.form),y:formData.map(f=>f.count),type:'bar',marker:{color:['#00ff88','#00d9ff','#ffd700','#ff8c00']}}],{...plo(),xaxis:{title:'Form'},yaxis:{title:'Numbers Covered'}});
+
+// Gap distribution
+const gaps=[];
+for(let i=1;i<result.uncovered.length;i++){
+gaps.push(result.uncovered[i]-result.uncovered[i-1]);}
+const gapCounts={};
+for(const g of gaps)gapCounts[g]=(gapCounts[g]||0)+1;
+const gapArr=Object.entries(gapCounts).map(([g,c])=>({gap:+g,count:c})).sort((a,b)=>a.gap-b.gap).slice(0,15);
+Plotly.newPlot('psierpGaps',[{x:gapArr.map(g=>`gap ${g.gap}`),y:gapArr.map(g=>g.count),type:'bar',marker:{color:'#ff4040'}}],{...plo(),xaxis:{title:'Gap Size'},yaxis:{title:'Frequency'}});
+
+// Coverage rate
+const rateData=[];
+const step=Math.max(5,Math.floor(N/25));
+for(let n=20;n<=N;n+=step){
+const r=sierpinski6ab(n,Math.ceil(Math.sqrt(n/6))+5);
+rateData.push({n,rate:100*r.covered.size/n});}
+if(rateData.length>0){
+Plotly.newPlot('psierpRate',[{x:rateData.map(d=>d.n),y:rateData.map(d=>d.rate),mode:'lines+markers',line:{color:'#00ff88'},marker:{size:6}}],{...plo(),xaxis:{title:'N'},yaxis:{title:'Coverage %',range:[Math.min(90,...rateData.map(d=>d.rate))-2,100]}});
+}else{
+Plotly.newPlot('psierpRate',[],{...plo()});}
+
+// Legend
+legend('alsierp','Statistics',[['Covered',result.covered.size,'#00ff88'],['Uncovered',result.uncovered.length,'#ff4040'],['Rate',(100*result.covered.size/N).toFixed(2)+'%','#ffd700']]);
+
+// Live stats
+const coverageRate=(100*result.covered.size/N).toFixed(2);
+document.getElementById('sierpLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${N}</div><div style="font-size:.65rem;color:var(--txt2)">MAX N</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${result.covered.size}</div><div style="font-size:.65rem;color:var(--txt2)">COVERED</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff4040">${result.uncovered.length}</div><div style="font-size:.65rem;color:var(--txt2)">UNCOVERED</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Coverage Analysis</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>Coverage Rate:</span><span style="color:#00ff88">${coverageRate}%</span>
+<span>Search Depth:</span><span style="color:#ffd700">a,b ≤ ${maxAB}</span>
+<span>First Uncovered:</span><span style="color:#ff4040">${result.uncovered[0]||'none'}</span>
+<span>Last Uncovered:</span><span style="color:#ff4040">${result.uncovered[result.uncovered.length-1]||'none'}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Form Coverage</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>6ab+a+b:</span><span style="color:#00ff88">${result.formCounts.pp.size}</span>
+<span>6ab+a-b:</span><span style="color:#00d9ff">${result.formCounts.pm.size}</span>
+<span>6ab-a+b:</span><span style="color:#ffd700">${result.formCounts.mp.size}</span>
+<span>6ab-a-b:</span><span style="color:#ff8c00">${result.formCounts.mm.size}</span>
+</div>
+</div>
+<div style="background:rgba(255,64,64,.1);padding:8px;border-radius:6px;font-size:.75rem">
+<strong style="color:#ff4040">Open Problem (1964)</strong><br>
+<span style="color:var(--txt2)">Are there infinitely many uncovered integers? Known: 78 uncovered ≤1000</span>
+</div>`;
+
+// Table
+document.getElementById('tsierpT').innerHTML='<tr><th>n</th><th>n mod 6</th><th>n mod 12</th><th>Factorization</th><th>Neighbors</th></tr>'+
+result.uncovered.slice(0,50).map(n=>{
+const factors=factorize(n).join('×')||'1';
+const prev=result.uncovered[result.uncovered.indexOf(n)-1]||'-';
+const next=result.uncovered[result.uncovered.indexOf(n)+1]||'-';
+return `<tr onclick="testSierpNum(${n})" style="cursor:pointer;color:#ff4040"><td>${n}</td><td>${n%6}</td><td>${n%12}</td><td>${factors}</td><td>${prev}, ${next}</td></tr>`;}).join('');
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const my=(e.clientY-rect.top)*(c.height/rect.height);
+if(viz==='coverage'){
+const cols=Math.ceil(Math.sqrt(N*1.5));
+const cellW=(c.width-80)/cols,cellH=(c.height-80)/Math.ceil(N/cols);
+const col=Math.floor((mx-40)/cellW);
+const row=Math.floor((my-40)/cellH);
+const n=row*cols+col+1;
+if(n>=1&&n<=N){
+const isCovered=result.covered.has(n);
+modal(`Number ${n}`,[['n',n],['Covered?',isCovered?'Yes':'No'],['n mod 6',n%6],['n mod 12',n%12],['Factorization',factorize(n).join('×')||'1']]);}}};
+}
+
+function testSierpNum(n){
+if(!n)n=+document.getElementById('sierpTest').value;
+const maxAB=+document.getElementById('sierpABv').value;
+const reps=[];
+for(let a=1;a<=maxAB;a++){
+for(let b=1;b<=maxAB;b++){
+if(6*a*b+a+b===n)reps.push(`6·${a}·${b}+${a}+${b}`);
+if(6*a*b+a-b===n)reps.push(`6·${a}·${b}+${a}-${b}`);
+if(6*a*b-a+b===n)reps.push(`6·${a}·${b}-${a}+${b}`);
+if(6*a*b-a-b===n)reps.push(`6·${a}·${b}-${a}-${b}`);}}
+const msg=reps.length>0?reps.slice(0,5).join('\n'):'No representation found';
+modal(`Test n = ${n}`,[['n',n],['Covered?',reps.length>0?'Yes':'No'],['Representations',reps.length],['Examples',msg]]);}
+
+function csvSierp(){
+let s='n,covered,mod6,mod12,factorization\n';
+for(let n=1;n<=sierpData.N;n++){
+const isCov=sierpData.covered.has(n)?1:0;
+s+=`${n},${isCov},${n%6},${n%12},"${factorize(n).join('×')||'1'}"\n`;}
+dl(s,'sierpinski_coverage.csv');}
+
+async function screenshotSierp(){
+const c=document.getElementById('csierp'),dashData=extractDashboardData('sierpLiveStats');
+const N=document.getElementById('sierpNv').value;
+const scale=2,pad=30,dashH=350;
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Sierpiński Problem — N=${N}`,out.width/scale/2,pad);
+ctx.drawImage(c,pad,pad+25,c.width,c.height);
+const dashY=c.height+pad+45;
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
+ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='sierpinski.png';a.click();},'image/png',1.0);}
+
+// k-Free Integers (Squarefree, Cubefree, etc.)
+const zetaVals={2:Math.PI**2/6,3:1.2020569032,4:Math.PI**4/90,5:1.0369277551,6:Math.PI**6/945};
+
+function isKfree(n,k){
+if(n<=1)return n===1;
+for(let p=2;p*p<=n;p++){
+if(n%p===0){
+let cnt=0;
+while(n%p===0){cnt++;n/=p;}
+if(cnt>=k)return false;}}
+return true;}
+
+function countKfree(N,k){
+let count=0;
+const nonKfree=[];
+for(let n=1;n<=N;n++){
+if(isKfree(n,k))count++;
+else if(nonKfree.length<100)nonKfree.push(n);}
+return {count,nonKfree};}
+
+function drawKfree(){
+const c=document.getElementById('ckfree'),ctx=c.getContext('2d');
+const N=+document.getElementById('kfreeNv').value||+document.getElementById('kfreeN').value;
+const k=+document.getElementById('kfreeK').value;
+const viz=document.getElementById('kfreeViz').value;
+const showTheory=document.getElementById('kfreeTheory').checked;
+const showBound=document.getElementById('kfreeBound').checked;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+document.getElementById('kfreeKdisp').textContent=k;
+document.getElementById('kfreeNdisp').textContent=N;
+
+const zeta=zetaVals[k]||1;
+const density=1/zeta;
+const result=countKfree(N,k);
+const predicted=N/zeta;
+const error=result.count-predicted;
+const errorBound=Math.pow(N,1/k);
+const errorRatio=Math.abs(error)/errorBound;
+
+const pad=50,w=c.width-2*pad,h=c.height-2*pad;
+
+if(viz==='density'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`${k===2?'Squarefree':k===3?'Cubefree':k+'-free'} Density Convergence to 1/ζ(${k})`,c.width/2,25);
+const densData=[];
+const step=Math.max(10,Math.floor(N/40));
+for(let n=50;n<=N;n+=step){
+const r=countKfree(n,k);
+densData.push({n,ratio:r.count/n});}
+// Theory line
+if(showTheory){
+ctx.strokeStyle='#ff006e';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+const yTheory=pad+h*(1-density);
+ctx.beginPath();ctx.moveTo(pad,yTheory);ctx.lineTo(pad+w,yTheory);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff006e';ctx.font='11px Arial';ctx.textAlign='left';
+ctx.fillText(`1/ζ(${k}) ≈ ${density.toFixed(4)}`,pad+5,yTheory-5);}
+// Density curve
+ctx.beginPath();ctx.strokeStyle='#00ff88';ctx.lineWidth=2;
+for(let i=0;i<densData.length;i++){
+const x=pad+w*i/(densData.length-1);
+const y=pad+h*(1-densData[i].ratio);
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();}
+
+else if(viz==='error'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Error Term E(N) = Q_${k}(N) - N/ζ(${k})`,c.width/2,25);
+const errData=[];
+const step=Math.max(10,Math.floor(N/40));
+for(let n=50;n<=N;n+=step){
+const r=countKfree(n,k);
+const pred=n/zeta;
+errData.push({n,err:r.count-pred,bound:Math.pow(n,1/k)});}
+const maxErr=Math.max(...errData.map(d=>Math.abs(d.err)));
+const maxBound=Math.max(...errData.map(d=>d.bound));
+const scale=Math.max(maxErr,maxBound);
+// Error curve
+ctx.beginPath();ctx.strokeStyle='#00d9ff';ctx.lineWidth=2;
+for(let i=0;i<errData.length;i++){
+const x=pad+w*i/(errData.length-1);
+const y=pad+h/2-h/2*errData[i].err/scale;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();
+// Bound curves
+if(showBound){
+ctx.strokeStyle='#ffd700';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+ctx.beginPath();
+for(let i=0;i<errData.length;i++){
+const x=pad+w*i/(errData.length-1);
+const y=pad+h/2-h/2*errData[i].bound/scale;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();
+ctx.beginPath();
+for(let i=0;i<errData.length;i++){
+const x=pad+w*i/(errData.length-1);
+const y=pad+h/2+h/2*errData[i].bound/scale;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();ctx.setLineDash([]);}
+// Zero line
+ctx.strokeStyle=gridC();ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(pad,pad+h/2);ctx.lineTo(pad+w,pad+h/2);ctx.stroke();}
+
+else if(viz==='grid'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`${k}-free Numbers Grid (green = ${k}-free)`,c.width/2,25);
+const gridN=Math.min(N,500);
+const cols=Math.ceil(Math.sqrt(gridN*1.5));
+const rows=Math.ceil(gridN/cols);
+const cellW=w/cols,cellH=h/rows;
+for(let n=1;n<=gridN;n++){
+const col=(n-1)%cols;
+const row=Math.floor((n-1)/cols);
+const x=pad+col*cellW;
+const y=pad+row*cellH;
+ctx.fillStyle=isKfree(n,k)?'#00ff88':'#ff4040';
+ctx.fillRect(x+0.5,y+0.5,cellW-1,cellH-1);}}
+
+else if(viz==='compare'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Comparing Densities for k = 2, 3, 4, 5, 6',c.width/2,25);
+const colors=['#00ff88','#00d9ff','#ffd700','#ff8c00','#ff006e'];
+for(let ki=2;ki<=6;ki++){
+const dens=1/zetaVals[ki];
+const y=pad+h*(1-dens);
+ctx.strokeStyle=colors[ki-2];ctx.lineWidth=2;ctx.setLineDash([]);
+ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(pad+w,y);ctx.stroke();
+ctx.fillStyle=colors[ki-2];ctx.font='11px Arial';ctx.textAlign='left';
+ctx.fillText(`k=${ki}: 1/ζ(${ki})=${dens.toFixed(4)}`,pad+10+(ki-2)*120,y-5);}}
+
+// Charts - Zeta reference
+const zetaData=[2,3,4,5,6].map(ki=>({k:ki,zeta:zetaVals[ki],inv:1/zetaVals[ki]}));
+Plotly.newPlot('pkfreeZeta',[{x:zetaData.map(d=>`k=${d.k}`),y:zetaData.map(d=>d.inv),type:'bar',marker:{color:['#00ff88','#00d9ff','#ffd700','#ff8c00','#ff006e']},name:'1/ζ(k)'}],{...plo(),xaxis:{title:'k'},yaxis:{title:'Density 1/ζ(k)',range:[0.5,1]}});
+
+// Error chart
+const errData=[];
+const step=Math.max(10,Math.floor(N/30));
+for(let n=50;n<=N;n+=step){
+const r=countKfree(n,k);
+const pred=n/zeta;
+errData.push({n,err:r.count-pred});}
+Plotly.newPlot('pkfreeErr',[{x:errData.map(d=>d.n),y:errData.map(d=>d.err),mode:'lines',line:{color:'#00d9ff'},name:'E(N)'}],{...plo(),xaxis:{title:'N'},yaxis:{title:'Error'}});
+
+// Ratio chart
+const ratioData=errData.map(d=>({n:d.n,ratio:Math.abs(d.err)/Math.pow(d.n,1/k)}));
+Plotly.newPlot('pkfreeRatio',[{x:ratioData.map(d=>d.n),y:ratioData.map(d=>d.ratio),mode:'lines+markers',line:{color:'#ff006e'},name:'|E|/N^(1/k)'}],{...plo(),xaxis:{title:'N'},yaxis:{title:'Ratio'}});
+
+// Legend
+legend('alkfree','Statistics',[['Q_k(N)',result.count,'#00ff88'],['Predicted',predicted.toFixed(1),'#ffd700'],['Error',error.toFixed(2),'#00d9ff']]);
+
+// Live stats
+document.getElementById('kfreeLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${k}</div><div style="font-size:.65rem;color:var(--txt2)">k VALUE</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${result.count}</div><div style="font-size:.65rem;color:var(--txt2)">Q_k(N)</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${(result.count/N).toFixed(5)}</div><div style="font-size:.65rem;color:var(--txt2)">DENSITY</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Theoretical Values</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>ζ(${k}):</span><span style="color:#ffd700">${zeta.toFixed(6)}</span>
+<span>1/ζ(${k}):</span><span style="color:#00ff88">${density.toFixed(6)}</span>
+<span>Predicted:</span><span style="color:#9664ff">${predicted.toFixed(2)}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Error Analysis</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>E(N):</span><span style="color:#00d9ff">${error.toFixed(3)}</span>
+<span>|E(N)|:</span><span style="color:#ff006e">${Math.abs(error).toFixed(3)}</span>
+<span>Bound N^(1/${k}):</span><span style="color:#ffd700">${errorBound.toFixed(2)}</span>
+<span>|E|/Bound:</span><span style="color:#ff8c00;font-weight:bold">${errorRatio.toFixed(4)}</span>
+</div>
+</div>
+<div style="background:rgba(0,255,136,.1);padding:8px;border-radius:6px;font-size:.75rem">
+<strong style="color:#00ff88">Boundary Principle</strong><br>
+<span style="color:var(--txt2)">Error O(N^(1/k)) from (k-1)-dim boundary truncation</span>
+</div>`;
+
+// Table
+const nonKfreeData=result.nonKfree.slice(0,40).map(n=>{
+const f=factorize(n);
+let smallestPk=0;
+for(let p=2;p*p<=n;p++){
+let cnt=0,temp=n;
+while(temp%p===0){cnt++;temp/=p;}
+if(cnt>=k){smallestPk=p;break;}}
+return {n,factors:f.join('×'),pk:`${smallestPk}^${k}`,p:smallestPk};});
+document.getElementById('tkfreeT').innerHTML='<tr><th>n</th><th>Factorization</th><th>Divisible by p^k</th><th>Smallest p</th></tr>'+
+nonKfreeData.map(d=>`<tr style="color:#ff4040"><td>${d.n}</td><td>${d.factors}</td><td>${d.pk}</td><td>${d.p}</td></tr>`).join('');}
+
+function csvKfree(){
+const N=+document.getElementById('kfreeNv').value;
+const k=+document.getElementById('kfreeK').value;
+let s=`n,is_${k}_free,cumulative_count,density\n`;
+let cnt=0;
+for(let n=1;n<=N;n++){
+const kf=isKfree(n,k)?1:0;
+cnt+=kf;
+s+=`${n},${kf},${cnt},${(cnt/n).toFixed(6)}\n`;}
+dl(s,`${k}_free_integers.csv`);}
+
+async function screenshotKfree(){
+const c=document.getElementById('ckfree'),dashData=extractDashboardData('kfreeLiveStats');
+const N=document.getElementById('kfreeNv').value,k=document.getElementById('kfreeK').value;
+const scale=2,pad=30,dashH=350;
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`${k}-Free Integers — N=${N}`,out.width/scale/2,pad);
+ctx.drawImage(c,pad,pad+25,c.width,c.height);
+const dashY=c.height+pad+45;
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
+ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='k_free.png';a.click();},'image/png',1.0);}
+
+// Euler Product for π and ζ(2n)
+let eulerData={primes:[],product:1,target:Math.PI};
+
+function sievePrimes(max){
+const sieve=new Array(max+1).fill(true);
+sieve[0]=sieve[1]=false;
+for(let i=2;i*i<=max;i++){
+if(sieve[i])for(let j=i*i;j<=max;j+=i)sieve[j]=false;}
+const primes=[];
+for(let i=2;i<=max;i++)if(sieve[i])primes.push(i);
+return primes;}
+
+function eulerProduct(primes,s){
+let product=1;
+for(const p of primes){
+product*=1/(1-Math.pow(p,-s));}
+return product;}
+
+function drawEuler(){
+const c=document.getElementById('ceuler'),ctx=c.getContext('2d');
+const Pmax=+document.getElementById('eulerPmaxv').value||+document.getElementById('eulerPmax').value;
+const target=document.getElementById('eulerTarget').value;
+const viz=document.getElementById('eulerViz').value;
+const mod=+document.getElementById('eulerMod').value||30;
+const showRef=document.getElementById('eulerRef').checked;
+const showError=document.getElementById('eulerError').checked;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+// Generate primes
+const primes=sievePrimes(Pmax);
+
+// Target values
+const targets={
+pi:{s:2,exact:Math.PI,name:'π',transform:z=>Math.sqrt(6*z)},
+z2:{s:2,exact:Math.PI**2/6,name:'ζ(2)',transform:z=>z},
+z4:{s:4,exact:Math.PI**4/90,name:'ζ(4)',transform:z=>z},
+z6:{s:6,exact:Math.PI**6/945,name:'ζ(6)',transform:z=>z},
+z8:{s:8,exact:1.00407735619794,name:'ζ(8)',transform:z=>z}};
+const tgt=targets[target];
+const s=tgt.s;
+
+// Compute Euler product
+const zeta=eulerProduct(primes,s);
+const computed=tgt.transform(zeta);
+const error=Math.abs(computed-tgt.exact);
+const relError=error/tgt.exact;
+
+document.getElementById('eulerTargetDisp').textContent=tgt.name;
+document.getElementById('eulerPmaxDisp').textContent=Pmax;
+
+const pad=50,w=c.width-2*pad,h=c.height-2*pad;
+
+// Gap-class analysis
+const gapClasses={};
+for(let i=0;i<primes.length-1;i++){
+const gap=primes[i+1]-primes[i];
+if(!gapClasses[gap])gapClasses[gap]=[];
+gapClasses[gap].push(primes[i]);}
+
+// Residue channel analysis
+const channels={};
+for(let a=1;a<mod;a++){
+if(gcd(a,mod)===1)channels[a]=[];}
+for(const p of primes){
+const r=p%mod;
+if(channels[r])channels[r].push(p);}
+
+if(viz==='convergence'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Computing ${tgt.name} via Euler Product`,c.width/2,25);
+// Convergence curve
+const convData=[];
+const step=Math.max(1,Math.floor(primes.length/60));
+let prod=1;
+for(let i=0;i<primes.length;i++){
+prod*=1/(1-Math.pow(primes[i],-s));
+if(i%step===0||i===primes.length-1){
+const val=tgt.transform(prod);
+convData.push({p:primes[i],val});}}
+const maxP=primes[primes.length-1];
+const minV=Math.min(...convData.map(d=>d.val))*0.999;
+const maxV=Math.max(...convData.map(d=>d.val),tgt.exact)*1.001;
+// Reference line
+if(showRef){
+ctx.strokeStyle='#ff006e';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+const yRef=pad+h*(1-(tgt.exact-minV)/(maxV-minV));
+ctx.beginPath();ctx.moveTo(pad,yRef);ctx.lineTo(pad+w,yRef);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff006e';ctx.font='11px Arial';ctx.textAlign='left';
+ctx.fillText(`${tgt.name} = ${tgt.exact.toFixed(10)}`,pad+5,yRef-5);}
+// Convergence curve
+ctx.beginPath();ctx.strokeStyle='#00ff88';ctx.lineWidth=2;
+for(let i=0;i<convData.length;i++){
+const x=pad+w*convData[i].p/maxP;
+const y=pad+h*(1-(convData[i].val-minV)/(maxV-minV));
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();}
+
+else if(viz==='contributions'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Individual Prime Contributions to ζ('+s+')',c.width/2,25);
+const contribs=primes.slice(0,50).map(p=>({p,contrib:1/(1-Math.pow(p,-s))}));
+const maxC=Math.max(...contribs.map(c=>c.contrib));
+const barW=w/contribs.length-2;
+for(let i=0;i<contribs.length;i++){
+const barH=h*(contribs[i].contrib-1)/(maxC-1);
+const x=pad+i*(barW+2);
+const y=pad+h-barH;
+ctx.fillStyle=`hsl(${i*7},70%,50%)`;
+ctx.fillRect(x,y,barW,barH);}}
+
+else if(viz==='gaps'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Gap-Class Decomposition: ζ(s) = ∏_g P_g(s)',c.width/2,25);
+const gapArr=Object.entries(gapClasses).map(([g,ps])=>{
+let prod=1;
+for(const p of ps)prod*=1/(1-Math.pow(p,-s));
+return {gap:+g,count:ps.length,prod};}).sort((a,b)=>a.gap-b.gap).slice(0,15);
+const maxProd=Math.max(...gapArr.map(g=>g.prod));
+const barW=w/gapArr.length-4;
+for(let i=0;i<gapArr.length;i++){
+const barH=h*Math.log(gapArr[i].prod)/Math.log(maxProd);
+const x=pad+i*(barW+4);
+const y=pad+h-barH;
+ctx.fillStyle=`hsl(${gapArr[i].gap*20},70%,50%)`;
+ctx.fillRect(x,y,barW,barH);
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='9px Arial';ctx.textAlign='center';
+ctx.fillText(`g=${gapArr[i].gap}`,x+barW/2,pad+h+12);}}
+
+else if(viz==='residue'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Residue Channels mod ${mod} (φ(${mod})=${Object.keys(channels).length} channels)`,c.width/2,25);
+const chanArr=Object.entries(channels).map(([a,ps])=>{
+let prod=1;
+for(const p of ps)prod*=1/(1-Math.pow(p,-s));
+return {a:+a,count:ps.length,prod};}).sort((a,b)=>a.a-b.a);
+const maxProd=Math.max(...chanArr.map(c=>c.prod));
+const barW=w/chanArr.length-2;
+for(let i=0;i<chanArr.length;i++){
+const barH=h*Math.log(chanArr[i].prod)/Math.log(maxProd);
+const x=pad+i*(barW+2);
+const y=pad+h-barH;
+ctx.fillStyle=`hsl(${chanArr[i].a*360/mod},70%,50%)`;
+ctx.fillRect(x,y,barW,barH);
+if(chanArr.length<=20){
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='8px Arial';ctx.textAlign='center';
+ctx.fillText(chanArr[i].a,x+barW/2,pad+h+10);}}}
+
+// Charts
+const zetaRef=[{k:2,val:Math.PI**2/6},{k:4,val:Math.PI**4/90},{k:6,val:Math.PI**6/945},{k:8,val:1.00407735619794}];
+Plotly.newPlot('peulerZeta',[{x:zetaRef.map(z=>`ζ(${z.k})`),y:zetaRef.map(z=>z.val),type:'bar',marker:{color:['#00ff88','#00d9ff','#ffd700','#ff8c00']}}],{...plo(),yaxis:{title:'Value'}});
+
+// Convergence chart
+const convData=[];
+let prod=1;
+const step=Math.max(1,Math.floor(primes.length/40));
+for(let i=0;i<primes.length;i++){
+prod*=1/(1-Math.pow(primes[i],-s));
+if(i%step===0||i===primes.length-1){
+convData.push({p:primes[i],val:tgt.transform(prod)});}}
+Plotly.newPlot('peulerConv',[
+{x:convData.map(d=>d.p),y:convData.map(d=>d.val),mode:'lines',line:{color:'#00ff88'},name:'Computed'},
+{x:[2,Pmax],y:[tgt.exact,tgt.exact],mode:'lines',line:{color:'#ff006e',dash:'dash'},name:'Exact'}
+],{...plo(),xaxis:{title:'Prime'},yaxis:{title:tgt.name}});
+
+// Error chart
+const errData=convData.map(d=>({p:d.p,err:Math.abs(d.val-tgt.exact)}));
+Plotly.newPlot('peulerErr',[{x:errData.map(d=>d.p),y:errData.map(d=>d.err),mode:'lines',line:{color:'#ff006e'}}],{...plo(),xaxis:{title:'Prime'},yaxis:{title:'|Error|',type:'log'}});
+
+// Gap chart
+const gapArr=Object.entries(gapClasses).map(([g,ps])=>({gap:+g,count:ps.length})).sort((a,b)=>a.gap-b.gap).slice(0,12);
+Plotly.newPlot('peulerGap',[{x:gapArr.map(g=>`gap ${g.gap}`),y:gapArr.map(g=>g.count),type:'bar',marker:{color:'#00d9ff'}}],{...plo(),xaxis:{title:'Gap'},yaxis:{title:'Primes'}});
+
+// Residue chart
+const chanArr=Object.entries(channels).map(([a,ps])=>({a:+a,count:ps.length})).sort((a,b)=>a.a-b.a);
+Plotly.newPlot('peulerRes',[{x:chanArr.map(c=>`${c.a}`),y:chanArr.map(c=>c.count),type:'bar',marker:{color:chanArr.map(c=>`hsl(${c.a*360/mod},70%,50%)`)}}],{...plo(),xaxis:{title:`Residue mod ${mod}`},yaxis:{title:'Primes'}});
+
+// Legend
+legend('aleuler','Euler Product',[['Computed',computed.toFixed(12),'#00ff88'],['Exact',tgt.exact.toFixed(12),'#ff006e'],['Primes',primes.length,'#00d9ff']]);
+
+eulerData={primes,product:zeta,computed,target:tgt.exact};
+
+// Live stats
+document.getElementById('eulerLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#00d9ff">${primes.length}</div><div style="font-size:.65rem;color:var(--txt2)">PRIMES</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#00ff88">${computed.toFixed(10)}</div><div style="font-size:.65rem;color:var(--txt2)">${tgt.name} COMPUTED</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#ff006e">${tgt.exact.toFixed(10)}</div><div style="font-size:.65rem;color:var(--txt2)">${tgt.name} EXACT</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Accuracy</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>Absolute Error:</span><span style="color:#ffd700">${error.toExponential(4)}</span>
+<span>Relative Error:</span><span style="color:#9664ff">${(relError*100).toExponential(3)}%</span>
+<span>Correct Digits:</span><span style="color:#00ff88">~${Math.max(0,-Math.floor(Math.log10(relError))).toFixed(0)}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Euler Product ζ(${s})</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>ζ(${s}) computed:</span><span style="color:#00d9ff">${zeta.toFixed(10)}</span>
+<span>Largest prime:</span><span style="color:#ffd700">${primes[primes.length-1]}</span>
+<span>Gap classes:</span><span style="color:#ff8c00">${Object.keys(gapClasses).length}</span>
+</div>
+</div>
+<div style="background:rgba(0,255,136,.1);padding:8px;border-radius:6px;font-size:.75rem">
+<strong style="color:#00ff88">Basel Problem (Euler 1734)</strong><br>
+<span style="color:var(--txt2)">ζ(2) = 1+1/4+1/9+... = π²/6<br>π = √(6·∏<sub>p</sub>(1-p⁻²)⁻¹)</span>
+</div>`;
+}
+
+function csvEuler(){
+const primes=eulerData.primes;
+const s=document.getElementById('eulerTarget').value==='pi'?2:+document.getElementById('eulerTarget').value.slice(1);
+let csv='prime,index,1/(1-p^-s),cumulative_product\n';
+let prod=1;
+for(let i=0;i<primes.length;i++){
+const factor=1/(1-Math.pow(primes[i],-s));
+prod*=factor;
+csv+=`${primes[i]},${i+1},${factor.toFixed(12)},${prod.toFixed(12)}\n`;}
+dl(csv,'euler_product.csv');}
+
+async function screenshotEuler(){
+const c=document.getElementById('ceuler'),dashData=extractDashboardData('eulerLiveStats');
+const target=document.getElementById('eulerTarget').value;
+const Pmax=document.getElementById('eulerPmaxv').value;
+const scale=2,pad=30,dashH=350;
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Euler Product — Primes ≤ ${Pmax}`,out.width/scale/2,pad);
+ctx.drawImage(c,pad,pad+25,c.width,c.height);
+const dashY=c.height+pad+45;
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
+ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='euler_product.png';a.click();},'image/png',1.0);}
+
+// Chord Length Uniformity Analysis
+let chordData={results:[]};
+
+function chordCV(n){
+const coprimes=[];
+for(let r=1;r<n;r++)if(gcd(r,n)===1)coprimes.push(r);
+if(coprimes.length<2)return {cv:0,mean:0,stdDev:0,phi:coprimes.length,gapRatio:1,chords:[]};
+const chords=[];
+for(let i=0;i<coprimes.length;i++){
+const r1=coprimes[i];
+const r2=coprimes[(i+1)%coprimes.length];
+const gap=(r2>r1)?(r2-r1):(r2+n-r1);
+chords.push(2*Math.sin(Math.PI*gap/n));}
+const mean=chords.reduce((a,b)=>a+b,0)/chords.length;
+const variance=chords.reduce((a,b)=>a+(b-mean)**2,0)/chords.length;
+const stdDev=Math.sqrt(variance);
+const cv=mean>0?stdDev/mean:0;
+const gapRatio=Math.max(...chords)/Math.min(...chords);
+return {cv,mean,stdDev,phi:coprimes.length,gapRatio,chords};}
+
+function drawChord(){
+const c=document.getElementById('cchord'),ctx=c.getContext('2d');
+const maxN=+document.getElementById('chordNv').value||+document.getElementById('chordN').value;
+const viz=document.getElementById('chordViz').value;
+const testN=+document.getElementById('chordTest').value||97;
+const showThresh=document.getElementById('chordThresh').checked;
+const showLabels=document.getElementById('chordLabels').checked;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+// Compute CV for all n in range
+const results=[];
+let primeSum=0,primeCount=0,compSum=0,compCount=0;
+for(let n=3;n<=maxN;n++){
+const r=chordCV(n);
+const prime=isPrime(n);
+results.push({n,cv:r.cv,phi:r.phi,gapRatio:r.gapRatio,prime});
+if(prime){primeSum+=r.cv;primeCount++;}
+else{compSum+=r.cv;compCount++;}}
+chordData.results=results;
+
+const primeAvg=primeCount>0?primeSum/primeCount:0;
+const compAvg=compCount>0?compSum/compCount:0;
+const separation=compAvg>0?((compAvg-primeAvg)/compAvg*100):0;
+
+const pad=50,w=c.width-2*pad,h=c.height-2*pad;
+const threshold=0.22;
+
+if(viz==='scatter'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Chord CV: Primes (green) vs Composites (red)',c.width/2,25);
+const maxCV=Math.max(...results.map(r=>r.cv),0.5);
+// Threshold line
+if(showThresh){
+ctx.strokeStyle='#ffd700';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+const yThresh=pad+h*(1-threshold/maxCV);
+ctx.beginPath();ctx.moveTo(pad,yThresh);ctx.lineTo(pad+w,yThresh);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ffd700';ctx.font='10px Arial';ctx.textAlign='left';
+ctx.fillText('CV=0.22 threshold',pad+5,yThresh-5);}
+// Plot points
+for(const r of results){
+const x=pad+w*(r.n-3)/(maxN-3);
+const y=pad+h*(1-r.cv/maxCV);
+ctx.fillStyle=r.prime?'#00ff88':'#ff4040';
+ctx.beginPath();ctx.arc(x,y,3,0,2*Math.PI);ctx.fill();}
+// Axes
+ctx.strokeStyle=gridC();ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(pad,pad+h);ctx.lineTo(pad+w,pad+h);ctx.stroke();
+ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,pad+h);ctx.stroke();
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='11px Segoe UI';
+ctx.textAlign='center';ctx.fillText('n',pad+w/2,pad+h+25);
+ctx.save();ctx.translate(15,pad+h/2);ctx.rotate(-Math.PI/2);ctx.fillText('CV',0,0);ctx.restore();}
+
+else if(viz==='histogram'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('CV Distribution: Primes vs Composites',c.width/2,25);
+const bins=20;
+const primeBins=new Array(bins).fill(0);
+const compBins=new Array(bins).fill(0);
+for(const r of results){
+const bin=Math.min(bins-1,Math.floor(r.cv*bins/0.6));
+if(r.prime)primeBins[bin]++;else compBins[bin]++;}
+const maxBin=Math.max(...primeBins,...compBins);
+const barW=w/bins/2-2;
+for(let i=0;i<bins;i++){
+const x=pad+i*w/bins;
+const ph=h*primeBins[i]/maxBin;
+const ch=h*compBins[i]/maxBin;
+ctx.fillStyle='#00ff88';ctx.fillRect(x,pad+h-ph,barW,ph);
+ctx.fillStyle='#ff4040';ctx.fillRect(x+barW+2,pad+h-ch,barW,ch);}
+// Labels
+ctx.fillStyle=isDark()?'#888':'#666';ctx.font='9px Arial';ctx.textAlign='center';
+for(let i=0;i<=bins;i+=5){
+ctx.fillText((i*0.6/bins).toFixed(2),pad+i*w/bins,pad+h+12);}}
+
+else if(viz==='separation'){
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Separation Growth by Range',c.width/2,25);
+const ranges=[50,100,200,300,400,500,maxN].filter(r=>r<=maxN);
+const sepData=[];
+for(const rng of ranges){
+let ps=0,pc=0,cs=0,cc=0;
+for(const r of results){
+if(r.n>rng)continue;
+if(r.prime){ps+=r.cv;pc++;}else{cs+=r.cv;cc++;}}
+const pa=pc>0?ps/pc:0;
+const ca=cc>0?cs/cc:0;
+sepData.push({rng,sep:ca>0?(ca-pa)/ca*100:0,primeAvg:pa,compAvg:ca});}
+const maxSep=Math.max(...sepData.map(d=>d.sep),80);
+ctx.beginPath();ctx.strokeStyle='#00ff88';ctx.lineWidth=3;
+for(let i=0;i<sepData.length;i++){
+const x=pad+w*i/(sepData.length-1);
+const y=pad+h*(1-sepData[i].sep/maxSep);
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();
+// Points with labels
+for(let i=0;i<sepData.length;i++){
+const x=pad+w*i/(sepData.length-1);
+const y=pad+h*(1-sepData[i].sep/maxSep);
+ctx.fillStyle='#00ff88';ctx.beginPath();ctx.arc(x,y,6,0,2*Math.PI);ctx.fill();
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='10px Arial';ctx.textAlign='center';
+ctx.fillText(sepData[i].sep.toFixed(1)+'%',x,y-12);
+ctx.fillText('n≤'+sepData[i].rng,x,pad+h+15);}}
+
+else if(viz==='single'){
+const r=chordCV(testN);
+const prime=isPrime(testN);
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Chord Analysis for n=${testN} (${prime?'PRIME':'COMPOSITE'})`,c.width/2,25);
+// Draw unit circle with coprime points
+const cx=c.width/2,cy=c.height/2+20,rad=Math.min(w,h)/2-30;
+ctx.strokeStyle=gridC();ctx.lineWidth=1;
+ctx.beginPath();ctx.arc(cx,cy,rad,0,2*Math.PI);ctx.stroke();
+// Draw coprime points and chords
+const coprimes=[];
+for(let i=1;i<testN;i++)if(gcd(i,testN)===1)coprimes.push(i);
+for(let i=0;i<coprimes.length;i++){
+const angle=2*Math.PI*coprimes[i]/testN-Math.PI/2;
+const x=cx+rad*Math.cos(angle);
+const y=cy+rad*Math.sin(angle);
+ctx.fillStyle='#00ff88';ctx.beginPath();ctx.arc(x,y,5,0,2*Math.PI);ctx.fill();
+// Draw chord to next
+const nextAngle=2*Math.PI*coprimes[(i+1)%coprimes.length]/testN-Math.PI/2;
+const nx=cx+rad*Math.cos(nextAngle);
+const ny=cy+rad*Math.sin(nextAngle);
+ctx.strokeStyle='rgba(0,255,136,0.3)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(nx,ny);ctx.stroke();}
+// Info
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='12px Segoe UI';ctx.textAlign='left';
+ctx.fillText(`φ(${testN}) = ${r.phi}`,pad,pad+h-60);
+ctx.fillText(`CV = ${r.cv.toFixed(4)}`,pad,pad+h-40);
+ctx.fillText(`Gap Ratio = ${r.gapRatio.toFixed(3)}`,pad,pad+h-20);
+ctx.fillText(`Verdict: ${r.cv<0.22?'Likely Prime':'Likely Composite'}`,pad+200,pad+h-40);}
+
+// Charts
+const primeResults=results.filter(r=>r.prime);
+const compResults=results.filter(r=>!r.prime);
+Plotly.newPlot('pchordDist',[
+{x:primeResults.map(r=>r.cv),type:'histogram',name:'Primes',marker:{color:'#00ff88'},opacity:0.7,nbinsx:20},
+{x:compResults.map(r=>r.cv),type:'histogram',name:'Composites',marker:{color:'#ff4040'},opacity:0.7,nbinsx:20}
+],{...plo(),barmode:'overlay',xaxis:{title:'CV'},yaxis:{title:'Count'}});
+
+// Separation chart
+const sepRanges=[50,100,150,200,300,400,500].filter(r=>r<=maxN);
+const sepVals=sepRanges.map(rng=>{
+let ps=0,pc=0,cs=0,cc=0;
+for(const r of results){if(r.n>rng)continue;if(r.prime){ps+=r.cv;pc++;}else{cs+=r.cv;cc++;}}
+const pa=pc>0?ps/pc:0,ca=cc>0?cs/cc:0;
+return ca>0?(ca-pa)/ca*100:0;});
+Plotly.newPlot('pchordSep',[{x:sepRanges.map(r=>'≤'+r),y:sepVals,type:'bar',marker:{color:'#00d9ff'}}],{...plo(),xaxis:{title:'Range'},yaxis:{title:'Separation %'}});
+
+// Average CV
+Plotly.newPlot('pchordAvg',[{x:['Primes','Composites'],y:[primeAvg,compAvg],type:'bar',marker:{color:['#00ff88','#ff4040']}}],{...plo(),yaxis:{title:'Average CV'}});
+
+// Legend
+const testR=chordCV(testN);
+legend('alchord','Analysis',[['Prime Avg CV',primeAvg.toFixed(4),'#00ff88'],['Comp Avg CV',compAvg.toFixed(4),'#ff4040'],['Separation',separation.toFixed(1)+'%','#00d9ff']]);
+
+// Live stats
+document.getElementById('chordLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${maxN}</div><div style="font-size:.65rem;color:var(--txt2)">MAX N</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00ff88">${primeCount}</div><div style="font-size:.65rem;color:var(--txt2)">PRIMES</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff4040">${compCount}</div><div style="font-size:.65rem;color:var(--txt2)">COMPOSITES</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Average CV</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>Primes:</span><span style="color:#00ff88">${primeAvg.toFixed(4)}</span>
+<span>Composites:</span><span style="color:#ff4040">${compAvg.toFixed(4)}</span>
+<span>Separation:</span><span style="color:#00d9ff;font-weight:bold">${separation.toFixed(1)}%</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Test n = ${testN}</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>Type:</span><span style="color:${isPrime(testN)?'#00ff88':'#ff4040'}">${isPrime(testN)?'Prime':'Composite'}</span>
+<span>φ(n):</span><span style="color:#ffd700">${testR.phi}</span>
+<span>CV:</span><span style="color:#00d9ff">${testR.cv.toFixed(4)}</span>
+<span>Gap Ratio:</span><span style="color:#9664ff">${testR.gapRatio.toFixed(3)}</span>
+</div>
+</div>
+<div style="background:${testR.cv<0.22?'rgba(0,255,136,.15)':'rgba(255,64,64,.15)'};padding:8px;border-radius:6px;font-size:.8rem">
+<strong style="color:${testR.cv<0.22?'#00ff88':'#ff4040'}">Verdict: ${testR.cv<0.22?'Likely Prime':'Likely Composite'}</strong>
+</div>`;
+
+// Table
+const tableData=results.slice(0,60).map(r=>({...r,verdict:r.cv<0.22?'Prime?':'Comp?'}));
+document.getElementById('tchordT').innerHTML='<tr><th>n</th><th>Type</th><th>φ(n)</th><th>CV</th><th>Gap Ratio</th><th>Verdict</th></tr>'+
+tableData.map(r=>`<tr onclick="document.getElementById('chordTest').value=${r.n};drawChord()" style="cursor:pointer;color:${r.prime?'#00ff88':'#ff4040'}"><td>${r.n}</td><td>${r.prime?'Prime':'Comp'}</td><td>${r.phi}</td><td>${r.cv.toFixed(4)}</td><td>${r.gapRatio.toFixed(2)}</td><td>${r.verdict}</td></tr>`).join('');}
+
+function csvChord(){
+let csv='n,type,phi,cv,gap_ratio,verdict\n';
+for(const r of chordData.results){
+csv+=`${r.n},${r.prime?'prime':'composite'},${r.phi},${r.cv.toFixed(6)},${r.gapRatio.toFixed(4)},${r.cv<0.22?'likely_prime':'likely_composite'}\n`;}
+dl(csv,'chord_uniformity.csv');}
+
+async function screenshotChord(){
+const c=document.getElementById('cchord'),dashData=extractDashboardData('chordLiveStats');
+const maxN=document.getElementById('chordNv').value;
+const scale=2,pad=30,dashH=350;
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Chord Uniformity — n ≤ ${maxN}`,out.width/scale/2,pad);
+ctx.drawImage(c,pad,pad+25,c.width,c.height);
+const dashY=c.height+pad+45;
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
+ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='chord_uniformity.png';a.click();},'image/png',1.0);}
+
 async function screenshotMod(){
 const c=document.getElementById('cmod'),dashData=extractDashboardData('modLiveStats');
 const minM=document.getElementById('modMin').value,maxM=document.getElementById('modMax').value;
@@ -4397,4 +6291,4 @@ out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b)
 draw2D();
 </script>
 </body>
-                                                                                                                                                              </html>
+                                                                                                                        </html>
