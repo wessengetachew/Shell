@@ -142,7 +142,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <ul>
 <li><strong>ζ(n)^(-1) Density:</strong> The inverse zeta function emerges as the natural density of primitive integers.</li>
 <li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</li>
-<li><strong>Multi-Scale Sieve:</strong> The Möbius cts as a geometric filter.</li>
+<li><strong>Multi-Scale Sieve:</strong> The Möbius inversion acts as a geometric filter.</li>
 <li><strong>Dimension Universal:</strong> The formula holds for all dimensions n ≥ 3.</li>
 <li><strong>GCD Multiplication Table:</strong> The 2D lattice within a circle is fundamentally a bounded GCD multiplication table. Each point (x,y) represents an entry where gcd(x,y) determines the "cell value". The primitive points (GCD=1) correspond to coprime pairs—the units in the multiplicative structure.</li>
 <li><strong>Four-Quadrant Symmetry:</strong> The lattice exhibits 4-fold rotational symmetry, mirroring the structure of modular arithmetic tables when viewed as rings.</li>
@@ -186,6 +186,8 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <button class="tbtn" onclick="showTab('tcirc',this)">Circle</button>
 <button class="tbtn" onclick="showTab('tdens',this)">Density 1/ζ</button>
 <button class="tbtn" onclick="showTab('tdir',this)">Dirichlet χ</button>
+<button class="tbtn" onclick="showTab('ttwin',this)">Twin Primes</button>
+<button class="tbtn" onclick="showTab('tpi',this)">π(x)</button>
 </div>
 
 <div id="t2d" class="tab active">
@@ -868,6 +870,131 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div><strong>L-function:</strong> L(s,χ) = Σ χ(n)/nˢ = Π(1-χ(p)p⁻ˢ)⁻¹</div>
 <div><strong>Orthogonality:</strong> Σᵣ χ(r)χ̄'(r) = φ(M)·δ_{χ,χ'}</div>
 <div><strong>Dirichlet's Theorem:</strong> Primes ≡ a (mod M) infinite if gcd(a,M)=1</div>
+</div>
+</div>
+</div>
+
+<div id="ttwin" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max N <span class="tip" title="Search primes up to N">?</span></label><div class="sig"><input type="range" id="twinN" min="100" max="10000" step="100" value="1000" oninput="document.getElementById('twinNv').value=this.value"><input type="number" id="twinNv" value="1000" min="10" max="100000" onchange="document.getElementById('twinN').value=Math.min(10000,this.value)"></div></div>
+<div class="cg"><label>Gap Size g <span class="tip" title="Find prime pairs (p, p+g)">?</span></label><div class="sig"><input type="range" id="twinG" min="2" max="30" step="2" value="2" oninput="document.getElementById('twinGv').value=this.value;drawTwin()"><input type="number" id="twinGv" value="2" min="2" max="100" step="2" onchange="document.getElementById('twinG').value=Math.min(30,this.value);drawTwin()"></div></div>
+<div class="cg"><label>Visualization</label><select id="twinViz" onchange="drawTwin()">
+<option value="gaps">Prime Gap Distribution</option>
+<option value="pairs">Twin Prime Pairs</option>
+<option value="density">Gap Density by Range</option>
+<option value="brun">Brun's Constant Convergence</option>
+<option value="constellation">Prime Constellations</option>
+</select></div>
+<div class="cg"><label>Color Mode</label><select id="twinCol" onchange="drawTwin()">
+<option value="gap">By Gap Size</option>
+<option value="density">By Local Density</option>
+<option value="log">By log(p)</option>
+</select></div>
+</div>
+<div class="ctrl">
+<div class="cg"><label>Display</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="twinLabels" onchange="drawTwin()"> Labels</label>
+<label><input type="checkbox" id="twinGrid" checked onchange="drawTwin()"> Grid</label>
+<label><input type="checkbox" id="twinAvg" checked onchange="drawTwin()"> Running Average</label>
+<label><input type="checkbox" id="twinTheory" checked onchange="drawTwin()"> Theory Curve</label>
+</div></div>
+<div class="cg"><label>Point Size</label><input type="range" id="twinPtSz" min="2" max="12" value="5" onchange="drawTwin()"></div>
+<div class="cg"><label>Constellation</label><select id="twinConst" onchange="drawTwin()">
+<option value="twin">Twin (p,p+2)</option>
+<option value="cousin">Cousin (p,p+4)</option>
+<option value="sexy">Sexy (p,p+6)</option>
+<option value="triplet">Triplet (p,p+2,p+6)</option>
+<option value="quadruplet">Quadruplet (p,p+2,p+6,p+8)</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawTwin()">Analyze</button><button onclick="screenshotTwin()">Screenshot</button><button class="s" onclick="csvTwin()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Prime Gap Analysis up to N = <span id="twinNdisp">1000</span></h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Twin primes (p, p+2) become rarer but are conjectured infinite. Brun proved Σ1/p (twin) converges.</p>
+<canvas id="ctwin" width="800" height="500"></canvas><div class="al" id="altwin"></div></div>
+<div class="viz"><h3>Live Statistics</h3><div id="twinLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<h3 style="margin-top:1rem">Gap Frequency</h3><div class="pc" id="ptwinGap"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Brun's Constant Convergence</h3><div class="pc" id="ptwinBrun"></div></div>
+<div class="viz"><h3>Prime Gaps vs log(p)</h3><div class="pc" id="ptwinLog"></div></div>
+</div>
+<div class="viz"><h3>Prime Pair Data (Click rows)</h3>
+<div style="max-height:300px;overflow-y:auto">
+<table id="ttwinT"><tr><th>p</th><th>p+g</th><th>Gap</th><th>log(p)</th><th>gap/log(p)</th><th>Σ1/p</th></tr></table>
+</div></div>
+<div style="padding:1rem;background:rgba(255,100,150,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Twin Prime Theory</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>Twin Primes:</strong> Pairs (p, p+2) where both prime</div>
+<div><strong>Twin Prime Conjecture:</strong> Infinitely many twin primes (unproved)</div>
+<div><strong>Brun's Theorem:</strong> Σ(1/p + 1/(p+2)) converges to B₂ ≈ 1.902</div>
+<div><strong>Hardy-Littlewood:</strong> π₂(x) ~ 2C₂ x/(ln x)² where C₂ ≈ 0.66</div>
+<div><strong>Cousin Primes:</strong> (p, p+4) — also conjectured infinite</div>
+<div><strong>Sexy Primes:</strong> (p, p+6) — gap divisible by 6</div>
+<div><strong>Prime k-tuples:</strong> Admissible patterns conjectured infinite</div>
+<div><strong>Zhang (2013):</strong> Proved gaps ≤ 70,000,000 infinitely often</div>
+</div>
+</div>
+</div>
+
+<div id="tpi" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max x <span class="tip" title="Count primes up to x">?</span></label><div class="sig"><input type="range" id="piX" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('piXv').value=this.value"><input type="number" id="piXv" value="10000" min="10" max="1000000" onchange="document.getElementById('piX').value=Math.min(100000,this.value)"></div></div>
+<div class="cg"><label>Step Size</label><select id="piStep" onchange="drawPi()">
+<option value="10">10</option>
+<option value="50">50</option>
+<option value="100" selected>100</option>
+<option value="500">500</option>
+</select></div>
+<div class="cg"><label>Visualization</label><select id="piViz" onchange="drawPi()">
+<option value="count">π(x) Prime Count</option>
+<option value="compare">π(x) vs Approximations</option>
+<option value="error">Error Analysis</option>
+<option value="ratio">π(x)·ln(x)/x Ratio</option>
+<option value="density">Prime Density 1/ln(x)</option>
+</select></div>
+<div class="cg"><label>Approximations</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="piLi" checked onchange="drawPi()"> Li(x)</label>
+<label><input type="checkbox" id="piXlnx" checked onchange="drawPi()"> x/ln(x)</label>
+<label><input type="checkbox" id="piRiemann" onchange="drawPi()"> R(x)</label>
+</div></div>
+</div>
+<div class="ctrl">
+<div class="cg"><label>Display</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="piGrid" checked onchange="drawPi()"> Grid</label>
+<label><input type="checkbox" id="piLog" onchange="drawPi()"> Log Scale</label>
+<label><input type="checkbox" id="piBounds" onchange="drawPi()"> Chebyshev Bounds</label>
+</div></div>
+<div class="cg"><label>Point Size</label><input type="range" id="piPtSz" min="2" max="10" value="4" onchange="drawPi()"></div>
+</div>
+<div class="bg"><button onclick="drawPi()">Compute</button><button onclick="screenshotPi()">Screenshot</button><button class="s" onclick="csvPi()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Prime Counting Function π(x) up to <span id="piXdisp">10000</span></h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">π(x) counts primes ≤ x. PNT: π(x) ~ x/ln(x). Li(x) is the best elementary approximation.</p>
+<canvas id="cpi" width="800" height="500"></canvas><div class="al" id="alpi"></div></div>
+<div class="viz"><h3>Live Statistics</h3><div id="piLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
+<h3 style="margin-top:1rem">Approximation Errors</h3><div class="pc" id="ppiErr"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>π(x) vs Approximations</h3><div class="pc" id="ppiComp"></div></div>
+<div class="viz"><h3>Ratio π(x)·ln(x)/x → 1</h3><div class="pc" id="ppiRatio"></div></div>
+</div>
+<div class="viz"><h3>Prime Count Data (Click rows)</h3>
+<div style="max-height:300px;overflow-y:auto">
+<table id="tpiT"><tr><th>x</th><th>π(x)</th><th>x/ln(x)</th><th>Li(x)</th><th>Error Li</th><th>Rel %</th></tr></table>
+</div></div>
+<div style="padding:1rem;background:rgba(0,255,136,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Prime Number Theorem</h4>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>PNT:</strong> π(x) ~ x/ln(x) as x → ∞</div>
+<div><strong>Li(x):</strong> ∫₂ˣ dt/ln(t) — logarithmic integral</div>
+<div><strong>Better Approx:</strong> π(x) = Li(x) + O(x·e^(-c√ln x))</div>
+<div><strong>Riemann R(x):</strong> Σ μ(n)/n · Li(x^(1/n)) — very accurate</div>
+<div><strong>Chebyshev:</strong> 0.92 x/ln(x) < π(x) < 1.11 x/ln(x) for x≥30</div>
+<div><strong>Prime Density:</strong> ~1/ln(x) primes near x</div>
+<div><strong>RH Connection:</strong> Best error bound needs Riemann Hypothesis</div>
+<div><strong>Bertrand:</strong> Always a prime between n and 2n</div>
 </div>
 </div>
 </div>
@@ -3607,8 +3734,20 @@ let txt=isZ?'0':Math.abs(v.im)<1e-10?v.re.toFixed(0):Math.abs(v.re)<1e-10?(v.im>
 ctx.fillText(txt,pad+(r+1.5)*cellW,y);}}}
 
 else if(viz==='lfunction'){
-// L-function partial sums
-const sVals=[1,1.5,2,2.5,3];
+// L-function canvas display
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 16px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`L(s,χ) = Σ χ(n)/nˢ  (${Lterms} terms)`,cx,cy-80);
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='14px Segoe UI';
+// Compute for display
+const sDisp=[1,2,3];
+for(let si=0;si<sDisp.length;si++){
+const s=sDisp[si];
+let Lre=0,Lim=0;
+for(let n=1;n<=Lterms;n++){const v=chi.values[n%M];Lre+=v.re*Math.pow(n,-s);Lim+=v.im*Math.pow(n,-s);}
+ctx.fillText(`L(${s},χ) ≈ ${Lre.toFixed(4)} + ${Lim.toFixed(4)}i   |L| = ${Math.sqrt(Lre*Lre+Lim*Lim).toFixed(4)}`,cx,cy-30+si*30);}}
+
+// L-function chart (always compute)
+const sVals=[1,1.2,1.5,2,2.5,3,4,5];
 const Ldata=[];
 for(const s of sVals){
 let Lre=0,Lim=0;
@@ -3617,18 +3756,11 @@ const v=chi.values[n%M];
 const coef=Math.pow(n,-s);
 Lre+=v.re*coef;Lim+=v.im*coef;}
 Ldata.push({s,Lre,Lim,Lmag:Math.sqrt(Lre*Lre+Lim*Lim)});}
-
 Plotly.newPlot('pdirL',[
 {x:sVals,y:Ldata.map(d=>d.Lre),name:'Re L(s,χ)',mode:'lines+markers',line:{color:'#00d9ff'}},
 {x:sVals,y:Ldata.map(d=>d.Lim),name:'Im L(s,χ)',mode:'lines+markers',line:{color:'#ff8c00'}},
 {x:sVals,y:Ldata.map(d=>d.Lmag),name:'|L(s,χ)|',mode:'lines+markers',line:{color:'#00ff88'}}
 ],{...plo(),xaxis:{title:'s'},yaxis:{title:'L(s,χ)'}});
-
-ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 16px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`L(s,χ) = Σ χ(n)/nˢ  (${Lterms} terms)`,cx,cy-50);
-ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='14px Segoe UI';
-ctx.fillText(`L(2,χ) ≈ ${Ldata[2].Lre.toFixed(4)} + ${Ldata[2].Lim.toFixed(4)}i`,cx,cy);
-ctx.fillText(`|L(2,χ)| ≈ ${Ldata[2].Lmag.toFixed(4)}`,cx,cy+25);}
 
 // Distribution chart
 const argBins=[];
@@ -3738,6 +3870,486 @@ ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='cent
 ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
 out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='dirichlet_char.png';a.click();},'image/png',1.0);}
 
+// Twin Primes & Prime Gaps
+let twinData={primes:[],gaps:[],twins:[]};
+
+function sievePrimes(N){
+const sieve=new Array(N+1).fill(true);
+sieve[0]=sieve[1]=false;
+for(let i=2;i*i<=N;i++)if(sieve[i])for(let j=i*i;j<=N;j+=i)sieve[j]=false;
+const primes=[];for(let i=2;i<=N;i++)if(sieve[i])primes.push(i);
+return primes;}
+
+function drawTwin(){
+const c=document.getElementById('ctwin'),ctx=c.getContext('2d');
+const N=+document.getElementById('twinNv').value||+document.getElementById('twinN').value;
+const g=+document.getElementById('twinGv').value||+document.getElementById('twinG').value;
+const viz=document.getElementById('twinViz').value;
+const col=document.getElementById('twinCol').value;
+const ptSz=+document.getElementById('twinPtSz').value;
+const showLabels=document.getElementById('twinLabels').checked;
+const showGrid=document.getElementById('twinGrid').checked;
+const showAvg=document.getElementById('twinAvg').checked;
+const showTheory=document.getElementById('twinTheory').checked;
+const constType=document.getElementById('twinConst').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+document.getElementById('twinNdisp').textContent=N;
+
+// Generate primes
+const primes=sievePrimes(N);
+twinData.primes=primes;
+
+// Compute gaps
+const gaps=[];
+for(let i=1;i<primes.length;i++)gaps.push({p:primes[i-1],gap:primes[i]-primes[i-1],idx:i});
+twinData.gaps=gaps;
+
+// Find twin primes (or other constellations)
+const twins=[];
+let gapPattern=[2];
+if(constType==='cousin')gapPattern=[4];
+else if(constType==='sexy')gapPattern=[6];
+else if(constType==='triplet')gapPattern=[2,4];
+else if(constType==='quadruplet')gapPattern=[2,4,2];
+
+for(let i=0;i<primes.length-gapPattern.length;i++){
+let match=true;
+for(let j=0;j<gapPattern.length;j++){
+if(primes[i+j+1]-primes[i+j]!==gapPattern[j]){match=false;break;}}
+if(match)twins.push({p:primes[i],constellation:primes.slice(i,i+gapPattern.length+1)});}
+twinData.twins=twins;
+
+// Brun's constant partial sum
+let brunSum=0;
+const brunPartial=[];
+for(const t of twins.filter(t=>t.constellation.length===2)){
+brunSum+=1/t.p+1/t.constellation[1];
+brunPartial.push({p:t.p,sum:brunSum});}
+
+const pad=60,w=c.width-2*pad,h=c.height-2*pad;
+const cx=c.width/2,cy=c.height/2;
+
+// Gap frequency
+const gapFreq={};
+for(const g of gaps)gapFreq[g.gap]=(gapFreq[g.gap]||0)+1;
+const gapArr=Object.entries(gapFreq).map(([g,c])=>({gap:+g,count:c})).sort((a,b)=>a.gap-b.gap);
+
+if(viz==='gaps'){
+// Histogram of prime gaps
+const maxGap=Math.max(...gaps.map(g=>g.gap));
+const barW=w/Math.min(maxGap/2+1,30);
+const maxCount=Math.max(...gapArr.map(g=>g.count));
+if(showGrid){
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=5;i++){const y=pad+h-i*h/5;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(pad+w,y);ctx.stroke();}}
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Prime Gap Distribution',cx,30);
+for(const gd of gapArr.slice(0,30)){
+const x=pad+(gd.gap/2-1)*barW;
+const barH=h*gd.count/maxCount;
+let clr=gd.gap===2?'#ffd700':gd.gap===4?'#00d9ff':gd.gap===6?'#ff8c00':`hsl(${gd.gap*10},70%,50%)`;
+ctx.fillStyle=clr;
+ctx.fillRect(x,pad+h-barH,barW*0.8,barH);
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='9px Arial';
+ctx.fillText(gd.gap,x+barW*0.4,pad+h+15);
+if(showLabels)ctx.fillText(gd.count,x+barW*0.4,pad+h-barH-5);}}
+
+else if(viz==='pairs'){
+// Show twin prime pairs as points
+const maxP=primes[primes.length-1];
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`${constType.charAt(0).toUpperCase()+constType.slice(1)} Prime Pairs (gap=${gapPattern.join(',')})`,cx,30);
+if(showGrid){ctx.strokeStyle=gridC();ctx.lineWidth=0.5;ctx.strokeRect(pad,pad,w,h);}
+for(let i=0;i<twins.length;i++){
+const t=twins[i];
+const x=pad+w*t.p/maxP;
+const y=pad+h-h*i/Math.max(twins.length-1,1);
+ctx.fillStyle='#ffd700';
+ctx.beginPath();ctx.arc(x,y,ptSz,0,2*Math.PI);ctx.fill();
+if(showLabels&&twins.length<30){
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='9px Arial';
+ctx.fillText(`(${t.constellation.join(',')})`,x+ptSz+3,y+3);}}}
+
+else if(viz==='density'){
+// Gap density by range
+const ranges=[];
+const rangeSize=Math.ceil(N/10);
+for(let r=0;r<10;r++){
+const lo=r*rangeSize,hi=(r+1)*rangeSize;
+const rangeGaps=gaps.filter(g=>g.p>=lo&&g.p<hi);
+const twinCount=rangeGaps.filter(g=>g.gap===g).length;
+const avgGap=rangeGaps.length?rangeGaps.reduce((a,g)=>a+g.gap,0)/rangeGaps.length:0;
+ranges.push({lo,hi,count:rangeGaps.length,avgGap,twinCount});}
+const maxAvg=Math.max(...ranges.map(r=>r.avgGap));
+const barW=w/10;
+for(let i=0;i<ranges.length;i++){
+const r=ranges[i];
+const x=pad+i*barW;
+const barH=h*r.avgGap/maxAvg;
+ctx.fillStyle=`hsl(${i*36},70%,50%)`;
+ctx.fillRect(x,pad+h-barH,barW*0.8,barH);
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='9px Arial';ctx.textAlign='center';
+ctx.fillText(`${(r.lo/1000).toFixed(0)}k`,x+barW*0.4,pad+h+15);}}
+
+else if(viz==='brun'){
+// Brun's constant convergence
+if(brunPartial.length>0){
+const maxSum=brunPartial[brunPartial.length-1].sum;
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText("Brun's Constant B₂ ≈ 1.902 (Convergence)",cx,30);
+if(showGrid){ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=5;i++){const y=pad+h-i*h/5;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(pad+w,y);ctx.stroke();
+ctx.fillStyle=isDark()?'#666':'#999';ctx.font='10px Arial';ctx.textAlign='right';
+ctx.fillText((maxSum*i/5).toFixed(3),pad-5,y+3);}}
+ctx.beginPath();ctx.strokeStyle='#00d9ff';ctx.lineWidth=2;
+for(let i=0;i<brunPartial.length;i++){
+const x=pad+w*i/(brunPartial.length-1);
+const y=pad+h-h*brunPartial[i].sum/maxSum;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();
+// Reference line at B2 ≈ 1.902
+if(showTheory&&maxSum>1.5){
+ctx.strokeStyle='#ff006e';ctx.setLineDash([5,5]);ctx.beginPath();
+const y1902=pad+h-h*1.902/maxSum;
+ctx.moveTo(pad,y1902);ctx.lineTo(pad+w,y1902);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff006e';ctx.font='11px Arial';ctx.textAlign='left';
+ctx.fillText('B₂ ≈ 1.902',pad+w-60,y1902-5);}}}
+
+else if(viz==='constellation'){
+// Prime constellations visualization  
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Prime ${constType.charAt(0).toUpperCase()+constType.slice(1)}s: ${twins.length} found`,cx,30);
+const cols=Math.ceil(Math.sqrt(twins.length));
+const rows=Math.ceil(twins.length/cols);
+const cellW=w/cols,cellH=h/rows;
+for(let i=0;i<Math.min(twins.length,100);i++){
+const t=twins[i];
+const col=i%cols,row=Math.floor(i/cols);
+const x=pad+col*cellW+cellW/2;
+const y=pad+row*cellH+cellH/2;
+ctx.fillStyle=`hsl(${i*7},70%,55%)`;
+ctx.beginPath();ctx.arc(x,y,ptSz,0,2*Math.PI);ctx.fill();
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='8px Arial';ctx.textAlign='center';
+ctx.fillText(t.constellation.join(','),x,y+ptSz+10);}}
+
+// Charts
+Plotly.newPlot('ptwinGap',[{x:gapArr.slice(0,20).map(g=>g.gap),y:gapArr.slice(0,20).map(g=>g.count),type:'bar',marker:{color:gapArr.slice(0,20).map(g=>g.gap===2?'#ffd700':'#00d9ff')}}],{...plo(),xaxis:{title:'Gap'},yaxis:{title:'Count'}});
+
+Plotly.newPlot('ptwinBrun',[{x:brunPartial.map(b=>b.p),y:brunPartial.map(b=>b.sum),mode:'lines',line:{color:'#00d9ff',width:2},name:'Σ(1/p+1/(p+2))'}],{...plo(),xaxis:{title:'p'},yaxis:{title:"Brun's partial sum"}});
+
+Plotly.newPlot('ptwinLog',[{x:gaps.map(g=>Math.log(g.p)),y:gaps.map(g=>g.gap),mode:'markers',marker:{size:3,color:'#9664ff'},name:'Gap'},{x:gaps.map(g=>Math.log(g.p)),y:gaps.map((_,i)=>{const localGaps=gaps.slice(Math.max(0,i-20),i+20);return localGaps.reduce((a,g)=>a+g.gap,0)/localGaps.length;}),mode:'lines',line:{color:'#ffd700',width:2},name:'Running Avg'}],{...plo(),xaxis:{title:'ln(p)'},yaxis:{title:'Gap'}});
+
+// Stats
+const avgGap=gaps.reduce((a,g)=>a+g.gap,0)/gaps.length;
+const maxGapVal=Math.max(...gaps.map(g=>g.gap));
+const gapG=gaps.filter(g=>g.gap===g).length;
+legend('altwin','Gap Statistics',[['Twin pairs',twins.filter(t=>t.constellation.length===2).length,'#ffd700'],['Avg gap',avgGap.toFixed(2),'#00d9ff'],['Max gap',maxGapVal,'#ff006e']]);
+
+// Live stats
+document.getElementById('twinLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00d9ff">${primes.length}</div><div style="font-size:.7rem;color:var(--txt2)">PRIMES ≤ N</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ffd700">${twins.length}</div><div style="font-size:.7rem;color:var(--txt2)">${constType.toUpperCase()}S</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00ff88">${avgGap.toFixed(2)}</div><div style="font-size:.7rem;color:var(--txt2)">AVG GAP</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Gap Analysis</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.8rem">
+<span>Most common gap:</span><span style="color:#ffd700">${gapArr[0]?.gap||0} (${gapArr[0]?.count||0}×)</span>
+<span>Max gap:</span><span style="color:#ff006e">${maxGapVal}</span>
+<span>Gap=2 count:</span><span style="color:#00d9ff">${gapFreq[2]||0}</span>
+<span>Gap=6 count:</span><span style="color:#ff8c00">${gapFreq[6]||0}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Brun's Constant</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.8rem">
+<span>Partial sum:</span><span style="color:#00d9ff">${brunPartial.length?brunPartial[brunPartial.length-1].sum.toFixed(6):'—'}</span>
+<span>B₂ ≈:</span><span style="color:#9664ff">1.902160...</span>
+<span>Twin pairs:</span><span style="color:#ffd700">${twins.filter(t=>t.constellation.length===2).length}</span>
+<span>Convergence:</span><span style="color:#00ff88">Proved (Brun 1919)</span>
+</div>
+</div>
+<div>
+<strong style="color:var(--acc)">First ${constType}s</strong>
+<div style="margin-top:5px;font-size:.75rem;color:var(--txt2)">
+${twins.slice(0,8).map(t=>`(${t.constellation.join(',')})`).join(', ')}${twins.length>8?'...':''}
+</div>
+</div>`;
+
+// Table
+document.getElementById('ttwinT').innerHTML='<tr><th>p</th><th>p+g</th><th>Gap</th><th>log(p)</th><th>gap/log(p)</th><th>Σ1/p</th></tr>'+
+twins.slice(0,100).map((t,i)=>{
+const bp=brunPartial.find(b=>b.p===t.p);
+return`<tr onclick="modal('${constType} at ${t.p}',[['p',${t.p}],['Constellation','${t.constellation.join(', ')}']])" style="cursor:pointer"><td>${t.p}</td><td>${t.constellation[1]||''}</td><td>${t.constellation[1]-t.p||''}</td><td>${Math.log(t.p).toFixed(3)}</td><td>${((t.constellation[1]-t.p)/Math.log(t.p)).toFixed(3)}</td><td>${bp?bp.sum.toFixed(4):'—'}</td></tr>`;}).join('');}
+
+function csvTwin(){
+let s='p,gap,constellation,brun_partial\n';
+let bsum=0;
+for(const t of twinData.twins){
+if(t.constellation.length===2)bsum+=1/t.p+1/t.constellation[1];
+s+=`${t.p},${t.constellation[1]-t.p},"${t.constellation.join(',')}",${bsum}\n`;}
+dl(s,'twin_primes.csv');}
+
+async function screenshotTwin(){
+const c=document.getElementById('ctwin'),dashData=extractDashboardData('twinLiveStats');
+const N=document.getElementById('twinNv').value;
+const scale=2,pad=30,dashH=320;
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Twin Prime Analysis — N=${N}`,out.width/scale/2,pad);
+ctx.drawImage(c,pad,pad+25,c.width,c.height);
+const dashY=c.height+pad+45;
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
+ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='twin_primes.png';a.click();},'image/png',1.0);}
+
+// Prime Counting π(x)
+let piData={xs:[],pis:[],lis:[],xlnxs:[]};
+
+function Li(x){
+// Logarithmic integral approximation
+if(x<=2)return 0;
+let sum=0;const dx=0.1;
+for(let t=2;t<=x;t+=dx)sum+=dx/Math.log(t);
+return sum;}
+
+function RiemannR(x){
+// Riemann R function (simplified)
+let sum=0;
+for(let n=1;n<=100;n++){
+const m=mob(n);
+if(m!==0)sum+=m/n*Li(Math.pow(x,1/n));}
+return sum;}
+
+function drawPi(){
+const c=document.getElementById('cpi'),ctx=c.getContext('2d');
+const X=+document.getElementById('piXv').value||+document.getElementById('piX').value;
+const step=+document.getElementById('piStep').value;
+const viz=document.getElementById('piViz').value;
+const showLi=document.getElementById('piLi').checked;
+const showXlnx=document.getElementById('piXlnx').checked;
+const showRiem=document.getElementById('piRiemann').checked;
+const showGrid=document.getElementById('piGrid').checked;
+const showLog=document.getElementById('piLog').checked;
+const showBounds=document.getElementById('piBounds').checked;
+const ptSz=+document.getElementById('piPtSz').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+document.getElementById('piXdisp').textContent=X;
+
+// Compute π(x) for range
+const primes=sievePrimes(X);
+const xs=[],pis=[],lis=[],xlnxs=[],riems=[];
+let piCount=0,primeIdx=0;
+for(let x=step;x<=X;x+=step){
+while(primeIdx<primes.length&&primes[primeIdx]<=x){piCount++;primeIdx++;}
+xs.push(x);
+pis.push(piCount);
+lis.push(Li(x));
+xlnxs.push(x/Math.log(x));
+if(showRiem&&x<=10000)riems.push(RiemannR(x));else riems.push(null);}
+piData={xs,pis,lis,xlnxs,riems};
+
+const pad=60,w=c.width-2*pad,h=c.height-2*pad;
+const maxPi=Math.max(...pis);
+
+if(viz==='count'||viz==='compare'){
+// Plot π(x) and approximations
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Prime Counting Function π(x)',c.width/2,30);
+if(showGrid){
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=5;i++){
+const y=pad+h-i*h/5;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(pad+w,y);ctx.stroke();
+ctx.fillStyle=isDark()?'#666':'#999';ctx.font='10px Arial';ctx.textAlign='right';
+ctx.fillText(Math.round(maxPi*i/5),pad-5,y+3);}}
+// x/ln(x) line
+if(showXlnx){
+ctx.beginPath();ctx.strokeStyle='#ff8c00';ctx.lineWidth=1.5;
+for(let i=0;i<xs.length;i++){
+const x=pad+w*xs[i]/X;const y=pad+h-h*xlnxs[i]/maxPi;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();}
+// Li(x) line
+if(showLi){
+ctx.beginPath();ctx.strokeStyle='#00ff88';ctx.lineWidth=1.5;
+for(let i=0;i<xs.length;i++){
+const x=pad+w*xs[i]/X;const y=pad+h-h*lis[i]/maxPi;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();}
+// π(x) actual
+ctx.beginPath();ctx.strokeStyle='#00d9ff';ctx.lineWidth=2;
+for(let i=0;i<xs.length;i++){
+const x=pad+w*xs[i]/X;const y=pad+h-h*pis[i]/maxPi;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();
+// Legend
+ctx.font='11px Segoe UI';ctx.textAlign='left';
+let ly=pad+20;
+ctx.fillStyle='#00d9ff';ctx.fillRect(pad+10,ly-8,15,3);ctx.fillText('π(x)',pad+30,ly);ly+=18;
+if(showXlnx){ctx.fillStyle='#ff8c00';ctx.fillRect(pad+10,ly-8,15,3);ctx.fillText('x/ln(x)',pad+30,ly);ly+=18;}
+if(showLi){ctx.fillStyle='#00ff88';ctx.fillRect(pad+10,ly-8,15,3);ctx.fillText('Li(x)',pad+30,ly);}}
+
+else if(viz==='error'){
+// Error plot
+const liErrs=pis.map((p,i)=>p-lis[i]);
+const xlnxErrs=pis.map((p,i)=>p-xlnxs[i]);
+const maxErr=Math.max(...liErrs.map(Math.abs),...xlnxErrs.map(Math.abs));
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Approximation Errors: π(x) - Approx',c.width/2,30);
+// Zero line
+ctx.strokeStyle=gridC();ctx.lineWidth=1;ctx.beginPath();
+ctx.moveTo(pad,pad+h/2);ctx.lineTo(pad+w,pad+h/2);ctx.stroke();
+// Li error
+ctx.beginPath();ctx.strokeStyle='#00ff88';ctx.lineWidth=2;
+for(let i=0;i<xs.length;i++){
+const x=pad+w*xs[i]/X;const y=pad+h/2-h/2*liErrs[i]/maxErr;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();
+// x/ln(x) error
+ctx.beginPath();ctx.strokeStyle='#ff8c00';ctx.lineWidth=2;
+for(let i=0;i<xs.length;i++){
+const x=pad+w*xs[i]/X;const y=pad+h/2-h/2*xlnxErrs[i]/maxErr;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();}
+
+else if(viz==='ratio'){
+// π(x)·ln(x)/x ratio → 1
+const ratios=pis.map((p,i)=>p*Math.log(xs[i])/xs[i]);
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('PNT Ratio: π(x)·ln(x)/x → 1',c.width/2,30);
+const maxR=Math.max(...ratios),minR=Math.min(...ratios);
+// Reference line at 1
+ctx.strokeStyle='#ff006e';ctx.setLineDash([5,5]);ctx.lineWidth=1;ctx.beginPath();
+const y1=pad+h-(1-minR)/(maxR-minR)*h;
+ctx.moveTo(pad,y1);ctx.lineTo(pad+w,y1);ctx.stroke();ctx.setLineDash([]);
+// Ratio curve
+ctx.beginPath();ctx.strokeStyle='#00d9ff';ctx.lineWidth=2;
+for(let i=0;i<xs.length;i++){
+const x=pad+w*xs[i]/X;const y=pad+h-(ratios[i]-minR)/(maxR-minR)*h;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();}
+
+else if(viz==='density'){
+// Prime density 1/ln(x)
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Prime Density ≈ 1/ln(x)',c.width/2,30);
+const empirical=[];
+for(let i=1;i<pis.length;i++)empirical.push((pis[i]-pis[i-1])/step);
+const theory=xs.map(x=>1/Math.log(x));
+const maxD=Math.max(...empirical,...theory);
+// Theory
+ctx.beginPath();ctx.strokeStyle='#ff8c00';ctx.lineWidth=2;
+for(let i=0;i<xs.length;i++){
+const x=pad+w*xs[i]/X;const y=pad+h-h*theory[i]/maxD;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();
+// Empirical (smoothed)
+ctx.beginPath();ctx.strokeStyle='#00d9ff';ctx.lineWidth=2;
+for(let i=0;i<empirical.length;i++){
+const x=pad+w*xs[i+1]/X;
+const avgD=empirical.slice(Math.max(0,i-5),i+5).reduce((a,b)=>a+b,0)/Math.min(10,i+5);
+const y=pad+h-h*avgD/maxD;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+ctx.stroke();}
+
+// Charts
+const liErrs=pis.map((p,i)=>Math.abs(p-lis[i]));
+const xlnxErrs=pis.map((p,i)=>Math.abs(p-xlnxs[i]));
+Plotly.newPlot('ppiErr',[
+{x:xs,y:liErrs,name:'|π(x)-Li(x)|',mode:'lines',line:{color:'#00ff88'}},
+{x:xs,y:xlnxErrs,name:'|π(x)-x/ln(x)|',mode:'lines',line:{color:'#ff8c00'}}
+],{...plo(),xaxis:{title:'x'},yaxis:{title:'Absolute Error'}});
+
+Plotly.newPlot('ppiComp',[
+{x:xs,y:pis,name:'π(x)',mode:'lines',line:{color:'#00d9ff',width:2}},
+{x:xs,y:lis,name:'Li(x)',mode:'lines',line:{color:'#00ff88'}},
+{x:xs,y:xlnxs,name:'x/ln(x)',mode:'lines',line:{color:'#ff8c00'}}
+],{...plo(),xaxis:{title:'x'},yaxis:{title:'Count'}});
+
+const ratios=pis.map((p,i)=>xs[i]>10?p*Math.log(xs[i])/xs[i]:null).filter(x=>x!==null);
+Plotly.newPlot('ppiRatio',[
+{x:xs.filter((_,i)=>xs[i]>10),y:ratios,mode:'lines',line:{color:'#9664ff',width:2},name:'π(x)ln(x)/x'},
+{x:[xs[0],xs[xs.length-1]],y:[1,1],mode:'lines',line:{color:'#ff006e',dash:'dash'},name:'Limit=1'}
+],{...plo(),xaxis:{title:'x'},yaxis:{title:'Ratio',range:[0.8,1.3]}});
+
+// Stats
+const finalPi=pis[pis.length-1];
+const finalLi=lis[lis.length-1];
+const finalXlnx=xlnxs[xlnxs.length-1];
+legend('alpi','π(x) Statistics',[['π('+X+')',finalPi,'#00d9ff'],['Li error',Math.abs(finalPi-finalLi).toFixed(1),'#00ff88'],['x/ln error',Math.abs(finalPi-finalXlnx).toFixed(1),'#ff8c00']]);
+
+// Live stats
+document.getElementById('piLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00d9ff">${finalPi}</div><div style="font-size:.7rem;color:var(--txt2)">π(${X})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00ff88">${finalLi.toFixed(1)}</div><div style="font-size:.7rem;color:var(--txt2)">Li(${X})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ff8c00">${finalXlnx.toFixed(1)}</div><div style="font-size:.7rem;color:var(--txt2)">x/ln(x)</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Error Analysis at x=${X}</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.8rem">
+<span>Li(x) error:</span><span style="color:#00ff88">${(finalPi-finalLi).toFixed(2)} (${(100*(finalPi-finalLi)/finalPi).toFixed(3)}%)</span>
+<span>x/ln(x) error:</span><span style="color:#ff8c00">${(finalPi-finalXlnx).toFixed(2)} (${(100*(finalPi-finalXlnx)/finalPi).toFixed(2)}%)</span>
+<span>Li is better by:</span><span style="color:#9664ff">${(Math.abs(finalPi-finalXlnx)-Math.abs(finalPi-finalLi)).toFixed(1)}</span>
+<span>Ratio π·ln/x:</span><span style="color:#00d9ff">${(finalPi*Math.log(X)/X).toFixed(4)}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Prime Number Theorem</strong>
+<div style="margin-top:5px;font-size:.8rem;color:var(--txt2)">
+π(x) ~ x/ln(x) as x → ∞<br>
+Better: π(x) ~ Li(x) = ∫₂ˣ dt/ln(t)
+</div>
+</div>
+<div>
+<strong style="color:var(--acc)">Key Values</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.75rem">
+<span>π(100):</span><span style="color:var(--txt)">25</span>
+<span>π(1000):</span><span style="color:var(--txt)">168</span>
+<span>π(10000):</span><span style="color:var(--txt)">1229</span>
+<span>π(100000):</span><span style="color:var(--txt)">9592</span>
+</div>
+</div>`;
+
+// Table
+document.getElementById('tpiT').innerHTML='<tr><th>x</th><th>π(x)</th><th>x/ln(x)</th><th>Li(x)</th><th>Error Li</th><th>Rel %</th></tr>'+
+xs.slice(0,100).map((x,i)=>`<tr onclick="modal('π(${x})',[['x',${x}],['π(x)',${pis[i]}],['Li(x)',${lis[i].toFixed(2)}],['x/ln(x)',${xlnxs[i].toFixed(2)}]])" style="cursor:pointer"><td>${x}</td><td>${pis[i]}</td><td>${xlnxs[i].toFixed(1)}</td><td>${lis[i].toFixed(1)}</td><td>${(pis[i]-lis[i]).toFixed(1)}</td><td>${(100*(pis[i]-lis[i])/pis[i]).toFixed(2)}%</td></tr>`).join('');}
+
+function csvPi(){
+let s='x,pi_x,li_x,x_ln_x,error_li,error_xlnx\n';
+for(let i=0;i<piData.xs.length;i++)s+=`${piData.xs[i]},${piData.pis[i]},${piData.lis[i]},${piData.xlnxs[i]},${piData.pis[i]-piData.lis[i]},${piData.pis[i]-piData.xlnxs[i]}\n`;
+dl(s,'prime_counting.csv');}
+
+async function screenshotPi(){
+const c=document.getElementById('cpi'),dashData=extractDashboardData('piLiveStats');
+const X=document.getElementById('piXv').value;
+const scale=2,pad=30,dashH=320;
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Prime Counting Function — x=${X}`,out.width/scale/2,pad);
+ctx.drawImage(c,pad,pad+25,c.width,c.height);
+const dashY=c.height+pad+45;
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
+ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='prime_counting.png';a.click();},'image/png',1.0);}
+
 async function screenshotMod(){
 const c=document.getElementById('cmod'),dashData=extractDashboardData('modLiveStats');
 const minM=document.getElementById('modMin').value,maxM=document.getElementById('modMax').value;
@@ -3785,4 +4397,4 @@ out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b)
 draw2D();
 </script>
 </body>
-                                                                                                        </html>
+                                                                                                                                                              </html>
