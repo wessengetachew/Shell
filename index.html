@@ -142,7 +142,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <ul>
 <li><strong>ζ(n)^(-1) Density:</strong> The inverse zeta function emerges as the natural density of primitive integers.</li>
 <li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</li>
-<li><strong>Multi-Scale Sieve:</strong> The Möbius inversion acts as a geometric filter.</li>
+<li><strong>Multi-Scale Sieve:</strong> The Möbiucts as a geometric filter.</li>
 <li><strong>Dimension Universal:</strong> The formula holds for all dimensions n ≥ 3.</li>
 <li><strong>GCD Multiplication Table:</strong> The 2D lattice within a circle is fundamentally a bounded GCD multiplication table. Each point (x,y) represents an entry where gcd(x,y) determines the "cell value". The primitive points (GCD=1) correspond to coprime pairs—the units in the multiplicative structure.</li>
 <li><strong>Four-Quadrant Symmetry:</strong> The lattice exhibits 4-fold rotational symmetry, mirroring the structure of modular arithmetic tables when viewed as rings.</li>
@@ -1511,7 +1511,7 @@ const gridC=()=>isDark()?'rgba(0,217,255,0.12)':'rgba(0,102,204,0.15)';
 const bordC=()=>isDark()?'rgba(0,217,255,0.5)':'rgba(0,102,204,0.6)';
 function toggleTheme(){document.body.classList.toggle('light');document.getElementById('thm').textContent=isDark()?'D':'L';draw2D();if(document.getElementById('t3d').classList.contains('active'))draw3D();}
 function showSec(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.snav .nbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
-function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc')drawCircleViz();if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();}
 function legend(id,title,data){const d=document.getElementById(id);if(!d)return;d.innerHTML=`<h4>${title}</h4><div class="lg">${data.map(([l,v,c])=>`<div class="li" style="border-left-color:${c}"><strong>${l}</strong><span class="v">${fmt(v)}</span></div>`).join('')}</div>`;}
 function modal(title,data){document.getElementById('mtitle').textContent=title;document.getElementById('mbody').innerHTML=data.map(([l,v])=>`<div class="ds"><div class="dr"><span class="dl">${l}:</span><span class="dv">${typeof v==='number'?fmt(v):v}</span></div></div>`).join('');document.getElementById('modal').classList.add('active');}
 function dl(c,f){const a=document.createElement('a');a.href='data:text/csv,'+encodeURIComponent(c);a.download=f;a.click();}
@@ -4709,7 +4709,7 @@ out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b)
 let compData={M:60,residues:[],channels:[]};
 let compSweepInterval=null,compSweepR=1;
 
-function factorize(n){
+function factorizeArr(n){
 const factors=[];
 let d=2;
 while(d*d<=n){
@@ -4730,7 +4730,7 @@ for(let i=3;i*i<=n;i+=2)if(n%i===0)return i;
 return n;}
 
 function largestPrimeFactor(n){
-const f=factorize(n);
+const f=factorizeArr(n);
 return f.length?f[f.length-1]:1;}
 
 function drawComp(){
@@ -4751,7 +4751,7 @@ document.getElementById('compMdisp').textContent=M;
 compData.M=M;
 const phi=eulerPhi(M);
 const divs=getDivisors(M);
-const factors=factorize(M);
+const factors=factorizeArr(M);
 const primeFactors=[...new Set(factors)];
 
 // Build residue data
@@ -4844,7 +4844,7 @@ ctx.fillText(`τ(${M}) = ${divs.length} divisors`,cx,130);
 // Draw divisor lattice
 const levels={};
 for(const d of divs){
-const nf=factorize(d).length;
+const nf=factorizeArr(d).length;
 if(!levels[nf])levels[nf]=[];
 levels[nf].push(d);}
 const levelKeys=Object.keys(levels).map(Number).sort((a,b)=>a-b);
@@ -5481,7 +5481,7 @@ document.getElementById('sierpLiveStats').innerHTML=`
 // Table
 document.getElementById('tsierpT').innerHTML='<tr><th>n</th><th>n mod 6</th><th>n mod 12</th><th>Factorization</th><th>Neighbors</th></tr>'+
 result.uncovered.slice(0,50).map(n=>{
-const factors=factorize(n).join('×')||'1';
+const factors=factorizeArr(n).join('×')||'1';
 const prev=result.uncovered[result.uncovered.indexOf(n)-1]||'-';
 const next=result.uncovered[result.uncovered.indexOf(n)+1]||'-';
 return `<tr onclick="testSierpNum(${n})" style="cursor:pointer;color:#ff4040"><td>${n}</td><td>${n%6}</td><td>${n%12}</td><td>${factors}</td><td>${prev}, ${next}</td></tr>`;}).join('');
@@ -5499,7 +5499,7 @@ const row=Math.floor((my-40)/cellH);
 const n=row*cols+col+1;
 if(n>=1&&n<=N){
 const isCovered=result.covered.has(n);
-modal(`Number ${n}`,[['n',n],['Covered?',isCovered?'Yes':'No'],['n mod 6',n%6],['n mod 12',n%12],['Factorization',factorize(n).join('×')||'1']]);}}};
+modal(`Number ${n}`,[['n',n],['Covered?',isCovered?'Yes':'No'],['n mod 6',n%6],['n mod 12',n%12],['Factorization',factorizeArr(n).join('×')||'1']]);}}};
 }
 
 function testSierpNum(n){
@@ -5519,7 +5519,7 @@ function csvSierp(){
 let s='n,covered,mod6,mod12,factorization\n';
 for(let n=1;n<=sierpData.N;n++){
 const isCov=sierpData.covered.has(n)?1:0;
-s+=`${n},${isCov},${n%6},${n%12},"${factorize(n).join('×')||'1'}"\n`;}
+s+=`${n},${isCov},${n%6},${n%12},"${factorizeArr(n).join('×')||'1'}"\n`;}
 dl(s,'sierpinski_coverage.csv');}
 
 async function screenshotSierp(){
@@ -5723,7 +5723,7 @@ document.getElementById('kfreeLiveStats').innerHTML=`
 
 // Table
 const nonKfreeData=result.nonKfree.slice(0,40).map(n=>{
-const f=factorize(n);
+const f=factorizeArr(n);
 let smallestPk=0;
 for(let p=2;p*p<=n;p++){
 let cnt=0,temp=n;
@@ -5767,16 +5767,7 @@ out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b)
 // Euler Product for π and ζ(2n)
 let eulerData={primes:[],product:1,target:Math.PI};
 
-function sievePrimes(max){
-const sieve=new Array(max+1).fill(true);
-sieve[0]=sieve[1]=false;
-for(let i=2;i*i<=max;i++){
-if(sieve[i])for(let j=i*i;j<=max;j+=i)sieve[j]=false;}
-const primes=[];
-for(let i=2;i<=max;i++)if(sieve[i])primes.push(i);
-return primes;}
-
-function eulerProduct(primes,s){
+function eulerProductPrimes(primes,s){
 let product=1;
 for(const p of primes){
 product*=1/(1-Math.pow(p,-s));}
@@ -5807,7 +5798,7 @@ const tgt=targets[target];
 const s=tgt.s;
 
 // Compute Euler product
-const zeta=eulerProduct(primes,s);
+const zeta=eulerProductPrimes(primes,s);
 const computed=tgt.transform(zeta);
 const error=Math.abs(computed-tgt.exact);
 const relError=error/tgt.exact;
@@ -6291,4 +6282,4 @@ out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b)
 draw2D();
 </script>
 </body>
-                                                                                                                        </html>
+</html>
