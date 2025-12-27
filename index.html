@@ -142,16 +142,11 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <ul>
 <li><strong>ζ(n)^(-1) Density:</strong> The inverse zeta function emerges as the natural density of primitive integers.</li>
 <li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</li>
-<li><strong>Multi-Scale Sieve:</strong> The Möbiucts as a geometric filter.</li>
+<li><strong>Multi-Scale Sieve:</strong> The Möbius inversion acts as a geometric filter.</li>
 <li><strong>Dimension Universal:</strong> The formula holds for all dimensions n ≥ 3.</li>
 <li><strong>GCD Multiplication Table:</strong> The 2D lattice within a circle is fundamentally a bounded GCD multiplication table. Each point (x,y) represents an entry where gcd(x,y) determines the "cell value". The primitive points (GCD=1) correspond to coprime pairs—the units in the multiplicative structure.</li>
 <li><strong>Four-Quadrant Symmetry:</strong> The lattice exhibits 4-fold rotational symmetry, mirroring the structure of modular arithmetic tables when viewed as rings.</li>
 </ul>
-<h3>Riemann Zeta Function Reference</h3>
-<table><tr><th>n</th><th>ζ(n)</th><th>ζ(n)^(-1)</th><th>Interpretation</th></tr>
-<tr><td>2</td><td>π²/6 ≈ 1.6449</td><td>≈ 0.6079</td><td>≈61% of integer pairs coprime</td></tr>
-<tr><td>3</td><td>≈ 1.2021</td><td>≈ 0.8319</td><td>≈83% of triples coprime</td></tr>
-<tr><td>4</td><td>π⁴/90 ≈ 1.0823</td><td>≈ 0.9239</td><td>≈92% of 4-tuples coprime</td></tr></table>
 <h3>Möbius Function μ(n)</h3>
 <ul>
 <li>μ(1) = 1 (base case)</li>
@@ -166,6 +161,234 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <li><strong>Geometry of Numbers:</strong> Minkowski's theory of lattices</li>
 <li><strong>Harmonic Analysis:</strong> Fourier analysis on lattices</li>
 </ul>
+
+<hr style="border:none;border-top:2px solid var(--bord);margin:2rem 0">
+
+<h2>Complete Platform Reference</h2>
+<p style="color:var(--txt2);font-style:italic">23 interactive visualization tools spanning 300 years of number theory</p>
+
+<h3>Mathematical Credits (Chronological)</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin:1rem 0">
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #00ff88">
+<strong style="color:#00ff88">Leonhard Euler (1707–1783)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Euler product formula (1737), Basel problem ζ(2)=π²/6 (1734), totient function φ(n), Euler's criterion for quadratic residues</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">John Farey (1766–1826)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Farey sequences F_n (1816), mediant property, connection to continued fractions and rational approximation</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #ffd700">
+<strong style="color:#ffd700">Carl Friedrich Gauss (1777–1855)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Gaussian integers ℤ[i], Circle Problem, prime counting conjecture π(x)~x/ln(x), quadratic reciprocity (1801)</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #ff006e">
+<strong style="color:#ff006e">August Ferdinand Möbius (1790–1868)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Möbius function μ(n) (1832), Möbius inversion formula, inclusion-exclusion in number theory</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #9664ff">
+<strong style="color:#9664ff">Peter Gustav Lejeune Dirichlet (1805–1859)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">L-functions, Dirichlet characters, theorem on primes in arithmetic progressions (1837)</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #ff8c00">
+<strong style="color:#ff8c00">Arthur Cayley (1821–1895)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Cayley transform mapping unit disk to upper half-plane, foundations of hyperbolic geometry</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #00ff88">
+<strong style="color:#00ff88">Alphonse de Polignac (1826–1863)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Twin prime conjecture (1849), Polignac's conjecture on prime gaps of any even size</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Bernhard Riemann (1826–1866)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Zeta function ζ(s) (1859), Riemann Hypothesis, explicit formula for π(x), analytic continuation</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #ffd700">
+<strong style="color:#ffd700">G.H. Hardy (1877–1947)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Prime race analysis, circle method, Hardy-Littlewood conjecture on twin primes, work with Ramanujan</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #ff006e">
+<strong style="color:#ff006e">Wacław Sierpiński (1882–1969)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Sierpiński problem (1964): coverage of positive integers by forms 6ab±a±b</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #9664ff">
+<strong style="color:#9664ff">J.E. Littlewood (1885–1977)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Collaborated with Hardy on prime distribution, circle method, and analytic number theory</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #ff8c00">
+<strong style="color:#ff8c00">Viggo Brun (1885–1978)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Brun sieve (1915), twin prime constant B₂≈1.902, proved Σ(1/p) over twin primes converges</span>
+</div>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;border-left:3px solid #00ff88">
+<strong style="color:#00ff88">Lester R. Ford (1886–1967)</strong><br>
+<span style="color:var(--txt2);font-size:.9rem">Ford circles (1938), tangency conditions, geometric visualization of Farey sequences</span>
+</div>
+</div>
+
+<h3>Core Theorems (Chronological)</h3>
+<div style="background:var(--bg2);padding:1rem;border-radius:8px;margin:1rem 0">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem">
+<div>
+<strong style="color:#00ff88">Basel Problem — Euler (1734)</strong>
+<div class="fm">ζ(2) = 1 + 1/4 + 1/9 + ... = π²/6</div>
+<span style="color:var(--txt2);font-size:.85rem">First exact value of ζ(n), solved 90-year-old problem</span>
+</div>
+<div>
+<strong style="color:#00d9ff">Euler Product — Euler (1737)</strong>
+<div class="fm">ζ(s) = Σ n⁻ˢ = ∏_p (1 - p⁻ˢ)⁻¹</div>
+<span style="color:var(--txt2);font-size:.85rem">Fundamental connection between primes and zeta</span>
+</div>
+<div>
+<strong style="color:#ffd700">Möbius Inversion (1832)</strong>
+<div class="fm">g(n) = Σ_{d|n} f(d) ⟺ f(n) = Σ_{d|n} μ(d)g(n/d)</div>
+<span style="color:var(--txt2);font-size:.85rem">Fundamental sieve identity</span>
+</div>
+<div>
+<strong style="color:#ff006e">Dirichlet's Theorem (1837)</strong>
+<div class="fm">π(x;q,a) ~ x/(φ(q)·ln x) for gcd(a,q)=1</div>
+<span style="color:var(--txt2);font-size:.85rem">Infinitely many primes in each coprime residue class</span>
+</div>
+<div>
+<strong style="color:#9664ff">Riemann Hypothesis (1859)</strong>
+<div class="fm">ζ(s) = 0 ⟹ Re(s) = ½ (nontrivial zeros)</div>
+<span style="color:var(--txt2);font-size:.85rem">Implies |M(n)| = O(n^(½+ε)), still unproven</span>
+</div>
+<div>
+<strong style="color:#ff8c00">Prime Number Theorem (1896)</strong>
+<div class="fm">π(x) ~ x/ln(x) ~ Li(x)</div>
+<span style="color:var(--txt2);font-size:.85rem">Hadamard & de la Vallée Poussin, independently</span>
+</div>
+<div>
+<strong style="color:#00ff88">Brun's Theorem (1915)</strong>
+<div class="fm">B₂ = Σ(1/p + 1/(p+2)) ≈ 1.902</div>
+<span style="color:var(--txt2);font-size:.85rem">Sum over twin primes converges (unlike Σ1/p)</span>
+</div>
+<div>
+<strong style="color:#00d9ff">Hardy-Littlewood Conjecture (~1923)</strong>
+<div class="fm">π₂(x) ~ 2C₂ · x/(ln x)²</div>
+<span style="color:var(--txt2);font-size:.85rem">Twin prime asymptotic, C₂≈0.66 (twin prime constant)</span>
+</div>
+</div>
+</div>
+
+<h3>All 23 Tabs — Quick Reference</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:1rem;margin:1rem 0">
+
+<div style="background:var(--bg2);padding:1rem;border-radius:8px">
+<h4 style="color:var(--acc);margin:0 0 .5rem 0;border-bottom:1px solid var(--bord);padding-bottom:.3rem">① Lattice & Geometry (Tabs 1–3)</h4>
+<div style="font-size:.85rem;color:var(--txt2);line-height:1.6">
+<strong style="color:#00ff88">1. 2D Lattice:</strong> Primitive points in circle/square. Density → 6/π² ≈ 60.79%<br>
+<strong style="color:#00d9ff">2. 3D Ball:</strong> Primitive points in sphere. Density → 1/ζ(3) ≈ 83.19%<br>
+<strong style="color:#ffd700">3. Möbius μ(n):</strong> Sieve function, Mertens M(n), squarefree decomposition
+</div>
+</div>
+
+<div style="background:var(--bg2);padding:1rem;border-radius:8px">
+<h4 style="color:var(--acc);margin:0 0 .5rem 0;border-bottom:1px solid var(--bord);padding-bottom:.3rem">② Modular Arithmetic (Tabs 4–7)</h4>
+<div style="font-size:.85rem;color:var(--txt2);line-height:1.6">
+<strong style="color:#00ff88">4. Modular Rings:</strong> Unit circle at angle 2πr/M for coprime residues<br>
+<strong style="color:#00d9ff">5. Cayley ℍ:</strong> Transform to hyperbolic half-plane, Ford circles<br>
+<strong style="color:#ffd700">6. Farey:</strong> Sequences F_n, mediant property, |F_n| = 1 + Σφ(k)<br>
+<strong style="color:#ff006e">7. Primitive Roots:</strong> Generators of (ℤ/pℤ)*, order analysis, power sequences
+</div>
+</div>
+
+<div style="background:var(--bg2);padding:1rem;border-radius:8px">
+<h4 style="color:var(--acc);margin:0 0 .5rem 0;border-bottom:1px solid var(--bord);padding-bottom:.3rem">③ Analysis & Error (Tabs 8–10)</h4>
+<div style="font-size:.85rem;color:var(--txt2);line-height:1.6">
+<strong style="color:#00ff88">8. Error:</strong> Deviation from Vol(K)/ζ(n)·Rⁿ, boundary effects<br>
+<strong style="color:#00d9ff">9. Dims:</strong> Primitive density 1/ζ(n) for dimensions 2–20<br>
+<strong style="color:#ffd700">10. Shells:</strong> Möbius shell decomposition, layer-by-layer sieve
+</div>
+</div>
+
+<div style="background:var(--bg2);padding:1rem;border-radius:8px">
+<h4 style="color:var(--acc);margin:0 0 .5rem 0;border-bottom:1px solid var(--bord);padding-bottom:.3rem">④ Classical Problems (Tabs 11–14)</h4>
+<div style="font-size:.85rem;color:var(--txt2);line-height:1.6">
+<strong style="color:#00ff88">11. GCD:</strong> Distribution of gcd(x,y) in lattice, P(gcd=k) = 1/(k²ζ(2))<br>
+<strong style="color:#00d9ff">12. Gaussian:</strong> ℤ[i] primes, norm N(a+bi)=a²+b², splitting behavior<br>
+<strong style="color:#ffd700">13. Circle:</strong> Gauss problem N(R)=πR²+O(R^θ), Hardy conjecture θ=½+ε<br>
+<strong style="color:#ff006e">14. Density:</strong> High-dimensional 1/ζ(n) verification, Monte Carlo sampling
+</div>
+</div>
+
+<div style="background:var(--bg2);padding:1rem;border-radius:8px">
+<h4 style="color:var(--acc);margin:0 0 .5rem 0;border-bottom:1px solid var(--bord);padding-bottom:.3rem">⑤ Characters & Primes (Tabs 15–17)</h4>
+<div style="font-size:.85rem;color:var(--txt2);line-height:1.6">
+<strong style="color:#00ff88">15. Dirichlet χ:</strong> Characters mod q, L-functions, orthogonality relations<br>
+<strong style="color:#00d9ff">16. Twin Primes:</strong> Gaps p_{n+1}-p_n=2, Brun constant, Hardy-Littlewood conjecture<br>
+<strong style="color:#ffd700">17. π(x):</strong> Prime counting, Li(x) approximation, Riemann's explicit formula
+</div>
+</div>
+
+<div style="background:var(--bg2);padding:1rem;border-radius:8px">
+<h4 style="color:var(--acc);margin:0 0 .5rem 0;border-bottom:1px solid var(--bord);padding-bottom:.3rem">⑥ Advanced Topics (Tabs 18–23)</h4>
+<div style="font-size:.85rem;color:var(--txt2);line-height:1.6">
+<strong style="color:#00ff88">18. Composite:</strong> Channel projection for composite moduli, divisor lattice<br>
+<strong style="color:#00d9ff">19. Coprime Pairs:</strong> Density in N×N grid, RH connection via M(n)/√n<br>
+<strong style="color:#ffd700">20. Sierpiński:</strong> Coverage by 6ab±a±b, uncovered integers analysis<br>
+<strong style="color:#ff006e">21. k-Free:</strong> Squarefree (k=2), cubefree (k=3), density 1/ζ(k)<br>
+<strong style="color:#9664ff">22. Euler ∏:</strong> Product formula ζ(s)=∏(1-p⁻ˢ)⁻¹, compute π from ζ(2)<br>
+<strong style="color:#ff8c00">23. Chord CV:</strong> Primality heuristic via coprime gap uniformity (Getachew 2025)
+</div>
+</div>
+</div>
+
+<h3>Key Formulas by Tab</h3>
+<table style="width:100%;font-size:.85rem">
+<tr><th>Tab</th><th>Primary Formula</th><th>Key Result</th></tr>
+<tr><td>2D Lattice</td><td>N(R) = (6/π²)πR² + O(R)</td><td>~60.79% primitive</td></tr>
+<tr><td>3D Ball</td><td>N(R) = (4π/3ζ(3))R³ + O(R²)</td><td>~83.19% primitive</td></tr>
+<tr><td>Möbius</td><td>μ(n) = (-1)^k if squarefree, else 0</td><td>Σμ(d) = [n=1]</td></tr>
+<tr><td>Farey</td><td>|F_n| = 1 + Σ_{k=1}^n φ(k)</td><td>~3n²/π² fractions</td></tr>
+<tr><td>Primitive Roots</td><td>ord_p(g) = p-1 ⟺ g primitive</td><td>φ(p-1) generators</td></tr>
+<tr><td>Circle Problem</td><td>N(R) = πR² + O(R^θ)</td><td>θ ≤ 131/208 ≈ 0.63</td></tr>
+<tr><td>Dirichlet</td><td>L(s,χ) = Σ χ(n)n⁻ˢ</td><td>L(1,χ) ≠ 0 for χ≠χ₀</td></tr>
+<tr><td>Twin Primes</td><td>B₂ = Σ(1/p + 1/(p+2))</td><td>B₂ ≈ 1.902160583</td></tr>
+<tr><td>π(x)</td><td>π(x) = Li(x) + O(x·e^(-c√ln x))</td><td>RH ⟹ O(√x ln x)</td></tr>
+<tr><td>k-Free</td><td>Q_k(N) = N/ζ(k) + O(N^(1/k))</td><td>k=2: ~60.79% sqfree</td></tr>
+<tr><td>Euler Product</td><td>π = √(6·∏_p(1-p⁻²)⁻¹)</td><td>Compute π from primes</td></tr>
+<tr><td>Chord CV</td><td>CV = σ_L/μ_L for chord lengths</td><td>Primes: CV→0, Comp: CV≈0.30</td></tr>
+</table>
+
+<h3>Riemann Zeta Reference Values</h3>
+<table style="font-size:.85rem">
+<tr><th>n</th><th>ζ(n)</th><th>1/ζ(n)</th><th>Closed Form</th><th>Interpretation</th></tr>
+<tr><td>2</td><td>1.6449341</td><td>0.6079271</td><td>π²/6</td><td>~61% pairs coprime</td></tr>
+<tr><td>3</td><td>1.2020569</td><td>0.8319073</td><td>Apéry's constant</td><td>~83% triples coprime</td></tr>
+<tr><td>4</td><td>1.0823232</td><td>0.9239384</td><td>π⁴/90</td><td>~92% 4-tuples coprime</td></tr>
+<tr><td>5</td><td>1.0369278</td><td>0.9643894</td><td>—</td><td>~96% 5-tuples coprime</td></tr>
+<tr><td>6</td><td>1.0173431</td><td>0.9829534</td><td>π⁶/945</td><td>~98% 6-tuples coprime</td></tr>
+<tr><td>8</td><td>1.0040774</td><td>0.9959326</td><td>π⁸/9450</td><td>~99.6% 8-tuples coprime</td></tr>
+</table>
+
+<h3>Academic References</h3>
+<ul style="font-size:.85rem;color:var(--txt2)">
+<li>Edwards, H.M. <em>Riemann's Zeta Function</em> (1974) — Definitive treatment of ζ(s)</li>
+<li>Apostol, T.M. <em>Introduction to Analytic Number Theory</em> (1976) — Standard graduate text</li>
+<li>Hardy, G.H. & Wright, E.M. <em>An Introduction to the Theory of Numbers</em> (6th ed., 2008)</li>
+<li>Davenport, H. <em>Multiplicative Number Theory</em> (3rd ed., 2000) — Dirichlet L-functions</li>
+<li>Titchmarsh, E.C. <em>The Theory of the Riemann Zeta-Function</em> (2nd ed., 1986)</li>
+<li>Montgomery, H.L. & Vaughan, R.C. <em>Multiplicative Number Theory I</em> (2007)</li>
+<li>Iwaniec, H. & Kowalski, E. <em>Analytic Number Theory</em> (2004) — Modern comprehensive reference</li>
+<li>OEIS Foundation. <em>The On-Line Encyclopedia of Integer Sequences</em> — oeis.org</li>
+</ul>
+
+<h3>Platform Features</h3>
+<ul style="font-size:.85rem;color:var(--txt2)">
+<li><strong>Live Dashboards:</strong> Real-time statistics with color-coded metrics</li>
+<li><strong>Theory Panels:</strong> Mathematical context for each visualization</li>
+<li><strong>Interactive Charts:</strong> Plotly.js with hover details and zoom</li>
+<li><strong>Click Inspector:</strong> Click any point/row for detailed modal</li>
+<li><strong>CSV Export:</strong> Download raw data for external analysis</li>
+<li><strong>Screenshot:</strong> Capture visualization + dashboard as PNG</li>
+<li><strong>Dual Controls:</strong> Slider + numeric input for all parameters</li>
+<li><strong>Dark/Light Mode:</strong> Toggle with 'D/L' button</li>
+</ul>
+
+<div style="margin-top:2rem;padding:1rem;background:rgba(0,255,136,.08);border-radius:8px;text-align:center">
+<strong style="color:#00ff88">Created by Wessen Getachew</strong><br>
+<span style="color:var(--txt2);font-size:.85rem">wessengetachew.github.io — @7dview</span><br>
+<span style="color:var(--txt2);font-size:.8rem;font-style:italic">"Mathematics is the art of giving the same name to different things." — Henri Poincaré</span>
+</div>
 </div>
 </div>
 
@@ -1511,7 +1734,7 @@ const gridC=()=>isDark()?'rgba(0,217,255,0.12)':'rgba(0,102,204,0.15)';
 const bordC=()=>isDark()?'rgba(0,217,255,0.5)':'rgba(0,102,204,0.6)';
 function toggleTheme(){document.body.classList.toggle('light');document.getElementById('thm').textContent=isDark()?'D':'L';draw2D();if(document.getElementById('t3d').classList.contains('active'))draw3D();}
 function showSec(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.snav .nbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
-function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc')drawCircleViz();if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();}
 function legend(id,title,data){const d=document.getElementById(id);if(!d)return;d.innerHTML=`<h4>${title}</h4><div class="lg">${data.map(([l,v,c])=>`<div class="li" style="border-left-color:${c}"><strong>${l}</strong><span class="v">${fmt(v)}</span></div>`).join('')}</div>`;}
 function modal(title,data){document.getElementById('mtitle').textContent=title;document.getElementById('mbody').innerHTML=data.map(([l,v])=>`<div class="ds"><div class="dr"><span class="dl">${l}:</span><span class="dv">${typeof v==='number'?fmt(v):v}</span></div></div>`).join('');document.getElementById('modal').classList.add('active');}
 function dl(c,f){const a=document.createElement('a');a.href='data:text/csv,'+encodeURIComponent(c);a.download=f;a.click();}
@@ -6282,4 +6505,4 @@ out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b)
 draw2D();
 </script>
 </body>
-</html>
+  </html>
