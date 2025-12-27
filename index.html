@@ -144,6 +144,8 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</li>
 <li><strong>Multi-Scale Sieve:</strong> The Möbius inversion acts as a geometric filter.</li>
 <li><strong>Dimension Universal:</strong> The formula holds for all dimensions n ≥ 3.</li>
+<li><strong>GCD Multiplication Table:</strong> The 2D lattice within a circle is fundamentally a bounded GCD multiplication table. Each point (x,y) represents an entry where gcd(x,y) determines the "cell value". The primitive points (GCD=1) correspond to coprime pairs—the units in the multiplicative structure.</li>
+<li><strong>Four-Quadrant Symmetry:</strong> The lattice exhibits 4-fold rotational symmetry, mirroring the structure of modular arithmetic tables when viewed as rings.</li>
 </ul>
 <h3>Riemann Zeta Function Reference</h3>
 <table><tr><th>n</th><th>ζ(n)</th><th>ζ(n)^(-1)</th><th>Interpretation</th></tr>
@@ -169,8 +171,11 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 
 <div id="tools" class="sec">
 <div class="tabs">
-<button class="tbtn active" onclick="showTab('t2d',this)">2D</button>
-<button class="tbtn" onclick="showTab('t3d',this)">3D</button>
+<button class="tbtn active" onclick="showTab('t2d',this)">2D Lattice</button>
+<button class="tbtn" onclick="showTab('t3d',this)">3D Ball</button>
+<button class="tbtn" onclick="showTab('tmod',this)">Modular 2πr/M</button>
+<button class="tbtn" onclick="showTab('tcayley',this)">Cayley ℍ</button>
+<button class="tbtn" onclick="showTab('tprim',this)">Primitive Roots</button>
 <button class="tbtn" onclick="showTab('terr',this)">Error</button>
 <button class="tbtn" onclick="showTab('tdim',this)">Dims</button>
 <button class="tbtn" onclick="showTab('tsh',this)">Shells</button>
@@ -183,11 +188,20 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div id="t2d" class="tab active">
 <div class="ctrl">
 <div class="cg"><label>Radius R <span class="tip" title="Scaling parameter">?</span></label><div class="sig"><input type="range" id="r2d" min="1" max="50" step=".5" value="4" oninput="document.getElementById('r2dv').value=this.value;draw2D()"><input type="number" id="r2dv" value="4" min="1" max="50" step=".5"><button onclick="document.getElementById('r2d').value=document.getElementById('r2dv').value;draw2D()">Set</button></div></div>
-<div class="cg"><label>Shape <span class="tip" title="Circle or square">?</span></label><select id="sh2d" onchange="draw2D()"><option value="circle">Circle</option><option value="square">Square</option></select></div>
-<div class="cg"><label>Color Scheme <span class="tip" title="Coloring method">?</span></label><select id="col2d" onchange="draw2D()"><option value="gcd">By GCD (Recommended)</option><option value="dist">By Distance</option><option value="prim">Primitive vs Non</option></select></div>
+<div class="cg"><label>Shape <span class="tip" title="Circle or square">?</span></label><select id="sh2d" onchange="draw2D()"><option value="circle">Circle</option><option value="square">Square</option><option value="both">Square + Circle</option></select></div>
+<div class="cg"><label>Color Scheme <span class="tip" title="Coloring method">?</span></label><select id="col2d" onchange="draw2D()"><option value="gcd">By GCD (Recommended)</option><option value="dist">By Distance</option><option value="prim">Primitive vs Non</option><option value="rainbow">Rainbow (Cyclic)</option><option value="quadres">Quadratic Residues</option><option value="primality">Primality (x·y)</option><option value="moddist">Modular Distance</option><option value="symmetry">Symmetry Pattern</option><option value="heatmap">Heatmap (Density)</option><option value="divisibility">Divisibility</option><option value="discrete">Discrete GCD</option><option value="fire">Fire Gradient</option><option value="plasma">Plasma</option><option value="viridis">Viridis</option><option value="ocean">Ocean</option></select></div>
 <div class="cg"><label>Point Labels <span class="tip" title="Label display">?</span></label><select id="lbl2d" onchange="draw2D()"><option value="none">None</option><option value="coords">Coordinates</option><option value="gcd">GCD Values</option></select></div>
 <div class="cg"><label>Zoom <span class="tip" title="Zoom level">?</span></label><div class="sig"><input type="range" id="zm2d" min=".5" max="3" step=".1" value="1" oninput="draw2D();document.getElementById('zm2dv').textContent=this.value+'x'"><span id="zm2dv" style="color:var(--txt2);min-width:40px">1x</span></div></div>
 <div class="cg"><label>Label Size <span class="tip" title="Label font size">?</span></label><div class="sig"><input type="range" id="lblsz2d" min="6" max="16" step="1" value="8" oninput="draw2D();document.getElementById('lblszv').textContent=this.value+'px'"><span id="lblszv" style="color:var(--txt2);min-width:40px">8px</span></div></div>
+<div class="cg"><label>Connections <span class="tip" title="Draw lines between related points">?</span></label><select id="conn2d" onchange="draw2D()"><option value="none">None</option><option value="gcd1">GCD=1 Network</option><option value="same">Same GCD</option><option value="radial">Radial from Origin</option><option value="diagonal">Diagonal Lines</option></select></div>
+<div class="cg"><label>Line Opacity</label><input type="range" id="connOp2d" min="0.1" max="1" step="0.1" value="0.3" onchange="draw2D()"></div>
+</div>
+<div class="ctrl" style="border-top:1px solid var(--bord);padding-top:.5rem;margin-top:.5rem">
+<div class="cg"><label><strong>Smith Chart Transform</strong> <span class="tip" title="Γ = (z-1)/(z+1) conformal mapping">?</span></label></div>
+<div class="cg"><label>Enable Smith Chart</label><input type="checkbox" id="smith2d" onchange="draw2D()"></div>
+<div class="cg"><label>Phase Shift α</label><div class="sig"><input type="range" id="smithA2d" min="0" max="360" value="90" oninput="document.getElementById('smithA2dV').textContent=this.value+'°';draw2D()"><span id="smithA2dV" style="color:var(--txt2)">90°</span></div></div>
+<div class="cg"><label>Radius Scale</label><select id="smithR2d" onchange="draw2D()"><option value="unit">Unit (R=1)</option><option value="index">By Index</option><option value="dist">By Distance</option></select></div>
+<div class="cg"><label style="display:flex;gap:.5rem;flex-wrap:wrap"><input type="checkbox" id="smithGrid2d" onchange="draw2D()"> Grid</label><label><input type="checkbox" id="smithCircR2d" onchange="draw2D()"> Const-R</label><label><input type="checkbox" id="smithArcX2d" onchange="draw2D()"> Const-X</label></div>
 </div>
 <div class="bg"><button onclick="screenshot2D()">Screenshot</button><button onclick="exp2D()">PNG Export</button><button class="s" onclick="csv2D()">CSV Export</button></div>
 <div class="viz"><h3>2D Lattice Points Visualization (Click any point for details)</h3><canvas id="c2d" width="800" height="800"></canvas><div class="al" id="al2d"></div><div class="sg" id="st2d"></div></div>
@@ -196,15 +210,92 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div id="t3d" class="tab">
 <div class="ctrl">
 <div class="cg"><label>Radius R <span class="tip" title="Ball radius">?</span></label><div class="sig"><input type="range" id="r3d" min="1" max="15" step=".5" value="4" oninput="document.getElementById('r3dv').value=this.value;draw3D()"><input type="number" id="r3dv" value="4" min="1" max="15" step=".5"><button onclick="document.getElementById('r3d').value=document.getElementById('r3dv').value;draw3D()">Set</button></div></div>
+<div class="cg"><label>X Rotation <span class="tip" title="Rotation around X axis">?</span></label><div class="sig"><input type="number" id="rotX" value="0" min="0" max="360" step="1" style="width:60px" onchange="rx=this.value*Math.PI/180;draw3D()"><span style="color:var(--txt2)">°</span><input type="range" id="rotXr" min="0" max="360" value="0" oninput="document.getElementById('rotX').value=this.value;rx=this.value*Math.PI/180;draw3D()"></div></div>
+<div class="cg"><label>Y Rotation <span class="tip" title="Rotation around Y axis">?</span></label><div class="sig"><input type="number" id="rotY" value="0" min="0" max="360" step="1" style="width:60px" onchange="ry=this.value*Math.PI/180;draw3D()"><span style="color:var(--txt2)">°</span><input type="range" id="rotYr" min="0" max="360" value="0" oninput="document.getElementById('rotY').value=this.value;ry=this.value*Math.PI/180;draw3D()"></div></div>
+<div class="cg"><label>Z Rotation <span class="tip" title="Rotation around Z axis">?</span></label><div class="sig"><input type="number" id="rotZ" value="0" min="0" max="360" step="1" style="width:60px" onchange="rz=this.value*Math.PI/180;draw3D()"><span style="color:var(--txt2)">°</span><input type="range" id="rotZr" min="0" max="360" value="0" oninput="document.getElementById('rotZ').value=this.value;rz=this.value*Math.PI/180;draw3D()"></div></div>
 <div class="cg"><label>Zoom <span class="tip" title="Zoom level">?</span></label><div class="sig"><input type="range" id="zm3d" min=".2" max="5" step=".1" value="1" oninput="draw3D();document.getElementById('zmv').textContent=this.value+'x'"><span id="zmv" style="color:var(--txt2);min-width:40px">1x</span></div></div>
 <div class="cg"><label>Point Size <span class="tip" title="Point radius">?</span></label><div class="sig"><input type="range" id="ps3d" min=".02" max=".5" step=".01" value=".12" oninput="draw3D();document.getElementById('psv').textContent=this.value"><span id="psv" style="color:var(--txt2);min-width:40px">.12</span></div></div>
-<div class="cg"><label>Color Scheme <span class="tip" title="Color by">?</span></label><select id="col3d" onchange="draw3D()"><option value="gcd">By GCD</option><option value="dist">By Distance</option><option value="prim">Primitive vs Non</option></select></div>
+<div class="cg"><label>Color Scheme <span class="tip" title="Color by">?</span></label><select id="col3d" onchange="draw3D()"><option value="gcd">By GCD</option><option value="dist">By Distance</option><option value="prim">Primitive vs Non</option><option value="rainbow">Rainbow (Cyclic)</option><option value="quadres">Quadratic Residues</option><option value="primality">Primality (x·y·z)</option><option value="moddist">Modular Distance</option><option value="symmetry">Symmetry Pattern</option><option value="heatmap">Heatmap (Density)</option><option value="divisibility">Divisibility</option><option value="discrete">Discrete GCD</option><option value="fire">Fire Gradient</option><option value="plasma">Plasma</option><option value="viridis">Viridis</option><option value="ocean">Ocean</option></select></div>
 <div class="cg"><label>View Mode <span class="tip" title="Normal or inverted">?</span></label><select id="vm3d" onchange="draw3D()"><option value="normal">Normal</option><option value="inv">Inverted (Flip)</option></select></div>
 <div class="cg"><label>Label Size <span class="tip" title="Info label size">?</span></label><div class="sig"><input type="range" id="lblsz3d" min="8" max="18" step="1" value="11" oninput="document.getElementById('lblsz3dv').textContent=this.value+'px'"><span id="lblsz3dv" style="color:var(--txt2);min-width:40px">11px</span></div></div>
 </div>
-<div class="bg"><button onclick="screenshot3D()">Screenshot</button><button onclick="anim3d=!anim3d">Auto Rotate</button><button class="s" onclick="rx=.3;ry=.5;panX=0;panY=0;document.getElementById('zm3d').value=1;document.getElementById('zmv').textContent='1x';draw3D()">Reset View</button><button class="s" onclick="csv3D()">Export Points</button></div>
+<div class="ctrl" style="border-top:1px solid var(--bord);padding-top:.5rem;margin-top:.5rem">
+<div class="cg"><label><strong>Screenshot Options</strong></label></div>
+<div class="cg"><label>Resolution</label><select id="ss3dRes"><option value="1">Standard (1x)</option><option value="2" selected>High (2x)</option><option value="4">4K (4x)</option></select></div>
+<div class="cg"><label>Background</label><select id="ss3dBg"><option value="theme">Theme Default</option><option value="black">Black</option><option value="white">White</option><option value="transparent">Transparent</option></select></div>
+<div class="cg"><label style="display:flex;gap:.5rem;flex-wrap:wrap"><input type="checkbox" id="ss3dTitle" checked> Title</label><label><input type="checkbox" id="ss3dLegend" checked> Legend</label><label><input type="checkbox" id="ss3dStats" checked> Stats</label></div>
+<div class="cg"><label>Title Text</label><input type="text" id="ss3dTitleTxt" value="Geometric Möbius Shell Sieve - 3D Ball" style="width:100%"></div>
+</div>
+<div class="ctrl" style="border-top:1px solid var(--bord);padding-top:.5rem;margin-top:.5rem">
+<div class="cg"><label><strong>Smith Chart Transform</strong> <span class="tip" title="Γ = (z-1)/(z+1) conformal mapping to unit disk">?</span></label></div>
+<div class="cg"><label>Enable Smith Chart</label><input type="checkbox" id="smith3d" onchange="draw3D()"></div>
+<div class="cg"><label>Phase Shift α</label><div class="sig"><input type="range" id="smithA3d" min="0" max="360" value="90" oninput="document.getElementById('smithA3dV').textContent=this.value+'°';draw3D()"><span id="smithA3dV" style="color:var(--txt2)">90°</span></div></div>
+<div class="cg"><label>Radius Scale</label><select id="smithR3d" onchange="draw3D()"><option value="unit">Unit (R=1)</option><option value="index">By Index</option><option value="dist">By Distance</option></select></div>
+<div class="cg"><label style="display:flex;gap:.5rem;flex-wrap:wrap"><input type="checkbox" id="smithGrid3d" onchange="draw3D()"> Grid</label><label><input type="checkbox" id="smithCircR3d" onchange="draw3D()"> Const-R</label><label><input type="checkbox" id="smithArcX3d" onchange="draw3D()"> Const-X</label></div>
+</div>
+<div class="bg"><button onclick="screenshot3D()">Screenshot</button><button onclick="screenshot3D4K()">4K Export</button><button onclick="anim3d=!anim3d">Auto Rotate</button><button class="s" onclick="rx=0;ry=0;rz=0;panX=0;panY=0;document.getElementById('zm3d').value=1;document.getElementById('zmv').textContent='1x';document.getElementById('rotX').value=0;document.getElementById('rotY').value=0;document.getElementById('rotZ').value=0;document.getElementById('rotXr').value=0;document.getElementById('rotYr').value=0;document.getElementById('rotZr').value=0;draw3D()">Reset View</button><button class="s" onclick="csv3D()">Export Points</button></div>
 <div class="viz"><h3>3D Ball Visualization (Drag to rotate | Scroll to zoom | Right-click to pan)</h3><canvas id="c3d" width="700" height="700"></canvas><div class="al" id="al3d"></div><div class="sg" id="st3d"></div></div>
 <p style="color:var(--txt2);font-size:.9rem;padding:1rem;background:rgba(0,217,255,.05);border-radius:4px"><strong>Controls:</strong> Left-drag to rotate | Scroll to zoom | Right-drag to pan | Inverted flips inner↔outer</p>
+</div>
+
+<div id="tcayley" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Radius R <span class="tip" title="Lattice boundary">?</span></label><div class="sig"><input type="range" id="rcay" min="1" max="30" step=".5" value="6" oninput="document.getElementById('rcayv').value=this.value;drawCayley()"><input type="number" id="rcayv" value="6" min="1" max="30" step=".5"><button onclick="document.getElementById('rcay').value=document.getElementById('rcayv').value;drawCayley()">Set</button></div></div>
+<div class="cg"><label>View Range <span class="tip" title="Upper half-plane extent">?</span></label><input type="number" id="cayRange" value="4" min="1" max="20" step=".5" onchange="drawCayley()"></div>
+<div class="cg"><label>Color Scheme</label><select id="colCay" onchange="drawCayley()"><option value="gcd">By GCD</option><option value="prim">Primitive vs Non</option><option value="imag">By Im(w)</option><option value="fire">Fire Gradient</option><option value="plasma">Plasma</option><option value="viridis">Viridis</option></select></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap"><label><input type="checkbox" id="cayGrid" checked onchange="drawCayley()"> Grid</label><label><input type="checkbox" id="cayGeo" onchange="drawCayley()"> Geodesics</label><label><input type="checkbox" id="cayFord" onchange="drawCayley()"> Ford Circles</label></div></div>
+</div>
+<div class="bg"><button onclick="drawCayley()">Redraw</button><button onclick="screenshotCayley()">Screenshot</button><button class="s" onclick="csvCayley()">CSV Export</button></div>
+<div class="viz"><h3>Cayley Transform: 𝔻 → ℍ Upper Half-Plane</h3><p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">w = i(1+z)/(1-z) maps primitive lattice points to hyperbolic space. Geodesics are semicircles ⊥ to ℝ.</p><canvas id="ccay" width="800" height="500"></canvas><div class="al" id="alcay"></div><div class="sg" id="stcay"></div></div>
+</div>
+
+<div id="tprim" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Modulus M <span class="tip" title="Ring ℤ/Mℤ">?</span></label><div class="sig"><input type="range" id="mprim" min="2" max="200" step="1" value="17" oninput="document.getElementById('mprimv').value=this.value;drawPrimRoot()"><input type="number" id="mprimv" value="17" min="2" max="200"><button onclick="document.getElementById('mprim').value=document.getElementById('mprimv').value;drawPrimRoot()">Set</button></div></div>
+<div class="cg"><label>Generator g <span class="tip" title="Primitive root candidate">?</span></label><div class="sig"><input type="number" id="gprim" value="3" min="1" max="200"><button onclick="drawPrimRoot()">Use</button><button onclick="findPrimRoot()">Find Smallest</button></div></div>
+<div class="cg"><label>Color By</label><select id="colPrim" onchange="drawPrimRoot()"><option value="order">Element Order</option><option value="power">Power Index</option><option value="unit">Unit vs Non-Unit</option></select></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap"><label><input type="checkbox" id="primSeq" checked onchange="drawPrimRoot()"> Power Sequence</label><label><input type="checkbox" id="primOrd" onchange="drawPrimRoot()"> Orders</label></div></div>
+</div>
+<div class="bg"><button onclick="drawPrimRoot()">Analyze</button><button onclick="screenshotPrim()">Screenshot</button><button class="s" onclick="csvPrim()">CSV Export</button></div>
+<div class="viz"><h3>Primitive Roots & Cyclic Structure of (ℤ/Mℤ)×</h3><p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">g is a primitive root iff ord(g) = φ(M). Power sequence g^n mod M reveals cyclic group structure.</p><canvas id="cprim" width="800" height="600"></canvas><div class="al" id="alprim"></div><div class="sg" id="stprim"></div></div>
+<div class="viz"><h3>Order Distribution</h3><div class="pc" id="pprimord"></div></div>
+</div>
+
+<div id="tmod" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Min Modulus <span class="tip" title="Inner ring">?</span></label><input type="number" id="modMin" value="1" min="1" max="100" onchange="drawModRings()"></div>
+<div class="cg"><label>Max Modulus <span class="tip" title="Outer ring">?</span></label><input type="number" id="modMax" value="12" min="2" max="60" onchange="drawModRings()"></div>
+<div class="cg"><label>Ring Spacing <span class="tip" title="How rings are spaced">?</span></label><select id="modSpace" onchange="drawModRings()"><option value="uniform">Uniform</option><option value="linear">Linear (c·m)</option><option value="sqrt">Square Root (√m)</option><option value="log">Logarithmic</option><option value="phi">Totient φ(m)</option></select></div>
+<div class="cg"><label>Color Scheme</label><select id="modCol" onchange="drawModRings()"><option value="rainbow">Rainbow (Angular)</option><option value="gcd">By GCD (Gold=1)</option><option value="gcd_per_mod">GCD=1: Per Modulus</option><option value="gcd_spectrum">GCD=1: Spectral</option><option value="spf">Smallest Prime Factor</option><option value="ring">By Ring</option><option value="residue">By Residue Value</option><option value="prime">Prime vs Composite</option></select></div>
+<div class="cg"><label>Phase α <span class="tip" title="Global rotation">?</span></label><div class="sig"><input type="range" id="modPhase" min="0" max="360" value="0" oninput="document.getElementById('modPhaseV').textContent=this.value+'°';drawModRings()"><span id="modPhaseV" style="color:var(--txt2)">0°</span></div></div>
+<div class="cg"><label>Point Size</label><input type="range" id="modPtSz" min="2" max="12" value="5" step="0.5" onchange="drawModRings()"></div>
+</div>
+<div class="ctrl" style="border-top:1px solid var(--bord);padding-top:.5rem;margin-top:.5rem">
+<div class="cg"><label><strong>Gap Connections</strong> <span class="tip" title="Connect r→r+g within ring (GCD=1 only)">?</span></label></div>
+<div class="cg"><label style="display:flex;gap:.5rem;flex-wrap:wrap"><input type="checkbox" id="gap2" onchange="drawModRings()"> Gap 2</label><label><input type="checkbox" id="gap4" onchange="drawModRings()"> Gap 4</label><label><input type="checkbox" id="gap6" onchange="drawModRings()"> Gap 6</label><label><input type="checkbox" id="gap8" onchange="drawModRings()"> Gap 8</label><label><input type="checkbox" id="gap10" onchange="drawModRings()"> Gap 10</label></div>
+<div class="cg"><label>Gap Line Thickness <span id="gapThickV" style="color:var(--txt2)">0.3</span></label><input type="range" id="gapThick" min="0" max="1" step="0.01" value="0.3" oninput="document.getElementById('gapThickV').textContent=this.value;drawModRings()"></div>
+<div class="cg"><label><strong>Lift Lines</strong></label></div>
+<div class="cg"><label>Direct Lifts <span class="tip" title="r → r across consecutive rings">?</span></label><input type="checkbox" id="modDirect" onchange="drawModRings()"></div>
+<div class="cg"><label>Lift Line Thickness <span id="liftThickV" style="color:var(--txt2)">0.5</span></label><input type="range" id="liftThick" min="0" max="1" step="0.01" value="0.5" oninput="document.getElementById('liftThickV').textContent=this.value;drawModRings()"></div>
+<div class="cg"><label>Show Only GCD=1</label><input type="checkbox" id="modGcd1" onchange="drawModRings()"></div>
+<div class="cg"><label>Highlight Unit Circle</label><input type="checkbox" id="modUnit" checked onchange="drawModRings()"></div>
+</div>
+<div class="ctrl" style="border-top:1px solid var(--bord);padding-top:.5rem;margin-top:.5rem">
+<div class="cg"><label><strong>Smith Chart Transform</strong> <span class="tip" title="Γ = (z-1)/(z+1) conformal mapping">?</span></label></div>
+<div class="cg"><label>Enable Smith Chart</label><input type="checkbox" id="smithMod" onchange="drawModRings()"></div>
+<div class="cg"><label>Phase Shift α</label><div class="sig"><input type="range" id="smithAMod" min="0" max="360" value="90" oninput="document.getElementById('smithAModV').textContent=this.value+'°';drawModRings()"><span id="smithAModV" style="color:var(--txt2)">90°</span></div></div>
+<div class="cg"><label>Radius Scale</label><select id="smithRMod" onchange="drawModRings()"><option value="unit">Unit (R=1)</option><option value="scaled" selected>Scaled by Index</option><option value="modulus">By Modulus</option></select></div>
+<div class="cg"><label>Zoom <span id="smithZoomV" style="color:var(--txt2)">1.0x</span></label><input type="range" id="smithZoom" min="0.5" max="3" step="0.1" value="1" oninput="document.getElementById('smithZoomV').textContent=this.value+'x';drawModRings()"></div>
+<div class="cg"><label style="display:flex;gap:.5rem;flex-wrap:wrap"><input type="checkbox" id="smithGridMod" checked onchange="drawModRings()"> Grid</label><label><input type="checkbox" id="smithCircRMod" checked onchange="drawModRings()"> Const-R</label><label><input type="checkbox" id="smithArcXMod" checked onchange="drawModRings()"> Const-X</label></div>
+</div>
+<div class="ctrl" style="border-top:1px solid var(--bord);padding-top:.5rem;margin-top:.5rem">
+<div class="cg"><label><strong>Point Labels</strong></label></div>
+<div class="cg"><label>Label Mode</label><select id="modLabel" onchange="drawModRings()"><option value="none">None</option><option value="r">Residue r</option><option value="rm">r/M Fraction</option><option value="deg">Degree θ°</option><option value="gcd">GCD Value</option></select></div>
+<div class="cg"><label>Label Size</label><input type="range" id="modLblSz" min="6" max="14" value="8" step="1" onchange="drawModRings()"></div>
+</div>
+<div class="bg"><button onclick="drawModRings()">Redraw</button><button onclick="screenshotMod()">Screenshot</button><button class="s" onclick="csvMod()">CSV Export</button></div>
+<div class="viz"><h3>Modular Ring System: θ = 2πr/M</h3><p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Concentric rings show residue classes. Gold points have GCD(r,M)=1 (Dirichlet character support χ(r)≠0). Direct lifts connect same residue across moduli.</p><canvas id="cmod" width="800" height="800"></canvas><div class="al" id="almod"></div><div class="sg" id="stmod"></div></div>
+<div class="viz"><h3>Totient Density φ(M)/M</h3><div class="pc" id="pmodphi"></div></div>
 </div>
 
 <div id="terr" class="tab">
@@ -212,7 +303,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="cg"><label>Max Radius <span class="tip" title="Upper limit">?</span></label><input type="number" id="errR" value="20" min="2" max="50"></div>
 <div class="cg"><label>Shape <span class="tip" title="Region type">?</span></label><select id="errSh"><option value="circle">Circle</option><option value="square">Square</option></select></div>
 </div>
-<div class="bg"><button onclick="runErr()">Run Error Analysis</button><button class="s" onclick="csvErr()">Export CSV</button></div>
+<div class="bg"><button onclick="runErr()">Run Error Analysis</button><button onclick="screenshotErr()">Screenshot</button><button class="s" onclick="csvErr()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Theory vs Actual</h3><div class="pc" id="pe1"></div><div class="al" id="ale1"></div></div>
 <div class="viz"><h3>Absolute Error</h3><div class="pc" id="pe2"></div><div class="al" id="ale2"></div></div>
@@ -226,7 +317,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 
 <div id="tdim" class="tab">
 <div class="ctrl"><div class="cg"><label>Radius R <span class="tip" title="Ball radius">?</span></label><div class="sig"><input type="range" id="rdim" min="1" max="50" step=".5" value="8" oninput="document.getElementById('rdimv').value=this.value"><input type="number" id="rdimv" value="8"><button onclick="document.getElementById('rdim').value=document.getElementById('rdimv').value">Set</button></div></div></div>
-<div class="bg"><button onclick="runDim()">Compute n=2-7</button><button class="s" onclick="csvDim()">Export CSV</button></div>
+<div class="bg"><button onclick="runDim()">Compute n=2-7</button><button onclick="screenshotDim()">Screenshot</button><button class="s" onclick="csvDim()">Export CSV</button></div>
 <div class="viz"><h3>Dimension Comparison (Click rows for details)</h3><table id="tdimT"><tr><th>n</th><th>Vol(B_n)</th><th>ζ(n)</th><th>Theory</th><th>Computed</th><th>Error</th></tr></table><div class="al" id="aldim"></div></div>
 </div>
 
@@ -235,14 +326,14 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rsh" min="1" max="50" step=".5" value="6" oninput="document.getElementById('rshv').value=this.value"><input type="number" id="rshv" value="6"><button onclick="document.getElementById('rsh').value=document.getElementById('rshv').value">Set</button></div></div>
 <div class="cg"><label>Max k <span class="tip" title="Maximum divisor">?</span></label><input type="number" id="shK" value="10" min="1" max="30"></div>
 </div>
-<div class="bg"><button onclick="runSh()">Analyze</button><button class="s" onclick="csvSh()">Export CSV</button></div>
+<div class="bg"><button onclick="runSh()">Analyze</button><button onclick="screenshotSh()">Screenshot</button><button class="s" onclick="csvSh()">Export CSV</button></div>
 <div class="viz"><h3>Möbius Shell Contributions</h3><div class="pc" id="psh"></div><div class="al" id="alsh"></div></div>
 <div class="viz"><h3>Shell Decomposition Data</h3><table id="tshT"><tr><th>k</th><th>μ(k)</th><th>L(R/k)</th><th>Contribution</th><th>Cumulative</th></tr></table></div>
 </div>
 
 <div id="tgcd" class="tab">
 <div class="ctrl"><div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rgcd" min="1" max="50" step=".5" value="10" oninput="document.getElementById('rgcdv').value=this.value"><input type="number" id="rgcdv" value="10"><button onclick="document.getElementById('rgcd').value=document.getElementById('rgcdv').value">Set</button></div></div></div>
-<div class="bg"><button onclick="runGCD()">Analyze GCD</button><button class="s" onclick="csvGCD()">Export CSV</button></div>
+<div class="bg"><button onclick="runGCD()">Analyze GCD</button><button onclick="screenshotGCD()">Screenshot</button><button class="s" onclick="csvGCD()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>GCD Frequency (Click bars)</h3><div class="pc" id="pgcd1"></div><div class="al" id="algcd1"></div></div>
 <div class="viz"><h3>GCD Statistics</h3><div class="pc" id="pgcd2"></div><div class="al" id="algcd2"></div></div>
@@ -267,7 +358,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 
 <div id="tcirc" class="tab">
 <div class="ctrl"><div class="cg"><label>Max Radius <span class="tip" title="Upper limit">?</span></label><input type="number" id="circR" value="20" min="2" max="50"></div></div>
-<div class="bg"><button onclick="runCirc()">Run Circle Problem</button><button class="s" onclick="csvCirc()">Export CSV</button></div>
+<div class="bg"><button onclick="runCirc()">Run Circle Problem</button><button onclick="screenshotCirc()">Screenshot</button><button class="s" onclick="csvCirc()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Lattice vs π·R² (Click)</h3><div class="pc" id="pc1"></div><div class="al" id="alc1"></div></div>
 <div class="viz"><h3>Error r(R) (Click)</h3><div class="pc" id="pc2"></div><div class="al" id="alc2"></div></div>
@@ -278,7 +369,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 
 <div id="tdens" class="tab">
 <div class="ctrl"><div class="cg"><label>Fixed Radius R <span class="tip" title="Ball radius for all dims">?</span></label><input type="number" id="densR" value="12" min="2" max="25"></div></div>
-<div class="bg"><button onclick="runDens()">Verify 1/ζ(k)</button><button class="s" onclick="csvDens()">Export CSV</button></div>
+<div class="bg"><button onclick="runDens()">Verify 1/ζ(k)</button><button onclick="screenshotDens()">Screenshot</button><button class="s" onclick="csvDens()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Empirical vs Theory (Click)</h3><div class="pc" id="pdens1"></div><div class="al" id="aldens1"></div></div>
 <div class="viz"><h3>Error % (Click bars)</h3><div class="pc" id="pdens2"></div><div class="al" id="aldens2"></div></div>
@@ -304,10 +395,98 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div class="fb"><strong>Circle Problem</strong> - Dirichlet's classical problem with r(R) = Count - π·R².</div>
 <div class="fb"><strong>Shells</strong> - Möbius decomposition showing divisor contributions.</div>
 </div>
-<div class="rs"><h3>Coloring Schemes (2D Tab)</h3>
+<div class="rs"><h3>Coloring Schemes (2D & 3D)</h3>
 <h4>By GCD (Recommended)</h4><p style="color:var(--acc);font-weight:600">Cyan = GCD:1 (Primitive) | Blue = GCD:2 | Purple = GCD:3 | Pink = Other</p>
+<p style="color:var(--txt2)">Colors points by their GCD value, revealing the shell structure of the Möbius sieve. Primitive points (GCD=1) form the outer layer.</p>
 <h4>By Distance</h4><p style="color:var(--acc);font-weight:600">Gradient from near (blue) to far (red) from origin</p>
+<p style="color:var(--txt2)">HSL gradient based on Euclidean distance from origin. Visualizes radial distribution.</p>
 <h4>Primitive vs Non</h4><p style="color:var(--acc);font-weight:600">Cyan = Primitive (GCD=1) | Red = Non-Primitive (GCD>1)</p>
+<p style="color:var(--txt2)">Binary coloring highlighting the fundamental primitive/non-primitive distinction.</p>
+<h4>Rainbow (Cyclic)</h4><p style="color:var(--acc);font-weight:600">Full spectrum based on angular position</p>
+<p style="color:var(--txt2)">Colors by angle from origin (atan2). Reveals rotational patterns in the lattice. The lattice is essentially a bounded GCD multiplication table.</p>
+<h4>Quadratic Residues</h4><p style="color:var(--acc);font-weight:600">Gold = Quadratic residue | Purple = Non-residue</p>
+<p style="color:var(--txt2)">Colors based on whether x²+y² (mod R) is a perfect square. Connects to quadratic forms and Fermat's theorem on sums of squares.</p>
+<h4>Primality (Product)</h4><p style="color:var(--acc);font-weight:600">Green = |x·y| prime | Pink = Composite | Blue = 0 or 1</p>
+<p style="color:var(--txt2)">Highlights points where the product of coordinates is prime. Reveals prime-generating patterns.</p>
+<h4>Modular Distance</h4><p style="color:var(--acc);font-weight:600">Spectrum by min(|x|,|y|)</p>
+<p style="color:var(--txt2)">Colors by the minimum absolute coordinate value. Shows proximity to axes.</p>
+<h4>Symmetry Pattern</h4><p style="color:var(--acc);font-weight:600">Gold = Diagonal (|x|=|y|) | Spectrum by asymmetry</p>
+<p style="color:var(--txt2)">Highlights points along diagonals and colors others by deviation from diagonal symmetry.</p>
+<h4>Heatmap (Density)</h4><p style="color:var(--acc);font-weight:600">Dark Blue → Cyan → Yellow → Red by distance</p>
+<p style="color:var(--txt2)">Classic thermal gradient visualization of radial distance.</p>
+<h4>Divisibility</h4><p style="color:var(--acc);font-weight:600">Hue by divisor count of GCD</p>
+<p style="color:var(--txt2)">Colors based on how many divisors the GCD has. Highly composite GCDs have distinct colors.</p>
+<h4>Discrete GCD</h4><p style="color:var(--acc);font-weight:600">20 distinct colors cycling through GCD values</p>
+<p style="color:var(--txt2)">Maximum contrast coloring for distinguishing individual GCD values.</p>
+<h4>Fire Gradient</h4><p style="color:var(--acc);font-weight:600">Black → Red → Orange → Yellow by distance</p>
+<p style="color:var(--txt2)">Thermal gradient emphasizing radial density. Points near origin are dark, outer points glow hot.</p>
+<h4>Plasma</h4><p style="color:var(--acc);font-weight:600">Purple → Pink → Yellow scientific colormap</p>
+<p style="color:var(--txt2)">Perceptually uniform gradient from matplotlib. Excellent for revealing subtle density variations.</p>
+<h4>Viridis</h4><p style="color:var(--acc);font-weight:600">Purple → Green → Yellow scientific colormap</p>
+<p style="color:var(--txt2)">Perceptually uniform and colorblind-friendly. Standard for scientific visualization.</p>
+<h4>Ocean</h4><p style="color:var(--acc);font-weight:600">Deep Blue → Cyan by distance</p>
+<p style="color:var(--txt2)">Cool tones gradient emphasizing depth perception.</p>
+</div>
+<div class="rs"><h3>New Tabs: Cayley Transform & Primitive Roots</h3>
+<h4>Cayley ℍ (Upper Half-Plane)</h4>
+<p style="color:var(--txt2)">The Cayley transform w = i(1+z)/(1-z) maps the unit disk to the upper half-plane ℍ. This conformal mapping is fundamental to hyperbolic geometry and modular forms. Primitive lattice points (GCD=1) transform to create patterns related to Ford circles and Farey sequences.</p>
+<div class="fb"><strong>Ford Circles:</strong> For rational p/q, the Ford circle has center (p/q, 1/(2q²)) and radius 1/(2q²). Adjacent Farey fractions have tangent Ford circles.</div>
+<div class="fb"><strong>Geodesics:</strong> In ℍ, hyperbolic geodesics are semicircles perpendicular to the real axis. The modular group PSL(2,ℤ) acts by isometries.</div>
+<h4>Primitive Roots</h4>
+<p style="color:var(--txt2)">An element g ∈ (ℤ/Mℤ)× is a primitive root if its multiplicative order equals φ(M). When primitive roots exist, the unit group is cyclic: (ℤ/Mℤ)× ≅ ℤ/φ(M)ℤ.</p>
+<div class="fb"><strong>Existence:</strong> Primitive roots exist mod M iff M ∈ {1, 2, 4, p^k, 2p^k} where p is odd prime.</div>
+<div class="fb"><strong>Power Sequence:</strong> g^n mod M for n=0,1,...,φ(M)-1 cycles through all units exactly once.</div>
+</div>
+<div class="rs"><h3>New Tab: Modular Rings 2πr/M</h3>
+<p style="color:var(--txt2)">Concentric ring visualization showing residue classes at angular positions θ = 2πr/M. This is the geometric foundation for understanding Dirichlet characters and the Generalized Riemann Hypothesis.</p>
+<h4>Ring Spacing Options</h4>
+<div class="fb"><strong>Uniform:</strong> Equal spacing between rings regardless of modulus value.</div>
+<div class="fb"><strong>Linear (c·m):</strong> Ring radius proportional to modulus. Outer rings are larger moduli.</div>
+<div class="fb"><strong>Square Root (√m):</strong> Compressed outer rings. Better for large modulus ranges.</div>
+<div class="fb"><strong>Logarithmic:</strong> Even more compression. Good for M=1 to M=100+.</div>
+<div class="fb"><strong>Totient φ(m):</strong> Radius proportional to number of coprime residues. Reveals totient structure.</div>
+<h4>Connection Lines</h4>
+<div class="fb"><strong>Direct Lifts:</strong> r → r across consecutive rings. Shows how residues persist across moduli.</div>
+<div class="fb"><strong>Gap-g Lines:</strong> r → r+g within same ring. Gap 2 = twin primes, Gap 6 = sexy primes.</div>
+<h4>Color Schemes</h4>
+<div class="fb"><strong>By GCD:</strong> Gold for GCD(r,M)=1 (Dirichlet character support χ(r)≠0), gray otherwise.</div>
+<div class="fb"><strong>Rainbow:</strong> Hue by angular position 2πr/M.</div>
+<div class="fb"><strong>By Ring:</strong> Each modulus gets unique color.</div>
+<div class="fb"><strong>Prime vs Composite:</strong> Green for prime residues, pink for composite.</div>
+</div>
+<div class="rs"><h3>Smith Chart / Cayley Transform</h3>
+<p style="color:var(--txt2)">Conformal mapping Γ = (z-1)/(z+1) from impedance plane to unit disk. Available in 2D, 3D, and Modular Rings tabs.</p>
+<h4>Transform Formula</h4>
+<div class="fb"><strong>Input:</strong> z = R·e^(iθ) where θ = angle + α (phase shift)</div>
+<div class="fb"><strong>Output:</strong> Γ = (z-1)/(z+1) maps to unit disk</div>
+<div class="fb"><strong>Real Part:</strong> Re(Γ) = (AC + B²)/(C² + B²) where A = R·cos(θ)-1, B = R·sin(θ), C = R·cos(θ)+1</div>
+<div class="fb"><strong>Imaginary Part:</strong> Im(Γ) = B(C-A)/(C² + B²)</div>
+<div class="fb"><strong>Special Case R=1:</strong> Γ(θ) = i·tan(θ/2) (pure imaginary axis)</div>
+<h4>Controls</h4>
+<div class="fb"><strong>Phase Shift α:</strong> Global rotation of all angles (0°-360°). Default 90° aligns with standard Smith chart.</div>
+<div class="fb"><strong>Radius Scale:</strong> Unit (all R=1), By Index (spreads points), By Distance/Modulus (varies R).</div>
+<div class="fb"><strong>Grid:</strong> Shows unit circle and axes.</div>
+<div class="fb"><strong>Const-R Circles:</strong> Circles of constant resistance (real part).</div>
+<div class="fb"><strong>Const-X Arcs:</strong> Arcs of constant reactance (imaginary part).</div>
+<h4>Mathematical Significance</h4>
+<div class="fb"><strong>Conformal:</strong> Preserves angles between curves.</div>
+<div class="fb"><strong>Möbius Transform:</strong> Special case mapping circles to circles.</div>
+<div class="fb"><strong>RF Engineering:</strong> Standard tool for impedance matching and transmission line analysis.</div>
+<div class="fb"><strong>Number Theory:</strong> Maps residue angles to patterns revealing arithmetic structure.</div>
+</div>
+<div class="rs"><h3>2D Connection Lines</h3>
+<p style="color:var(--txt2)">Connect lattice points to reveal structural patterns:</p>
+<div class="fb"><strong>GCD=1 Network:</strong> Links between primitive points within distance 2.</div>
+<div class="fb"><strong>Same GCD:</strong> Points with equal GCD values connected.</div>
+<div class="fb"><strong>Radial:</strong> Lines from origin to all primitive points.</div>
+<div class="fb"><strong>Diagonal:</strong> Connects points on x=±y lines.</div>
+</div>
+<div class="rs"><h3>Enhanced 3D Screenshot</h3>
+<p style="color:var(--txt2)">Professional export options for publications and presentations:</p>
+<div class="fb"><strong>Resolution:</strong> 1x Standard, 2x High, 4x for 4K output.</div>
+<div class="fb"><strong>Background:</strong> Theme default, black, white, or transparent.</div>
+<div class="fb"><strong>Options:</strong> Include/exclude title, legend, statistics panel.</div>
+<div class="fb"><strong>Custom Title:</strong> Set your own title text for the export.</div>
 </div>
 <div class="rs"><h3>Point Labeling Options</h3><ul><li><strong>None</strong> - Clean visualization</li><li><strong>Coordinates</strong> - Shows (x,y) above each point</li><li><strong>GCD Values</strong> - Displays GCD number</li></ul></div>
 <div class="rs"><h3>Precision Control (2-16 Decimal Places)</h3><p>Use the dropdown in the header. 2-4 for quick analysis, 6-8 for verification, 10+ for research.</p></div>
@@ -324,10 +503,23 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </div>
 </div>
 
-<footer>Complete Research Platform: 9 Tabs | Auto-Legends | All Features Working</footer>
+<footer>
+<div style="margin-bottom:1rem"><strong style="color:var(--acc)">By Wessen Getachew</strong> · <a href="https://twitter.com/7dview" target="_blank" style="color:var(--acc2)">@7dview</a></div>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:1rem">
+<a href="https://wessengetachew.github.io/Farey/" target="_blank" style="color:var(--acc);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--acc);border-radius:4px">Farey Triangle</a>
+<a href="https://wessengetachew.github.io/1-2/" target="_blank" style="color:var(--acc);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--acc);border-radius:4px">1/ζ(2) Explorer</a>
+<a href="https://wessengetachew.github.io/Primes/" target="_blank" style="color:var(--acc);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--acc);border-radius:4px">Prime Explorer</a>
+<a href="https://wessengetachew.github.io/Composite/" target="_blank" style="color:var(--acc);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--acc);border-radius:4px">Composite Analysis</a>
+<a href="https://wessengetachew.github.io/GCD/" target="_blank" style="color:var(--acc);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--acc);border-radius:4px">GCD Explorer</a>
+<a href="https://wessengetachew.github.io/Reduced/" target="_blank" style="color:var(--acc);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--acc);border-radius:4px">Reduced Residues</a>
+<a href="https://wessengetachew.github.io/Infinitemoduli/" target="_blank" style="color:var(--acc);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--acc);border-radius:4px">Modular Arithmetic</a>
+<a href="https://wessengetachew.github.io/finite/" target="_blank" style="color:var(--acc);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--acc);border-radius:4px">Finite Fields</a>
+</div>
+<div style="color:var(--txt2);font-size:.85rem">A philosophical exploration of optimal prime sieves through geometric visualization</div>
+</footer>
 
 <script>
-let P=4,D={},rx=.3,ry=.5,panX=0,panY=0,anim3d=false,pts2d=[],pts3d=[],gausP=[];
+let P=4,D={},rx=0,ry=0,rz=0,panX=0,panY=0,anim3d=false,pts2d=[],pts3d=[],gausP=[];
 const fmt=n=>(n==null||isNaN(n))?'N/A':parseFloat(n).toFixed(P);
 const gcd=(a,b)=>{a=Math.abs(Math.round(a));b=Math.abs(Math.round(b));while(b)[a,b]=[b,a%b];return a||1;};
 const gcdM=(...n)=>n.reduce((a,b)=>gcd(a,b));
@@ -343,33 +535,83 @@ const gridC=()=>isDark()?'rgba(0,217,255,0.12)':'rgba(0,102,204,0.15)';
 const bordC=()=>isDark()?'rgba(0,217,255,0.5)':'rgba(0,102,204,0.6)';
 function toggleTheme(){document.body.classList.toggle('light');document.getElementById('thm').textContent=isDark()?'D':'L';draw2D();if(document.getElementById('t3d').classList.contains('active'))draw3D();}
 function showSec(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.snav .nbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
-function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();}
 function legend(id,title,data){const d=document.getElementById(id);if(!d)return;d.innerHTML=`<h4>${title}</h4><div class="lg">${data.map(([l,v,c])=>`<div class="li" style="border-left-color:${c}"><strong>${l}</strong><span class="v">${fmt(v)}</span></div>`).join('')}</div>`;}
 function modal(title,data){document.getElementById('mtitle').textContent=title;document.getElementById('mbody').innerHTML=data.map(([l,v])=>`<div class="ds"><div class="dr"><span class="dl">${l}:</span><span class="dv">${typeof v==='number'?fmt(v):v}</span></div></div>`).join('');document.getElementById('modal').classList.add('active');}
 function dl(c,f){const a=document.createElement('a');a.href='data:text/csv,'+encodeURIComponent(c);a.download=f;a.click();}
-function enum2D(R,sh){const pts=[],m=Math.ceil(R)+1;for(let x=-m;x<=m;x++)for(let y=-m;y<=m;y++){const inR=sh==='circle'?x*x+y*y<=R*R:Math.abs(x)<=R&&Math.abs(y)<=R;if(inR){const g=gcdM(x,y);pts.push({x,y,g,p:g===1});}}return pts;}
+function enum2D(R,sh){const pts=[],m=Math.ceil(R)+1;for(let x=-m;x<=m;x++)for(let y=-m;y<=m;y++){const inCirc=x*x+y*y<=R*R,inSq=Math.abs(x)<=R&&Math.abs(y)<=R;const inR=sh==='circle'?inCirc:sh==='square'?inSq:inSq;if(inR){const g=gcdM(x,y);pts.push({x,y,g,p:g===1,inCircle:inCirc});}}return pts;}
 function enum3D(R){const pts=[],m=Math.ceil(R)+1;for(let x=-m;x<=m;x++)for(let y=-m;y<=m;y++)for(let z=-m;z<=m;z++)if(x*x+y*y+z*z<=R*R){const g=gcdM(x,y,z);pts.push({x,y,z,g,p:g===1});}return pts;}
+
+function smithTransform(r,theta,alpha){
+const th=theta+alpha*Math.PI/180;
+const A=r*Math.cos(th)-1,B=r*Math.sin(th),C=r*Math.cos(th)+1;
+const denom=C*C+B*B;
+if(denom<1e-10)return{x:0,y:0};
+const re=(A*C+B*B)/denom,im=B*(C-A)/denom;
+return{x:re,y:im};}
+
+function smithTransformUnit(theta){return{x:0,y:Math.tan(theta/2)};}
+
+function drawSmithGrid(ctx,cx,cy,rad,showGrid,showConstR,showConstX){
+if(showGrid){ctx.strokeStyle=isDark()?'rgba(100,150,200,0.3)':'rgba(50,100,150,0.3)';ctx.lineWidth=0.5;
+ctx.beginPath();ctx.arc(cx,cy,rad,0,2*Math.PI);ctx.stroke();
+ctx.strokeStyle=isDark()?'rgba(255,255,255,0.4)':'rgba(0,0,0,0.4)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(cx-rad,cy);ctx.lineTo(cx+rad,cy);ctx.stroke();
+ctx.beginPath();ctx.moveTo(cx,cy-rad);ctx.lineTo(cx,cy+rad);ctx.stroke();}
+if(showConstR){ctx.strokeStyle='rgba(100,150,200,0.25)';ctx.lineWidth=0.5;
+const rVals=[0.2,0.5,1,2,5];
+rVals.forEach(r=>{const center=r/(1+r),radius=1/(1+r);ctx.beginPath();ctx.arc(cx+center*rad,cy,radius*rad,0,2*Math.PI);ctx.stroke();});}
+if(showConstX){ctx.strokeStyle='rgba(150,100,200,0.25)';ctx.lineWidth=0.5;
+const xVals=[-2,-1,-0.5,0.5,1,2];
+xVals.forEach(x=>{if(Math.abs(x)<0.01)return;const centerY=1/x,radius=1/Math.abs(x);ctx.beginPath();ctx.arc(cx+rad,cy-centerY*rad,radius*rad,x>0?Math.PI:0,x>0?0:Math.PI,x>0);ctx.stroke();});}}
 
 function draw2D(){
 const c=document.getElementById('c2d'),ctx=c.getContext('2d'),R=+document.getElementById('r2d').value,sh=document.getElementById('sh2d').value,col=document.getElementById('col2d').value,lbl=document.getElementById('lbl2d').value,zm=+document.getElementById('zm2d').value,lblsz=+document.getElementById('lblsz2d').value;
-const cx=c.width/2,cy=c.height/2,sc=(c.width/2)/(R*1.15)*zm;
+const smithEnabled=document.getElementById('smith2d').checked,smithAlpha=+document.getElementById('smithA2d').value,smithRMode=document.getElementById('smithR2d').value;
+const smithGrid=document.getElementById('smithGrid2d').checked,smithConstR=document.getElementById('smithCircR2d').checked,smithConstX=document.getElementById('smithArcX2d').checked;
+const cx=c.width/2,cy=c.height/2,sc=(c.width/2)/(R*1.15)*zm,smithRad=(c.width/2-40)*zm;
 ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
-ctx.strokeStyle=gridC();ctx.lineWidth=1;
-for(let i=-Math.ceil(R);i<=Math.ceil(R);i++){ctx.beginPath();ctx.moveTo(cx+i*sc,0);ctx.lineTo(cx+i*sc,c.height);ctx.stroke();ctx.beginPath();ctx.moveTo(0,cy+i*sc);ctx.lineTo(c.width,cy+i*sc);ctx.stroke();}
-ctx.strokeStyle=bordC();ctx.lineWidth=2;
-if(sh==='circle'){ctx.beginPath();ctx.arc(cx,cy,R*sc,0,2*Math.PI);ctx.stroke();}else ctx.strokeRect(cx-R*sc,cy-R*sc,2*R*sc,2*R*sc);
-pts2d=enum2D(R,sh);let prim=0;const gcds=pts2d.map(p=>p.g);
-for(const pt of pts2d){if(pt.p)prim++;const px=cx+pt.x*sc,py=cy-pt.y*sc;
+if(smithEnabled){drawSmithGrid(ctx,cx,cy,smithRad,smithGrid,smithConstR,smithConstX);ctx.strokeStyle=bordC();ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,smithRad,0,2*Math.PI);ctx.stroke();}
+else{ctx.strokeStyle=gridC();ctx.lineWidth=1;for(let i=-Math.ceil(R);i<=Math.ceil(R);i++){ctx.beginPath();ctx.moveTo(cx+i*sc,0);ctx.lineTo(cx+i*sc,c.height);ctx.stroke();ctx.beginPath();ctx.moveTo(0,cy+i*sc);ctx.lineTo(c.width,cy+i*sc);ctx.stroke();}ctx.strokeStyle=bordC();ctx.lineWidth=2;if(sh==='circle'){ctx.beginPath();ctx.arc(cx,cy,R*sc,0,2*Math.PI);ctx.stroke();}else if(sh==='square'){ctx.strokeRect(cx-R*sc,cy-R*sc,2*R*sc,2*R*sc);}else if(sh==='both'){ctx.strokeRect(cx-R*sc,cy-R*sc,2*R*sc,2*R*sc);ctx.strokeStyle='rgba(255,136,0,0.8)';ctx.beginPath();ctx.arc(cx,cy,R*sc,0,2*Math.PI);ctx.stroke();}}
+pts2d=enum2D(R,sh);
+const conn=document.getElementById('conn2d').value,connOp=+document.getElementById('connOp2d').value;
+if(conn!=='none'&&!smithEnabled){ctx.lineWidth=1;const primPts=pts2d.filter(p=>p.p);
+if(conn==='gcd1'){ctx.strokeStyle=`rgba(0,217,255,${connOp})`;for(let i=0;i<primPts.length;i++)for(let j=i+1;j<primPts.length;j++){const p1=primPts[i],p2=primPts[j],d=Math.hypot(p1.x-p2.x,p1.y-p2.y);if(d<=2){ctx.beginPath();ctx.moveTo(cx+p1.x*sc,cy-p1.y*sc);ctx.lineTo(cx+p2.x*sc,cy-p2.y*sc);ctx.stroke();}}}
+else if(conn==='same'){const byGcd={};pts2d.forEach(p=>{if(!byGcd[p.g])byGcd[p.g]=[];byGcd[p.g].push(p);});Object.keys(byGcd).forEach(g=>{const ps=byGcd[g];ctx.strokeStyle=`hsla(${g*60},100%,50%,${connOp})`;for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){const p1=ps[i],p2=ps[j],d=Math.hypot(p1.x-p2.x,p1.y-p2.y);if(d<=2){ctx.beginPath();ctx.moveTo(cx+p1.x*sc,cy-p1.y*sc);ctx.lineTo(cx+p2.x*sc,cy-p2.y*sc);ctx.stroke();}}});}
+else if(conn==='radial'){ctx.strokeStyle=`rgba(255,215,0,${connOp})`;for(const p of primPts){ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+p.x*sc,cy-p.y*sc);ctx.stroke();}}
+else if(conn==='diagonal'){ctx.strokeStyle=`rgba(150,100,255,${connOp})`;const diag=pts2d.filter(p=>Math.abs(p.x)===Math.abs(p.y));for(let i=0;i<diag.length;i++)for(let j=i+1;j<diag.length;j++){const p1=diag[i],p2=diag[j];if(Math.abs(p1.x-p2.x)<=2){ctx.beginPath();ctx.moveTo(cx+p1.x*sc,cy-p1.y*sc);ctx.lineTo(cx+p2.x*sc,cy-p2.y*sc);ctx.stroke();}}}}
+let prim=0,inCircCount=0,outCircCount=0;const gcds=pts2d.map(p=>p.g);
+for(let idx=0;idx<pts2d.length;idx++){const pt=pts2d[idx];if(pt.p)prim++;if(sh==='both'){if(pt.inCircle)inCircCount++;else outCircCount++;}
+let px,py;
+if(smithEnabled){const theta=Math.atan2(pt.y,pt.x);const dist=Math.sqrt(pt.x*pt.x+pt.y*pt.y);let r=1;if(smithRMode==='index')r=1+(idx/pts2d.length)*2;else if(smithRMode==='dist')r=0.5+dist/(R*2);const sm=smithTransform(r,theta,smithAlpha);px=cx+sm.x*smithRad;py=cy-sm.y*smithRad;}
+else{px=cx+pt.x*sc;py=cy-pt.y*sc;}
 let clr;if(col==='gcd')clr={1:'#00d9ff',2:'#64c8ff',3:'#9664ff'}[pt.g]||'#ff6496';
 else if(col==='dist'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y)/R;clr=`hsl(${Math.floor((1-d)*240)},100%,50%)`;}
+else if(col==='prim')clr=pt.p?'#00d9ff':'#ff6496';
+else if(col==='rainbow'){const ang=Math.atan2(pt.y,pt.x);clr=`hsl(${Math.floor((ang+Math.PI)/(2*Math.PI)*360)},100%,50%)`;}
+else if(col==='quadres'){const n2=(pt.x*pt.x+pt.y*pt.y)%Math.max(2,Math.ceil(R)),isQR=n2===0||[...Array(Math.ceil(R))].some((_,i)=>(i*i)%Math.max(2,Math.ceil(R))===n2);clr=isQR?'#ffd700':'#9664ff';}
+else if(col==='primality'){const prod=Math.abs(pt.x*pt.y),isPr=prod>1&&[...Array(Math.floor(Math.sqrt(prod))+1)].every((_,i)=>i<2||prod%i!==0);clr=prod<=1?'#64c8ff':isPr?'#00ff88':'#ff6496';}
+else if(col==='moddist'){const md=Math.min(Math.abs(pt.x),Math.abs(pt.y));clr=`hsl(${Math.floor(md/R*300)},100%,50%)`;}
+else if(col==='symmetry'){const sym=Math.abs(Math.abs(pt.x)-Math.abs(pt.y));clr=sym===0?'#ffd700':`hsl(${Math.floor(sym/R*240)},80%,50%)`;}
+else if(col==='heatmap'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y)/R;clr=d<.25?'#00008b':d<.5?'#00d9ff':d<.75?'#ffff00':'#ff0000';}
+else if(col==='divisibility'){const dc=[...Array(pt.g)].filter((_,i)=>i>0&&pt.g%i===0).length+1;clr=`hsl(${dc*40},100%,50%)`;}
+else if(col==='discrete'){const cols=['#e6194b','#3cb44b','#ffe119','#4363d8','#f58231','#911eb4','#46f0f0','#f032e6','#bcf60c','#fabebe','#008080','#e6beff','#9a6324','#fffac8','#800000','#aaffc3','#808000','#ffd8b1','#000075','#808080'];clr=cols[(pt.g-1)%cols.length];}
+else if(col==='fire'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y)/R;clr=d<.33?`rgb(${Math.floor(d*3*255)},0,0)`:d<.66?`rgb(255,${Math.floor((d-.33)*3*255)},0)`:`rgb(255,${Math.floor(128+(d-.66)*3*127)},${Math.floor((d-.66)*3*255)})`;}
+else if(col==='plasma'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y)/R;clr=`rgb(${Math.floor(13+d*230)},${Math.floor(8+d*92+Math.sin(d*Math.PI)*100)},${Math.floor(135+d*80-d*d*150)})`;}
+else if(col==='viridis'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y)/R;clr=`rgb(${Math.floor(68+d*187)},${Math.floor(1+d*206)},${Math.floor(84-d*50+d*d*100)})`;}
+else if(col==='ocean'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y)/R;clr=`rgb(${Math.floor(d*100)},${Math.floor(50+d*150)},${Math.floor(100+d*155)})`;}
 else clr=pt.p?'#00d9ff':'#ff6496';
+if(sh==='both'&&!pt.inCircle){clr=isDark()?'rgba(255,100,150,0.4)':'rgba(200,50,100,0.4)';}
 ctx.fillStyle=clr;ctx.beginPath();ctx.arc(px,py,3*zm,0,2*Math.PI);ctx.fill();
 if(lbl==='coords'){ctx.fillStyle=isDark()?'rgba(0,217,255,0.9)':'rgba(0,102,204,0.9)';ctx.font=`bold ${lblsz}px Arial`;ctx.textAlign='center';ctx.fillText(`(${pt.x},${pt.y})`,px,py-7*zm);}
 else if(lbl==='gcd'){ctx.fillStyle=isDark()?'rgba(0,217,255,0.9)':'rgba(0,102,204,0.9)';ctx.font=`bold ${lblsz}px Arial`;ctx.textAlign='center';ctx.fillText(pt.g,px,py-7*zm);}}
+if(smithEnabled){ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='12px Segoe UI';ctx.fillText('Smith Chart: Γ = (z-1)/(z+1)',10,20);ctx.fillText(`α = ${smithAlpha}°`,10,35);}
 const tot=pts2d.length,th=theory(R,2),err=Math.abs(prim-th),relE=th>0?err/th*100:0,z2=zeta(2);
-legend('al2d','2D Lattice Point Statistics',[['Count',tot,'#00d9ff'],['Primitive',prim,'#00d9ff'],['1/ζ(2) Pred',tot/z2,'#9664ff'],['Theory',th,'#ff8c00'],['Abs Error',err,'#ff006e'],['Rel Error %',relE,'#ff006e']]);
-document.getElementById('st2d').innerHTML=`<div class="sb"><span class="sl">Total</span><span class="sv">${tot}</span></div><div class="sb"><span class="sl">Primitive</span><span class="sv">${prim}</span></div><div class="sb"><span class="sl">Density %</span><span class="sv">${fmt(100*prim/tot)}%</span></div><div class="sb"><span class="sl">Min GCD</span><span class="sv">${Math.min(...gcds)}</span></div><div class="sb"><span class="sl">Max GCD</span><span class="sv">${Math.max(...gcds)}</span></div><div class="sb"><span class="sl">Avg GCD</span><span class="sv">${fmt(gcds.reduce((a,b)=>a+b,0)/tot)}</span></div>`;
-c.onclick=e=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);for(const pt of pts2d){const px=cx+pt.x*sc,py=cy-pt.y*sc;if(Math.hypot(mx-px,my-py)<12){modal('2D Point Analysis',[['Coordinates',`(${pt.x}, ${pt.y})`],['GCD(x,y)',pt.g],['Primitive',pt.p?'Yes':'No'],['Distance',Math.sqrt(pt.x*pt.x+pt.y*pt.y)],['Norm (x²+y²)',pt.x*pt.x+pt.y*pt.y]]);break;}}};}
+if(sh==='both'){legend('al2d','Square + Circle Comparison',[['Square Total',tot,'#00d9ff'],['In Circle',inCircCount,'#ff8c00'],['Outside Circle',outCircCount,'#9664ff'],['Primitive',prim,'#00ff88'],['Circle Ratio %',100*inCircCount/tot,'#ff8c00']]);
+document.getElementById('st2d').innerHTML=`<div class="sb"><span class="sl">Square</span><span class="sv">${tot}</span></div><div class="sb"><span class="sl">In Circle</span><span class="sv">${inCircCount}</span></div><div class="sb"><span class="sl">Outside</span><span class="sv">${outCircCount}</span></div><div class="sb"><span class="sl">Ratio</span><span class="sv">${fmt(100*inCircCount/tot)}%</span></div><div class="sb"><span class="sl">π/4 ≈</span><span class="sv">${fmt(Math.PI/4*100)}%</span></div><div class="sb"><span class="sl">Primitive</span><span class="sv">${prim}</span></div>`;}
+else{legend('al2d',smithEnabled?'Smith Chart Statistics':'2D Lattice Point Statistics',[['Count',tot,'#00d9ff'],['Primitive',prim,'#00d9ff'],['1/ζ(2) Pred',tot/z2,'#9664ff'],['Theory',th,'#ff8c00'],['Abs Error',err,'#ff006e'],['Rel Error %',relE,'#ff006e']]);
+document.getElementById('st2d').innerHTML=`<div class="sb"><span class="sl">Total</span><span class="sv">${tot}</span></div><div class="sb"><span class="sl">Primitive</span><span class="sv">${prim}</span></div><div class="sb"><span class="sl">Density %</span><span class="sv">${fmt(100*prim/tot)}%</span></div><div class="sb"><span class="sl">Min GCD</span><span class="sv">${Math.min(...gcds)}</span></div><div class="sb"><span class="sl">Max GCD</span><span class="sv">${Math.max(...gcds)}</span></div><div class="sb"><span class="sl">Avg GCD</span><span class="sv">${fmt(gcds.reduce((a,b)=>a+b,0)/tot)}</span></div>`;}
+c.onclick=e=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);for(let idx=0;idx<pts2d.length;idx++){const pt=pts2d[idx];let px,py;if(smithEnabled){const theta=Math.atan2(pt.y,pt.x);const dist=Math.sqrt(pt.x*pt.x+pt.y*pt.y);let r=1;if(smithRMode==='index')r=1+(idx/pts2d.length)*2;else if(smithRMode==='dist')r=0.5+dist/(R*2);const sm=smithTransform(r,theta,smithAlpha);px=cx+sm.x*smithRad;py=cy-sm.y*smithRad;}else{px=cx+pt.x*sc;py=cy-pt.y*sc;}if(Math.hypot(mx-px,my-py)<12){const theta=Math.atan2(pt.y,pt.x);const sm=smithEnabled?smithTransform(1,theta,smithAlpha):{x:0,y:0};modal('2D Point Analysis',[['Coordinates',`(${pt.x}, ${pt.y})`],['GCD(x,y)',pt.g],['Primitive',pt.p?'Yes':'No'],['Distance',Math.sqrt(pt.x*pt.x+pt.y*pt.y)],['θ (radians)',theta.toFixed(4)],smithEnabled?['Γ (Smith)',`${sm.x.toFixed(4)} + ${sm.y.toFixed(4)}i`]:['Norm',pt.x*pt.x+pt.y*pt.y]]);break;}}};}
 function exp2D(){const c=document.getElementById('c2d');c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mobius_2d.png';a.click();});}
 function csv2D(){let s='x,y,gcd,primitive\n';for(const p of pts2d)s+=`${p.x},${p.y},${p.g},${p.p}\n`;dl(s,'mobius_2d.csv');}
 
@@ -450,41 +692,64 @@ out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b)
 
 function draw3D(){
 const c=document.getElementById('c3d'),ctx=c.getContext('2d'),R=+document.getElementById('r3d').value,col=document.getElementById('col3d').value,vm=document.getElementById('vm3d').value,zm=+document.getElementById('zm3d').value,ps=+document.getElementById('ps3d').value;
+const smithEnabled=document.getElementById('smith3d').checked,smithAlpha=+document.getElementById('smithA3d').value,smithRMode=document.getElementById('smithR3d').value;
+const smithGrid=document.getElementById('smithGrid3d').checked,smithConstR=document.getElementById('smithCircR3d').checked,smithConstX=document.getElementById('smithArcX3d').checked;
 ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+const cxS=c.width/2,cyS=c.height/2,smithRad=(c.width/2-40)*zm;
+if(smithEnabled){drawSmithGrid(ctx,cxS,cyS,smithRad,smithGrid,smithConstR,smithConstX);ctx.strokeStyle=bordC();ctx.lineWidth=2;ctx.beginPath();ctx.arc(cxS,cyS,smithRad,0,2*Math.PI);ctx.stroke();}
 let rawPts=enum3D(R);
 if(vm==='inv')rawPts=rawPts.map(pt=>{const n=Math.sqrt(pt.x*pt.x+pt.y*pt.y+pt.z*pt.z);if(n>.1){const s=R*R/(n*n);return{x:pt.x*s,y:pt.y*s,z:pt.z*s,g:pt.g,p:pt.p};}return pt;});
-const proj=rawPts.map(pt=>{let x=pt.x,y=pt.y,z=pt.z;
+const proj=rawPts.map((pt,idx)=>{let x=pt.x,y=pt.y,z=pt.z;
 let y1=y*Math.cos(rx)-z*Math.sin(rx),z1=y*Math.sin(rx)+z*Math.cos(rx);y=y1;z=z1;
 let x2=x*Math.cos(ry)+z*Math.sin(ry),z2=-x*Math.sin(ry)+z*Math.cos(ry);x=x2;z=z2;
-const fov=500,sc=fov/(z+fov/2),px=c.width/2+(x*sc*zm*15)+panX,py=c.height/2-(y*sc*zm*15)+panY;
+let x3=x*Math.cos(rz)-y*Math.sin(rz),y3=x*Math.sin(rz)+y*Math.cos(rz);x=x3;y=y3;
+let px,py;
+if(smithEnabled){const theta=Math.atan2(y,x);const dist3d=Math.sqrt(pt.x*pt.x+pt.y*pt.y+pt.z*pt.z);let r=1;if(smithRMode==='index')r=1+(idx/rawPts.length)*2;else if(smithRMode==='dist')r=0.5+dist3d/(R*2);const sm=smithTransform(r,theta,smithAlpha);px=cxS+sm.x*smithRad;py=cyS-sm.y*smithRad;}
+else{const fov=500,sc=fov/(z+fov/2);px=c.width/2+(x*sc*zm*15)+panX;py=c.height/2-(y*sc*zm*15)+panY;}
 let clr;if(col==='gcd')clr={1:'#00d9ff',2:'#64c8ff',3:'#9664ff'}[pt.g]||'#ff6496';
 else if(col==='dist'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y+pt.z*pt.z)/R;clr=`hsl(${Math.floor((1-d)*240)},100%,50%)`;}
+else if(col==='prim')clr=pt.p?'#00d9ff':'#ff6496';
+else if(col==='rainbow'){const ang=Math.atan2(pt.y,pt.x);clr=`hsl(${Math.floor((ang+Math.PI)/(2*Math.PI)*360)},100%,50%)`;}
+else if(col==='quadres'){const n2=(pt.x*pt.x+pt.y*pt.y+pt.z*pt.z)%Math.max(2,Math.ceil(R)),isQR=n2===0||[...Array(Math.ceil(R))].some((_,i)=>(i*i)%Math.max(2,Math.ceil(R))===n2);clr=isQR?'#ffd700':'#9664ff';}
+else if(col==='primality'){const prod=Math.abs(pt.x*pt.y*pt.z),isPr=prod>1&&[...Array(Math.floor(Math.sqrt(prod))+1)].every((_,i)=>i<2||prod%i!==0);clr=prod<=1?'#64c8ff':isPr?'#00ff88':'#ff6496';}
+else if(col==='moddist'){const md=Math.min(Math.abs(pt.x),Math.abs(pt.y),Math.abs(pt.z));clr=`hsl(${Math.floor(md/R*300)},100%,50%)`;}
+else if(col==='symmetry'){const vals=[Math.abs(pt.x),Math.abs(pt.y),Math.abs(pt.z)].sort((a,b)=>a-b),sym=vals[2]-vals[0];clr=sym===0?'#ffd700':`hsl(${Math.floor(sym/R*240)},80%,50%)`;}
+else if(col==='heatmap'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y+pt.z*pt.z)/R;clr=d<.25?'#00008b':d<.5?'#00d9ff':d<.75?'#ffff00':'#ff0000';}
+else if(col==='divisibility'){const dc=[...Array(pt.g)].filter((_,i)=>i>0&&pt.g%i===0).length+1;clr=`hsl(${dc*40},100%,50%)`;}
+else if(col==='discrete'){const cols=['#e6194b','#3cb44b','#ffe119','#4363d8','#f58231','#911eb4','#46f0f0','#f032e6','#bcf60c','#fabebe','#008080','#e6beff','#9a6324','#fffac8','#800000','#aaffc3','#808000','#ffd8b1','#000075','#808080'];clr=cols[(pt.g-1)%cols.length];}
+else if(col==='fire'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y+pt.z*pt.z)/R;clr=d<.33?`rgb(${Math.floor(d*3*255)},0,0)`:d<.66?`rgb(255,${Math.floor((d-.33)*3*255)},0)`:`rgb(255,${Math.floor(128+(d-.66)*3*127)},${Math.floor((d-.66)*3*255)})`;}
+else if(col==='plasma'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y+pt.z*pt.z)/R;clr=`rgb(${Math.floor(13+d*230)},${Math.floor(8+d*92+Math.sin(d*Math.PI)*100)},${Math.floor(135+d*80-d*d*150)})`;}
+else if(col==='viridis'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y+pt.z*pt.z)/R;clr=`rgb(${Math.floor(68+d*187)},${Math.floor(1+d*206)},${Math.floor(84-d*50+d*d*100)})`;}
+else if(col==='ocean'){const d=Math.sqrt(pt.x*pt.x+pt.y*pt.y+pt.z*pt.z)/R;clr=`rgb(${Math.floor(d*100)},${Math.floor(50+d*150)},${Math.floor(100+d*155)})`;}
 else clr=pt.p?'#00d9ff':'#ff6496';
-return{px,py,z,clr,sc:sc*zm,g:pt.g,p:pt.p,ox:pt.x,oy:pt.y,oz:pt.z};});
+const fov=500,sc=fov/(z+fov/2);
+return{px,py,z,clr,sc:smithEnabled?1:sc*zm,g:pt.g,p:pt.p,ox:pt.x,oy:pt.y,oz:pt.z};});
 proj.sort((a,b)=>a.z-b.z);
-ctx.strokeStyle=gridC();ctx.lineWidth=1;
+if(!smithEnabled){ctx.strokeStyle=gridC();ctx.lineWidth=1;
 const seg=12;for(let lat=0;lat<seg;lat++)for(let lng=0;lng<seg;lng++){const lat1=(lat/seg)*Math.PI,lng1=(lng/seg)*2*Math.PI,lng2=((lng+1)/seg)*2*Math.PI;
 const x1=R*Math.sin(lat1)*Math.cos(lng1),y1=R*Math.cos(lat1),z1=R*Math.sin(lat1)*Math.sin(lng1);
 const x2=R*Math.sin(lat1)*Math.cos(lng2),y2=R*Math.cos(lat1),z2=R*Math.sin(lat1)*Math.sin(lng2);
-const rot1=(p)=>{let x=p.x,y=p.y,z=p.z;let y1=y*Math.cos(rx)-z*Math.sin(rx),z1=y*Math.sin(rx)+z*Math.cos(rx);y=y1;z=z1;let x2=x*Math.cos(ry)+z*Math.sin(ry),z2=-x*Math.sin(ry)+z*Math.cos(ry);return{x:x2,y,z:z2};};
+const rot1=(p)=>{let x=p.x,y=p.y,z=p.z;let y1=y*Math.cos(rx)-z*Math.sin(rx),z1=y*Math.sin(rx)+z*Math.cos(rx);y=y1;z=z1;let x2=x*Math.cos(ry)+z*Math.sin(ry),z2=-x*Math.sin(ry)+z*Math.cos(ry);x=x2;z=z2;let x3=x*Math.cos(rz)-y*Math.sin(rz),y3=x*Math.sin(rz)+y*Math.cos(rz);return{x:x3,y:y3,z};};
 const pr1=rot1({x:x1,y:y1,z:z1}),pr2=rot1({x:x2,y:y2,z:z2});
 const fov=500,sc1=fov/(pr1.z+fov/2),sc2=fov/(pr2.z+fov/2);
 const px1=c.width/2+pr1.x*sc1*zm*15+panX,py1=c.height/2-pr1.y*sc1*zm*15+panY;
 const px2=c.width/2+pr2.x*sc2*zm*15+panX,py2=c.height/2-pr2.y*sc2*zm*15+panY;
-ctx.beginPath();ctx.moveTo(px1,py1);ctx.lineTo(px2,py2);ctx.stroke();}
+ctx.beginPath();ctx.moveTo(px1,py1);ctx.lineTo(px2,py2);ctx.stroke();}}
 for(const p of proj){ctx.fillStyle=p.clr;ctx.beginPath();ctx.arc(p.px,p.py,Math.max(1,ps*p.sc*10),0,2*Math.PI);ctx.fill();}
+if(smithEnabled){ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='12px Segoe UI';ctx.fillText('Smith Chart: Γ = (z-1)/(z+1)',10,20);ctx.fillText(`α = ${smithAlpha}°`,10,35);}
 pts3d=proj;
 const tot=rawPts.length,prim=rawPts.filter(p=>p.p).length,th=theory(R,3),z3=zeta(3);
-legend('al3d',`3D Ball Statistics (${vm==='inv'?'INVERTED':'Normal'})`,[['Count',tot,'#00d9ff'],['Primitive',prim,'#00d9ff'],['1/ζ(3) Pred',tot/z3,'#9664ff'],['Theory',th,'#ff8c00'],['Density %',100*prim/tot,'#00ff88']]);
-document.getElementById('st3d').innerHTML=`<div class="sb"><span class="sl">Total</span><span class="sv">${tot}</span></div><div class="sb"><span class="sl">Primitive</span><span class="sv">${prim}</span></div><div class="sb"><span class="sl">Density</span><span class="sv">${fmt(100*prim/tot)}%</span></div><div class="sb"><span class="sl">Theory</span><span class="sv">${fmt(th)}</span></div><div class="sb"><span class="sl">Mode</span><span class="sv">${vm==='inv'?'Inverted':'Normal'}</span></div>`;
-c.onclick=e=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);for(const p of[...proj].reverse())if(Math.hypot(mx-p.px,my-p.py)<10){modal('3D Point Analysis',[['Position',`(${fmt(p.ox)}, ${fmt(p.oy)}, ${fmt(p.oz)})`],['GCD',p.g],['Primitive',p.p?'Yes':'No'],['Distance',Math.sqrt(p.ox*p.ox+p.oy*p.oy+p.oz*p.oz)]]);break;}};}
+legend('al3d',`${smithEnabled?'Smith Chart':'3D Ball'} Statistics (${vm==='inv'?'INVERTED':'Normal'})`,[['Count',tot,'#00d9ff'],['Primitive',prim,'#00d9ff'],['1/ζ(3) Pred',tot/z3,'#9664ff'],['Theory',th,'#ff8c00'],['Density %',100*prim/tot,'#00ff88']]);
+document.getElementById('st3d').innerHTML=`<div class="sb"><span class="sl">Total</span><span class="sv">${tot}</span></div><div class="sb"><span class="sl">Primitive</span><span class="sv">${prim}</span></div><div class="sb"><span class="sl">Density</span><span class="sv">${fmt(100*prim/tot)}%</span></div><div class="sb"><span class="sl">Theory</span><span class="sv">${fmt(th)}</span></div><div class="sb"><span class="sl">Mode</span><span class="sv">${smithEnabled?'Smith':vm==='inv'?'Inverted':'Normal'}</span></div>`;
+c.onclick=e=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);for(const p of[...proj].reverse())if(Math.hypot(mx-p.px,my-p.py)<10){const theta=Math.atan2(p.oy,p.ox);const sm=smithEnabled?smithTransform(1,theta,smithAlpha):{x:0,y:0};modal('3D Point Analysis',[['Position',`(${fmt(p.ox)}, ${fmt(p.oy)}, ${fmt(p.oz)})`],['GCD',p.g],['Primitive',p.p?'Yes':'No'],['Distance',Math.sqrt(p.ox*p.ox+p.oy*p.oy+p.oz*p.oz)],smithEnabled?['Γ (Smith)',`${sm.x.toFixed(4)} + ${sm.y.toFixed(4)}i`]:['Z-depth',p.z]]);break;}};}
 let drag=false,rmd=false,lx,ly;
+function syncRotInputs(){document.getElementById('rotX').value=Math.round(rx*180/Math.PI)%360;document.getElementById('rotY').value=Math.round(ry*180/Math.PI)%360;document.getElementById('rotZ').value=Math.round(rz*180/Math.PI)%360;document.getElementById('rotXr').value=Math.round(rx*180/Math.PI)%360;document.getElementById('rotYr').value=Math.round(ry*180/Math.PI)%360;document.getElementById('rotZr').value=Math.round(rz*180/Math.PI)%360;}
 document.getElementById('c3d').onmousedown=e=>{if(e.button===0){drag=true;}else if(e.button===2){rmd=true;}lx=e.clientX;ly=e.clientY;e.preventDefault();};
 document.getElementById('c3d').oncontextmenu=e=>e.preventDefault();
-document.onmousemove=e=>{if(drag){ry+=(e.clientX-lx)*.01;rx+=(e.clientY-ly)*.01;lx=e.clientX;ly=e.clientY;draw3D();}else if(rmd){panX+=(e.clientX-lx);panY+=(e.clientY-ly);lx=e.clientX;ly=e.clientY;draw3D();}};
+document.onmousemove=e=>{if(drag){ry+=(e.clientX-lx)*.01;rx+=(e.clientY-ly)*.01;lx=e.clientX;ly=e.clientY;syncRotInputs();draw3D();}else if(rmd){panX+=(e.clientX-lx);panY+=(e.clientY-ly);lx=e.clientX;ly=e.clientY;draw3D();}};
 document.onmouseup=()=>{drag=false;rmd=false;};
 document.getElementById('c3d').onwheel=e=>{const z=document.getElementById('zm3d');z.value=Math.max(.2,Math.min(5,+z.value+(e.deltaY>0?-.1:.1)));document.getElementById('zmv').textContent=z.value+'x';draw3D();e.preventDefault();};
-setInterval(()=>{if(anim3d){ry+=.015;draw3D();}},50);
+setInterval(()=>{if(anim3d){ry+=.015;syncRotInputs();draw3D();}},50);
 function csv3D(){let s='x,y,z,gcd,primitive\n';for(const p of enum3D(+document.getElementById('r3d').value))s+=`${p.x},${p.y},${p.z},${p.g},${p.p}\n`;dl(s,'mobius_3d.csv');}
 
 function runErr(){const maxR=+document.getElementById('errR').value,sh=document.getElementById('errSh').value;const rs=[],ths=[],acts=[],errs=[],relEs=[];D.err=[];for(let r=.5;r<=maxR;r+=.5){const pts=enum2D(r,sh),p=pts.filter(x=>x.p).length,th=theory(r,2),err=Math.abs(p-th);rs.push(r);ths.push(th);acts.push(p);errs.push(err);relEs.push(th>0?err/th*100:0);D.err.push({r,th,p,err,relE:th>0?err/th*100:0});}
@@ -526,7 +791,197 @@ function csvCirc(){let s='R,Count,Theory,Error,RelError%\n';for(const d of D.cir
 function runDens(){const R=+document.getElementById('densR').value;const ks=[],ths=[],emps=[];D.dens=[];for(let k=2;k<=7;k++){let tot=0,prim=0;const m=Math.ceil(k<=3?R:Math.min(R,5));if(k===2){for(let x=-m;x<=m;x++)for(let y=-m;y<=m;y++)if(x*x+y*y<=R*R){tot++;if(gcdM(x,y)===1)prim++;}}else if(k===3){for(let x=-m;x<=m;x++)for(let y=-m;y<=m;y++)for(let z=-m;z<=m;z++)if(x*x+y*y+z*z<=R*R){tot++;if(gcdM(x,y,z)===1)prim++;}}else{const sm=Math.min(5,Math.ceil(R));(function en(d,c){if(c.length===k){const s=c.reduce((a,x)=>a+x*x,0);if(s<=R*R){tot++;if(gcdM(...c)===1)prim++;}return;}for(let i=-sm;i<=sm;i++)en(d,[...c,i]);})(k,[]);}const z=zeta(k),th=1/z,emp=tot>0?prim/tot:0;ks.push(k);ths.push(th);emps.push(emp);D.dens.push({k,z,th,emp,tot,prim,err:Math.abs(emp-th),relE:th>0?Math.abs(emp-th)/th*100:0});}Plotly.newPlot('pdens1',[{x:ks,y:ths,name:'1/ζ(k)',mode:'lines+markers',line:{color:'#ff8c00',width:3},marker:{size:8}},{x:ks,y:emps,name:'Empirical',mode:'markers',marker:{color:'#00d9ff',size:8}}],{...plo(),xaxis:{title:'Dimension k'}});legend('aldens1','Density Convergence',[['Theory (k=2)',ths[0],'#ff8c00'],['Empirical (k=2)',emps[0],'#00d9ff']]);Plotly.newPlot('pdens2',[{x:ks,y:D.dens.map(d=>d.relE),type:'bar',marker:{color:'#00ff88'}}],plo());legend('aldens2','Error Convergence',[['Max Error %',Math.max(...D.dens.map(d=>d.relE)),'#ff006e'],['Min Error %',Math.min(...D.dens.map(d=>d.relE)),'#00ff88']]);document.getElementById('tdensT').innerHTML='<tr><th>k</th><th>ζ(k)</th><th>1/ζ(k) Theory</th><th>Empirical</th><th>Error</th></tr>'+D.dens.map(d=>`<tr onclick="modal('Dimension ${d.k} Density',[['ζ(${d.k})',${d.z}],['Theory',${d.th}],['Empirical',${d.emp}],['Total',${d.tot}],['Primitive',${d.prim}]])" style="cursor:pointer"><td>${d.k}</td><td>${fmt(d.z)}</td><td>${fmt(d.th)}</td><td>${fmt(d.emp)}</td><td>${fmt(d.err)}</td></tr>`).join('');}
 function csvDens(){let s='k,Zeta,Theory,Empirical,Error,Total,Primitive\n';for(const d of D.dens)s+=`${d.k},${d.z},${d.th},${d.emp},${d.err},${d.tot},${d.prim}\n`;dl(s,'density.csv');}
 
+async function screenshotPlotly(plotIds,legends,title,filename){
+const scale=2,pad=30,gap=20;
+const plots=plotIds.map(id=>document.getElementById(id)).filter(p=>p);
+if(!plots.length)return alert('Run analysis first');
+const imgs=await Promise.all(plots.map(p=>Plotly.toImage(p,{format:'png',width:p.offsetWidth,height:p.offsetHeight,scale:2})));
+const loaded=await Promise.all(imgs.map(src=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=src;})));
+const legEls=legends.map(id=>document.getElementById(id)).filter(l=>l);
+const legH=legEls.length?100:0;
+const cols=Math.min(2,loaded.length),rows=Math.ceil(loaded.length/cols);
+const pw=loaded[0].width/2,ph=loaded[0].height/2;
+const out=document.createElement('canvas');
+out.width=(pw*cols+gap*(cols-1)+pad*2)*scale;
+out.height=(ph*rows+gap*(rows-1)+pad*2+40+legH)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.fillText(title,pad,pad+20);
+loaded.forEach((img,i)=>{const col=i%cols,row=Math.floor(i/cols);ctx.drawImage(img,pad+col*(pw+gap),pad+40+row*(ph+gap),pw,ph);});
+if(legEls.length){let ly=pad+40+rows*(ph+gap)+10;
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 14px Segoe UI';ctx.fillText('Statistics',pad,ly);ly+=20;
+ctx.font='12px Segoe UI';let lx=pad;
+legEls.forEach(leg=>{leg.querySelectorAll('.li').forEach((li,j)=>{const l=li.querySelector('strong')?.textContent||'',v=li.querySelector('.v')?.textContent||'';
+ctx.fillStyle=isDark()?'#b0b8d8':'#4a5568';ctx.fillText(l+': '+v,lx,ly);lx+=160;if(lx>out.width/scale-pad){lx=pad;ly+=18;}});});}
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;a.click();},'image/png',1.0);}
+
+async function screenshotErr(){await screenshotPlotly(['pe1','pe2','pe3','pe4'],['ale1','ale2','ale3','ale4'],'Error Analysis','error_screenshot.png');}
+async function screenshotSh(){await screenshotPlotly(['psh'],['alsh'],'Möbius Shell Contributions','shells_screenshot.png');}
+async function screenshotGCD(){await screenshotPlotly(['pgcd1','pgcd2'],['algcd1','algcd2'],'GCD Analysis','gcd_screenshot.png');}
+async function screenshotCirc(){await screenshotPlotly(['pc1','pc2','pc3'],['alc1','alc2','alc3'],'Circle Problem Analysis','circle_screenshot.png');}
+async function screenshotDens(){await screenshotPlotly(['pdens1','pdens2'],['aldens1','aldens2'],'Primitive Density 1/ζ(k) Verification','density_screenshot.png');}
+async function screenshotDim(){
+const tbl=document.getElementById('tdimT'),leg=document.getElementById('aldim');
+if(!tbl.rows.length||tbl.rows.length<2)return alert('Run analysis first');
+const scale=2,pad=40;
+const out=document.createElement('canvas');out.width=800*scale;out.height=500*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,800,500);
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.fillText('Dimension Comparison',pad,pad);
+ctx.font='bold 12px Segoe UI';ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';
+const heads=['n','Vol(Bₙ)','ζ(n)','Theory','Computed','Error'];
+heads.forEach((h,i)=>ctx.fillText(h,pad+i*115,pad+40));
+ctx.font='12px Segoe UI';ctx.fillStyle=isDark()?'#b0b8d8':'#4a5568';
+[...tbl.rows].slice(1).forEach((r,ri)=>{[...r.cells].forEach((c,ci)=>ctx.fillText(c.textContent,pad+ci*115,pad+65+ri*25));});
+if(leg){ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 14px Segoe UI';ctx.fillText('Legend',pad,pad+200);
+let lx=pad,ly=pad+220;ctx.font='12px Segoe UI';
+leg.querySelectorAll('.li').forEach(li=>{const l=li.querySelector('strong')?.textContent||'',v=li.querySelector('.v')?.textContent||'';
+ctx.fillStyle=isDark()?'#b0b8d8':'#4a5568';ctx.fillText(l+': '+v,lx,ly);lx+=180;if(lx>700){lx=pad;ly+=20;}});}
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='dimensions_screenshot.png';a.click();},'image/png',1.0);}
+
+let cayleyPts=[],primRootData={};
+
+function cayley(z){const x=z.x,y=z.y,d=(1-x)*(1-x)+y*y;if(d<1e-10)return{x:0,y:1e6};return{x:-2*y/d,y:(1-x*x-y*y)/d};}
+
+function drawCayley(){
+const c=document.getElementById('ccay'),ctx=c.getContext('2d'),R=+document.getElementById('rcay').value,range=+document.getElementById('cayRange').value,col=document.getElementById('colCay').value;
+const showGrid=document.getElementById('cayGrid').checked,showGeo=document.getElementById('cayGeo').checked,showFord=document.getElementById('cayFord').checked;
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+const scX=c.width/(2*range),scY=c.height/range,ox=c.width/2,oy=c.height;
+if(showGrid){ctx.strokeStyle=gridC();ctx.lineWidth=1;for(let i=-Math.ceil(range);i<=Math.ceil(range);i++){ctx.beginPath();ctx.moveTo(ox+i*scX,0);ctx.lineTo(ox+i*scX,c.height);ctx.stroke();}for(let i=0;i<=range;i++){ctx.beginPath();ctx.moveTo(0,oy-i*scY);ctx.lineTo(c.width,oy-i*scY);ctx.stroke();}}
+ctx.strokeStyle=bordC();ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,oy);ctx.lineTo(c.width,oy);ctx.stroke();
+cayleyPts=[];const pts=enum2D(R,'circle');let prim=0;
+for(const pt of pts){if(pt.x===0&&pt.y===0)continue;const nrm=Math.sqrt(pt.x*pt.x+pt.y*pt.y);const zNorm={x:pt.x/(nrm+.01)*.99,y:pt.y/(nrm+.01)*.99};const w=cayley(zNorm);if(w.y>0&&w.y<range*2&&Math.abs(w.x)<range*2){if(pt.p)prim++;const px=ox+w.x*scX,py=oy-w.y*scY;let clr;if(col==='gcd')clr=pt.p?'#00d9ff':'#ff6496';else if(col==='prim')clr=pt.p?'#ffd700':'#666';else if(col==='imag')clr=`hsl(${Math.floor(w.y/range*240)},100%,50%)`;else if(col==='fire'){const d=w.y/range;clr=d<.33?`rgb(${Math.floor(d*3*255)},0,0)`:d<.66?`rgb(255,${Math.floor((d-.33)*3*255)},0)`:`rgb(255,200,${Math.floor((d-.66)*3*255)})`;}else if(col==='plasma'){const d=w.y/range;clr=`rgb(${Math.floor(13+d*230)},${Math.floor(8+d*92+Math.sin(d*Math.PI)*100)},${Math.floor(135+d*80)})`;}else if(col==='viridis'){const d=w.y/range;clr=`rgb(${Math.floor(68+d*187)},${Math.floor(1+d*206)},${Math.floor(84+d*50)})`;}else clr=pt.p?'#00d9ff':'#ff6496';ctx.fillStyle=clr;ctx.beginPath();ctx.arc(px,py,3,0,2*Math.PI);ctx.fill();cayleyPts.push({...pt,wx:w.x,wy:w.y,px,py});}}
+if(showGeo){ctx.strokeStyle='rgba(255,136,0,0.3)';ctx.lineWidth=1;for(let i=1;i<=5;i++){const r=i*.5*scY;ctx.beginPath();ctx.arc(ox,oy,r,Math.PI,2*Math.PI);ctx.stroke();}}
+if(showFord){ctx.strokeStyle='rgba(150,100,255,0.4)';ctx.lineWidth=1;for(let q=1;q<=Math.min(R,8);q++)for(let p=0;p<=q;p++)if(gcd(p,q)===1){const cx=ox+(p/q)*range*scX,r=1/(2*q*q)*scY*range;if(r>2){ctx.beginPath();ctx.arc(cx,oy-r,r,0,2*Math.PI);ctx.stroke();}}}
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='12px Segoe UI';ctx.fillText('Re(w)',c.width-40,oy-10);ctx.fillText('Im(w)',ox+5,15);
+legend('alcay','Cayley Transform ℍ Statistics',[['In Range',cayleyPts.length,'#00d9ff'],['Primitive',prim,'#ffd700'],['Density %',cayleyPts.length>0?100*prim/cayleyPts.length:0,'#00ff88']]);
+document.getElementById('stcay').innerHTML=`<div class="sb"><span class="sl">Points</span><span class="sv">${cayleyPts.length}</span></div><div class="sb"><span class="sl">Primitive</span><span class="sv">${prim}</span></div><div class="sb"><span class="sl">View Range</span><span class="sv">${range}</span></div>`;
+c.onclick=e=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);for(const p of cayleyPts)if(Math.hypot(mx-p.px,my-p.py)<10){modal('Cayley Point',[['Original (x,y)',`(${p.x}, ${p.y})`],['Cayley w',`${fmt(p.wx)} + ${fmt(p.wy)}i`],['Im(w)',p.wy],['GCD',p.g],['Primitive',p.p?'Yes':'No']]);break;}};}
+
+function csvCayley(){let s='x,y,gcd,primitive,Re_w,Im_w\n';for(const p of cayleyPts)s+=`${p.x},${p.y},${p.g},${p.p},${p.wx},${p.wy}\n`;dl(s,'cayley.csv');}
+
+async function screenshotCayley(){const c=document.getElementById('ccay'),al=document.getElementById('alcay'),st=document.getElementById('stcay');const scale=2,pad=40,statH=80;const out=document.createElement('canvas');out.width=c.width*scale;out.height=(c.height+statH+pad*2)*scale;const ctx=out.getContext('2d');ctx.scale(scale,scale);ctx.fillStyle=canvBg();ctx.fillRect(0,0,out.width/scale,out.height/scale);ctx.drawImage(c,0,0);ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 16px Segoe UI';ctx.fillText('Cayley Transform: Disk → Upper Half-Plane',pad,c.height+pad+20);out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='cayley_screenshot.png';a.click();},'image/png',1.0);}
+
+function mulOrd(a,m){if(gcd(a,m)!==1)return 0;let ord=1,x=a%m;while(x!==1&&ord<=m){x=(x*a)%m;ord++;}return ord;}
+
+function findPrimRoot(){const M=+document.getElementById('mprim').value,phi=eulerPhi(M);for(let g=2;g<M;g++)if(gcd(g,M)===1&&mulOrd(g,M)===phi){document.getElementById('gprim').value=g;drawPrimRoot();return;}alert('No primitive root exists for M='+M);}
+
+function eulerPhi(n){let r=n;for(let p=2;p*p<=n;p++)if(n%p===0){while(n%p===0)n/=p;r-=r/p;}if(n>1)r-=r/n;return Math.round(r);}
+
+function drawPrimRoot(){
+const c=document.getElementById('cprim'),ctx=c.getContext('2d'),M=+document.getElementById('mprim').value,g=+document.getElementById('gprim').value,col=document.getElementById('colPrim').value;
+const showSeq=document.getElementById('primSeq').checked,showOrd=document.getElementById('primOrd').checked;
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+const cx=c.width/2,cy=c.height/2,rad=Math.min(cx,cy)-60;
+ctx.strokeStyle=gridC();ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,rad,0,2*Math.PI);ctx.stroke();
+const phi=eulerPhi(M),isPrimRoot=gcd(g,M)===1&&mulOrd(g,M)===phi;
+const orders={},elements=[];for(let k=1;k<M;k++){const ord=mulOrd(k,M);orders[k]=ord;elements.push({k,ord,isUnit:gcd(k,M)===1});}
+const ordCounts={};elements.forEach(e=>{if(e.ord>0)ordCounts[e.ord]=(ordCounts[e.ord]||0)+1;});
+const maxOrd=Math.max(...elements.map(e=>e.ord));
+for(const e of elements){const ang=2*Math.PI*e.k/M-Math.PI/2,px=cx+rad*Math.cos(ang),py=cy+rad*Math.sin(ang);let clr;if(col==='order')clr=e.ord===0?'#666':e.ord===phi?'#ffd700':`hsl(${Math.floor(e.ord/maxOrd*300)},100%,50%)`;else if(col==='power')clr=e.isUnit?'#00d9ff':'#ff6496';else clr=e.isUnit?'#00ff88':'#ff6496';ctx.fillStyle=clr;ctx.beginPath();ctx.arc(px,py,e.ord===phi?6:4,0,2*Math.PI);ctx.fill();if(showOrd&&e.ord>0){ctx.fillStyle=isDark()?'rgba(255,255,255,0.8)':'rgba(0,0,0,0.8)';ctx.font='10px Arial';ctx.textAlign='center';ctx.fillText(e.ord,px,py-10);}}
+if(showSeq&&isPrimRoot){ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=2;ctx.beginPath();let x=1;for(let i=0;i<=phi;i++){const ang=2*Math.PI*x/M-Math.PI/2,px=cx+rad*Math.cos(ang),py=cy+rad*Math.sin(ang);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);x=(x*g)%M;}ctx.stroke();}
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';ctx.fillText(`M = ${M}, φ(M) = ${phi}, g = ${g}`,cx,30);ctx.fillText(isPrimRoot?'g is a PRIMITIVE ROOT':'g is NOT a primitive root',cx,50);
+const primRoots=elements.filter(e=>e.ord===phi).map(e=>e.k);legend('alprim','Primitive Root Analysis',[['φ(M)',phi,'#ffd700'],['Units',elements.filter(e=>e.isUnit).length,'#00d9ff'],['Primitive Roots',primRoots.length,'#00ff88'],['Max Order',maxOrd,'#ff8c00']]);
+document.getElementById('stprim').innerHTML=`<div class="sb"><span class="sl">M</span><span class="sv">${M}</span></div><div class="sb"><span class="sl">φ(M)</span><span class="sv">${phi}</span></div><div class="sb"><span class="sl">g</span><span class="sv">${g}</span></div><div class="sb"><span class="sl">ord(g)</span><span class="sv">${mulOrd(g,M)}</span></div><div class="sb"><span class="sl">Prim Root?</span><span class="sv">${isPrimRoot?'Yes':'No'}</span></div>`;
+const ordData=Object.entries(ordCounts).sort((a,b)=>+a[0]-+b[0]);Plotly.newPlot('pprimord',[{x:ordData.map(d=>d[0]),y:ordData.map(d=>d[1]),type:'bar',marker:{color:ordData.map(d=>+d[0]===phi?'#ffd700':'#00d9ff')}}],{...plo(),xaxis:{title:'Order'},yaxis:{title:'Count'}});
+primRootData={M,phi,g,isPrimRoot,elements,primRoots};}
+
+function csvPrim(){let s='k,order,isUnit,isPrimRoot\n';for(const e of primRootData.elements||[])s+=`${e.k},${e.ord},${e.isUnit},${e.ord===primRootData.phi}\n`;dl(s,'primitive_roots.csv');}
+
+async function screenshotPrim(){const c=document.getElementById('cprim'),al=document.getElementById('alprim');const scale=2,pad=40;const out=document.createElement('canvas');out.width=c.width*scale;out.height=(c.height+100)*scale;const ctx=out.getContext('2d');ctx.scale(scale,scale);ctx.fillStyle=canvBg();ctx.fillRect(0,0,out.width/scale,out.height/scale);ctx.drawImage(c,0,0);ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 16px Segoe UI';ctx.fillText('Primitive Roots & Cyclic Structure',pad,c.height+pad);out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='primitive_roots_screenshot.png';a.click();},'image/png',1.0);}
+
+let modRingData=[];
+
+function drawModRings(){
+const c=document.getElementById('cmod'),ctx=c.getContext('2d');
+const minM=+document.getElementById('modMin').value,maxM=+document.getElementById('modMax').value;
+const spacing=document.getElementById('modSpace').value,col=document.getElementById('modCol').value;
+const phase=+document.getElementById('modPhase').value*Math.PI/180,ptSz=+document.getElementById('modPtSz').value;
+const showDirect=document.getElementById('modDirect').checked,showGcd1=document.getElementById('modGcd1').checked;
+const showUnit=document.getElementById('modUnit').checked;
+const gapThick=parseFloat(document.getElementById('gapThick').value);
+const liftThick=parseFloat(document.getElementById('liftThick').value);
+const labelMode=document.getElementById('modLabel').value,labelSz=+document.getElementById('modLblSz').value;
+const selectedGaps=[];
+if(document.getElementById('gap2').checked)selectedGaps.push(2);
+if(document.getElementById('gap4').checked)selectedGaps.push(4);
+if(document.getElementById('gap6').checked)selectedGaps.push(6);
+if(document.getElementById('gap8').checked)selectedGaps.push(8);
+if(document.getElementById('gap10').checked)selectedGaps.push(10);
+const smithEnabled=document.getElementById('smithMod').checked,smithAlpha=+document.getElementById('smithAMod').value;
+const smithRMode=document.getElementById('smithRMod').value,smithZoom=+document.getElementById('smithZoom').value;
+const smithGrid=document.getElementById('smithGridMod').checked,smithConstR=document.getElementById('smithCircRMod').checked,smithConstX=document.getElementById('smithArcXMod').checked;
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+const cx=c.width/2,cy=c.height/2,maxRad=Math.min(cx,cy)-40;
+const smithRad=maxRad*smithZoom;
+if(smithEnabled){drawSmithGrid(ctx,cx,cy,smithRad,smithGrid,smithConstR,smithConstX);ctx.strokeStyle=bordC();ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,smithRad,0,2*Math.PI);ctx.stroke();}
+const rings=[];for(let m=minM;m<=maxM;m++)rings.push(m);
+const getRadius=(m,i)=>{const n=rings.length;if(spacing==='uniform')return maxRad*(i+1)/(n+1);if(spacing==='linear')return maxRad*m/maxM;if(spacing==='sqrt')return maxRad*Math.sqrt(m)/Math.sqrt(maxM);if(spacing==='log')return maxRad*Math.log(m+1)/Math.log(maxM+1);if(spacing==='phi')return maxRad*eulerPhi(m)/eulerPhi(maxM);return maxRad*(i+1)/(n+1);};
+const getSmithR=(i,m)=>{if(smithRMode==='unit')return 1;if(smithRMode==='scaled')return 0.5+(i/Math.max(1,rings.length-1))*1.5;if(smithRMode==='modulus')return Math.min(3,Math.log(m+1)/Math.log(10));return 1;};
+const spf=(n)=>{if(n<2)return n;for(let p=2;p*p<=n;p++)if(n%p===0)return p;return n;};
+const spfColors={2:'#FF6B6B',3:'#4ECDC4',5:'#FFE66D',7:'#95E1D3',11:'#F38181',13:'#AA96DA',17:'#FCBAD3',19:'#A8D8EA',23:'#DFE6E9'};
+modRingData=[];let totalPts=0,totalGcd1=0;
+if(showUnit&&minM===1&&!smithEnabled){ctx.strokeStyle='rgba(255,215,0,0.8)';ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy,getRadius(1,0),0,2*Math.PI);ctx.stroke();ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(cx,cy,ptSz+2,0,2*Math.PI);ctx.fill();}
+for(let i=0;i<rings.length;i++){const m=rings[i];if(m<2)continue;const rad=getRadius(m,i),phi=eulerPhi(m);
+if(!smithEnabled){ctx.strokeStyle=gridC();ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,rad,0,2*Math.PI);ctx.stroke();}
+const coprimes=[];for(let r=0;r<m;r++)if(gcd(r,m)===1)coprimes.push(r);
+const pts=[];for(let r=0;r<m;r++){const g=gcd(r,m),isGcd1=g===1;if(showGcd1&&!isGcd1)continue;
+const ang=2*Math.PI*r/m-Math.PI/2+phase;
+let px,py;
+if(smithEnabled){const smR=getSmithR(i,m);const theta=ang+smithAlpha*Math.PI/180;let gamma;if(smithRMode==='unit'){gamma={re:0,im:Math.tan(theta/2)};}else{const A=smR*Math.cos(theta)-1,B=smR*Math.sin(theta),C=smR*Math.cos(theta)+1;const denom=C*C+B*B;gamma=denom<1e-10?{re:0,im:0}:{re:(A*C+B*B)/denom,im:B*(C-A)/denom};}px=cx+gamma.re*smithRad;py=cy-gamma.im*smithRad;}
+else{px=cx+rad*Math.cos(ang);py=cy+rad*Math.sin(ang);}
+let clr;const angle=r/m;
+if(col==='rainbow')clr=`hsl(${Math.floor(angle*360)},75%,65%)`;
+else if(col==='gcd')clr=isGcd1?'#ffd700':'#666666';
+else if(col==='gcd_per_mod'){if(isGcd1){const modHue=(m*67)%360;clr=`hsl(${modHue},85%,70%)`;}else clr='#666666';}
+else if(col==='gcd_spectrum'){if(isGcd1){const density=phi/m;const spectralHue=(density*240+r*15)%360;const sat=60+density*30;clr=`hsl(${spectralHue},${sat}%,65%)`;}else clr='#666666';}
+else if(col==='spf'){const pf=spf(r);clr=spfColors[pf]||`hsl(${(pf*37)%360},70%,60%)`;}
+else if(col==='ring')clr=`hsl(${Math.floor(i/rings.length*300)},78%,62%)`;
+else if(col==='residue')clr=`hsl(${(r*37)%360},80%,70%)`;
+else if(col==='prime'){const isPr=r>1&&[...Array(Math.floor(Math.sqrt(r))+1)].every((_,j)=>j<2||r%j!==0);clr=isPr?'#FF6B6B':'#4ECDC4';}
+else clr=isGcd1?'#ffd700':'#666666';
+pts.push({r,m,g,isGcd1,ang,px,py,clr,rad});totalPts++;if(isGcd1)totalGcd1++;}
+for(const pt of pts){ctx.fillStyle=pt.clr;ctx.beginPath();ctx.arc(pt.px,pt.py,pt.isGcd1?ptSz:ptSz*.7,0,2*Math.PI);ctx.fill();}
+if(labelMode!=='none'){ctx.font=`${labelSz}px Segoe UI`;ctx.textAlign='center';ctx.textBaseline='bottom';
+for(const pt of pts){let lbl='';if(labelMode==='r')lbl=pt.r;else if(labelMode==='rm')lbl=`${pt.r}/${pt.m}`;else if(labelMode==='deg')lbl=Math.round((pt.ang+Math.PI/2)*180/Math.PI)+'°';else if(labelMode==='gcd')lbl=pt.g;ctx.fillStyle=isDark()?'rgba(255,255,255,0.85)':'rgba(0,0,0,0.85)';ctx.fillText(lbl,pt.px,pt.py-ptSz-2);}}
+modRingData.push({m,phi,pts,coprimes,index:i});}
+const gapLineWidth=0.2+gapThick*2.8;
+selectedGaps.forEach((gap,gapIdx)=>{const hue=(gapIdx*360/selectedGaps.length)%360;
+for(const ring of modRingData){ring.coprimes.forEach(r=>{const r2=(r+gap)%ring.m;if(ring.coprimes.includes(r2)){const p1=ring.pts.find(p=>p.r===r&&p.isGcd1);const p2=ring.pts.find(p=>p.r===r2&&p.isGcd1);if(p1&&p2){ctx.beginPath();ctx.moveTo(p1.px,p1.py);ctx.lineTo(p2.px,p2.py);ctx.strokeStyle=`hsla(${hue},75%,65%,0.6)`;ctx.lineWidth=gapLineWidth;ctx.stroke();}}});}});
+if(showDirect){const liftLineWidth=0.5+liftThick*3.5;ctx.strokeStyle='rgba(255,215,0,0.7)';ctx.lineWidth=liftLineWidth;
+for(let i=0;i<modRingData.length-1;i++){const curr=modRingData[i],next=modRingData[i+1];for(const p1 of curr.pts){if(!p1.isGcd1)continue;const p2=next.pts.find(p=>p.r===p1.r&&p.isGcd1);if(p2){ctx.beginPath();ctx.moveTo(p1.px,p1.py);ctx.lineTo(p2.px,p2.py);ctx.stroke();}}}}
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(smithEnabled?`Smith Chart: M=${minM} to ${maxM}, α=${smithAlpha}°, Zoom ${smithZoom}x`:`Modular Rings M=${minM} to ${maxM}`,cx,20);
+legend('almod',smithEnabled?'Smith Chart Statistics':'Modular Ring Statistics',[['Rings',rings.length,'#00d9ff'],['Total Points',totalPts,'#00d9ff'],['GCD=1 (χ≠0)',totalGcd1,'#ffd700'],['Density %',totalPts>0?100*totalGcd1/totalPts:0,'#00ff88']]);
+document.getElementById('stmod').innerHTML=`<div class="sb"><span class="sl">Rings</span><span class="sv">${rings.length}</span></div><div class="sb"><span class="sl">Points</span><span class="sv">${totalPts}</span></div><div class="sb"><span class="sl">GCD=1</span><span class="sv">${totalGcd1}</span></div><div class="sb"><span class="sl">Density</span><span class="sv">${fmt(100*totalGcd1/totalPts)}%</span></div>`;
+const phiData=modRingData.filter(r=>r.m>1).map(r=>({m:r.m,phi:r.phi,density:r.phi/r.m}));
+Plotly.newPlot('pmodphi',[{x:phiData.map(d=>d.m),y:phiData.map(d=>d.density),type:'scatter',mode:'lines+markers',name:'φ(M)/M',line:{color:'#ffd700'},marker:{color:'#ffd700'}}],{...plo(),xaxis:{title:'Modulus M'},yaxis:{title:'φ(M)/M',range:[0,1]}});
+c.onclick=e=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);for(const ring of modRingData)for(const p of ring.pts)if(Math.hypot(mx-p.px,my-p.py)<ptSz+5){const theta=p.ang+smithAlpha*Math.PI/180;const smR=smithEnabled?getSmithR(ring.index,ring.m):1;let gamma;if(smithRMode==='unit')gamma={re:0,im:Math.tan(theta/2)};else{const A=smR*Math.cos(theta)-1,B=smR*Math.sin(theta),C=smR*Math.cos(theta)+1;const denom=C*C+B*B;gamma=denom<1e-10?{re:0,im:0}:{re:(A*C+B*B)/denom,im:B*(C-A)/denom};}modal('Residue Point',[['Residue r',p.r],['Modulus M',p.m],['GCD(r,M)',p.g],['Coprime χ(r)≠0',p.isGcd1?'Yes':'No'],['Angle θ',fmt(p.ang*180/Math.PI)+'°'],['φ(M)',ring.phi],smithEnabled?['Γ (Smith)',`${gamma.re.toFixed(4)} + ${gamma.im.toFixed(4)}i`]:['Ring Radius',fmt(p.rad)]]);return;}};}
+
+
+function csvMod(){let s='modulus,residue,gcd,coprime,angle_deg\n';for(const ring of modRingData)for(const p of ring.pts)s+=`${p.m},${p.r},${p.g},${p.isGcd1},${p.ang*180/Math.PI}\n`;dl(s,'modular_rings.csv');}
+
+async function screenshotMod(){const c=document.getElementById('cmod'),al=document.getElementById('almod');const scale=2,pad=40;const out=document.createElement('canvas');out.width=c.width*scale;out.height=(c.height+120)*scale;const ctx=out.getContext('2d');ctx.scale(scale,scale);ctx.fillStyle=canvBg();ctx.fillRect(0,0,out.width/scale,out.height/scale);ctx.drawImage(c,0,0);ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.fillText('Modular Ring System: θ = 2πr/M',pad,c.height+pad);ctx.font='14px Segoe UI';ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.fillText('Gold = GCD(r,M)=1 (Dirichlet Character Support χ(r)≠0)',pad,c.height+pad+25);out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='modular_rings_screenshot.png';a.click();},'image/png',1.0);}
+
+async function screenshot3D4K(){
+const c=document.getElementById('c3d'),al=document.getElementById('al3d'),st=document.getElementById('st3d');
+const res=+document.getElementById('ss3dRes').value||4,bg=document.getElementById('ss3dBg').value;
+const showTitle=document.getElementById('ss3dTitle').checked,showLegend=document.getElementById('ss3dLegend').checked,showStats=document.getElementById('ss3dStats').checked;
+const titleTxt=document.getElementById('ss3dTitleTxt').value||'3D Visualization';
+const pad=60,titleH=showTitle?80:0,legendH=showLegend?150:0,statsH=showStats?100:0;
+const out=document.createElement('canvas');out.width=c.width*res;out.height=(c.height+titleH+legendH+statsH)*res;
+const ctx=out.getContext('2d');ctx.scale(res,res);
+if(bg==='black')ctx.fillStyle='#000';else if(bg==='white')ctx.fillStyle='#fff';else if(bg==='transparent')ctx.fillStyle='transparent';else ctx.fillStyle=canvBg();
+ctx.fillRect(0,0,out.width/res,out.height/res);
+let yOff=0;
+if(showTitle){ctx.fillStyle=bg==='white'?'#0066cc':'#00d9ff';ctx.font='bold 24px Segoe UI';ctx.textAlign='center';ctx.fillText(titleTxt,c.width/2,pad);ctx.font='14px Segoe UI';ctx.fillStyle=bg==='white'?'#666':'#aaa';ctx.fillText('By Wessen Getachew · @7dview',c.width/2,pad+30);yOff=titleH;}
+ctx.drawImage(c,0,yOff);yOff+=c.height;
+if(showStats){ctx.fillStyle=bg==='white'?'#333':'#e0e0ff';ctx.font='bold 14px Segoe UI';ctx.textAlign='left';const R=+document.getElementById('r3d').value,pts=enum3D(R),prim=pts.filter(p=>p.p).length;ctx.fillText(`R=${R}  |  Total: ${pts.length}  |  Primitive: ${prim}  |  Density: ${fmt(100*prim/pts.length)}%`,pad,yOff+30);ctx.fillText(`Rotation: X=${document.getElementById('rotX').value}° Y=${document.getElementById('rotY').value}° Z=${document.getElementById('rotZ').value}°`,pad,yOff+55);yOff+=statsH;}
+if(showLegend){ctx.fillStyle=bg==='white'?'#0066cc':'#00d9ff';ctx.font='bold 16px Segoe UI';ctx.fillText('Legend',pad,yOff+25);ctx.font='12px Segoe UI';const legs=[['GCD=1 (Primitive)','#00d9ff'],['GCD=2','#64c8ff'],['GCD=3','#9664ff'],['GCD>3','#ff6496']];let lx=pad;legs.forEach(([txt,clr])=>{ctx.fillStyle=clr;ctx.fillRect(lx,yOff+40,15,15);ctx.fillStyle=bg==='white'?'#333':'#e0e0ff';ctx.fillText(txt,lx+20,yOff+52);lx+=150;});}
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`mobius_3d_${res}x.png`;a.click();},'image/png',1.0);}
+
 draw2D();
 </script>
 </body>
-</html>
+                                                                                                                                                                                                                                                                                               </html>
