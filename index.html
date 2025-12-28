@@ -142,7 +142,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <ul>
 <li><strong>ζ(n)^(-1) Density:</strong> The inverse zeta function emerges as the natural density of primitive integers.</li>
 <li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</li>
-<li><strong>Multi-Scale Sieve:</strong> The Möbicts as a geometric filter.</li>
+<li><strong>Multi-Scale Sieve:</strong> The Möbius inversion acts as a geometric filter.</li>
 <li><strong>Dimension Universal:</strong> The formula holds for all dimensions n ≥ 3.</li>
 <li><strong>GCD Multiplication Table:</strong> The 2D lattice within a circle is fundamentally a bounded GCD multiplication table. Each point (x,y) represents an entry where gcd(x,y) determines the "cell value". The primitive points (GCD=1) correspond to coprime pairs—the units in the multiplicative structure.</li>
 <li><strong>Four-Quadrant Symmetry:</strong> The lattice exhibits 4-fold rotational symmetry, mirroring the structure of modular arithmetic tables when viewed as rings.</li>
@@ -420,6 +420,15 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <button class="tbtn" onclick="showTab('tgold',this)">Goldbach</button>
 <button class="tbtn" onclick="showTab('tgap',this)">Prime Gaps</button>
 <button class="tbtn" onclick="showTab('tsoph',this)">Sophie Germain</button>
+<button class="tbtn" onclick="showTab('tmert',this)">Mertens M(x)</button>
+<button class="tbtn" onclick="showTab('tcheb',this)">Chebyshev ψ</button>
+<button class="tbtn" onclick="showTab('tli',this)">Li(x)</button>
+<button class="tbtn" onclick="showTab('tdiv',this)">Divisor d(n)</button>
+<button class="tbtn" onclick="showTab('tliou',this)">Liouville λ</button>
+<button class="tbtn" onclick="showTab('tmang',this)">Mangoldt Λ</button>
+<button class="tbtn" onclick="showTab('tram',this)">Ramanujan c_q</button>
+<button class="tbtn" onclick="showTab('tulam',this)">Ulam Spiral</button>
+<button class="tbtn" onclick="showTab('tsacks',this)">Sacks Spiral</button>
 </div>
 
 <div id="t2d" class="tab active">
@@ -2250,8 +2259,524 @@ p is Sophie Germain prime ⟺ p and 2p+1 both prime &nbsp;|&nbsp; 2p+1 is called
 </div>
 </div>
 
+<div id="tmert" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max x <span class="tip" title="Upper bound for summation">?</span></label><div class="sig"><input type="range" id="mertX" min="100" max="50000" value="1000" oninput="document.getElementById('mertXv').value=this.value;drawMertens()"><input type="number" id="mertXv" value="1000" min="10" max="100000" onchange="document.getElementById('mertX').value=Math.min(50000,this.value);drawMertens()"></div></div>
+<div class="cg"><label>Visualization</label><select id="mertViz" onchange="drawMertens()">
+<option value="cumulative">M(x) Cumulative</option>
+<option value="normalized">M(x)/√x Normalized</option>
+<option value="mobius">μ(n) Values</option>
+<option value="both">M(x) + μ(n) Combined</option>
+</select></div>
+<div class="cg"><label>Color Mode</label><select id="mertCol" onchange="drawMertens()">
+<option value="sign">By Sign (+1/-1/0)</option>
+<option value="squarefree">Squarefree vs Not</option>
+<option value="omega">By ω(n) (distinct primes)</option>
+</select></div>
+<div class="cg"><label>Show Bounds</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="mertBoundSqrt" checked onchange="drawMertens()"> ±√x</label>
+<label><input type="checkbox" id="mertBoundRH" onchange="drawMertens()"> RH Bound x^{1/2+ε}</label>
+</div></div>
+<div class="cg"><label>Point Size</label><input type="range" id="mertPtSz" min="1" max="8" value="3" step="0.5" onchange="drawMertens()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('mertXv').value=500;drawMertens()">500</button>
+<button onclick="document.getElementById('mertXv').value=1000;drawMertens()">1K</button>
+<button onclick="document.getElementById('mertXv').value=5000;drawMertens()">5K</button>
+<button onclick="document.getElementById('mertXv').value=10000;drawMertens()">10K</button>
+<button onclick="document.getElementById('mertXv').value=50000;drawMertens()">50K</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawMertens()">Compute</button><button onclick="screenshotMertens()">Screenshot</button><button class="s" onclick="csvMertens()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Mertens Function M(x) = Σμ(n) for n≤x</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Click any point for details. RH ⟺ M(x) = O(x^{1/2+ε}) for all ε>0.</p>
+<canvas id="cmert" width="800" height="500"></canvas><div class="al" id="almert"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('mertLiveStats','Mertens_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="mertLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>M(x)/√x Ratio</h3><div class="pc" id="pmertRatio"></div></div>
+<div class="viz"><h3>μ(n) Distribution</h3><div class="pc" id="pmertDist"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,100,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Mertens Function & Riemann Hypothesis</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The Mertens function M(x) = Σ_{n≤x} μ(n) is the summatory function of the Möbius function. It encodes the "imbalance" between squarefree integers with even vs odd numbers of prime factors. The Riemann Hypothesis is equivalent to the bound |M(x)| = O(x^{1/2+ε}) for all ε > 0. The weaker Mertens conjecture |M(x)| < √x was disproved by Odlyzko and te Riele (1985), but the RH bound remains open.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (RH Connection):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The connection to RH comes through the identity: 1/ζ(s) = Σμ(n)/n^s. The Dirichlet series for 1/ζ(s) converges absolutely for Re(s) > 1. The behavior of M(x) determines how far left this can be analytically continued. If |M(x)| = O(x^{1/2+ε}), then ζ(s) has no zeros with Re(s) > 1/2, which is RH. The normalized ratio M(x)/√x oscillates but should remain bounded if RH is true.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+RH ⟺ M(x) = O(x^{1/2+ε}) ∀ε>0 &nbsp;&nbsp;|&nbsp;&nbsp; M(x) = Σ_{n≤x} μ(n) &nbsp;&nbsp;|&nbsp;&nbsp; 1/ζ(s) = Σ μ(n)/n^s
+</div>
+</div>
+</div>
+
+<div id="tcheb" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max x <span class="tip" title="Upper bound for summation">?</span></label><div class="sig"><input type="range" id="chebX" min="100" max="50000" value="1000" oninput="document.getElementById('chebXv').value=this.value;drawChebyshev()"><input type="number" id="chebXv" value="1000" min="10" max="100000" onchange="document.getElementById('chebX').value=Math.min(50000,this.value);drawChebyshev()"></div></div>
+<div class="cg"><label>Function</label><select id="chebFunc" onchange="drawChebyshev()">
+<option value="psi">ψ(x) = Σ Λ(n)</option>
+<option value="theta">θ(x) = Σ log p</option>
+<option value="both">Both ψ(x) and θ(x)</option>
+<option value="error">Error ψ(x) - x</option>
+</select></div>
+<div class="cg"><label>Show Reference</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="chebShowX" checked onchange="drawChebyshev()"> y = x line</label>
+<label><input type="checkbox" id="chebShowRH" onchange="drawChebyshev()"> RH bound</label>
+</div></div>
+<div class="cg"><label>Normalization</label><select id="chebNorm" onchange="drawChebyshev()">
+<option value="raw">Raw values</option>
+<option value="ratio">ψ(x)/x ratio</option>
+<option value="error_norm">(ψ(x)-x)/√x</option>
+</select></div>
+<div class="cg"><label>Point Size</label><input type="range" id="chebPtSz" min="1" max="8" value="3" step="0.5" onchange="drawChebyshev()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('chebXv').value=500;drawChebyshev()">500</button>
+<button onclick="document.getElementById('chebXv').value=1000;drawChebyshev()">1K</button>
+<button onclick="document.getElementById('chebXv').value=5000;drawChebyshev()">5K</button>
+<button onclick="document.getElementById('chebXv').value=10000;drawChebyshev()">10K</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawChebyshev()">Compute</button><button onclick="screenshotChebyshev()">Screenshot</button><button class="s" onclick="csvChebyshev()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Chebyshev Functions ψ(x) and θ(x)</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">ψ(x) counts prime powers weighted by log. PNT: ψ(x) ~ x. RH: ψ(x) = x + O(x^{1/2+ε}).</p>
+<canvas id="ccheb" width="800" height="500"></canvas><div class="al" id="alcheb"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('chebLiveStats','Chebyshev_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="chebLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>ψ(x)/x Convergence</h3><div class="pc" id="pchebRatio"></div></div>
+<div class="viz"><h3>Von Mangoldt Λ(n)</h3><div class="pc" id="pchebLambda"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(100,200,255,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Chebyshev Functions & Prime Number Theorem</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The Chebyshev function ψ(x) = Σ_{n≤x} Λ(n) where Λ(n) is the von Mangoldt function (log p if n=p^k, else 0). The companion function θ(x) = Σ_{p≤x} log p sums only over primes. The Prime Number Theorem (PNT) states ψ(x) ~ x and θ(x) ~ x as x→∞. These functions are smoother than π(x) and connect directly to ζ(s) zeros.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Explicit Formula):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The explicit formula connects ψ(x) to zeta zeros: ψ(x) = x - Σ_ρ x^ρ/ρ - log(2π) - ½log(1-x^{-2}), where the sum is over nontrivial zeros ρ of ζ(s). Each zero contributes an oscillation. RH (all ρ have Re(ρ)=1/2) implies these oscillations decay like √x, giving ψ(x) = x + O(√x log²x).
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+ψ(x) = Σ_{n≤x} Λ(n) ~ x &nbsp;&nbsp;|&nbsp;&nbsp; θ(x) = Σ_{p≤x} log p ~ x &nbsp;&nbsp;|&nbsp;&nbsp; Λ(p^k) = log p
+</div>
+</div>
+</div>
+
+<div id="tli" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max x <span class="tip" title="Upper bound for integration">?</span></label><div class="sig"><input type="range" id="liX" min="10" max="100000" value="1000" oninput="document.getElementById('liXv').value=this.value;drawLi()"><input type="number" id="liXv" value="1000" min="10" max="500000" onchange="document.getElementById('liX').value=Math.min(100000,this.value);drawLi()"></div></div>
+<div class="cg"><label>Visualization</label><select id="liViz" onchange="drawLi()">
+<option value="comparison">π(x) vs Li(x) vs x/ln(x)</option>
+<option value="error">Error π(x) - Li(x)</option>
+<option value="ratio">π(x)/Li(x) Ratio</option>
+<option value="density">Prime Density 1/ln(x)</option>
+</select></div>
+<div class="cg"><label>Show Functions</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="liShowPi" checked onchange="drawLi()"> π(x)</label>
+<label><input type="checkbox" id="liShowLi" checked onchange="drawLi()"> Li(x)</label>
+<label><input type="checkbox" id="liShowXln" checked onchange="drawLi()"> x/ln(x)</label>
+<label><input type="checkbox" id="liShowR" onchange="drawLi()"> R(x) Riemann</label>
+</div></div>
+<div class="cg"><label>Scale</label><select id="liScale" onchange="drawLi()">
+<option value="linear">Linear</option>
+<option value="log">Logarithmic</option>
+</select></div>
+<div class="cg"><label>Point Size</label><input type="range" id="liPtSz" min="1" max="8" value="3" step="0.5" onchange="drawLi()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('liXv').value=100;drawLi()">100</button>
+<button onclick="document.getElementById('liXv').value=1000;drawLi()">1K</button>
+<button onclick="document.getElementById('liXv').value=10000;drawLi()">10K</button>
+<button onclick="document.getElementById('liXv').value=100000;drawLi()">100K</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawLi()">Compute</button><button onclick="screenshotLi()">Screenshot</button><button class="s" onclick="csvLi()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Logarithmic Integral Li(x) = ∫₂ˣ dt/ln(t)</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Li(x) is the best elementary approximation to π(x). Click points for details.</p>
+<canvas id="cli" width="800" height="500"></canvas><div class="al" id="alli"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('liLiveStats','Li_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="liLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Error π(x) - Li(x)</h3><div class="pc" id="pliError"></div></div>
+<div class="viz"><h3>Approximation Quality</h3><div class="pc" id="pliQuality"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(100,255,150,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Logarithmic Integral & Prime Counting</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The logarithmic integral Li(x) = ∫₂ˣ dt/ln(t) provides the best elementary approximation to the prime counting function π(x). Gauss conjectured π(x) ~ Li(x), which is the Prime Number Theorem (proved 1896). While x/ln(x) is simpler, Li(x) has smaller error: |π(x) - Li(x)| grows much slower than |π(x) - x/ln(x)|.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Skewes Number):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Surprisingly, Li(x) > π(x) for all computed values, but Littlewood proved π(x) - Li(x) changes sign infinitely often! The first crossover (Skewes number) is enormous: around 10^316. Under RH, |π(x) - Li(x)| = O(√x log x). Riemann's function R(x) = Σ μ(n)/n · Li(x^{1/n}) is even more accurate, incorporating the zeros of ζ(s).
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+Li(x) = ∫₂ˣ dt/ln(t) &nbsp;&nbsp;|&nbsp;&nbsp; π(x) ~ Li(x) &nbsp;&nbsp;|&nbsp;&nbsp; R(x) = Σ μ(n)/n · Li(x^{1/n})
+</div>
+</div>
+</div>
+
+<div id="tdiv" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="divN" min="50" max="10000" value="500" oninput="document.getElementById('divNv').value=this.value;drawDivisor()"><input type="number" id="divNv" value="500" min="10" max="50000" onchange="document.getElementById('divN').value=Math.min(10000,this.value);drawDivisor()"></div></div>
+<div class="cg"><label>Function</label><select id="divFunc" onchange="drawDivisor()">
+<option value="tau">τ(n) = d(n) Divisor Count</option>
+<option value="sigma">σ(n) Sum of Divisors</option>
+<option value="sigma_k">σ_k(n) Power Sum</option>
+<option value="both">Both τ(n) and σ(n)</option>
+</select></div>
+<div class="cg"><label>Visualization</label><select id="divViz" onchange="drawDivisor()">
+<option value="scatter">Scatter Plot</option>
+<option value="average">Running Average</option>
+<option value="max">Record Values</option>
+<option value="density">Density Distribution</option>
+</select></div>
+<div class="cg"><label>σ_k Power (k)</label><input type="number" id="divK" value="1" min="-2" max="10" onchange="drawDivisor()"></div>
+<div class="cg"><label>Point Size</label><input type="range" id="divPtSz" min="1" max="8" value="2" step="0.5" onchange="drawDivisor()"></div>
+<div class="cg"><label>Show Reference</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="divShowAvg" checked onchange="drawDivisor()"> Average Line</label>
+<label><input type="checkbox" id="divShowHC" onchange="drawDivisor()"> Highly Composite</label>
+</div></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('divNv').value=100;drawDivisor()">100</button>
+<button onclick="document.getElementById('divNv').value=500;drawDivisor()">500</button>
+<button onclick="document.getElementById('divNv').value=1000;drawDivisor()">1K</button>
+<button onclick="document.getElementById('divNv').value=5000;drawDivisor()">5K</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawDivisor()">Compute</button><button onclick="screenshotDivisor()">Screenshot</button><button class="s" onclick="csvDivisor()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Divisor Functions τ(n) and σ(n)</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">τ(n) counts divisors, σ(n) sums them. Click points for factorization details.</p>
+<canvas id="cdiv" width="800" height="500"></canvas><div class="al" id="aldiv"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('divLiveStats','Divisor_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="divLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>τ(n) Distribution</h3><div class="pc" id="pdivTau"></div></div>
+<div class="viz"><h3>σ(n)/n Abundancy</h3><div class="pc" id="pdivAbund"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,200,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Divisor Functions in Number Theory</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The divisor function τ(n) = d(n) counts the number of positive divisors of n, while σ(n) sums all divisors. For prime p, τ(p)=2 and σ(p)=p+1. These are multiplicative: τ(mn)=τ(m)τ(n) when gcd(m,n)=1. The average value of τ(n) is log n + 2γ - 1 where γ≈0.5772 is Euler's constant. Highly composite numbers have more divisors than any smaller number.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Perfect & Abundant Numbers):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The abundancy index σ(n)/n classifies numbers: deficient (σ(n)/n < 2), perfect (σ(n)/n = 2), or abundant (σ(n)/n > 2). Perfect numbers satisfy σ(n) = 2n (e.g., 6, 28, 496). Euler proved even perfect numbers have form 2^{p-1}(2^p - 1) where 2^p - 1 is Mersenne prime. Whether odd perfect numbers exist is unknown!
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+τ(n) = Σ_{d|n} 1 &nbsp;&nbsp;|&nbsp;&nbsp; σ(n) = Σ_{d|n} d &nbsp;&nbsp;|&nbsp;&nbsp; σ_k(n) = Σ_{d|n} d^k &nbsp;&nbsp;|&nbsp;&nbsp; ⟨τ(n)⟩ ~ log n
+</div>
+</div>
+</div>
+
+<div id="tliou" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="liouN" min="100" max="50000" value="1000" oninput="document.getElementById('liouNv').value=this.value;drawLiouville()"><input type="number" id="liouNv" value="1000" min="10" max="100000" onchange="document.getElementById('liouN').value=Math.min(50000,this.value);drawLiouville()"></div></div>
+<div class="cg"><label>Visualization</label><select id="liouViz" onchange="drawLiouville()">
+<option value="cumulative">L(x) = Σλ(n) Cumulative</option>
+<option value="normalized">L(x)/√x Normalized</option>
+<option value="lambda">λ(n) Values</option>
+<option value="comparison">L(x) vs M(x) Comparison</option>
+</select></div>
+<div class="cg"><label>Color Mode</label><select id="liouCol" onchange="drawLiouville()">
+<option value="sign">By Sign (+1/-1)</option>
+<option value="omega">By Ω(n) (total primes)</option>
+<option value="squarefree">Squarefree Highlight</option>
+</select></div>
+<div class="cg"><label>Show Bounds</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="liouBoundSqrt" checked onchange="drawLiouville()"> ±√x</label>
+<label><input type="checkbox" id="liouShowM" onchange="drawLiouville()"> Show M(x)</label>
+</div></div>
+<div class="cg"><label>Point Size</label><input type="range" id="liouPtSz" min="1" max="8" value="3" step="0.5" onchange="drawLiouville()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('liouNv').value=500;drawLiouville()">500</button>
+<button onclick="document.getElementById('liouNv').value=1000;drawLiouville()">1K</button>
+<button onclick="document.getElementById('liouNv').value=5000;drawLiouville()">5K</button>
+<button onclick="document.getElementById('liouNv').value=10000;drawLiouville()">10K</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawLiouville()">Compute</button><button onclick="screenshotLiouville()">Screenshot</button><button class="s" onclick="csvLiouville()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Liouville Function L(x) = Σλ(n)</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">λ(n) = (-1)^{Ω(n)} where Ω(n) counts prime factors with multiplicity. RH connection via Pólya conjecture.</p>
+<canvas id="cliou" width="800" height="500"></canvas><div class="al" id="alliou"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('liouLiveStats','Liouville_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="liouLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>L(x)/√x Ratio</h3><div class="pc" id="pliouRatio"></div></div>
+<div class="viz"><h3>Ω(n) Distribution</h3><div class="pc" id="pliouOmega"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(150,100,255,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Liouville Function & Pólya Conjecture</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The Liouville function λ(n) = (-1)^{Ω(n)} where Ω(n) is the number of prime factors of n counted with multiplicity. Unlike μ(n), λ(n) is never zero. The summatory function L(x) = Σ_{n≤x} λ(n) relates to M(x) via: L(x) = Σ_{k≤√x} M(x/k²). The Liouville function is completely multiplicative: λ(mn) = λ(m)λ(n) for all m,n.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Pólya Conjecture):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Pólya conjectured (1919) that L(x) ≤ 0 for all x ≥ 2, meaning more integers have an odd number of prime factors. This was disproved by Haselgrove (1958)! The first counterexample is around x ≈ 906,150,257. Like M(x), RH implies L(x) = O(x^{1/2+ε}).
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+λ(n) = (-1)^{Ω(n)} &nbsp;&nbsp;|&nbsp;&nbsp; L(x) = Σ_{n≤x} λ(n) &nbsp;&nbsp;|&nbsp;&nbsp; L(x) = Σ_{k≤√x} M(x/k²)
+</div>
+</div>
+</div>
+
+<div id="tmang" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="mangN" min="50" max="5000" value="500" oninput="document.getElementById('mangNv').value=this.value;drawMangoldt()"><input type="number" id="mangNv" value="500" min="10" max="20000" onchange="document.getElementById('mangN').value=Math.min(5000,this.value);drawMangoldt()"></div></div>
+<div class="cg"><label>Visualization</label><select id="mangViz" onchange="drawMangoldt()">
+<option value="bars">Λ(n) Bar Chart</option>
+<option value="cumulative">ψ(x) = Σ Λ(n)</option>
+<option value="primepower">Prime Power Highlight</option>
+<option value="log">log p Values</option>
+</select></div>
+<div class="cg"><label>Color Mode</label><select id="mangCol" onchange="drawMangoldt()">
+<option value="prime">By Prime Base</option>
+<option value="power">By Power k</option>
+<option value="size">By log p Size</option>
+</select></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="mangShowPrimes" checked onchange="drawMangoldt()"> Primes (k=1)</label>
+<label><input type="checkbox" id="mangShowPowers" checked onchange="drawMangoldt()"> Higher Powers</label>
+<label><input type="checkbox" id="mangShowPsi" onchange="drawMangoldt()"> ψ(x) Line</label>
+</div></div>
+<div class="cg"><label>Point Size</label><input type="range" id="mangPtSz" min="1" max="10" value="4" step="0.5" onchange="drawMangoldt()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('mangNv').value=100;drawMangoldt()">100</button>
+<button onclick="document.getElementById('mangNv').value=500;drawMangoldt()">500</button>
+<button onclick="document.getElementById('mangNv').value=1000;drawMangoldt()">1K</button>
+<button onclick="document.getElementById('mangNv').value=2000;drawMangoldt()">2K</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawMangoldt()">Compute</button><button onclick="screenshotMangoldt()">Screenshot</button><button class="s" onclick="csvMangoldt()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Von Mangoldt Function Λ(n)</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Λ(n) = log p if n = p^k for prime p, else 0. Core building block for Chebyshev functions.</p>
+<canvas id="cmang" width="800" height="500"></canvas><div class="al" id="almang"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('mangLiveStats','Mangoldt_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="mangLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Prime Powers by Base</h3><div class="pc" id="pmangPowers"></div></div>
+<div class="viz"><h3>Λ(n) Size Distribution</h3><div class="pc" id="pmangDist"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(100,255,200,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Von Mangoldt Function & Explicit Formulas</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The von Mangoldt function Λ(n) equals log p when n is a prime power p^k, and 0 otherwise. It satisfies the elegant identity: Σ_{d|n} Λ(d) = log n, making it fundamental to multiplicative number theory. The Chebyshev function ψ(x) = Σ_{n≤x} Λ(n) smooths prime counting, and PNT states ψ(x) ~ x.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Explicit Formula):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The explicit formula directly connects Λ(n) to zeta zeros: ψ(x) = x - Σ_ρ x^ρ/ρ - log(2π) + O(1), where ρ runs over nontrivial zeros of ζ(s). Each zero contributes an oscillating term x^ρ/ρ. If RH holds (all Re(ρ) = 1/2), these oscillations have amplitude √x, giving optimal error bounds.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+Λ(p^k) = log p &nbsp;&nbsp;|&nbsp;&nbsp; Σ_{d|n} Λ(d) = log n &nbsp;&nbsp;|&nbsp;&nbsp; ψ(x) = Σ Λ(n) = x - Σ_ρ x^ρ/ρ + O(1)
+</div>
+</div>
+</div>
+
+<div id="tram" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Modulus q <span class="tip" title="Denominator for Ramanujan sum">?</span></label><div class="sig"><input type="range" id="ramQ" min="2" max="100" value="12" oninput="document.getElementById('ramQv').value=this.value;drawRamanujan()"><input type="number" id="ramQv" value="12" min="2" max="500" onchange="document.getElementById('ramQ').value=Math.min(100,this.value);drawRamanujan()"></div></div>
+<div class="cg"><label>Max n <span class="tip" title="Range for n values">?</span></label><div class="sig"><input type="range" id="ramN" min="10" max="500" value="100" oninput="document.getElementById('ramNv').value=this.value;drawRamanujan()"><input type="number" id="ramNv" value="100" min="10" max="2000" onchange="document.getElementById('ramN').value=Math.min(500,this.value);drawRamanujan()"></div></div>
+<div class="cg"><label>Visualization</label><select id="ramViz" onchange="drawRamanujan()">
+<option value="heatmap">c_q(n) Heatmap (q vs n)</option>
+<option value="fixedq">c_q(n) for Fixed q</option>
+<option value="fixedn">c_q(n) for Fixed n</option>
+<option value="circle">Unit Circle Roots</option>
+</select></div>
+<div class="cg"><label>Color Scale</label><select id="ramCol" onchange="drawRamanujan()">
+<option value="diverging">Diverging (±)</option>
+<option value="magnitude">Magnitude |c_q|</option>
+<option value="phase">By Sign</option>
+</select></div>
+<div class="cg"><label>Fixed n (for q-view)</label><input type="number" id="ramFixN" value="6" min="1" max="1000" onchange="drawRamanujan()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('ramQv').value=6;drawRamanujan()">q=6</button>
+<button onclick="document.getElementById('ramQv').value=12;drawRamanujan()">q=12</button>
+<button onclick="document.getElementById('ramQv').value=30;drawRamanujan()">q=30</button>
+<button onclick="document.getElementById('ramQv').value=60;drawRamanujan()">q=60</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawRamanujan()">Compute</button><button onclick="screenshotRamanujan()">Screenshot</button><button class="s" onclick="csvRamanujan()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Ramanujan Sum c_q(n) = Σ_{gcd(a,q)=1} e^{2πian/q}</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Sum of primitive q-th roots of unity raised to power n. Always an integer! Click for details.</p>
+<canvas id="cram" width="800" height="500"></canvas><div class="al" id="alram"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('ramLiveStats','Ramanujan_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="ramLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>c_q(n) vs n</h3><div class="pc" id="pramN"></div></div>
+<div class="viz"><h3>c_q(n) for Divisors of q</h3><div class="pc" id="pramDiv"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,150,200,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Ramanujan Sums & Fourier Analysis on (ℤ/qℤ)×</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The Ramanujan sum c_q(n) = Σ_{1≤a≤q, gcd(a,q)=1} e^{2πian/q} is the sum of primitive q-th roots of unity raised to the n-th power. Remarkably, c_q(n) is always an integer! It equals μ(q/gcd(n,q))·φ(q)/φ(q/gcd(n,q)) when gcd(n,q) divides q. Ramanujan sums form an orthogonal basis for arithmetic functions.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Ramanujan Expansion):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Any arithmetic function f(n) with convergent series can be expanded: f(n) = Σ_q a_q·c_q(n). For example, μ(n) = Σ_q μ(q)c_q(n)/φ(q) and d(n) = Σ_q c_q(n)log(q)/q. This is Fourier analysis on the integers! The expansion converges for multiplicative functions.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+c_q(n) = Σ_{gcd(a,q)=1} e^{2πian/q} = μ(q/d)·φ(q)/φ(q/d) where d = gcd(n,q)
+</div>
+</div>
+</div>
+
+<div id="tulam" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Spiral Size <span class="tip" title="Width/height in cells">?</span></label><div class="sig"><input type="range" id="ulamSize" min="51" max="401" step="2" value="101" oninput="document.getElementById('ulamSizev').value=this.value;drawUlam()"><input type="number" id="ulamSizev" value="101" min="11" step="2" max="501" onchange="document.getElementById('ulamSize').value=Math.min(401,this.value);drawUlam()"></div></div>
+<div class="cg"><label>Start Number</label><input type="number" id="ulamStart" value="1" min="1" max="1000000" onchange="drawUlam()"></div>
+<div class="cg"><label>Highlight</label><select id="ulamHL" onchange="drawUlam()">
+<option value="primes">Primes Only</option>
+<option value="twin">Twin Primes</option>
+<option value="sophie">Sophie Germain</option>
+<option value="mersenne">Near 2^n-1</option>
+<option value="diagonal">Diagonal Patterns</option>
+</select></div>
+<div class="cg"><label>Color Mode</label><select id="ulamCol" onchange="drawUlam()">
+<option value="classic">Classic (Black/White)</option>
+<option value="heat">Prime Density Heat</option>
+<option value="mod6">Mod 6 Residue</option>
+<option value="gcd">GCD Pattern</option>
+</select></div>
+<div class="cg"><label>Cell Size</label><input type="range" id="ulamCell" min="1" max="10" value="4" onchange="drawUlam()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('ulamSizev').value=51;drawUlam()">51×51</button>
+<button onclick="document.getElementById('ulamSizev').value=101;drawUlam()">101×101</button>
+<button onclick="document.getElementById('ulamSizev').value=201;drawUlam()">201×201</button>
+<button onclick="document.getElementById('ulamSizev').value=401;drawUlam()">401×401</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawUlam()">Generate</button><button onclick="screenshotUlam()">Screenshot</button><button class="s" onclick="csvUlam()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Ulam Spiral — Primes on Integer Spiral</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Integers spiral outward; primes cluster along diagonals. Discovered by Stanisław Ulam (1963).</p>
+<canvas id="culam" width="800" height="800"></canvas><div class="al" id="alulam"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('ulamLiveStats','Ulam_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="ulamLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Diagonal Prime Density</h3><div class="pc" id="pulamDiag"></div></div>
+<div class="viz"><h3>Prime Gaps in Spiral</h3><div class="pc" id="pulamGaps"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(100,150,255,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Ulam Spiral & Prime Patterns</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The Ulam spiral arranges positive integers in a square spiral, starting from 1 at the center. When primes are highlighted, striking diagonal patterns emerge. Discovered by Stanisław Ulam in 1963 while doodling during a boring meeting! The diagonals correspond to quadratic polynomials n² + n + 41 (Euler's prime-rich polynomial) and similar forms.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Quadratic Polynomials):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Diagonals in the Ulam spiral represent quadratic sequences 4n² + bn + c. Some produce many primes: Euler's n² + n + 41 gives primes for n = 0 to 39. The diagonal density depends on the discriminant b² - 16c. Hardy-Littlewood conjecture predicts asymptotic prime density for each polynomial.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+Spiral: 1 → 2 → 3 → ... counterclockwise &nbsp;&nbsp;|&nbsp;&nbsp; Diagonals: 4n² + bn + c &nbsp;&nbsp;|&nbsp;&nbsp; Euler: n² + n + 41
+</div>
+</div>
+</div>
+
+<div id="tsacks" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max n <span class="tip" title="Highest integer to plot">?</span></label><div class="sig"><input type="range" id="sacksN" min="1000" max="100000" value="10000" oninput="document.getElementById('sacksNv').value=this.value;drawSacks()"><input type="number" id="sacksNv" value="10000" min="100" max="500000" onchange="document.getElementById('sacksN').value=Math.min(100000,this.value);drawSacks()"></div></div>
+<div class="cg"><label>Highlight</label><select id="sacksHL" onchange="drawSacks()">
+<option value="primes">Primes Only</option>
+<option value="all">All Integers</option>
+<option value="twin">Twin Primes</option>
+<option value="squares">Perfect Squares</option>
+<option value="triangular">Triangular Numbers</option>
+</select></div>
+<div class="cg"><label>Color Mode</label><select id="sacksCol" onchange="drawSacks()">
+<option value="classic">Classic White</option>
+<option value="rainbow">Rainbow by n</option>
+<option value="density">Local Density</option>
+<option value="gap">Gap to Next Prime</option>
+</select></div>
+<div class="cg"><label>Point Size</label><input type="range" id="sacksPtSz" min="0.5" max="5" value="1.5" step="0.5" onchange="drawSacks()"></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="sacksShowArcs" onchange="drawSacks()"> Parabolic Arcs</label>
+<label><input type="checkbox" id="sacksShowGrid" onchange="drawSacks()"> Radial Grid</label>
+</div></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('sacksNv').value=5000;drawSacks()">5K</button>
+<button onclick="document.getElementById('sacksNv').value=10000;drawSacks()">10K</button>
+<button onclick="document.getElementById('sacksNv').value=50000;drawSacks()">50K</button>
+<button onclick="document.getElementById('sacksNv').value=100000;drawSacks()">100K</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawSacks()">Generate</button><button onclick="screenshotSacks()">Screenshot</button><button class="s" onclick="csvSacks()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Sacks Spiral — Primes on √n Archimedean Spiral</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Each integer n at angle θ = 2π√n, radius r = √n. Primes form curved arms. Click for details.</p>
+<canvas id="csacks" width="800" height="800"></canvas><div class="al" id="alsacks"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('sacksLiveStats','Sacks_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="sacksLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Angular Distribution</h3><div class="pc" id="psacksAngle"></div></div>
+<div class="viz"><h3>Radial Prime Density</h3><div class="pc" id="psacksRadial"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(150,255,200,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Sacks Spiral & Prime Curves</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The Sacks spiral (Robert Sacks, 1994) places integer n at polar coordinates (√n, 2π√n). Perfect squares lie on the positive x-axis. Primes cluster along curved arms corresponding to quadratic polynomials. Unlike Ulam's square spiral, the Sacks spiral reveals smooth parabolic curves through prime-rich sequences.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Parabolic Arms):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Each parabolic arm in the Sacks spiral corresponds to a quadratic polynomial an² + bn + c. Primes from n² + n + 41 form a distinct curve. The visual clustering reveals that primes are not random but follow patterns encoded in quadratic residues modulo small primes. Twin primes appear as nearby paired curves.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+Position: r = √n, θ = 2π√n &nbsp;&nbsp;|&nbsp;&nbsp; Squares on x-axis &nbsp;&nbsp;|&nbsp;&nbsp; Arms: an² + bn + c
+</div>
+</div>
+</div>
+
 <div id="ref" class="sec">
-<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>26 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
+<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>35 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
 
 <div class="rs"><h3>Mathematical Credits & Historical Attribution</h3>
 <p style="color:var(--txt2);margin-bottom:1rem">This platform visualizes theorems and concepts developed by brilliant mathematicians over centuries:</p>
@@ -2272,7 +2797,7 @@ p is Sophie Germain prime ⟺ p and 2p+1 both prime &nbsp;|&nbsp; 2p+1 is called
 <div class="fb"><strong>Harald Cramér (1893-1985)</strong> — Cramér's conjecture on prime gaps: g_n = O((ln p_n)²), probabilistic model for primes.</div>
 </div>
 
-<div class="rs"><h3>All 26 Interactive Tabs</h3>
+<div class="rs"><h3>All 35 Interactive Tabs</h3>
 <h4>Lattice & Geometry (Tabs 1-3)</h4>
 <div class="fb"><strong>2D Lattice</strong> — Gauss circle problem: count lattice points in disk. Primitive density → 6/π² (Euler). 15+ color schemes.</div>
 <div class="fb"><strong>3D Ball</strong> — Extends to 3D sphere. Primitive density → 1/ζ(3) ≈ 0.832 (Apéry's constant). Drag rotation.</div>
@@ -2310,6 +2835,21 @@ p is Sophie Germain prime ⟺ p and 2p+1 both prime &nbsp;|&nbsp; 2p+1 is called
 <div class="fb"><strong>Goldbach</strong> — Goldbach conjecture: every even n≥4 is sum of two primes. Comet visualization, partition count G(n), Hardy-Littlewood prediction.</div>
 <div class="fb"><strong>Prime Gaps</strong> — Gap distribution g_n = p_{n+1} - p_n. Record gaps, Cramér's conjecture g_n = O((ln p)²), gap/ln(p) ratio analysis.</div>
 <div class="fb"><strong>Sophie Germain</strong> — Sophie Germain primes (p where 2p+1 also prime), safe primes, Cunningham chains. Cryptographic applications.</div>
+
+<h4>RH Connection (Tabs 27-29)</h4>
+<div class="fb"><strong>Mertens M(x)</strong> — Mertens function M(x)=Σμ(n) for n≤x. RH ⟺ |M(x)|=O(x^{1/2+ε}). Tracks μ(n) cumulative imbalance. M(x)/√x ratio analysis.</div>
+<div class="fb"><strong>Chebyshev ψ</strong> — Chebyshev function ψ(x)=Σ Λ(n) and θ(x)=Σ log p. Von Mangoldt Λ(n). PNT: ψ(x)~x. RH: ψ(x)=x+O(√x log²x).</div>
+<div class="fb"><strong>Li(x)</strong> — Logarithmic integral Li(x)=∫₂ˣ dt/ln(t). Best elementary π(x) approximation. Littlewood's sign changes. Skewes number ~10³¹⁶.</div>
+
+<h4>Arithmetic Functions (Tabs 30-32)</h4>
+<div class="fb"><strong>Divisor d(n)</strong> — τ(n) counts divisors, σ(n) sums them. Highly composite numbers, perfect/abundant/deficient classification. Average τ(n) ~ log n.</div>
+<div class="fb"><strong>Liouville λ</strong> — λ(n)=(-1)^{Ω(n)} where Ω counts primes with multiplicity. L(x)=Σλ(n). Pólya conjecture (disproved). RH connection.</div>
+<div class="fb"><strong>Mangoldt Λ</strong> — Λ(n)=log p if n=p^k, else 0. Core of Chebyshev ψ(x). Explicit formula: ψ(x)=x-Σ x^ρ/ρ. Prime power decomposition.</div>
+
+<h4>Advanced & Visual (Tabs 33-35)</h4>
+<div class="fb"><strong>Ramanujan c_q</strong> — Ramanujan sum c_q(n) = Σ_{gcd(a,q)=1} e^{2πian/q}. Always integer! Fourier basis for arithmetic functions. Heatmap and unit circle views.</div>
+<div class="fb"><strong>Ulam Spiral</strong> — Integers on square spiral, primes highlighted. Diagonal patterns reveal quadratic polynomials. Euler's n²+n+41. Discovered 1963.</div>
+<div class="fb"><strong>Sacks Spiral</strong> — Primes at (√n, 2π√n) Archimedean spiral. Parabolic arms from quadratic sequences. Squares on x-axis. Visual prime clustering.</div>
 </div>
 
 <div class="rs"><h3>Key Theorems Visualized</h3>
@@ -8013,6 +8553,1877 @@ if(showLegend){ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 14px Segoe 
 ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
 ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',c.width/2,out.height/res-15);
 out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`mobius_3d_${res}x.png`;a.click();},'image/png',1.0);}
+
+// ==================== MERTENS FUNCTION M(x) ====================
+let mertensData={values:[],maxX:0};
+
+function computeMertens(maxX){
+const mu=new Array(maxX+1).fill(1);
+const sieve=new Array(maxX+1).fill(true);
+// Compute Möbius function
+for(let p=2;p<=maxX;p++){
+if(sieve[p]){
+for(let m=p;m<=maxX;m+=p){mu[m]*=-1;sieve[m]=false;}
+for(let m=p*p;m<=maxX;m+=p*p)mu[m]=0;
+for(let m=p;m<=maxX;m+=p)sieve[m]=true;
+}}
+// Compute cumulative M(x)
+const M=new Array(maxX+1);
+M[0]=0;
+for(let n=1;n<=maxX;n++)M[n]=M[n-1]+mu[n];
+return{mu,M};
+}
+
+function drawMertens(){
+const c=document.getElementById('cmert'),ctx=c.getContext('2d');
+const maxX=+document.getElementById('mertXv').value||+document.getElementById('mertX').value;
+const viz=document.getElementById('mertViz').value;
+const col=document.getElementById('mertCol').value;
+const showSqrt=document.getElementById('mertBoundSqrt').checked;
+const showRH=document.getElementById('mertBoundRH').checked;
+const ptSz=+document.getElementById('mertPtSz').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+const{mu,M}=computeMertens(maxX);
+mertensData={mu,M,maxX};
+
+const pad=60,w=c.width-2*pad,h=c.height-2*pad;
+const cx=pad,cy=c.height/2;
+
+// Determine data range
+let data,yMin,yMax,ylabel;
+if(viz==='cumulative'||viz==='both'){
+data=M.slice(1);
+yMin=Math.min(...data);yMax=Math.max(...data);
+ylabel='M(x)';
+}else if(viz==='normalized'){
+data=M.slice(1).map((m,i)=>m/Math.sqrt(i+1));
+yMin=Math.min(...data);yMax=Math.max(...data);
+ylabel='M(x)/√x';
+}else if(viz==='mobius'){
+data=mu.slice(1);
+yMin=-1.5;yMax=1.5;
+ylabel='μ(n)';
+}else{
+data=M.slice(1);
+yMin=Math.min(...data);yMax=Math.max(...data);
+ylabel='M(x)';
+}
+
+const margin=Math.abs(yMax-yMin)*0.1||1;
+yMin-=margin;yMax+=margin;
+const scX=w/maxX,scY=h/(yMax-yMin);
+
+// Grid
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=10;i++){
+const gx=pad+i*w/10;
+ctx.beginPath();ctx.moveTo(gx,pad);ctx.lineTo(gx,c.height-pad);ctx.stroke();
+const gy=pad+i*h/10;
+ctx.beginPath();ctx.moveTo(pad,gy);ctx.lineTo(c.width-pad,gy);ctx.stroke();
+}
+
+// Axes
+ctx.strokeStyle=bordC();ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(pad,pad);ctx.lineTo(pad,c.height-pad);ctx.lineTo(c.width-pad,c.height-pad);ctx.stroke();
+// Zero line
+if(yMin<0&&yMax>0){
+const y0=c.height-pad+yMin*scY;
+ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(pad,y0);ctx.lineTo(c.width-pad,y0);ctx.stroke();
+}
+
+// Bounds
+if(showSqrt&&(viz==='cumulative'||viz==='both')){
+ctx.strokeStyle='rgba(0,255,136,0.4)';ctx.lineWidth=1;ctx.setLineDash([5,3]);
+ctx.beginPath();
+for(let x=1;x<=maxX;x++){
+const px=pad+x*scX;
+const py=c.height-pad-(Math.sqrt(x)-yMin)*scY;
+if(x===1)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+ctx.beginPath();
+for(let x=1;x<=maxX;x++){
+const px=pad+x*scX;
+const py=c.height-pad-(-Math.sqrt(x)-yMin)*scY;
+if(x===1)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+ctx.setLineDash([]);
+}
+
+// Draw data
+const allPts=[];
+if(viz==='mobius'){
+// Bar chart for μ(n)
+for(let n=1;n<=maxX;n++){
+const px=pad+n*scX;
+const py0=c.height-pad+yMin*scY;
+const py=c.height-pad-(mu[n]-yMin)*scY;
+let clr;
+if(col==='sign'){clr=mu[n]===1?'#00ff88':mu[n]===-1?'#ff6496':'#666';}
+else if(col==='squarefree'){clr=mu[n]!==0?'#ffd700':'#444';}
+else{const omega=countDistinctPrimes(n);clr=`hsl(${omega*60},70%,50%)`;}
+ctx.fillStyle=clr;
+ctx.fillRect(px-ptSz/2,Math.min(py,py0),ptSz,Math.abs(py-py0)||1);
+allPts.push({n,mu:mu[n],M:M[n],px,py});
+}
+}else{
+// Line/scatter for M(x)
+ctx.strokeStyle='#00d9ff';ctx.lineWidth=1.5;
+ctx.beginPath();
+for(let n=1;n<=maxX;n++){
+const val=viz==='normalized'?M[n]/Math.sqrt(n):M[n];
+const px=pad+n*scX;
+const py=c.height-pad-(val-yMin)*scY;
+if(n===1)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+allPts.push({n,mu:mu[n],M:M[n],val,px,py});
+}
+ctx.stroke();
+// Points
+for(const pt of allPts){
+let clr;
+if(col==='sign'){clr=mu[pt.n]===1?'#00ff88':mu[pt.n]===-1?'#ff6496':'#666';}
+else if(col==='squarefree'){clr=mu[pt.n]!==0?'#ffd700':'#444';}
+else{const omega=countDistinctPrimes(pt.n);clr=`hsl(${omega*60},70%,50%)`;}
+ctx.fillStyle=clr;ctx.beginPath();ctx.arc(pt.px,pt.py,ptSz,0,2*Math.PI);ctx.fill();
+}
+}
+
+// Labels
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='12px Segoe UI';
+ctx.textAlign='center';ctx.fillText('n',c.width/2,c.height-15);
+ctx.save();ctx.translate(15,c.height/2);ctx.rotate(-Math.PI/2);ctx.fillText(ylabel,0,0);ctx.restore();
+
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Mertens Function M(x) = Σμ(n) — x ≤ ${maxX}`,c.width/2,25);
+
+// Stats
+const maxM=Math.max(...M.slice(1));
+const minM=Math.min(...M.slice(1));
+const finalM=M[maxX];
+const sqrtX=Math.sqrt(maxX);
+const ratio=finalM/sqrtX;
+const mu1Count=mu.slice(1).filter(m=>m===1).length;
+const muNeg1Count=mu.slice(1).filter(m=>m===-1).length;
+const mu0Count=mu.slice(1).filter(m=>m===0).length;
+const sqfreeRatio=((mu1Count+muNeg1Count)/maxX*100);
+
+legend('almert','Mertens M(x)',[['M('+maxX+')',finalM,'#00d9ff'],['Max M',maxM,'#00ff88'],['Min M',minM,'#ff6496']]);
+
+document.getElementById('mertLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${maxX}</div><div style="font-size:.7rem;color:var(--txt2)">MAX x</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${finalM}</div><div style="font-size:.7rem;color:var(--txt2)">M(${maxX})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:${Math.abs(ratio)<1?'#00ff88':'#ff6496'}">${fmt(ratio)}</div><div style="font-size:.7rem;color:var(--txt2)">M(x)/√x</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Mertens Values</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Maximum M(x):</span><span style="color:#00ff88;font-weight:bold">${maxM}</span>
+<span>Minimum M(x):</span><span style="color:#ff6496;font-weight:bold">${minM}</span>
+<span>√x bound:</span><span style="color:#ffd700">±${fmt(sqrtX)}</span>
+<span>|M(x)/√x| max:</span><span style="color:${Math.max(Math.abs(maxM),Math.abs(minM))/sqrtX<1?'#00ff88':'#ff6496'}">${fmt(Math.max(Math.abs(maxM),Math.abs(minM))/sqrtX)}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Möbius Distribution</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>μ(n) = +1:</span><span style="color:#00ff88">${mu1Count} (${fmt(mu1Count/maxX*100)}%)</span>
+<span>μ(n) = -1:</span><span style="color:#ff6496">${muNeg1Count} (${fmt(muNeg1Count/maxX*100)}%)</span>
+<span>μ(n) = 0:</span><span style="color:#666">${mu0Count} (${fmt(mu0Count/maxX*100)}%)</span>
+<span>Squarefree:</span><span style="color:#ffd700">${fmt(sqfreeRatio)}% (→6/π²≈60.8%)</span>
+</div>
+</div>
+<div style="background:${Math.abs(ratio)<1?'rgba(0,255,136,.1)':'rgba(255,100,150,.1)'};padding:8px;border-radius:6px">
+<strong style="color:${Math.abs(ratio)<1?'#00ff88':'#ff6496'}">RH Status: ${Math.abs(ratio)<1?'CONSISTENT':'CHECK NEEDED'}</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">|M(x)/√x| ${Math.abs(ratio)<1?'<':'≥'} 1 at x=${maxX}</div>
+</div>`;
+
+// Plotly charts
+Plotly.newPlot('pmertRatio',[{x:[...Array(maxX)].map((_,i)=>i+1),y:M.slice(1).map((m,i)=>m/Math.sqrt(i+1)),type:'scatter',mode:'lines',name:'M(x)/√x',line:{color:'#00d9ff'}}],{...plo(),xaxis:{title:'x'},yaxis:{title:'M(x)/√x'}});
+Plotly.newPlot('pmertDist',[{x:['+1','-1','0'],y:[mu1Count,muNeg1Count,mu0Count],type:'bar',marker:{color:['#00ff88','#ff6496','#666']}}],{...plo(),xaxis:{title:'μ(n) value'},yaxis:{title:'Count'}});
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const my=(e.clientY-rect.top)*(c.height/rect.height);
+for(const pt of allPts){
+if(Math.hypot(mx-pt.px,my-pt.py)<ptSz+5){
+modal(`Mertens at n=${pt.n}`,[
+['n',pt.n],['μ(n)',pt.mu],['M(n)',pt.M],
+['M(n)/√n',fmt(pt.M/Math.sqrt(pt.n))],
+['√n',fmt(Math.sqrt(pt.n))],
+['|M(n)| < √n',Math.abs(pt.M)<Math.sqrt(pt.n)?'Yes':'No']
+]);return;
+}}};
+}
+
+function countDistinctPrimes(n){
+let count=0,d=2;
+while(d*d<=n){if(n%d===0){count++;while(n%d===0)n/=d;}d++;}
+if(n>1)count++;
+return count;
+}
+
+async function screenshotMertens(){
+const maxX=document.getElementById('mertXv').value;
+await screenshotUnified('cmert','mertLiveStats',`Mertens Function M(x) — x ≤ ${maxX}`,'mertens_complete.png',{dashH:350});
+}
+
+function csvMertens(){
+let s='n,mu_n,M_n,M_n_over_sqrt_n\n';
+for(let n=1;n<=mertensData.maxX;n++)s+=`${n},${mertensData.mu[n]},${mertensData.M[n]},${mertensData.M[n]/Math.sqrt(n)}\n`;
+dl(s,'mertens_data.csv');
+}
+
+// ==================== CHEBYSHEV FUNCTIONS ψ(x), θ(x) ====================
+let chebyshevData={psi:[],theta:[],lambda:[],maxX:0};
+
+function vonMangoldt(n){
+// Λ(n) = log(p) if n = p^k for some prime p and k ≥ 1, else 0
+if(n<2)return 0;
+let p=2,logp=0;
+while(p*p<=n){
+if(n%p===0){
+let m=n;
+while(m%p===0)m/=p;
+if(m===1)return Math.log(p);
+return 0;
+}
+p++;
+}
+// n is prime
+return Math.log(n);
+}
+
+function computeChebyshev(maxX){
+const primes=sievePrimes(maxX);
+const primeSet=new Set(primes);
+const psi=new Array(maxX+1).fill(0);
+const theta=new Array(maxX+1).fill(0);
+const lambda=new Array(maxX+1).fill(0);
+
+for(let n=2;n<=maxX;n++){
+lambda[n]=vonMangoldt(n);
+psi[n]=psi[n-1]+lambda[n];
+theta[n]=theta[n-1]+(primeSet.has(n)?Math.log(n):0);
+}
+psi[0]=0;psi[1]=0;theta[0]=0;theta[1]=0;
+return{psi,theta,lambda,primes};
+}
+
+function drawChebyshev(){
+const c=document.getElementById('ccheb'),ctx=c.getContext('2d');
+const maxX=+document.getElementById('chebXv').value||+document.getElementById('chebX').value;
+const func=document.getElementById('chebFunc').value;
+const showX=document.getElementById('chebShowX').checked;
+const showRH=document.getElementById('chebShowRH').checked;
+const norm=document.getElementById('chebNorm').value;
+const ptSz=+document.getElementById('chebPtSz').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+const{psi,theta,lambda,primes}=computeChebyshev(maxX);
+chebyshevData={psi,theta,lambda,primes,maxX};
+
+const pad=60,w=c.width-2*pad,h=c.height-2*pad;
+
+// Determine data
+let data1,data2,label1,label2,yMin,yMax;
+if(norm==='ratio'){
+data1=psi.slice(2).map((v,i)=>v/(i+2));
+data2=theta.slice(2).map((v,i)=>v/(i+2));
+label1='ψ(x)/x';label2='θ(x)/x';
+yMin=0;yMax=Math.max(...data1,1.2);
+}else if(norm==='error_norm'){
+data1=psi.slice(2).map((v,i)=>(v-(i+2))/Math.sqrt(i+2));
+data2=theta.slice(2).map((v,i)=>(v-(i+2))/Math.sqrt(i+2));
+label1='(ψ(x)-x)/√x';label2='(θ(x)-x)/√x';
+yMin=Math.min(...data1,...data2)-1;yMax=Math.max(...data1,...data2)+1;
+}else{
+if(func==='error'){
+data1=psi.slice(2).map((v,i)=>v-(i+2));
+label1='ψ(x)-x';
+yMin=Math.min(...data1);yMax=Math.max(...data1);
+}else{
+data1=psi.slice(2);
+data2=theta.slice(2);
+label1='ψ(x)';label2='θ(x)';
+yMin=0;yMax=Math.max(...data1,maxX);
+}
+}
+
+const margin=(yMax-yMin)*0.1||1;
+yMin-=margin;yMax+=margin;
+const scX=w/(maxX-2),scY=h/(yMax-yMin);
+
+// Grid
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=10;i++){
+const gx=pad+i*w/10,gy=pad+i*h/10;
+ctx.beginPath();ctx.moveTo(gx,pad);ctx.lineTo(gx,c.height-pad);ctx.stroke();
+ctx.beginPath();ctx.moveTo(pad,gy);ctx.lineTo(c.width-pad,gy);ctx.stroke();
+}
+
+// y=x reference line
+if(showX&&norm==='raw'&&func!=='error'){
+ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+ctx.beginPath();ctx.moveTo(pad,c.height-pad-(0-yMin)*scY);ctx.lineTo(c.width-pad,c.height-pad-(maxX-yMin)*scY);ctx.stroke();
+ctx.setLineDash([]);
+}
+if(showX&&norm==='ratio'){
+ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+ctx.beginPath();ctx.moveTo(pad,c.height-pad-(1-yMin)*scY);ctx.lineTo(c.width-pad,c.height-pad-(1-yMin)*scY);ctx.stroke();
+ctx.setLineDash([]);
+}
+
+// Draw ψ(x)
+ctx.strokeStyle='#00d9ff';ctx.lineWidth=2;
+ctx.beginPath();
+for(let i=0;i<data1.length;i++){
+const px=pad+i*scX;
+const py=c.height-pad-(data1[i]-yMin)*scY;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+
+// Draw θ(x) if showing both
+if((func==='both'||func==='theta')&&data2){
+ctx.strokeStyle='#ff6496';ctx.lineWidth=2;
+ctx.beginPath();
+for(let i=0;i<data2.length;i++){
+const px=pad+i*scX;
+const py=c.height-pad-(data2[i]-yMin)*scY;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+}
+
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Chebyshev Functions — x ≤ ${maxX}`,c.width/2,25);
+
+// Labels
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='12px Segoe UI';
+ctx.textAlign='center';ctx.fillText('x',c.width/2,c.height-15);
+ctx.save();ctx.translate(15,c.height/2);ctx.rotate(-Math.PI/2);ctx.fillText(label1,0,0);ctx.restore();
+
+// Stats
+const finalPsi=psi[maxX];
+const finalTheta=theta[maxX];
+const psiRatio=finalPsi/maxX;
+const thetaRatio=finalTheta/maxX;
+const error=finalPsi-maxX;
+const normError=error/Math.sqrt(maxX);
+const primeCount=primes.length;
+
+legend('alcheb','Chebyshev',[['ψ('+maxX+')',fmt(finalPsi),'#00d9ff'],['θ('+maxX+')',fmt(finalTheta),'#ff6496'],['Primes',primeCount,'#ffd700']]);
+
+document.getElementById('chebLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${fmt(finalPsi)}</div><div style="font-size:.7rem;color:var(--txt2)">ψ(${maxX})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${fmt(finalTheta)}</div><div style="font-size:.7rem;color:var(--txt2)">θ(${maxX})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${primeCount}</div><div style="font-size:.7rem;color:var(--txt2)">π(${maxX})</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Prime Number Theorem</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>ψ(x)/x:</span><span style="color:#00d9ff;font-weight:bold">${fmt(psiRatio)} (→1)</span>
+<span>θ(x)/x:</span><span style="color:#ff6496;font-weight:bold">${fmt(thetaRatio)} (→1)</span>
+<span>ψ(x) - x:</span><span style="color:${error<0?'#ff6496':'#00ff88'}">${fmt(error)}</span>
+<span>(ψ(x)-x)/√x:</span><span style="color:#ffd700">${fmt(normError)}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Von Mangoldt Λ(n)</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Λ(n)>0 count:</span><span style="color:#00d9ff">${lambda.filter(l=>l>0).length}</span>
+<span>Max Λ(n):</span><span style="color:#ffd700">${fmt(Math.max(...lambda))}</span>
+<span>Σ Λ(n):</span><span style="color:#ff6496">${fmt(finalPsi)}</span>
+<span>ψ-θ diff:</span><span style="color:#9664ff">${fmt(finalPsi-finalTheta)}</span>
+</div>
+</div>
+<div style="background:rgba(0,217,255,.1);padding:8px;border-radius:6px">
+<strong style="color:#00d9ff">PNT Verification</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">ψ(x)/x = ${fmt(psiRatio)} ≈ 1 confirms PNT</div>
+</div>`;
+
+// Plotly charts
+Plotly.newPlot('pchebRatio',[
+{x:[...Array(maxX-1)].map((_,i)=>i+2),y:psi.slice(2).map((v,i)=>v/(i+2)),name:'ψ(x)/x',line:{color:'#00d9ff'}},
+{x:[...Array(maxX-1)].map((_,i)=>i+2),y:psi.slice(2).map(()=>1),name:'y=1',line:{color:'#ffd700',dash:'dash'}}
+],{...plo(),xaxis:{title:'x'},yaxis:{title:'Ratio',range:[0.8,1.2]}});
+
+const lambdaX=[],lambdaY=[];
+for(let n=2;n<=Math.min(maxX,500);n++)if(lambda[n]>0){lambdaX.push(n);lambdaY.push(lambda[n]);}
+Plotly.newPlot('pchebLambda',[{x:lambdaX,y:lambdaY,type:'bar',name:'Λ(n)',marker:{color:'#9664ff'}}],{...plo(),xaxis:{title:'n'},yaxis:{title:'Λ(n)'}});
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const n=Math.round((mx-pad)/scX+2);
+if(n>=2&&n<=maxX){
+modal(`Chebyshev at x=${n}`,[
+['x',n],['ψ(x)',fmt(psi[n])],['θ(x)',fmt(theta[n])],
+['Λ(n)',fmt(lambda[n])],['ψ(x)/x',fmt(psi[n]/n)],
+['ψ(x)-x',fmt(psi[n]-n)],['(ψ(x)-x)/√x',fmt((psi[n]-n)/Math.sqrt(n))]
+]);
+}};
+}
+
+async function screenshotChebyshev(){
+const maxX=document.getElementById('chebXv').value;
+await screenshotUnified('ccheb','chebLiveStats',`Chebyshev Functions — x ≤ ${maxX}`,'chebyshev_complete.png',{dashH:350});
+}
+
+function csvChebyshev(){
+let s='n,lambda_n,psi_n,theta_n,psi_over_n\n';
+for(let n=2;n<=chebyshevData.maxX;n++)s+=`${n},${chebyshevData.lambda[n]},${chebyshevData.psi[n]},${chebyshevData.theta[n]},${chebyshevData.psi[n]/n}\n`;
+dl(s,'chebyshev_data.csv');
+}
+
+// ==================== LOGARITHMIC INTEGRAL Li(x) ====================
+let liData={pi:[],li:[],xln:[],R:[],maxX:0};
+
+function logIntegral(x){
+// Li(x) = ∫₂ˣ dt/ln(t) using numerical integration
+if(x<2)return 0;
+let sum=0;
+const steps=Math.max(100,Math.floor(x/10));
+const dx=(x-2)/steps;
+for(let i=0;i<steps;i++){
+const t1=2+i*dx;
+const t2=2+(i+1)*dx;
+const tm=(t1+t2)/2;
+sum+=dx/Math.log(tm);
+}
+return sum;
+}
+
+function riemannR(x){
+// R(x) = Σ μ(n)/n · Li(x^{1/n}) - approximation using first terms
+if(x<2)return 0;
+let sum=0;
+const maxN=Math.floor(Math.log2(x))+5;
+const mu=[0,1,-1,-1,0,-1,1,-1,0,0,1,-1,0,-1,1,1,0,-1,0,-1,0];
+for(let n=1;n<=Math.min(maxN,20);n++){
+if(n<mu.length&&mu[n]!==0){
+const xn=Math.pow(x,1/n);
+if(xn>=2)sum+=mu[n]/n*logIntegral(xn);
+}
+}
+return sum;
+}
+
+function drawLi(){
+const c=document.getElementById('cli'),ctx=c.getContext('2d');
+const maxX=+document.getElementById('liXv').value||+document.getElementById('liX').value;
+const viz=document.getElementById('liViz').value;
+const showPi=document.getElementById('liShowPi').checked;
+const showLi=document.getElementById('liShowLi').checked;
+const showXln=document.getElementById('liShowXln').checked;
+const showR=document.getElementById('liShowR').checked;
+const scale=document.getElementById('liScale').value;
+const ptSz=+document.getElementById('liPtSz').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+// Compute values
+const primes=sievePrimes(maxX);
+const piVals=new Array(maxX+1).fill(0);
+let pCount=0;
+for(let n=2;n<=maxX;n++){
+if(primes.includes(n))pCount++;
+piVals[n]=pCount;
+}
+
+const samplePoints=Math.min(200,maxX);
+const step=Math.max(1,Math.floor(maxX/samplePoints));
+const xs=[],piArr=[],liArr=[],xlnArr=[],rArr=[];
+
+for(let x=10;x<=maxX;x+=step){
+xs.push(x);
+piArr.push(piVals[x]);
+liArr.push(logIntegral(x));
+xlnArr.push(x/Math.log(x));
+if(showR)rArr.push(riemannR(x));
+}
+
+liData={pi:piArr,li:liArr,xln:xlnArr,R:rArr,xs,maxX,piVals};
+
+const pad=60,w=c.width-2*pad,h=c.height-2*pad;
+
+// Determine range based on visualization
+let yMin=0,yMax;
+if(viz==='error'){
+const errors=piArr.map((p,i)=>p-liArr[i]);
+yMin=Math.min(...errors)-5;yMax=Math.max(...errors)+5;
+}else if(viz==='ratio'){
+yMin=0.9;yMax=1.1;
+}else if(viz==='density'){
+yMin=0;yMax=0.5;
+}else{
+yMax=Math.max(...piArr,...liArr)*1.1;
+}
+
+const scX=w/(maxX-10);
+const scY=h/(yMax-yMin);
+
+// Grid
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=10;i++){
+const gx=pad+i*w/10,gy=pad+i*h/10;
+ctx.beginPath();ctx.moveTo(gx,pad);ctx.lineTo(gx,c.height-pad);ctx.stroke();
+ctx.beginPath();ctx.moveTo(pad,gy);ctx.lineTo(c.width-pad,gy);ctx.stroke();
+}
+
+// Draw based on visualization mode
+if(viz==='comparison'){
+// π(x)
+if(showPi){
+ctx.strokeStyle='#00d9ff';ctx.lineWidth=2;
+ctx.beginPath();
+for(let i=0;i<xs.length;i++){
+const px=pad+(xs[i]-10)*scX;
+const py=c.height-pad-(piArr[i]-yMin)*scY;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+}
+// Li(x)
+if(showLi){
+ctx.strokeStyle='#ff6496';ctx.lineWidth=2;
+ctx.beginPath();
+for(let i=0;i<xs.length;i++){
+const px=pad+(xs[i]-10)*scX;
+const py=c.height-pad-(liArr[i]-yMin)*scY;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+}
+// x/ln(x)
+if(showXln){
+ctx.strokeStyle='#ffd700';ctx.lineWidth=2;ctx.setLineDash([5,3]);
+ctx.beginPath();
+for(let i=0;i<xs.length;i++){
+const px=pad+(xs[i]-10)*scX;
+const py=c.height-pad-(xlnArr[i]-yMin)*scY;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();ctx.setLineDash([]);
+}
+// R(x)
+if(showR&&rArr.length>0){
+ctx.strokeStyle='#9664ff';ctx.lineWidth=2;
+ctx.beginPath();
+for(let i=0;i<xs.length;i++){
+const px=pad+(xs[i]-10)*scX;
+const py=c.height-pad-(rArr[i]-yMin)*scY;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+}
+}else if(viz==='error'){
+const errors=piArr.map((p,i)=>p-liArr[i]);
+ctx.strokeStyle='#ff6496';ctx.lineWidth=2;
+ctx.beginPath();
+for(let i=0;i<xs.length;i++){
+const px=pad+(xs[i]-10)*scX;
+const py=c.height-pad-(errors[i]-yMin)*scY;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+// Zero line
+ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=1;ctx.setLineDash([5,5]);
+const y0=c.height-pad-(0-yMin)*scY;
+ctx.beginPath();ctx.moveTo(pad,y0);ctx.lineTo(c.width-pad,y0);ctx.stroke();ctx.setLineDash([]);
+}else if(viz==='ratio'){
+const ratios=piArr.map((p,i)=>liArr[i]>0?p/liArr[i]:1);
+ctx.strokeStyle='#00d9ff';ctx.lineWidth=2;
+ctx.beginPath();
+for(let i=0;i<xs.length;i++){
+const px=pad+(xs[i]-10)*scX;
+const py=c.height-pad-(ratios[i]-yMin)*scY;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+// y=1 line
+ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+const y1=c.height-pad-(1-yMin)*scY;
+ctx.beginPath();ctx.moveTo(pad,y1);ctx.lineTo(c.width-pad,y1);ctx.stroke();ctx.setLineDash([]);
+}else if(viz==='density'){
+const density=xs.map(x=>1/Math.log(x));
+ctx.strokeStyle='#ffd700';ctx.lineWidth=2;
+ctx.beginPath();
+for(let i=0;i<xs.length;i++){
+const px=pad+(xs[i]-10)*scX;
+const py=c.height-pad-(density[i]-yMin)*scY;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+}
+
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Prime Counting: π(x), Li(x), x/ln(x) — x ≤ ${maxX}`,c.width/2,25);
+
+// Labels
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='12px Segoe UI';
+ctx.textAlign='center';ctx.fillText('x',c.width/2,c.height-15);
+
+// Stats
+const finalPi=piVals[maxX];
+const finalLi=logIntegral(maxX);
+const finalXln=maxX/Math.log(maxX);
+const finalR=showR?riemannR(maxX):0;
+const errorLi=finalPi-finalLi;
+const errorXln=finalPi-finalXln;
+const relErrorLi=errorLi/finalPi*100;
+const relErrorXln=errorXln/finalPi*100;
+
+legend('alli','Prime Counting',[['π(x)',finalPi,'#00d9ff'],['Li(x)',fmt(finalLi),'#ff6496'],['x/ln(x)',fmt(finalXln),'#ffd700']]);
+
+document.getElementById('liLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${finalPi}</div><div style="font-size:.7rem;color:var(--txt2)">π(${maxX})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${fmt(finalLi)}</div><div style="font-size:.7rem;color:var(--txt2)">Li(${maxX})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${fmt(finalXln)}</div><div style="font-size:.7rem;color:var(--txt2)">x/ln(x)</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Approximation Errors</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>π(x) - Li(x):</span><span style="color:#ff6496;font-weight:bold">${fmt(errorLi)}</span>
+<span>π(x) - x/ln(x):</span><span style="color:#ffd700;font-weight:bold">${fmt(errorXln)}</span>
+<span>Li(x) rel error:</span><span style="color:#ff6496">${fmt(relErrorLi)}%</span>
+<span>x/ln(x) rel error:</span><span style="color:#ffd700">${fmt(relErrorXln)}%</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Approximation Quality</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>π(x)/Li(x):</span><span style="color:#00d9ff">${fmt(finalPi/finalLi)}</span>
+<span>π(x)/(x/ln x):</span><span style="color:#ffd700">${fmt(finalPi/finalXln)}</span>
+<span>Li(x) advantage:</span><span style="color:#00ff88">${fmt(Math.abs(errorXln)-Math.abs(errorLi))} closer</span>
+${showR?`<span>R(x) error:</span><span style="color:#9664ff">${fmt(finalPi-finalR)}</span>`:''}
+</div>
+</div>
+<div style="background:rgba(255,100,150,.1);padding:8px;border-radius:6px">
+<strong style="color:#ff6496">Li(x) > π(x) Always?</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">Currently Li(x) - π(x) = ${fmt(finalLi-finalPi)} > 0. First crossover at ~10³¹⁶!</div>
+</div>`;
+
+// Plotly charts
+Plotly.newPlot('pliError',[{x:xs,y:piArr.map((p,i)=>p-liArr[i]),name:'π(x)-Li(x)',line:{color:'#ff6496'}}],{...plo(),xaxis:{title:'x'},yaxis:{title:'Error'}});
+Plotly.newPlot('pliQuality',[
+{x:xs,y:piArr.map((p,i)=>Math.abs(p-liArr[i])),name:'|π(x)-Li(x)|',line:{color:'#ff6496'}},
+{x:xs,y:piArr.map((p,i)=>Math.abs(p-xlnArr[i])),name:'|π(x)-x/ln(x)|',line:{color:'#ffd700'}}
+],{...plo(),xaxis:{title:'x'},yaxis:{title:'Absolute Error'}});
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const x=Math.round((mx-pad)/scX+10);
+if(x>=10&&x<=maxX){
+const pi=piVals[x]||0;
+const li=logIntegral(x);
+const xln=x/Math.log(x);
+modal(`Prime Counting at x=${x}`,[
+['x',x],['π(x)',pi],['Li(x)',fmt(li)],['x/ln(x)',fmt(xln)],
+['π(x)-Li(x)',fmt(pi-li)],['π(x)-x/ln(x)',fmt(pi-xln)],
+['π(x)/Li(x)',fmt(pi/li)]
+]);
+}};
+}
+
+async function screenshotLi(){
+const maxX=document.getElementById('liXv').value;
+await screenshotUnified('cli','liLiveStats',`Logarithmic Integral Li(x) — x ≤ ${maxX}`,'li_complete.png',{dashH:350});
+}
+
+function csvLi(){
+let s='x,pi_x,Li_x,x_over_ln_x,pi_minus_Li\n';
+for(let i=0;i<liData.xs.length;i++){
+const x=liData.xs[i];
+s+=`${x},${liData.pi[i]},${liData.li[i]},${liData.xln[i]},${liData.pi[i]-liData.li[i]}\n`;
+}
+dl(s,'li_data.csv');
+}
+
+// ==================== DIVISOR FUNCTIONS τ(n), σ(n) ====================
+let divisorData={tau:[],sigma:[],maxN:0};
+
+function computeDivisors(n){
+let tau=0,sigma=0;
+for(let d=1;d*d<=n;d++){
+if(n%d===0){
+tau+=d*d===n?1:2;
+sigma+=d*d===n?d:d+n/d;
+}}
+return{tau,sigma};
+}
+
+function sigmaK(n,k){
+let sum=0;
+for(let d=1;d*d<=n;d++){
+if(n%d===0){
+sum+=Math.pow(d,k);
+if(d*d!==n)sum+=Math.pow(n/d,k);
+}}
+return sum;
+}
+
+function isHighlyComposite(n,tauArr){
+const t=tauArr[n];
+for(let i=1;i<n;i++)if(tauArr[i]>=t)return false;
+return true;
+}
+
+function drawDivisor(){
+const c=document.getElementById('cdiv'),ctx=c.getContext('2d');
+const maxN=+document.getElementById('divNv').value||+document.getElementById('divN').value;
+const func=document.getElementById('divFunc').value;
+const viz=document.getElementById('divViz').value;
+const k=+document.getElementById('divK').value;
+const ptSz=+document.getElementById('divPtSz').value;
+const showAvg=document.getElementById('divShowAvg').checked;
+const showHC=document.getElementById('divShowHC').checked;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+// Compute divisor functions
+const tau=new Array(maxN+1).fill(0);
+const sigma=new Array(maxN+1).fill(0);
+const sigmaK_arr=new Array(maxN+1).fill(0);
+
+for(let n=1;n<=maxN;n++){
+const d=computeDivisors(n);
+tau[n]=d.tau;
+sigma[n]=d.sigma;
+if(func==='sigma_k')sigmaK_arr[n]=sigmaK(n,k);
+}
+
+divisorData={tau,sigma,sigmaK:sigmaK_arr,maxN};
+
+const pad=60,w=c.width-2*pad,h=c.height-2*pad;
+
+// Determine data and range
+let data,ylabel,yMax;
+if(func==='tau'){data=tau.slice(1);ylabel='τ(n)';yMax=Math.max(...data)*1.1;}
+else if(func==='sigma'){data=sigma.slice(1);ylabel='σ(n)';yMax=Math.max(...data)*1.1;}
+else if(func==='sigma_k'){data=sigmaK_arr.slice(1);ylabel=`σ_${k}(n)`;yMax=Math.max(...data)*1.1;}
+else{data=tau.slice(1);ylabel='τ(n)';yMax=Math.max(...data)*1.1;}
+
+const scX=w/maxN,scY=h/yMax;
+
+// Grid
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=10;i++){
+const gx=pad+i*w/10,gy=pad+i*h/10;
+ctx.beginPath();ctx.moveTo(gx,pad);ctx.lineTo(gx,c.height-pad);ctx.stroke();
+ctx.beginPath();ctx.moveTo(pad,gy);ctx.lineTo(c.width-pad,gy);ctx.stroke();
+}
+
+// Average line for τ(n) ~ log n
+if(showAvg&&func==='tau'){
+ctx.strokeStyle='rgba(255,215,0,0.6)';ctx.lineWidth=2;ctx.setLineDash([5,3]);
+ctx.beginPath();
+for(let n=2;n<=maxN;n++){
+const avg=Math.log(n)+2*0.5772-1;
+const px=pad+n*scX;
+const py=c.height-pad-avg*scY;
+if(n===2)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();ctx.setLineDash([]);
+}
+
+// Find highly composite numbers
+const hcNums=[];
+if(showHC){
+let maxTau=0;
+for(let n=1;n<=maxN;n++){
+if(tau[n]>maxTau){hcNums.push(n);maxTau=tau[n];}
+}}
+
+// Draw points
+const allPts=[];
+for(let n=1;n<=maxN;n++){
+const val=func==='sigma'?sigma[n]:func==='sigma_k'?sigmaK_arr[n]:tau[n];
+const px=pad+n*scX;
+const py=c.height-pad-val*scY;
+let clr='#00d9ff';
+if(showHC&&hcNums.includes(n))clr='#ffd700';
+else if(func==='tau'){
+if(tau[n]===2)clr='#ff6496'; // prime
+else if(tau[n]%2===1)clr='#9664ff'; // square
+else clr='#00d9ff';
+}
+ctx.fillStyle=clr;ctx.beginPath();ctx.arc(px,py,ptSz,0,2*Math.PI);ctx.fill();
+allPts.push({n,tau:tau[n],sigma:sigma[n],px,py});
+}
+
+// Draw second function if both
+if(func==='both'){
+ctx.fillStyle='#ff6496';
+for(let n=1;n<=maxN;n++){
+const val=sigma[n]/maxN*h/yMax*tau[maxN]; // normalize
+const px=pad+n*scX;
+const py=c.height-pad-sigma[n]/(sigma[maxN]/tau[maxN])*scY;
+ctx.beginPath();ctx.arc(px,py,ptSz*0.7,0,2*Math.PI);ctx.fill();
+}}
+
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Divisor Functions — n ≤ ${maxN}`,c.width/2,25);
+
+// Labels
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='12px Segoe UI';
+ctx.textAlign='center';ctx.fillText('n',c.width/2,c.height-15);
+ctx.save();ctx.translate(15,c.height/2);ctx.rotate(-Math.PI/2);ctx.fillText(ylabel,0,0);ctx.restore();
+
+// Stats
+const avgTau=tau.slice(1).reduce((a,b)=>a+b,0)/maxN;
+const avgSigma=sigma.slice(1).reduce((a,b)=>a+b,0)/maxN;
+const maxTau=Math.max(...tau.slice(1));
+const maxTauN=tau.indexOf(maxTau);
+const primeCount=tau.slice(1).filter(t=>t===2).length;
+const perfectNums=[6,28,496,8128].filter(p=>p<=maxN);
+const abundantCount=sigma.slice(1).filter((s,i)=>s>2*(i+1)).length;
+
+legend('aldiv','Divisor Functions',[['Avg τ(n)',fmt(avgTau),'#00d9ff'],['Max τ',maxTau+' at n='+maxTauN,'#ffd700'],['Primes',primeCount,'#ff6496']]);
+
+document.getElementById('divLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${maxN}</div><div style="font-size:.7rem;color:var(--txt2)">MAX n</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${fmt(avgTau)}</div><div style="font-size:.7rem;color:var(--txt2)">AVG τ(n)</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${primeCount}</div><div style="font-size:.7rem;color:var(--txt2)">PRIMES</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Divisor Count τ(n)</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Maximum τ(n):</span><span style="color:#ffd700;font-weight:bold">${maxTau} at n=${maxTauN}</span>
+<span>Average τ(n):</span><span style="color:#00d9ff">${fmt(avgTau)}</span>
+<span>Theory (log n):</span><span style="color:#ff6496">${fmt(Math.log(maxN)+2*0.5772-1)}</span>
+<span>Highly Composite:</span><span style="color:#9664ff">${hcNums.slice(0,5).join(', ')}...</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Sum of Divisors σ(n)</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Average σ(n):</span><span style="color:#00d9ff">${fmt(avgSigma)}</span>
+<span>Perfect numbers:</span><span style="color:#ffd700">${perfectNums.join(', ')||'none in range'}</span>
+<span>Abundant (σ>2n):</span><span style="color:#ff6496">${abundantCount} (${fmt(abundantCount/maxN*100)}%)</span>
+<span>Deficient:</span><span style="color:#00ff88">${maxN-abundantCount-perfectNums.length}</span>
+</div>
+</div>`;
+
+// Plotly charts
+const tauDist={};
+tau.slice(1).forEach(t=>{tauDist[t]=(tauDist[t]||0)+1;});
+Plotly.newPlot('pdivTau',[{x:Object.keys(tauDist).map(Number),y:Object.values(tauDist),type:'bar',marker:{color:'#00d9ff'}}],{...plo(),xaxis:{title:'τ(n)'},yaxis:{title:'Count'}});
+
+const abundancy=sigma.slice(1).map((s,i)=>s/(i+1));
+Plotly.newPlot('pdivAbund',[{x:[...Array(maxN)].map((_,i)=>i+1),y:abundancy,type:'scatter',mode:'markers',marker:{size:3,color:'#ff6496'}}],{...plo(),xaxis:{title:'n'},yaxis:{title:'σ(n)/n'},shapes:[{type:'line',x0:1,x1:maxN,y0:2,y1:2,line:{color:'#ffd700',dash:'dash'}}]});
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const my=(e.clientY-rect.top)*(c.height/rect.height);
+for(const pt of allPts){
+if(Math.hypot(mx-pt.px,my-pt.py)<ptSz+5){
+const factors=[];let n=pt.n,d=2;
+while(d*d<=n){if(n%d===0){let c=0;while(n%d===0){c++;n/=d;}factors.push(d+'^'+c);}d++;}
+if(n>1)factors.push(n+'^1');
+modal(`Divisors of n=${pt.n}`,[
+['n',pt.n],['τ(n)',pt.tau],['σ(n)',pt.sigma],
+['σ(n)/n',fmt(pt.sigma/pt.n)],['Factorization',factors.join('·')||'1'],
+['Type',pt.sigma===2*pt.n?'PERFECT':pt.sigma>2*pt.n?'Abundant':'Deficient']
+]);return;
+}}};
+}
+
+async function screenshotDivisor(){
+const maxN=document.getElementById('divNv').value;
+await screenshotUnified('cdiv','divLiveStats',`Divisor Functions — n ≤ ${maxN}`,'divisor_complete.png',{dashH:350});
+}
+
+function csvDivisor(){
+let s='n,tau_n,sigma_n,sigma_over_n\n';
+for(let n=1;n<=divisorData.maxN;n++)s+=`${n},${divisorData.tau[n]},${divisorData.sigma[n]},${divisorData.sigma[n]/n}\n`;
+dl(s,'divisor_data.csv');
+}
+
+// ==================== LIOUVILLE FUNCTION λ(n) ====================
+let liouvilleData={lambda:[],L:[],maxN:0};
+
+function bigOmega(n){
+// Count prime factors with multiplicity
+let count=0,d=2;
+while(d*d<=n){while(n%d===0){count++;n/=d;}d++;}
+if(n>1)count++;
+return count;
+}
+
+function computeLiouville(maxN){
+const lambda=new Array(maxN+1).fill(0);
+const L=new Array(maxN+1).fill(0);
+for(let n=1;n<=maxN;n++){
+lambda[n]=bigOmega(n)%2===0?1:-1;
+L[n]=L[n-1]+lambda[n];
+}
+return{lambda,L};
+}
+
+function drawLiouville(){
+const c=document.getElementById('cliou'),ctx=c.getContext('2d');
+const maxN=+document.getElementById('liouNv').value||+document.getElementById('liouN').value;
+const viz=document.getElementById('liouViz').value;
+const col=document.getElementById('liouCol').value;
+const showSqrt=document.getElementById('liouBoundSqrt').checked;
+const showM=document.getElementById('liouShowM').checked;
+const ptSz=+document.getElementById('liouPtSz').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+const{lambda,L}=computeLiouville(maxN);
+liouvilleData={lambda,L,maxN};
+
+// Also compute M(x) for comparison
+let M=null;
+if(viz==='comparison'||showM){
+const{M:Marr}=computeMertens(maxN);
+M=Marr;
+}
+
+const pad=60,w=c.width-2*pad,h=c.height-2*pad;
+
+// Determine data and range
+let data,ylabel,yMin,yMax;
+if(viz==='cumulative'||viz==='comparison'){
+data=L.slice(1);
+yMin=Math.min(...data);yMax=Math.max(...data);
+ylabel='L(x)';
+}else if(viz==='normalized'){
+data=L.slice(1).map((l,i)=>l/Math.sqrt(i+1));
+yMin=Math.min(...data);yMax=Math.max(...data);
+ylabel='L(x)/√x';
+}else{
+data=lambda.slice(1);
+yMin=-1.5;yMax=1.5;
+ylabel='λ(n)';
+}
+
+const margin=Math.abs(yMax-yMin)*0.1||1;
+yMin-=margin;yMax+=margin;
+const scX=w/maxN,scY=h/(yMax-yMin);
+
+// Grid
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=10;i++){
+const gx=pad+i*w/10,gy=pad+i*h/10;
+ctx.beginPath();ctx.moveTo(gx,pad);ctx.lineTo(gx,c.height-pad);ctx.stroke();
+ctx.beginPath();ctx.moveTo(pad,gy);ctx.lineTo(c.width-pad,gy);ctx.stroke();
+}
+
+// Zero line
+if(yMin<0&&yMax>0){
+const y0=c.height-pad+yMin*scY;
+ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(pad,y0);ctx.lineTo(c.width-pad,y0);ctx.stroke();
+}
+
+// Bounds ±√x
+if(showSqrt&&(viz==='cumulative'||viz==='comparison')){
+ctx.strokeStyle='rgba(0,255,136,0.4)';ctx.lineWidth=1;ctx.setLineDash([5,3]);
+ctx.beginPath();
+for(let x=1;x<=maxN;x++){
+const px=pad+x*scX;
+const py=c.height-pad-(Math.sqrt(x)-yMin)*scY;
+if(x===1)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+ctx.beginPath();
+for(let x=1;x<=maxN;x++){
+const px=pad+x*scX;
+const py=c.height-pad-(-Math.sqrt(x)-yMin)*scY;
+if(x===1)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+ctx.setLineDash([]);
+}
+
+// Draw M(x) if comparison
+if((viz==='comparison'||showM)&&M){
+ctx.strokeStyle='rgba(255,100,150,0.6)';ctx.lineWidth=1.5;
+ctx.beginPath();
+for(let n=1;n<=maxN;n++){
+const px=pad+n*scX;
+const py=c.height-pad-(M[n]-yMin)*scY;
+if(n===1)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+}
+
+// Draw L(x) or λ(n)
+const allPts=[];
+if(viz==='lambda'){
+for(let n=1;n<=maxN;n++){
+const px=pad+n*scX;
+const py0=c.height-pad+yMin*scY;
+const py=c.height-pad-(lambda[n]-yMin)*scY;
+let clr;
+if(col==='sign'){clr=lambda[n]===1?'#00ff88':'#ff6496';}
+else if(col==='omega'){const om=bigOmega(n);clr=`hsl(${om*50},70%,50%)`;}
+else{const mu=computeMertens(n).mu[n];clr=mu!==0?'#ffd700':'#666';}
+ctx.fillStyle=clr;
+ctx.fillRect(px-ptSz/2,Math.min(py,py0),ptSz,Math.abs(py-py0)||1);
+allPts.push({n,lambda:lambda[n],L:L[n],omega:bigOmega(n),px,py});
+}
+}else{
+ctx.strokeStyle='#9664ff';ctx.lineWidth=2;
+ctx.beginPath();
+for(let n=1;n<=maxN;n++){
+const val=viz==='normalized'?L[n]/Math.sqrt(n):L[n];
+const px=pad+n*scX;
+const py=c.height-pad-(val-yMin)*scY;
+if(n===1)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+allPts.push({n,lambda:lambda[n],L:L[n],omega:bigOmega(n),px,py});
+}ctx.stroke();
+}
+
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Liouville Function L(x) = Σλ(n) — n ≤ ${maxN}`,c.width/2,25);
+
+// Labels
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='12px Segoe UI';
+ctx.textAlign='center';ctx.fillText('n',c.width/2,c.height-15);
+ctx.save();ctx.translate(15,c.height/2);ctx.rotate(-Math.PI/2);ctx.fillText(ylabel,0,0);ctx.restore();
+
+// Stats
+const finalL=L[maxN];
+const sqrtN=Math.sqrt(maxN);
+const ratio=finalL/sqrtN;
+const lambda1Count=lambda.slice(1).filter(l=>l===1).length;
+const lambdaNeg1Count=lambda.slice(1).filter(l=>l===-1).length;
+const maxL=Math.max(...L.slice(1));
+const minL=Math.min(...L.slice(1));
+
+legend('alliou','Liouville L(x)',[['L('+maxN+')',finalL,'#9664ff'],['Max L',maxL,'#00ff88'],['Min L',minL,'#ff6496']]);
+
+document.getElementById('liouLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#9664ff">${finalL}</div><div style="font-size:.7rem;color:var(--txt2)">L(${maxN})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${fmt(ratio)}</div><div style="font-size:.7rem;color:var(--txt2)">L(x)/√x</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:${finalL<=0?'#00ff88':'#ff6496'}">${finalL<=0?'YES':'NO'}</div><div style="font-size:.7rem;color:var(--txt2)">L(x)≤0?</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Liouville Values</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Maximum L(x):</span><span style="color:#00ff88;font-weight:bold">${maxL}</span>
+<span>Minimum L(x):</span><span style="color:#ff6496;font-weight:bold">${minL}</span>
+<span>√x bound:</span><span style="color:#ffd700">±${fmt(sqrtN)}</span>
+<span>|L(x)/√x| max:</span><span style="color:#9664ff">${fmt(Math.max(Math.abs(maxL),Math.abs(minL))/sqrtN)}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">λ(n) Distribution</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>λ(n) = +1 (even Ω):</span><span style="color:#00ff88">${lambda1Count} (${fmt(lambda1Count/maxN*100)}%)</span>
+<span>λ(n) = -1 (odd Ω):</span><span style="color:#ff6496">${lambdaNeg1Count} (${fmt(lambdaNeg1Count/maxN*100)}%)</span>
+<span>Imbalance:</span><span style="color:#9664ff">${lambda1Count-lambdaNeg1Count}</span>
+<span>Note:</span><span style="color:var(--txt2)">λ(n) never 0</span>
+</div>
+</div>
+<div style="background:${finalL<=0?'rgba(0,255,136,.1)':'rgba(255,100,150,.1)'};padding:8px;border-radius:6px">
+<strong style="color:${finalL<=0?'#00ff88':'#ff6496'}">Pólya Status: L(${maxN}) ${finalL<=0?'≤':'>'} 0</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">First counterexample at x ≈ 906,150,257</div>
+</div>`;
+
+// Plotly charts
+Plotly.newPlot('pliouRatio',[{x:[...Array(maxN)].map((_,i)=>i+1),y:L.slice(1).map((l,i)=>l/Math.sqrt(i+1)),type:'scatter',mode:'lines',name:'L(x)/√x',line:{color:'#9664ff'}}],{...plo(),xaxis:{title:'x'},yaxis:{title:'L(x)/√x'}});
+
+const omegaDist={};
+for(let n=1;n<=maxN;n++){const om=bigOmega(n);omegaDist[om]=(omegaDist[om]||0)+1;}
+Plotly.newPlot('pliouOmega',[{x:Object.keys(omegaDist).map(Number),y:Object.values(omegaDist),type:'bar',marker:{color:'#00d9ff'}}],{...plo(),xaxis:{title:'Ω(n)'},yaxis:{title:'Count'}});
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const my=(e.clientY-rect.top)*(c.height/rect.height);
+for(const pt of allPts){
+if(Math.hypot(mx-pt.px,my-pt.py)<ptSz+5){
+modal(`Liouville at n=${pt.n}`,[
+['n',pt.n],['λ(n)',pt.lambda],['Ω(n)',pt.omega],
+['L(n)',pt.L],['L(n)/√n',fmt(pt.L/Math.sqrt(pt.n))],
+['√n',fmt(Math.sqrt(pt.n))]
+]);return;
+}}};
+}
+
+async function screenshotLiouville(){
+const maxN=document.getElementById('liouNv').value;
+await screenshotUnified('cliou','liouLiveStats',`Liouville Function L(x) — n ≤ ${maxN}`,'liouville_complete.png',{dashH:350});
+}
+
+function csvLiouville(){
+let s='n,lambda_n,L_n,Omega_n,L_over_sqrt_n\n';
+for(let n=1;n<=liouvilleData.maxN;n++)s+=`${n},${liouvilleData.lambda[n]},${liouvilleData.L[n]},${bigOmega(n)},${liouvilleData.L[n]/Math.sqrt(n)}\n`;
+dl(s,'liouville_data.csv');
+}
+
+// ==================== VON MANGOLDT Λ(n) ====================
+let mangoldtData={lambda:[],psi:[],maxN:0};
+
+function computeMangoldt(maxN){
+const lambda=new Array(maxN+1).fill(0);
+const psi=new Array(maxN+1).fill(0);
+const primes=sievePrimes(Math.floor(Math.sqrt(maxN))+1);
+const primeSet=new Set(sievePrimes(maxN));
+
+for(let n=2;n<=maxN;n++){
+// Check if n is a prime power
+let isPrimePower=false,base=0,power=0;
+for(const p of primes){
+if(p>n)break;
+let k=0,m=n;
+while(m%p===0){m/=p;k++;}
+if(m===1&&k>0){isPrimePower=true;base=p;power=k;break;}
+}
+if(isPrimePower){
+lambda[n]=Math.log(base);
+}
+psi[n]=psi[n-1]+lambda[n];
+}
+return{lambda,psi,primeSet};
+}
+
+function drawMangoldt(){
+const c=document.getElementById('cmang'),ctx=c.getContext('2d');
+const maxN=+document.getElementById('mangNv').value||+document.getElementById('mangN').value;
+const viz=document.getElementById('mangViz').value;
+const col=document.getElementById('mangCol').value;
+const showPrimes=document.getElementById('mangShowPrimes').checked;
+const showPowers=document.getElementById('mangShowPowers').checked;
+const showPsi=document.getElementById('mangShowPsi').checked;
+const ptSz=+document.getElementById('mangPtSz').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+const{lambda,psi,primeSet}=computeMangoldt(maxN);
+mangoldtData={lambda,psi,maxN};
+
+const pad=60,w=c.width-2*pad,h=c.height-2*pad;
+
+// Determine range
+let yMax;
+if(viz==='cumulative'){yMax=psi[maxN]*1.1;}
+else{yMax=Math.max(...lambda.slice(1))*1.2;}
+
+const scX=w/maxN,scY=h/yMax;
+
+// Grid
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=10;i++){
+const gx=pad+i*w/10,gy=pad+i*h/10;
+ctx.beginPath();ctx.moveTo(gx,pad);ctx.lineTo(gx,c.height-pad);ctx.stroke();
+ctx.beginPath();ctx.moveTo(pad,gy);ctx.lineTo(c.width-pad,gy);ctx.stroke();
+}
+
+// y=x reference for ψ(x)
+if(viz==='cumulative'||showPsi){
+ctx.strokeStyle='rgba(255,215,0,0.4)';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+ctx.beginPath();ctx.moveTo(pad,c.height-pad);ctx.lineTo(c.width-pad,c.height-pad-maxN*scY);ctx.stroke();
+ctx.setLineDash([]);
+}
+
+// Draw ψ(x) line
+if(viz==='cumulative'||showPsi){
+ctx.strokeStyle='#00d9ff';ctx.lineWidth=2;
+ctx.beginPath();
+for(let n=2;n<=maxN;n++){
+const px=pad+n*scX;
+const py=c.height-pad-psi[n]*scY;
+if(n===2)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+}ctx.stroke();
+}
+
+// Draw Λ(n) bars
+const allPts=[];
+if(viz!=='cumulative'){
+for(let n=2;n<=maxN;n++){
+if(lambda[n]===0)continue;
+// Determine if prime or higher power
+const isPrime=primeSet.has(n);
+const logVal=lambda[n];
+const base=Math.round(Math.exp(logVal));
+const power=Math.round(Math.log(n)/Math.log(base));
+
+if(isPrime&&!showPrimes)continue;
+if(!isPrime&&!showPowers)continue;
+
+const px=pad+n*scX;
+const py=c.height-pad-logVal*scY;
+const py0=c.height-pad;
+
+let clr;
+if(col==='prime'){
+// Color by prime base
+const hue=(base*37)%360;
+clr=`hsl(${hue},70%,50%)`;
+}else if(col==='power'){
+clr=power===1?'#00d9ff':power===2?'#ff6496':power===3?'#ffd700':'#9664ff';
+}else{
+// By size
+const t=logVal/Math.log(maxN);
+clr=`hsl(${(1-t)*240},70%,50%)`;
+}
+
+ctx.fillStyle=clr;
+ctx.fillRect(px-ptSz/2,py,ptSz,py0-py);
+allPts.push({n,lambda:logVal,base,power,isPrime,px,py});
+}}
+
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Von Mangoldt Function Λ(n) — n ≤ ${maxN}`,c.width/2,25);
+
+// Labels
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='12px Segoe UI';
+ctx.textAlign='center';ctx.fillText('n',c.width/2,c.height-15);
+ctx.save();ctx.translate(15,c.height/2);ctx.rotate(-Math.PI/2);ctx.fillText(viz==='cumulative'?'ψ(x)':'Λ(n)',0,0);ctx.restore();
+
+// Legend for powers
+if(viz!=='cumulative'&&col==='power'){
+const legs=[['k=1 (prime)','#00d9ff'],['k=2','#ff6496'],['k=3','#ffd700'],['k≥4','#9664ff']];
+let lx=pad;
+ctx.font='10px Segoe UI';
+legs.forEach(([txt,clr])=>{
+ctx.fillStyle=clr;ctx.fillRect(lx,c.height-pad+15,10,10);
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.fillText(txt,lx+14,c.height-pad+23);
+lx+=80;
+});
+}
+
+// Stats
+const finalPsi=psi[maxN];
+const primeCount=lambda.slice(1).filter((l,i)=>l>0&&primeSet.has(i+1)).length;
+const powerCount=lambda.slice(1).filter((l,i)=>l>0&&!primeSet.has(i+1)).length;
+const maxLambda=Math.max(...lambda.slice(1));
+const psiRatio=finalPsi/maxN;
+
+legend('almang','Von Mangoldt',[['ψ('+maxN+')',fmt(finalPsi),'#00d9ff'],['Primes',primeCount,'#ffd700'],['Powers',powerCount,'#ff6496']]);
+
+document.getElementById('mangLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${fmt(finalPsi)}</div><div style="font-size:.7rem;color:var(--txt2)">ψ(${maxN})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${primeCount}</div><div style="font-size:.7rem;color:var(--txt2)">PRIMES</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${powerCount}</div><div style="font-size:.7rem;color:var(--txt2)">POWERS k≥2</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Chebyshev ψ(x)</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>ψ(x):</span><span style="color:#00d9ff;font-weight:bold">${fmt(finalPsi)}</span>
+<span>ψ(x)/x:</span><span style="color:#ffd700">${fmt(psiRatio)} (→1)</span>
+<span>ψ(x) - x:</span><span style="color:${finalPsi-maxN<0?'#ff6496':'#00ff88'}">${fmt(finalPsi-maxN)}</span>
+<span>(ψ-x)/√x:</span><span style="color:#9664ff">${fmt((finalPsi-maxN)/Math.sqrt(maxN))}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Prime Powers</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Total Λ(n)>0:</span><span style="color:#00d9ff">${primeCount+powerCount}</span>
+<span>Max Λ(n):</span><span style="color:#ffd700">${fmt(maxLambda)} = log(${Math.round(Math.exp(maxLambda))})</span>
+<span>Primes (k=1):</span><span style="color:#00ff88">${primeCount}</span>
+<span>Higher powers:</span><span style="color:#ff6496">${powerCount}</span>
+</div>
+</div>
+<div style="background:rgba(0,217,255,.1);padding:8px;border-radius:6px">
+<strong style="color:#00d9ff">PNT Check</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">ψ(x)/x = ${fmt(psiRatio)} → 1 as x → ∞</div>
+</div>`;
+
+// Plotly charts - prime powers by base
+const powersByBase={};
+for(let n=2;n<=maxN;n++){
+if(lambda[n]>0){
+const base=Math.round(Math.exp(lambda[n]));
+powersByBase[base]=(powersByBase[base]||0)+1;
+}}
+const bases=Object.keys(powersByBase).map(Number).slice(0,20);
+Plotly.newPlot('pmangPowers',[{x:bases,y:bases.map(b=>powersByBase[b]),type:'bar',marker:{color:bases.map(b=>`hsl(${(b*37)%360},70%,50%)`)}}],{...plo(),xaxis:{title:'Prime Base p'},yaxis:{title:'Count of p^k ≤ n'}});
+
+// Distribution of Λ(n) values
+const lambdaVals=lambda.slice(1).filter(l=>l>0);
+Plotly.newPlot('pmangDist',[{x:lambdaVals,type:'histogram',nbinsx:30,marker:{color:'#9664ff'}}],{...plo(),xaxis:{title:'Λ(n) = log p'},yaxis:{title:'Count'}});
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const my=(e.clientY-rect.top)*(c.height/rect.height);
+for(const pt of allPts){
+if(Math.hypot(mx-pt.px,my-pt.py)<ptSz+10){
+modal(`Von Mangoldt at n=${pt.n}`,[
+['n',pt.n],['Λ(n)',fmt(pt.lambda)],['Base p',pt.base],['Power k',pt.power],
+['Type',pt.isPrime?'Prime':'Prime Power'],['n = p^k',`${pt.base}^${pt.power}`],
+['ψ(n)',fmt(psi[pt.n])]
+]);return;
+}}};
+}
+
+async function screenshotMangoldt(){
+const maxN=document.getElementById('mangNv').value;
+await screenshotUnified('cmang','mangLiveStats',`Von Mangoldt Function Λ(n) — n ≤ ${maxN}`,'mangoldt_complete.png',{dashH:350});
+}
+
+function csvMangoldt(){
+let s='n,Lambda_n,psi_n,is_prime_power\n';
+for(let n=2;n<=mangoldtData.maxN;n++)s+=`${n},${mangoldtData.lambda[n]},${mangoldtData.psi[n]},${mangoldtData.lambda[n]>0?1:0}\n`;
+dl(s,'mangoldt_data.csv');
+}
+
+// ==================== RAMANUJAN SUMS c_q(n) ====================
+let ramanujanData={cqn:[],maxQ:0,maxN:0};
+
+function ramanujanMu(n){
+if(n===1)return 1;
+let pf=0,d=2;
+while(d*d<=n){
+if(n%d===0){
+n/=d;pf++;
+if(n%d===0)return 0;
+}
+d++;
+}
+if(n>1)pf++;
+return pf%2===0?1:-1;
+}
+
+function ramanujanSum(q,n){
+// c_q(n) = μ(q/d) * φ(q) / φ(q/d) where d = gcd(n,q)
+const d=gcd(n,q);
+if(q%d!==0)return 0;
+const qd=q/d;
+return ramanujanMu(qd)*eulerPhi(q)/eulerPhi(qd);
+}
+
+function drawRamanujan(){
+const c=document.getElementById('cram'),ctx=c.getContext('2d');
+const maxQ=+document.getElementById('ramQv').value||+document.getElementById('ramQ').value;
+const maxN=+document.getElementById('ramNv').value||+document.getElementById('ramN').value;
+const viz=document.getElementById('ramViz').value;
+const col=document.getElementById('ramCol').value;
+const fixN=+document.getElementById('ramFixN').value||1;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+// Compute c_q(n) values
+const cqn=[];
+for(let q=1;q<=maxQ;q++){
+cqn[q]=[];
+for(let n=1;n<=maxN;n++){
+cqn[q][n]=ramanujanSum(q,n);
+}}
+ramanujanData={cqn,maxQ,maxN};
+
+const pad=60,w=c.width-2*pad,h=c.height-2*pad;
+
+if(viz==='heatmap'){
+// Draw q vs n heatmap
+const cellW=w/maxN,cellH=h/maxQ;
+let maxVal=0;
+for(let q=1;q<=maxQ;q++)for(let n=1;n<=maxN;n++)maxVal=Math.max(maxVal,Math.abs(cqn[q][n]));
+
+for(let q=1;q<=maxQ;q++){
+for(let n=1;n<=maxN;n++){
+const val=cqn[q][n];
+let clr;
+if(col==='diverging'){
+const t=val/(maxVal||1);
+if(t>0)clr=`rgba(0,200,100,${Math.abs(t)})`;
+else if(t<0)clr=`rgba(255,100,100,${Math.abs(t)})`;
+else clr='rgba(50,50,80,0.3)';
+}else if(col==='magnitude'){
+const t=Math.abs(val)/(maxVal||1);
+clr=`hsl(${240-t*200},70%,${30+t*40}%)`;
+}else{
+clr=val>0?'#00ff88':val<0?'#ff6496':'#333';
+}
+ctx.fillStyle=clr;
+ctx.fillRect(pad+(n-1)*cellW,pad+(q-1)*cellH,cellW+0.5,cellH+0.5);
+}}
+
+// Axes
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='12px Segoe UI';
+ctx.textAlign='center';ctx.fillText('n',c.width/2,c.height-15);
+ctx.save();ctx.translate(15,c.height/2);ctx.rotate(-Math.PI/2);ctx.fillText('q',0,0);ctx.restore();
+}else if(viz==='fixedq'){
+// Plot c_q(n) for fixed q
+const data=cqn[maxQ]||[];
+let yMin=Math.min(...data.slice(1)),yMax=Math.max(...data.slice(1));
+const margin=(yMax-yMin)*0.1||1;
+yMin-=margin;yMax+=margin;
+const scX=w/maxN,scY=h/(yMax-yMin);
+
+// Grid and zero line
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let i=0;i<=10;i++){
+ctx.beginPath();ctx.moveTo(pad+i*w/10,pad);ctx.lineTo(pad+i*w/10,c.height-pad);ctx.stroke();
+}
+if(yMin<0&&yMax>0){
+const y0=c.height-pad+yMin*scY;
+ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(pad,y0);ctx.lineTo(c.width-pad,y0);ctx.stroke();
+}
+
+// Plot bars
+for(let n=1;n<=maxN;n++){
+const val=data[n]||0;
+const px=pad+n*scX;
+const py0=c.height-pad+yMin*scY;
+const py=c.height-pad-(val-yMin)*scY;
+ctx.fillStyle=val>0?'#00ff88':val<0?'#ff6496':'#666';
+ctx.fillRect(px-2,Math.min(py,py0),4,Math.abs(py-py0)||1);
+}
+
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='12px Segoe UI';
+ctx.textAlign='center';ctx.fillText('n',c.width/2,c.height-15);
+ctx.save();ctx.translate(15,c.height/2);ctx.rotate(-Math.PI/2);ctx.fillText(`c_${maxQ}(n)`,0,0);ctx.restore();
+}else if(viz==='circle'){
+// Show roots of unity on unit circle
+const cx=c.width/2,cy=c.height/2,radius=Math.min(w,h)/2-20;
+ctx.strokeStyle=gridC();ctx.lineWidth=1;
+ctx.beginPath();ctx.arc(cx,cy,radius,0,2*Math.PI);ctx.stroke();
+
+// Draw all q-th roots
+for(let a=0;a<maxQ;a++){
+const angle=2*Math.PI*a/maxQ;
+const x=cx+radius*Math.cos(angle);
+const y=cy-radius*Math.sin(angle);
+const isPrim=gcd(a,maxQ)===1;
+ctx.fillStyle=isPrim?'#ffd700':'#666';
+ctx.beginPath();ctx.arc(x,y,isPrim?6:4,0,2*Math.PI);ctx.fill();
+if(isPrim&&maxQ<=24){
+ctx.fillStyle=isDark()?'#fff':'#000';ctx.font='10px Segoe UI';
+ctx.textAlign='center';ctx.fillText(a,x,y-10);
+}}
+
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 12px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`φ(${maxQ}) = ${eulerPhi(maxQ)} primitive roots`,cx,c.height-pad+30);
+}
+
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Ramanujan Sum c_q(n) — q = ${maxQ}, n ≤ ${maxN}`,c.width/2,25);
+
+// Stats
+const phiQ=eulerPhi(maxQ);
+const cq1=ramanujanSum(maxQ,1);
+const cqq=ramanujanSum(maxQ,maxQ);
+const divisors=[];for(let d=1;d<=maxQ;d++)if(maxQ%d===0)divisors.push(d);
+
+legend('alram','Ramanujan c_q(n)',[['φ(q)',phiQ,'#ffd700'],['c_q(1)',cq1,'#00d9ff'],['c_q(q)',cqq,'#ff6496']]);
+
+document.getElementById('ramLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${maxQ}</div><div style="font-size:.7rem;color:var(--txt2)">MODULUS q</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${phiQ}</div><div style="font-size:.7rem;color:var(--txt2)">φ(q)</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${cq1}</div><div style="font-size:.7rem;color:var(--txt2)">c_q(1) = μ(q)</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Key Values</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>c_q(1) = μ(q):</span><span style="color:#00d9ff;font-weight:bold">${cq1}</span>
+<span>c_q(q) = φ(q):</span><span style="color:#ffd700">${phiQ}</span>
+<span>Divisors of q:</span><span style="color:#9664ff">${divisors.join(', ')}</span>
+<span>c_q(n) range:</span><span style="color:#ff6496">[${-phiQ}, ${phiQ}]</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">c_q(n) for First Few n</strong>
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:6px;font-size:.75rem">
+${[1,2,3,4,5,6,7,8,9,10].map(n=>`<span>c(${n})=${ramanujanSum(maxQ,n)}</span>`).join('')}
+</div>
+</div>`;
+
+// Plotly charts
+Plotly.newPlot('pramN',[{x:[...Array(maxN)].map((_,i)=>i+1),y:[...Array(maxN)].map((_,i)=>ramanujanSum(maxQ,i+1)),type:'bar',marker:{color:[...Array(maxN)].map((_,i)=>ramanujanSum(maxQ,i+1)>0?'#00ff88':'#ff6496')}}],{...plo(),xaxis:{title:'n'},yaxis:{title:`c_${maxQ}(n)`}});
+
+const divData=divisors.map(d=>({x:d,y:ramanujanSum(maxQ,d)}));
+Plotly.newPlot('pramDiv',[{x:divisors,y:divisors.map(d=>ramanujanSum(maxQ,d)),type:'bar',marker:{color:'#ffd700'}}],{...plo(),xaxis:{title:'d | q'},yaxis:{title:'c_q(d)'}});
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const my=(e.clientY-rect.top)*(c.height/rect.height);
+if(viz==='heatmap'){
+const cellW=w/maxN,cellH=h/maxQ;
+const n=Math.floor((mx-pad)/cellW)+1;
+const q=Math.floor((my-pad)/cellH)+1;
+if(n>=1&&n<=maxN&&q>=1&&q<=maxQ){
+modal(`Ramanujan Sum c_${q}(${n})`,[
+['q',q],['n',n],['c_q(n)',ramanujanSum(q,n)],
+['gcd(n,q)',gcd(n,q)],['φ(q)',eulerPhi(q)],['μ(q/gcd)',ramanujanMu(q/gcd(n,q))]
+]);
+}}};
+}
+
+async function screenshotRamanujan(){
+const q=document.getElementById('ramQv').value;
+await screenshotUnified('cram','ramLiveStats',`Ramanujan Sum c_q(n) — q = ${q}`,'ramanujan_complete.png',{dashH:300});
+}
+
+function csvRamanujan(){
+let s='q,n,c_q_n\n';
+for(let q=1;q<=ramanujanData.maxQ;q++)for(let n=1;n<=ramanujanData.maxN;n++)s+=`${q},${n},${ramanujanData.cqn[q][n]}\n`;
+dl(s,'ramanujan_data.csv');
+}
+
+// ==================== ULAM SPIRAL ====================
+let ulamData={grid:[],primes:[],size:0};
+
+function generateUlamSpiral(size,start=1){
+const grid=Array(size).fill(null).map(()=>Array(size).fill(0));
+const cx=Math.floor(size/2),cy=Math.floor(size/2);
+let x=cx,y=cy,n=start;
+const dirs=[[1,0],[0,-1],[-1,0],[0,1]]; // right, up, left, down
+let dir=0,steps=1,stepCount=0,turnCount=0;
+
+grid[y][x]=n++;
+const maxN=start+size*size-1;
+const primes=new Set(sievePrimes(maxN));
+
+while(n<=maxN&&x>=0&&x<size&&y>=0&&y<size){
+x+=dirs[dir][0];y+=dirs[dir][1];
+if(x>=0&&x<size&&y>=0&&y<size)grid[y][x]=n;
+n++;stepCount++;
+if(stepCount===steps){
+stepCount=0;dir=(dir+1)%4;turnCount++;
+if(turnCount===2){turnCount=0;steps++;}
+}}
+return{grid,primes,start};
+}
+
+function drawUlam(){
+const c=document.getElementById('culam'),ctx=c.getContext('2d');
+const size=+document.getElementById('ulamSizev').value||+document.getElementById('ulamSize').value;
+const start=+document.getElementById('ulamStart').value||1;
+const hl=document.getElementById('ulamHL').value;
+const col=document.getElementById('ulamCol').value;
+const cellSz=+document.getElementById('ulamCell').value;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+const{grid,primes}=generateUlamSpiral(size,start);
+ulamData={grid,primes,size,start};
+
+const pad=10;
+const cellW=(c.width-2*pad)/size;
+const cellH=(c.height-2*pad)/size;
+const actualCell=Math.min(cellW,cellH,cellSz);
+const offsetX=(c.width-size*actualCell)/2;
+const offsetY=(c.height-size*actualCell)/2;
+
+// Draw grid
+let primeCount=0,twinCount=0;
+for(let y=0;y<size;y++){
+for(let x=0;x<size;x++){
+const n=grid[y][x];
+if(!n)continue;
+const isPrime=primes.has(n);
+if(isPrime)primeCount++;
+
+let show=false,clr='#fff';
+if(hl==='primes'&&isPrime){show=true;clr='#fff';}
+else if(hl==='twin'&&isPrime&&(primes.has(n+2)||primes.has(n-2))){show=true;clr='#ffd700';if(primes.has(n+2))twinCount++;}
+else if(hl==='sophie'&&isPrime&&primes.has(2*n+1)){show=true;clr='#ff6496';}
+else if(hl==='diagonal'){
+const cx=Math.floor(size/2),cy=Math.floor(size/2);
+if(x===y||x===size-1-y||x===cx||y===cy){show=isPrime;clr='#00d9ff';}
+}else if(hl==='mersenne'){
+const log2=Math.log2(n+1);
+if(Math.abs(log2-Math.round(log2))<0.01){show=true;clr='#9664ff';}
+else if(isPrime)show=true;
+}
+
+if(col==='classic'){
+if(show){ctx.fillStyle=clr;ctx.fillRect(offsetX+x*actualCell,offsetY+y*actualCell,actualCell,actualCell);}
+}else if(col==='heat'){
+if(isPrime){
+// Count nearby primes for heat
+let nearby=0;
+for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
+const ny=y+dy,nx=x+dx;
+if(ny>=0&&ny<size&&nx>=0&&nx<size&&grid[ny][nx]&&primes.has(grid[ny][nx]))nearby++;
+}
+const t=nearby/25;
+ctx.fillStyle=`hsl(${60-t*60},100%,${40+t*30}%)`;
+ctx.fillRect(offsetX+x*actualCell,offsetY+y*actualCell,actualCell,actualCell);
+}
+}else if(col==='mod6'){
+if(isPrime){
+const mod=n%6;
+const colors={1:'#00d9ff',5:'#ff6496'};
+ctx.fillStyle=colors[mod]||'#ffd700';
+ctx.fillRect(offsetX+x*actualCell,offsetY+y*actualCell,actualCell,actualCell);
+}
+}else if(col==='gcd'){
+if(isPrime){
+const g=gcd(x-Math.floor(size/2),y-Math.floor(size/2));
+ctx.fillStyle=`hsl(${g*60},70%,50%)`;
+ctx.fillRect(offsetX+x*actualCell,offsetY+y*actualCell,actualCell,actualCell);
+}
+}
+}}
+
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Ulam Spiral ${size}×${size} — Start: ${start}`,c.width/2,20);
+
+// Stats
+const maxN=start+size*size-1;
+const density=primeCount/(size*size)*100;
+
+legend('alulam','Ulam Spiral',[['Primes',primeCount,'#ffd700'],['Total',size*size,'#00d9ff'],['Density',fmt(density)+'%','#ff6496']]);
+
+document.getElementById('ulamLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${primeCount}</div><div style="font-size:.7rem;color:var(--txt2)">PRIMES</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${size}×${size}</div><div style="font-size:.7rem;color:var(--txt2)">GRID SIZE</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${fmt(density)}%</div><div style="font-size:.7rem;color:var(--txt2)">DENSITY</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Spiral Statistics</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Range:</span><span style="color:#00d9ff">${start} to ${maxN}</span>
+<span>Primes in range:</span><span style="color:#ffd700">${primeCount}</span>
+<span>Expected (PNT):</span><span style="color:#9664ff">${Math.round(maxN/Math.log(maxN))}</span>
+<span>Twin pairs:</span><span style="color:#ff6496">${Math.floor(twinCount/2)}</span>
+</div>
+</div>
+<div style="background:rgba(0,217,255,.1);padding:8px;border-radius:6px">
+<strong style="color:#00d9ff">Diagonal Patterns</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">Primes cluster on diagonals 4n²+bn+c. Try Euler's n²+n+41!</div>
+</div>`;
+
+// Plotly charts - diagonal density
+const diagCounts=[];
+for(let d=-Math.floor(size/2);d<=Math.floor(size/2);d++){
+let count=0;
+for(let i=0;i<size;i++){
+const y=i,x=i+d+Math.floor(size/2);
+if(x>=0&&x<size&&grid[y]&&grid[y][x]&&primes.has(grid[y][x]))count++;
+}
+diagCounts.push({d,count});
+}
+Plotly.newPlot('pulamDiag',[{x:diagCounts.map(dc=>dc.d),y:diagCounts.map(dc=>dc.count),type:'bar',marker:{color:'#00d9ff'}}],{...plo(),xaxis:{title:'Diagonal Offset'},yaxis:{title:'Prime Count'}});
+
+// Gap distribution
+const primeList=[...primes].filter(p=>p>=start&&p<=maxN).sort((a,b)=>a-b);
+const gaps=[];
+for(let i=1;i<Math.min(primeList.length,1000);i++)gaps.push(primeList[i]-primeList[i-1]);
+Plotly.newPlot('pulamGaps',[{x:gaps,type:'histogram',nbinsx:20,marker:{color:'#ff6496'}}],{...plo(),xaxis:{title:'Gap Size'},yaxis:{title:'Count'}});
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const my=(e.clientY-rect.top)*(c.height/rect.height);
+const gx=Math.floor((mx-offsetX)/actualCell);
+const gy=Math.floor((my-offsetY)/actualCell);
+if(gx>=0&&gx<size&&gy>=0&&gy<size&&grid[gy]&&grid[gy][gx]){
+const n=grid[gy][gx];
+modal(`Ulam Spiral at (${gx},${gy})`,[
+['Value',n],['Prime?',primes.has(n)?'YES':'NO'],
+['Grid Position',`(${gx}, ${gy})`],['Distance from Center',fmt(Math.hypot(gx-size/2,gy-size/2))],
+['n mod 6',n%6]
+]);
+}};
+}
+
+async function screenshotUlam(){
+const size=document.getElementById('ulamSizev').value;
+await screenshotUnified('culam','ulamLiveStats',`Ulam Spiral ${size}×${size}`,'ulam_spiral.png',{dashH:280});
+}
+
+function csvUlam(){
+let s='x,y,n,is_prime\n';
+for(let y=0;y<ulamData.size;y++)for(let x=0;x<ulamData.size;x++){
+const n=ulamData.grid[y][x];
+if(n)s+=`${x},${y},${n},${ulamData.primes.has(n)?1:0}\n`;
+}
+dl(s,'ulam_spiral.csv');
+}
+
+// ==================== SACKS SPIRAL ====================
+let sacksData={points:[],primes:new Set(),maxN:0};
+
+function drawSacks(){
+const c=document.getElementById('csacks'),ctx=c.getContext('2d');
+const maxN=+document.getElementById('sacksNv').value||+document.getElementById('sacksN').value;
+const hl=document.getElementById('sacksHL').value;
+const col=document.getElementById('sacksCol').value;
+const ptSz=+document.getElementById('sacksPtSz').value;
+const showArcs=document.getElementById('sacksShowArcs').checked;
+const showGrid=document.getElementById('sacksShowGrid').checked;
+
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
+
+const primes=new Set(sievePrimes(maxN));
+sacksData={primes,maxN};
+
+const cx=c.width/2,cy=c.height/2;
+const maxR=Math.sqrt(maxN);
+const scale=Math.min(c.width,c.height)/2/maxR*0.9;
+
+// Grid circles for perfect squares
+if(showGrid){
+ctx.strokeStyle=gridC();ctx.lineWidth=0.5;
+for(let k=1;k*k<=maxN;k+=Math.ceil(Math.sqrt(maxN)/10)){
+ctx.beginPath();ctx.arc(cx,cy,k*scale,0,2*Math.PI);ctx.stroke();
+}}
+
+// Draw parabolic arcs (reference curves)
+if(showArcs){
+ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;
+// n² + n + 41 (Euler's polynomial)
+ctx.beginPath();
+for(let n=0;n<Math.sqrt(maxN);n++){
+const val=n*n+n+41;
+if(val>maxN)break;
+const r=Math.sqrt(val)*scale;
+const theta=2*Math.PI*Math.sqrt(val);
+const x=cx+r*Math.cos(theta);
+const y=cy-r*Math.sin(theta);
+if(n===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+}ctx.stroke();
+}
+
+// Draw points
+const points=[];
+let primeCount=0,twinCount=0;
+for(let n=1;n<=maxN;n++){
+const sqrtN=Math.sqrt(n);
+const r=sqrtN*scale;
+const theta=2*Math.PI*sqrtN;
+const x=cx+r*Math.cos(theta);
+const y=cy-r*Math.sin(theta);
+const isPrime=primes.has(n);
+if(isPrime)primeCount++;
+
+let show=false,clr='#fff';
+if(hl==='primes'&&isPrime){show=true;}
+else if(hl==='all'){show=true;clr=isPrime?'#ffd700':'#444';}
+else if(hl==='twin'&&isPrime&&(primes.has(n+2)||primes.has(n-2))){show=true;clr='#ff6496';twinCount++;}
+else if(hl==='squares'){const sq=Math.sqrt(n);show=Math.abs(sq-Math.round(sq))<0.001;clr='#00d9ff';}
+else if(hl==='triangular'){const t=(Math.sqrt(8*n+1)-1)/2;show=Math.abs(t-Math.round(t))<0.001;clr='#9664ff';}
+
+if(show){
+if(col==='classic'){clr=clr==='#fff'?'#ffd700':clr;}
+else if(col==='rainbow'){clr=`hsl(${(n/maxN)*360},70%,50%)`;}
+else if(col==='density'){
+// Local prime density
+let nearby=0;
+for(let k=Math.max(1,n-50);k<=Math.min(maxN,n+50);k++)if(primes.has(k))nearby++;
+const t=nearby/100;
+clr=`hsl(${120-t*120},70%,50%)`;
+}else if(col==='gap'){
+if(isPrime){
+let gap=0;
+for(let k=n+1;k<=Math.min(maxN,n+100);k++)if(primes.has(k)){gap=k-n;break;}
+clr=`hsl(${Math.min(gap*10,240)},70%,50%)`;
+}
+}
+ctx.fillStyle=clr;
+ctx.beginPath();ctx.arc(x,y,ptSz,0,2*Math.PI);ctx.fill();
+points.push({n,x,y,isPrime});
+}}
+
+// Mark center and axes
+ctx.fillStyle='#ff6496';ctx.beginPath();ctx.arc(cx,cy,3,0,2*Math.PI);ctx.fill();
+
+// Title
+ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='bold 14px Segoe UI';ctx.textAlign='center';
+ctx.fillText(`Sacks Spiral — n ≤ ${maxN}`,c.width/2,20);
+
+// Stats
+const density=primeCount/maxN*100;
+const expected=maxN/Math.log(maxN);
+
+legend('alsacks','Sacks Spiral',[['Primes',primeCount,'#ffd700'],['Max n',maxN,'#00d9ff'],['Density',fmt(density)+'%','#ff6496']]);
+
+document.getElementById('sacksLiveStats').innerHTML=`
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${primeCount}</div><div style="font-size:.7rem;color:var(--txt2)">PRIMES</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${maxN}</div><div style="font-size:.7rem;color:var(--txt2)">MAX n</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${fmt(density)}%</div><div style="font-size:.7rem;color:var(--txt2)">DENSITY</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Spiral Statistics</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Primes found:</span><span style="color:#ffd700">${primeCount}</span>
+<span>PNT prediction:</span><span style="color:#9664ff">${Math.round(expected)}</span>
+<span>Ratio:</span><span style="color:#00d9ff">${fmt(primeCount/expected)}</span>
+<span>Max radius:</span><span style="color:#ff6496">${fmt(maxR)}</span>
+</div>
+</div>
+<div style="background:rgba(0,255,136,.1);padding:8px;border-radius:6px">
+<strong style="color:#00ff88">Parabolic Arms</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">Primes cluster on curves an²+bn+c. Toggle arcs to see Euler's n²+n+41.</div>
+</div>`;
+
+// Plotly charts - angular distribution
+const angleBins=Array(36).fill(0);
+for(let n=2;n<=maxN;n++){
+if(primes.has(n)){
+const theta=(2*Math.PI*Math.sqrt(n))%(2*Math.PI);
+const bin=Math.floor(theta/(2*Math.PI)*36);
+angleBins[bin]++;
+}}
+Plotly.newPlot('psacksAngle',[{x:[...Array(36)].map((_,i)=>i*10),y:angleBins,type:'bar',marker:{color:'#00d9ff'}}],{...plo(),xaxis:{title:'Angle (degrees)'},yaxis:{title:'Prime Count'}});
+
+// Radial density
+const radialBins=[];
+const binSize=Math.ceil(Math.sqrt(maxN)/20);
+for(let r=0;r<Math.sqrt(maxN);r+=binSize){
+let count=0,total=0;
+for(let n=Math.floor(r*r);n<Math.min(maxN,(r+binSize)*(r+binSize));n++){
+total++;if(primes.has(n))count++;
+}
+radialBins.push({r:r+binSize/2,density:count/total*100});
+}
+Plotly.newPlot('psacksRadial',[{x:radialBins.map(b=>b.r),y:radialBins.map(b=>b.density),type:'scatter',mode:'lines+markers',line:{color:'#ff6496'}}],{...plo(),xaxis:{title:'Radius (√n)'},yaxis:{title:'Prime %'}});
+
+// Click handler
+c.onclick=e=>{
+const rect=c.getBoundingClientRect();
+const mx=(e.clientX-rect.left)*(c.width/rect.width);
+const my=(e.clientY-rect.top)*(c.height/rect.height);
+// Find closest point
+let closest=null,minD=Infinity;
+for(const pt of points){
+const d=Math.hypot(mx-pt.x,my-pt.y);
+if(d<minD&&d<20){minD=d;closest=pt;}
+}
+if(closest){
+const sqrtN=Math.sqrt(closest.n);
+modal(`Sacks Spiral at n=${closest.n}`,[
+['n',closest.n],['Prime?',closest.isPrime?'YES':'NO'],
+['√n',fmt(sqrtN)],['θ = 2π√n',fmt(2*Math.PI*sqrtN)+' rad'],
+['Position',`(${fmt(closest.x-cx)}, ${fmt(cy-closest.y)})`]
+]);
+}};
+}
+
+async function screenshotSacks(){
+const maxN=document.getElementById('sacksNv').value;
+await screenshotUnified('csacks','sacksLiveStats',`Sacks Spiral — n ≤ ${maxN}`,'sacks_spiral.png',{dashH:280});
+}
+
+function csvSacks(){
+let s='n,sqrt_n,theta,x,y,is_prime\n';
+for(let n=1;n<=sacksData.maxN;n++){
+const sqrtN=Math.sqrt(n);
+const theta=2*Math.PI*sqrtN;
+s+=`${n},${sqrtN},${theta},${Math.cos(theta)*sqrtN},${Math.sin(theta)*sqrtN},${sacksData.primes.has(n)?1:0}\n`;
+}
+dl(s,'sacks_spiral.csv');
+}
 
 draw2D();
 </script>
