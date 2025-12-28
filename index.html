@@ -165,7 +165,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <hr style="border:none;border-top:2px solid var(--bord);margin:2rem 0">
 
 <h2>Complete Platform Reference</h2>
-<p style="color:var(--txt2);font-style:italic">23 interactive visualization tools spanning 300 years of number theory</p>
+<p style="color:var(--txt2);font-style:italic">41 interactive visualization tools spanning 300 years of number theory</p>
 
 <h3>Mathematical Credits (Chronological)</h3>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem;margin:1rem 0">
@@ -432,11 +432,14 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <button class="tbtn" onclick="showTab('thardy',this)">Hardy Z(t)</button>
 <button class="tbtn" onclick="showTab('tgram',this)">Gram Points</button>
 <button class="tbtn" onclick="showTab('texplicit',this)">Explicit π(x)</button>
+<button class="tbtn" onclick="showTab('tzerocount',this)">N(T) Zeros</button>
+<button class="tbtn" onclick="showTab('targand',this)">ζ(s) Argand</button>
+<button class="tbtn" onclick="showTab('tzetareal',this)">ζ(s) Real</button>
 </div>
 
 <div id="t2d" class="tab active">
 <div class="ctrl">
-<div class="cg"><label>Radius R <span class="tip" title="Scaling parameter">?</span></label><div class="sig"><input type="range" id="r2d" min="1" max="100" step=".5" value="4" oninput="document.getElementById('r2dv').value=this.value;draw2D()"><input type="number" id="r2dv" value="4" min="1" step=".5" onchange="document.getElementById('r2d').value=Math.min(100,this.value);draw2D()"></div></div>
+<div class="cg"><label>Radius R <span class="tip" title="Scaling parameter">?</span></label><div class="sig"><input type="range" id="r2d" min="1" max="200" step=".5" value="4" oninput="document.getElementById('r2dv').value=this.value;draw2DDebounced()"><input type="number" id="r2dv" value="4" min="1" step=".5" max="1000"><button onclick="draw2D()" style="padding:2px 8px;margin-left:4px;border-radius:4px;border:1px solid var(--bord);background:var(--acc);color:#000;cursor:pointer;font-weight:bold">Go</button></div></div>
 <div class="cg"><label>Shape <span class="tip" title="Circle or square">?</span></label><select id="sh2d" onchange="draw2D()"><option value="circle">Circle</option><option value="square">Square</option><option value="both">Square + Circle</option></select></div>
 <div class="cg"><label>Color Scheme <span class="tip" title="Coloring method">?</span></label><select id="col2d" onchange="draw2D()"><option value="gcd">By GCD (Recommended)</option><option value="dist">By Distance</option><option value="prim">Primitive vs Non</option><option value="rainbow">Rainbow (Cyclic)</option><option value="quadres">Quadratic Residues</option><option value="primality">Primality (x·y)</option><option value="moddist">Modular Distance</option><option value="symmetry">Symmetry Pattern</option><option value="heatmap">Heatmap (Density)</option><option value="divisibility">Divisibility</option><option value="discrete">Discrete GCD</option><option value="fire">Fire Gradient</option><option value="plasma">Plasma</option><option value="viridis">Viridis</option><option value="ocean">Ocean</option></select></div>
 <div class="cg"><label>Point Labels <span class="tip" title="Label display">?</span></label><select id="lbl2d" onchange="draw2D()"><option value="none">None</option><option value="coords">Coordinates</option><option value="gcd">GCD Values</option></select></div>
@@ -499,10 +502,13 @@ P(gcd(x,y) = 1) = 6/π² = 1/ζ(2) = 0.6079271018540266
 <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
 <strong style="color:var(--acc)">Quick Presets:</strong>
 <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
-<button onclick="document.getElementById('r2dv').value=4;document.getElementById('r2d').value=4;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=4 (Small)</button>
-<button onclick="document.getElementById('r2dv').value=10;document.getElementById('r2d').value=10;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=10 (Medium)</button>
-<button onclick="document.getElementById('r2dv').value=25;document.getElementById('r2d').value=25;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=25 (Large)</button>
-<button onclick="document.getElementById('r2dv').value=50;document.getElementById('r2d').value=50;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=50 (Dense)</button>
+<button onclick="document.getElementById('r2dv').value=4;document.getElementById('r2d').value=4;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=4</button>
+<button onclick="document.getElementById('r2dv').value=10;document.getElementById('r2d').value=10;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=10</button>
+<button onclick="document.getElementById('r2dv').value=25;document.getElementById('r2d').value=25;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=25</button>
+<button onclick="document.getElementById('r2dv').value=50;document.getElementById('r2d').value=50;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=50</button>
+<button onclick="document.getElementById('r2dv').value=100;document.getElementById('r2d').value=100;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=100</button>
+<button onclick="document.getElementById('r2dv').value=200;document.getElementById('r2d').value=200;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=200</button>
+<button onclick="document.getElementById('r2dv').value=500;document.getElementById('r2d').value=200;draw2D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--acc);color:#000;cursor:pointer;font-weight:bold">R=500</button>
 </div>
 </div>
 </div>
@@ -510,7 +516,7 @@ P(gcd(x,y) = 1) = 6/π² = 1/ζ(2) = 0.6079271018540266
 
 <div id="t3d" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Radius R <span class="tip" title="Ball radius">?</span></label><div class="sig"><input type="range" id="r3d" min="1" max="30" step=".5" value="4" oninput="document.getElementById('r3dv').value=this.value;draw3D()"><input type="number" id="r3dv" value="4" min="1" step=".5" onchange="document.getElementById('r3d').value=Math.min(30,this.value);draw3D()"></div></div>
+<div class="cg"><label>Radius R <span class="tip" title="Ball radius">?</span></label><div class="sig"><input type="range" id="r3d" min="1" max="50" step=".5" value="4" oninput="document.getElementById('r3dv').value=this.value;draw3DDebounced()"><input type="number" id="r3dv" value="4" min="1" step=".5" max="343"><button onclick="draw3D()" style="padding:2px 8px;margin-left:4px;border-radius:4px;border:1px solid var(--bord);background:var(--acc);color:#000;cursor:pointer;font-weight:bold">Go</button></div></div>
 <div class="cg"><label>X Rotation <span class="tip" title="Rotation around X axis">?</span></label><div class="sig"><input type="number" id="rotX" value="0" min="0" max="360" step="1" style="width:60px" onchange="rx=this.value*Math.PI/180;draw3D()"><span style="color:var(--txt2)">°</span><input type="range" id="rotXr" min="0" max="360" value="0" oninput="document.getElementById('rotX').value=this.value;rx=this.value*Math.PI/180;draw3D()"></div></div>
 <div class="cg"><label>Y Rotation <span class="tip" title="Rotation around Y axis">?</span></label><div class="sig"><input type="number" id="rotY" value="0" min="0" max="360" step="1" style="width:60px" onchange="ry=this.value*Math.PI/180;draw3D()"><span style="color:var(--txt2)">°</span><input type="range" id="rotYr" min="0" max="360" value="0" oninput="document.getElementById('rotY').value=this.value;ry=this.value*Math.PI/180;draw3D()"></div></div>
 <div class="cg"><label>Z Rotation <span class="tip" title="Rotation around Z axis">?</span></label><div class="sig"><input type="number" id="rotZ" value="0" min="0" max="360" step="1" style="width:60px" onchange="rz=this.value*Math.PI/180;draw3D()"><span style="color:var(--txt2)">°</span><input type="range" id="rotZr" min="0" max="360" value="0" oninput="document.getElementById('rotZ').value=this.value;rz=this.value*Math.PI/180;draw3D()"></div></div>
@@ -574,7 +580,7 @@ P(gcd(x,y,z) = 1) = 1/ζ(3) = 0.8319073725807075
 
 <div id="tmob" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Compute μ(n) for n ≤ N">?</span></label><div class="sig"><input type="range" id="mobN" min="10" max="500" step="10" value="100" oninput="document.getElementById('mobNv').value=this.value"><input type="number" id="mobNv" value="100" min="2" max="2000" onchange="document.getElementById('mobN').value=Math.min(500,this.value)"></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Compute μ(n) for n ≤ N">?</span></label><div class="sig"><input type="range" id="mobN" min="10" max="500" step="10" value="100" oninput="document.getElementById('mobNv').value=this.value"><input type="number" id="mobNv" value="100" min="2" max="2000" ></div></div>
 <div class="cg"><label>Visualization</label><select id="mobViz" onchange="drawMobius()">
 <option value="strip">μ(n) Strip Chart</option>
 <option value="mertens">Mertens M(x)</option>
@@ -633,7 +639,7 @@ P(gcd(x,y,z) = 1) = 1/ζ(3) = 0.8319073725807075
 
 <div id="tcayley" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Radius R <span class="tip" title="Lattice boundary">?</span></label><div class="sig"><input type="range" id="rcay" min="1" max="50" step=".5" value="6" oninput="document.getElementById('rcayv').value=this.value;drawCayley()"><input type="number" id="rcayv" value="6" min="1" step=".5" onchange="document.getElementById('rcay').value=Math.min(50,this.value);drawCayley()"></div></div>
+<div class="cg"><label>Radius R <span class="tip" title="Lattice boundary">?</span></label><div class="sig"><input type="range" id="rcay" min="1" max="50" step=".5" value="6" oninput="document.getElementById('rcayv').value=this.value;drawCayley()"><input type="number" id="rcayv" value="6" min="1" step=".5" onkeydown="if(event.key==='Enter')drawCayley()"></div></div>
 <div class="cg"><label>View Range <span class="tip" title="Upper half-plane extent">?</span></label><input type="number" id="cayRange" value="4" min="1" max="20" step=".5" onchange="drawCayley()"></div>
 <div class="cg"><label>Point Size</label><input type="range" id="caySz" min="1" max="10" value="3" onchange="drawCayley()"></div>
 <div class="cg"><label>Color Scheme</label><select id="colCay" onchange="drawCayley()"><option value="gcd">By GCD</option><option value="prim">Primitive (Gold)</option><option value="imag">By Im(w)</option><option value="arg">By Arg(z)</option><option value="farey">Farey Level</option><option value="fire">Fire Gradient</option><option value="plasma">Plasma</option><option value="viridis">Viridis</option></select></div>
@@ -692,7 +698,7 @@ w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²
 
 <div id="tprim" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Modulus M <span class="tip" title="Ring ℤ/Mℤ">?</span></label><div class="sig"><input type="range" id="mprim" min="2" max="500" step="1" value="17" oninput="document.getElementById('mprimv').value=this.value;drawPrimRoot()"><input type="number" id="mprimv" value="17" min="2" onchange="document.getElementById('mprim').value=Math.min(500,this.value);drawPrimRoot()"></div></div>
+<div class="cg"><label>Modulus M <span class="tip" title="Ring ℤ/Mℤ">?</span></label><div class="sig"><input type="range" id="mprim" min="2" max="500" step="1" value="17" oninput="document.getElementById('mprimv').value=this.value;drawPrimRoot()"><input type="number" id="mprimv" value="17" min="2" onkeydown="if(event.key==='Enter')drawPrimRoot()"></div></div>
 <div class="cg"><label>Generator g <span class="tip" title="Primitive root candidate">?</span></label><div class="sig"><input type="number" id="gprim" value="3" min="1" max="500"><button onclick="drawPrimRoot()">Use</button><button onclick="findPrimRoot()">Find Smallest</button><button onclick="findAllPrimRoots()">Find All</button></div></div>
 <div class="cg"><label>Point Size</label><input type="range" id="primPtSz" min="2" max="12" value="5" onchange="drawPrimRoot()"></div>
 <div class="cg"><label>Color By</label><select id="colPrim" onchange="drawPrimRoot()"><option value="order">Element Order</option><option value="power">Power Index</option><option value="unit">Unit vs Non-Unit</option><option value="quadres">Quadratic Residue</option><option value="generator">Generator Orbit</option><option value="discrete">Discrete Log</option></select></div>
@@ -745,7 +751,7 @@ w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²
 
 <div id="tfarey" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max Denominator Q <span class="tip" title="Farey sequence F_Q">?</span></label><div class="sig"><input type="range" id="fareyQ" min="2" max="50" value="8" oninput="document.getElementById('fareyQv').value=this.value;drawFarey()"><input type="number" id="fareyQv" value="8" min="2" max="100" onchange="document.getElementById('fareyQ').value=Math.min(50,this.value);drawFarey()"></div></div>
+<div class="cg"><label>Max Denominator Q <span class="tip" title="Farey sequence F_Q">?</span></label><div class="sig"><input type="range" id="fareyQ" min="2" max="50" value="8" oninput="document.getElementById('fareyQv').value=this.value;drawFarey()"><input type="number" id="fareyQv" value="8" min="2" max="100" onkeydown="if(event.key==='Enter')drawFarey()"></div></div>
 <div class="cg"><label>Visualization</label><select id="fareyViz" onchange="drawFarey()">
 <option value="sequence">Farey Sequence (Line)</option>
 <option value="tree">Stern-Brocot Tree</option>
@@ -883,7 +889,7 @@ w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²
 </div>
 <div class="ctrl" style="border-top:1px solid var(--bord);padding-top:.5rem;margin-top:.5rem">
 <div class="cg"><label><strong>Per-Ring Rotation</strong> <span class="tip" title="Each ring rotates by index × increment">?</span></label></div>
-<div class="cg"><label>Ring Increment <span id="ringIncV" style="color:var(--txt2)">0°</span></label><div class="sig"><input type="range" id="ringInc" min="0" max="90" value="0" step="0.5" oninput="document.getElementById('ringIncV').textContent=this.value+'°';document.getElementById('ringIncNum').value=this.value;drawModRings()"><input type="number" id="ringIncNum" value="0" min="0" max="360" step="0.5" style="width:60px" onchange="document.getElementById('ringInc').value=Math.min(90,this.value);document.getElementById('ringIncV').textContent=this.value+'°';drawModRings()"></div></div>
+<div class="cg"><label>Ring Increment <span id="ringIncV" style="color:var(--txt2)">0°</span></label><div class="sig"><input type="range" id="ringInc" min="0" max="90" value="0" step="0.5" oninput="document.getElementById('ringIncV').textContent=this.value+'°';document.getElementById('ringIncNum').value=this.value;drawModRings()"><input type="number" id="ringIncNum" value="0" min="0" max="360" step="0.5" style="width:60px" onkeydown="if(event.key==='Enter')document.getElementById('ringIncV').textContent=this.value+'°';drawModRings()"></div></div>
 <div class="cg"><label>Increment as r/m</label><div class="sig"><input type="number" id="ringIncR" value="0" min="0" style="width:50px">/&nbsp;<input type="number" id="ringIncM" value="1" min="1" style="width:50px"><button onclick="const r=+document.getElementById('ringIncR').value,m=+document.getElementById('ringIncM').value;if(m>0){const deg=360*r/m;document.getElementById('ringInc').value=Math.min(90,deg);document.getElementById('ringIncNum').value=deg.toFixed(4);document.getElementById('ringIncV').textContent=deg.toFixed(2)+'°';drawModRings();}">Set</button></div></div>
 <div class="cg"><label style="display:flex;gap:.3rem;flex-wrap:wrap"><button onclick="setRingInc(0)">0°</button><button onclick="setRingInc(1)">1°</button><button onclick="setRingInc(5)">5°</button><button onclick="setRingInc(10)">10°</button><button onclick="setRingInc(15)">15°</button><button onclick="setRingInc(30)">30°</button></label></div>
 </div>
@@ -962,7 +968,7 @@ The "gap connections" between consecutive coprime residues within each ring reve
 
 <div id="terr" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max Radius <span class="tip" title="Upper limit for R">?</span></label><div class="sig"><input type="range" id="errR" min="5" max="100" value="25" oninput="document.getElementById('errRv').value=this.value"><input type="number" id="errRv" value="25" min="2" max="200" onchange="document.getElementById('errR').value=Math.min(100,this.value)"></div></div>
+<div class="cg"><label>Max Radius <span class="tip" title="Upper limit for R">?</span></label><div class="sig"><input type="range" id="errR" min="5" max="500" value="25" oninput="document.getElementById('errRv').value=this.value"><input type="number" id="errRv" value="25" min="2" max="1000" ></div></div>
 <div class="cg"><label>Shape</label><select id="errSh"><option value="circle">Circle</option><option value="square">Square</option></select></div>
 <div class="cg"><label>Step Size</label><select id="errStep"><option value="0.5">0.5</option><option value="1" selected>1</option><option value="2">2</option></select></div>
 <div class="cg"><label>Error Exponent θ</label><div class="sig"><input type="range" id="errTheta" min="0.3" max="1" step="0.05" value="0.5" oninput="document.getElementById('errThetaV').textContent=this.value"><span id="errThetaV" style="color:var(--txt2)">0.5</span></div></div>
@@ -1017,8 +1023,8 @@ N(R) = Vol(K)·R^n / ζ(n) + O(R^(n-1)) &nbsp;|&nbsp; |Error| = O(R^θ)
 
 <div id="tdim" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max Dimension <span class="tip" title="Compute up to this dimension">?</span></label><div class="sig"><input type="range" id="dimMax" min="3" max="30" step="1" value="12" oninput="document.getElementById('dimMaxV').value=this.value"><input type="number" id="dimMaxV" value="12" min="2" max="50" onchange="document.getElementById('dimMax').value=Math.min(30,this.value)"></div></div>
-<div class="cg"><label>Radius R <span class="tip" title="Ball radius (lower for high dims)">?</span></label><div class="sig"><input type="range" id="rdim" min="1" max="20" step=".5" value="5" oninput="document.getElementById('rdimv').value=this.value"><input type="number" id="rdimv" value="5" min="1" max="50" onchange="document.getElementById('rdim').value=Math.min(20,this.value)"></div></div>
+<div class="cg"><label>Max Dimension <span class="tip" title="Compute up to this dimension">?</span></label><div class="sig"><input type="range" id="dimMax" min="3" max="30" step="1" value="12" oninput="document.getElementById('dimMaxV').value=this.value"><input type="number" id="dimMaxV" value="12" min="2" max="50" ></div></div>
+<div class="cg"><label>Radius R <span class="tip" title="Ball radius (lower for high dims)">?</span></label><div class="sig"><input type="range" id="rdim" min="1" max="20" step=".5" value="5" oninput="document.getElementById('rdimv').value=this.value"><input type="number" id="rdimv" value="5" min="1" max="50" ></div></div>
 <div class="cg"><label>Compute Mode</label><select id="dimMode">
 <option value="theory">Theory Only (fast)</option>
 <option value="hybrid">Hybrid (compute ≤5D)</option>
@@ -1060,8 +1066,8 @@ P(gcd = 1) = 1/ζ(n) → 1 as n → ∞ &nbsp;|&nbsp; Vol(Bⁿ) = π^(n/2) / Γ(
 
 <div id="tsh" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rsh" min="1" max="50" value="10" oninput="document.getElementById('rshv').value=this.value;runShNew()"><input type="number" id="rshv" value="10" min="1" max="100" onchange="document.getElementById('rsh').value=Math.min(50,this.value);runShNew()"></div></div>
-<div class="cg"><label>Max k <span class="tip" title="Maximum shell divisor">?</span></label><div class="sig"><input type="range" id="shK" min="5" max="50" value="15" oninput="document.getElementById('shKv').value=this.value;runShNew()"><input type="number" id="shKv" value="15" min="1" max="100" onchange="document.getElementById('shK').value=Math.min(50,this.value);runShNew()"></div></div>
+<div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rsh" min="1" max="50" value="10" oninput="document.getElementById('rshv').value=this.value;runShNew()"><input type="number" id="rshv" value="10" min="1" max="100" onkeydown="if(event.key==='Enter')runShNew()"></div></div>
+<div class="cg"><label>Max k <span class="tip" title="Maximum shell divisor">?</span></label><div class="sig"><input type="range" id="shK" min="5" max="50" value="15" oninput="document.getElementById('shKv').value=this.value;runShNew()"><input type="number" id="shKv" value="15" min="1" max="100" onkeydown="if(event.key==='Enter')runShNew()"></div></div>
 <div class="cg"><label>Shape</label><select id="shShape" onchange="runShNew()"><option value="circle">Circle</option><option value="square">Square</option></select></div>
 <div class="cg"><label>Display</label><select id="shDisplay" onchange="runShNew()"><option value="contrib">Contributions μ(k)·L(R/k)</option><option value="cumul">Cumulative Sum</option><option value="both">Both</option></select></div>
 </div>
@@ -1136,7 +1142,7 @@ P(6) = L(6) - L(3) - L(2) + L(1) - L(1.5) - L(1.2) + ...
 
 <div id="tgcd" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rgcd" min="1" max="100" value="15" oninput="document.getElementById('rgcdv').value=this.value"><input type="number" id="rgcdv" value="15" min="1" onchange="document.getElementById('rgcd').value=Math.min(100,this.value)"></div></div>
+<div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rgcd" min="1" max="500" value="15" oninput="document.getElementById('rgcdv').value=this.value"><input type="number" id="rgcdv" value="15" min="1" max="1000" ></div></div>
 <div class="cg"><label>Shape</label><select id="gcdShape" onchange="runGCD()"><option value="circle">Circle (x²+y²≤R²)</option><option value="square">Square (|x|,|y|≤R)</option></select></div>
 <div class="cg"><label>Analysis Mode</label><select id="gcdMode"><option value="full">Full Distribution</option><option value="avg">Average GCD Study</option><option value="coprime">Coprime Focus</option></select></div>
 <div class="cg"><label>Top N GCDs</label><input type="number" id="gcdTopN" value="20" min="5" max="50"></div>
@@ -1183,7 +1189,7 @@ P(gcd = k) = 1/(k² · ζ(2)) = 6/(π²k²) &nbsp;|&nbsp; P(gcd = 1) = 0.6079271
 
 <div id="tgaus" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Radius R <span class="tip" title="|a+bi| ≤ R">?</span></label><div class="sig"><input type="range" id="rgaus" min="1" max="50" step=".5" value="8" oninput="document.getElementById('rgausv').value=this.value;drawGaus()"><input type="number" id="rgausv" value="8" min="1" step=".5" onchange="document.getElementById('rgaus').value=Math.min(50,this.value);drawGaus()"></div></div>
+<div class="cg"><label>Radius R <span class="tip" title="|a+bi| ≤ R">?</span></label><div class="sig"><input type="range" id="rgaus" min="1" max="50" step=".5" value="8" oninput="document.getElementById('rgausv').value=this.value;drawGaus()"><input type="number" id="rgausv" value="8" min="1" step=".5" onkeydown="if(event.key==='Enter')drawGaus()"></div></div>
 <div class="cg"><label>Zoom <span class="tip" title="Zoom level">?</span></label><div class="sig"><input type="range" id="zmgaus" min=".5" max="3" step=".1" value="1" oninput="drawGaus();document.getElementById('zmgausv').textContent=this.value+'x'"><span id="zmgausv" style="color:var(--txt2);min-width:40px">1x</span></div></div>
 <div class="cg"><label>Point Size</label><input type="range" id="ptszgaus" min="1" max="10" step="0.5" value="3" onchange="drawGaus()"></div>
 <div class="cg"><label>Color Scheme</label><select id="colGaus" onchange="drawGaus()">
@@ -1257,7 +1263,7 @@ N(a+bi) = a² + b² &nbsp;|&nbsp; p = a²+b² ⟺ p=2 or p≡1 (mod 4)
 
 <div id="tcirc" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max Radius <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="circR" min="5" max="100" value="25" oninput="document.getElementById('circRv').value=this.value"><input type="number" id="circRv" value="25" min="2" max="200" onchange="document.getElementById('circR').value=Math.min(100,this.value)"></div></div>
+<div class="cg"><label>Max Radius <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="circR" min="5" max="500" value="25" oninput="document.getElementById('circRv').value=this.value"><input type="number" id="circRv" value="25" min="2" max="1000" ></div></div>
 <div class="cg"><label>Step Size</label><select id="circStep"><option value="0.5">0.5</option><option value="1" selected>1</option><option value="2">2</option></select></div>
 <div class="cg"><label>Visualization R</label><input type="number" id="circVizR" value="10" min="2" max="30"></div>
 <div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
@@ -1371,7 +1377,7 @@ P(gcd(x₁,...,xₖ)=1) = 1/ζ(k) → 1 as k → ∞
 
 <div id="tdir" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Modulus M <span class="tip" title="Character modulus">?</span></label><div class="sig"><input type="range" id="dirM" min="2" max="100" value="12" oninput="document.getElementById('dirMv').value=this.value;drawDirichlet()"><input type="number" id="dirMv" value="12" min="2" max="500" onchange="document.getElementById('dirM').value=Math.min(100,this.value);drawDirichlet()"></div></div>
+<div class="cg"><label>Modulus M <span class="tip" title="Character modulus">?</span></label><div class="sig"><input type="range" id="dirM" min="2" max="100" value="12" oninput="document.getElementById('dirMv').value=this.value;drawDirichlet()"><input type="number" id="dirMv" value="12" min="2" max="500" onkeydown="if(event.key==='Enter')drawDirichlet()"></div></div>
 <div class="cg"><label>Character Index <span class="tip" title="Which character (1 to φ(M))">?</span></label><div class="sig"><input type="range" id="dirIdx" min="0" max="10" value="0" oninput="document.getElementById('dirIdxV').textContent=this.value;drawDirichlet()"><span id="dirIdxV" style="color:var(--txt2)">0</span> <span id="dirIdxLabel" style="color:#ffd700;font-size:.8rem">(Principal χ₀)</span></div></div>
 <div class="cg"><label>Visualization</label><select id="dirViz" onchange="drawDirichlet()">
 <option value="circle">Unit Circle (χ values)</option>
@@ -1444,8 +1450,8 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 
 <div id="ttwin" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Search primes up to N">?</span></label><div class="sig"><input type="range" id="twinN" min="100" max="10000" step="100" value="1000" oninput="document.getElementById('twinNv').value=this.value"><input type="number" id="twinNv" value="1000" min="10" max="100000" onchange="document.getElementById('twinN').value=Math.min(10000,this.value)"></div></div>
-<div class="cg"><label>Gap Size g <span class="tip" title="Find prime pairs (p, p+g)">?</span></label><div class="sig"><input type="range" id="twinG" min="2" max="30" step="2" value="2" oninput="document.getElementById('twinGv').value=this.value;drawTwin()"><input type="number" id="twinGv" value="2" min="2" max="100" step="2" onchange="document.getElementById('twinG').value=Math.min(30,this.value);drawTwin()"></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Search primes up to N">?</span></label><div class="sig"><input type="range" id="twinN" min="100" max="10000" step="100" value="1000" oninput="document.getElementById('twinNv').value=this.value"><input type="number" id="twinNv" value="1000" min="10" max="100000" ></div></div>
+<div class="cg"><label>Gap Size g <span class="tip" title="Find prime pairs (p, p+g)">?</span></label><div class="sig"><input type="range" id="twinG" min="2" max="30" step="2" value="2" oninput="document.getElementById('twinGv').value=this.value;drawTwin()"><input type="number" id="twinGv" value="2" min="2" max="100" step="2" onkeydown="if(event.key==='Enter')drawTwin()"></div></div>
 <div class="cg"><label>Visualization</label><select id="twinViz" onchange="drawTwin()">
 <option value="gaps">Prime Gap Distribution</option>
 <option value="pairs">Twin Prime Pairs</option>
@@ -1522,7 +1528,7 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 
 <div id="tpi" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max x <span class="tip" title="Count primes up to x">?</span></label><div class="sig"><input type="range" id="piX" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('piXv').value=this.value"><input type="number" id="piXv" value="10000" min="10" max="1000000" onchange="document.getElementById('piX').value=Math.min(100000,this.value)"></div></div>
+<div class="cg"><label>Max x <span class="tip" title="Count primes up to x">?</span></label><div class="sig"><input type="range" id="piX" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('piXv').value=this.value"><input type="number" id="piXv" value="10000" min="10" max="1000000" ></div></div>
 <div class="cg"><label>Step Size</label><select id="piStep" onchange="drawPi()">
 <option value="10">10</option>
 <option value="50">50</option>
@@ -1600,7 +1606,7 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 
 <div id="tcomp" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Composite M <span class="tip" title="Composite modulus to analyze">?</span></label><div class="sig"><input type="range" id="compM" min="4" max="500" value="60" oninput="document.getElementById('compMv').value=this.value;drawComp()"><input type="number" id="compMv" value="60" min="4" max="2000" onchange="document.getElementById('compM').value=Math.min(500,this.value);drawComp()"></div></div>
+<div class="cg"><label>Composite M <span class="tip" title="Composite modulus to analyze">?</span></label><div class="sig"><input type="range" id="compM" min="4" max="500" value="60" oninput="document.getElementById('compMv').value=this.value;drawComp()"><input type="number" id="compMv" value="60" min="4" max="2000" onkeydown="if(event.key==='Enter')drawComp()"></div></div>
 <div class="cg"><label>Visualization</label><select id="compViz" onchange="drawComp()">
 <option value="projection">Channel Projections</option>
 <option value="rings">Ring View</option>
@@ -1712,7 +1718,7 @@ Coprime: 1,5,7,11 | Channels: 12,6,4,3,2,1
 
 <div id="tcopair" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Grid Size N <span class="tip" title="Count coprime pairs in N×N grid">?</span></label><div class="sig"><input type="range" id="copairN" min="10" max="200" value="60" oninput="document.getElementById('copairNv').value=this.value"><input type="number" id="copairNv" value="60" min="5" max="500" onchange="document.getElementById('copairN').value=Math.min(200,this.value)"></div></div>
+<div class="cg"><label>Grid Size N <span class="tip" title="Count coprime pairs in N×N grid">?</span></label><div class="sig"><input type="range" id="copairN" min="10" max="500" value="60" oninput="document.getElementById('copairNv').value=this.value"><input type="number" id="copairNv" value="60" min="5" max="2000" ></div></div>
 <div class="cg"><label>Visualization</label><select id="copairViz" onchange="drawCopair()">
 <option value="grid">Grid Heatmap</option>
 <option value="density">Density Convergence</option>
@@ -1811,7 +1817,7 @@ V(R) = 6R²/π² + E(R) &nbsp;|&nbsp; RH ⟺ |E(R)| = O(R^(½+ε))
 
 <div id="tsierp" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Check which numbers 1..N can be expressed as 6ab±a±b">?</span></label><div class="sig"><input type="range" id="sierpN" min="50" max="500" value="200" oninput="document.getElementById('sierpNv').value=this.value"><input type="number" id="sierpNv" value="200" min="20" max="2000" onchange="document.getElementById('sierpN').value=Math.min(500,this.value)"></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Check which numbers 1..N can be expressed as 6ab±a±b">?</span></label><div class="sig"><input type="range" id="sierpN" min="50" max="500" value="200" oninput="document.getElementById('sierpNv').value=this.value"><input type="number" id="sierpNv" value="200" min="20" max="2000" ></div></div>
 <div class="cg"><label>Visualization</label><select id="sierpViz" onchange="drawSierp()">
 <option value="coverage">Coverage Map</option>
 <option value="lattice">Lattice Structure</option>
@@ -1886,7 +1892,7 @@ n = 6ab ± a ± b &nbsp;|&nbsp; Are infinitely many integers uncovered?
 
 <div id="tkfree" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Count k-free integers up to N">?</span></label><div class="sig"><input type="range" id="kfreeN" min="100" max="5000" value="1000" oninput="document.getElementById('kfreeNv').value=this.value"><input type="number" id="kfreeNv" value="1000" min="50" max="50000" onchange="document.getElementById('kfreeN').value=Math.min(5000,this.value)"></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Count k-free integers up to N">?</span></label><div class="sig"><input type="range" id="kfreeN" min="100" max="5000" value="1000" oninput="document.getElementById('kfreeNv').value=this.value"><input type="number" id="kfreeNv" value="1000" min="50" max="50000" ></div></div>
 <div class="cg"><label>k (power)</label><select id="kfreeK" onchange="drawKfree()">
 <option value="2">k=2 (Squarefree)</option>
 <option value="3">k=3 (Cubefree)</option>
@@ -1959,7 +1965,7 @@ Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
 <option value="z6">ζ(6) = π⁶/945</option>
 <option value="z8">ζ(8)</option>
 </select></div>
-<div class="cg"><label>Prime Limit <span class="tip" title="Use primes up to this value">?</span></label><div class="sig"><input type="range" id="eulerPmax" min="100" max="10000" value="1000" oninput="document.getElementById('eulerPmaxv').value=this.value"><input type="number" id="eulerPmaxv" value="1000" min="10" max="100000" onchange="document.getElementById('eulerPmax').value=Math.min(10000,this.value)"></div></div>
+<div class="cg"><label>Prime Limit <span class="tip" title="Use primes up to this value">?</span></label><div class="sig"><input type="range" id="eulerPmax" min="100" max="10000" value="1000" oninput="document.getElementById('eulerPmaxv').value=this.value"><input type="number" id="eulerPmaxv" value="1000" min="10" max="100000" ></div></div>
 <div class="cg"><label>Visualization</label><select id="eulerViz" onchange="drawEuler()">
 <option value="convergence">Convergence</option>
 <option value="contributions">Prime Contributions</option>
@@ -2030,7 +2036,7 @@ Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
 
 <div id="tchord" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max n <span class="tip" title="Analyze chord uniformity for moduli up to n">?</span></label><div class="sig"><input type="range" id="chordN" min="50" max="500" value="200" oninput="document.getElementById('chordNv').value=this.value"><input type="number" id="chordNv" value="200" min="20" max="2000" onchange="document.getElementById('chordN').value=Math.min(500,this.value)"></div></div>
+<div class="cg"><label>Max n <span class="tip" title="Analyze chord uniformity for moduli up to n">?</span></label><div class="sig"><input type="range" id="chordN" min="50" max="500" value="200" oninput="document.getElementById('chordNv').value=this.value"><input type="number" id="chordNv" value="200" min="20" max="2000" ></div></div>
 <div class="cg"><label>Visualization</label><select id="chordViz" onchange="drawChord()">
 <option value="scatter">CV Scatter (Prime vs Comp)</option>
 <option value="histogram">CV Histogram</option>
@@ -2113,7 +2119,7 @@ CV(n) = σ_L / μ_L &nbsp;|&nbsp; L_i = 2·sin(π·gap_i/n) &nbsp;|&nbsp; Prime:
 
 <div id="tgold" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="goldN" min="10" max="10000" step="10" value="200" oninput="document.getElementById('goldNv').value=this.value"><input type="number" id="goldNv" value="200" min="10" max="50000" onchange="document.getElementById('goldN').value=Math.min(10000,this.value)"></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="goldN" min="10" max="10000" step="10" value="200" oninput="document.getElementById('goldNv').value=this.value"><input type="number" id="goldNv" value="200" min="10" max="50000" ></div></div>
 <div class="cg"><label>Test Even <span class="tip" title="Test specific even number">?</span></label><input type="number" id="goldTest" value="100" min="4" step="2"></div>
 <div class="cg"><label>Visualization</label><select id="goldViz" onchange="drawGoldbach()"><option value="comet">Goldbach Comet</option><option value="partitions">Partition Count</option><option value="single">Single Number</option><option value="heatmap">Heatmap</option></select></div>
 <div class="cg"><label>Color</label><select id="goldCol" onchange="drawGoldbach()"><option value="count">By Count</option><option value="minPrime">By Min Prime</option><option value="maxGap">By Max Gap</option></select></div>
@@ -2162,7 +2168,7 @@ CV(n) = σ_L / μ_L &nbsp;|&nbsp; L_i = 2·sin(π·gap_i/n) &nbsp;|&nbsp; Prime:
 
 <div id="tgap" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Upper limit for primes">?</span></label><div class="sig"><input type="range" id="gapN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('gapNv').value=this.value"><input type="number" id="gapNv" value="1000" min="100" max="500000" onchange="document.getElementById('gapN').value=Math.min(100000,this.value)"></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Upper limit for primes">?</span></label><div class="sig"><input type="range" id="gapN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('gapNv').value=this.value"><input type="number" id="gapNv" value="1000" min="100" max="500000" ></div></div>
 <div class="cg"><label>Visualization</label><select id="gapViz" onchange="drawGap()"><option value="scatter">Gap Scatter</option><option value="histogram">Gap Histogram</option><option value="records">Record Gaps</option><option value="ratio">Gap/ln(p) Ratio</option></select></div>
 <div class="cg"><label>Color</label><select id="gapCol" onchange="drawGap()"><option value="gap">By Gap Size</option><option value="record">Highlight Records</option><option value="cramér">Cramér Ratio</option></select></div>
 <div class="cg"><label>Point Size</label><input type="range" id="gapPtSz" min="1" max="8" step="0.5" value="2" onchange="drawGap()"></div>
@@ -2212,7 +2218,7 @@ g_n = p_{n+1} - p_n &nbsp;|&nbsp; Cramér: g_n = O((ln p_n)²) &nbsp;|&nbsp; Ave
 
 <div id="tsoph" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Upper limit for search">?</span></label><div class="sig"><input type="range" id="sophN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('sophNv').value=this.value"><input type="number" id="sophNv" value="1000" min="100" max="500000" onchange="document.getElementById('sophN').value=Math.min(100000,this.value)"></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Upper limit for search">?</span></label><div class="sig"><input type="range" id="sophN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('sophNv').value=this.value"><input type="number" id="sophNv" value="1000" min="100" max="500000" ></div></div>
 <div class="cg"><label>Type</label><select id="sophType" onchange="drawSophie()"><option value="sophie">Sophie Germain (p, 2p+1)</option><option value="safe">Safe Primes (2p+1)</option><option value="cunningham1">Cunningham Chain 1st</option><option value="cunningham2">Cunningham Chain 2nd</option></select></div>
 <div class="cg"><label>Visualization</label><select id="sophViz" onchange="drawSophie()"><option value="scatter">Scatter Plot</option><option value="density">Density</option><option value="chains">Chain Lengths</option></select></div>
 <div class="cg"><label>Point Size</label><input type="range" id="sophPtSz" min="1" max="8" step="0.5" value="3" onchange="drawSophie()"></div>
@@ -2264,7 +2270,7 @@ p is Sophie Germain prime ⟺ p and 2p+1 both prime &nbsp;|&nbsp; 2p+1 is called
 
 <div id="tmert" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max x <span class="tip" title="Upper bound for summation">?</span></label><div class="sig"><input type="range" id="mertX" min="100" max="50000" value="1000" oninput="document.getElementById('mertXv').value=this.value;drawMertens()"><input type="number" id="mertXv" value="1000" min="10" max="100000" onchange="document.getElementById('mertX').value=Math.min(50000,this.value);drawMertens()"></div></div>
+<div class="cg"><label>Max x <span class="tip" title="Upper bound for summation">?</span></label><div class="sig"><input type="range" id="mertX" min="100" max="50000" value="1000" oninput="document.getElementById('mertXv').value=this.value;drawMertens()"><input type="number" id="mertXv" value="1000" min="10" max="100000" onkeydown="if(event.key==='Enter')drawMertens()"></div></div>
 <div class="cg"><label>Visualization</label><select id="mertViz" onchange="drawMertens()">
 <option value="cumulative">M(x) Cumulative</option>
 <option value="normalized">M(x)/√x Normalized</option>
@@ -2322,7 +2328,7 @@ RH ⟺ M(x) = O(x^{1/2+ε}) ∀ε>0 &nbsp;&nbsp;|&nbsp;&nbsp; M(x) = Σ_{n≤x} 
 
 <div id="tcheb" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max x <span class="tip" title="Upper bound for summation">?</span></label><div class="sig"><input type="range" id="chebX" min="100" max="50000" value="1000" oninput="document.getElementById('chebXv').value=this.value;drawChebyshev()"><input type="number" id="chebXv" value="1000" min="10" max="100000" onchange="document.getElementById('chebX').value=Math.min(50000,this.value);drawChebyshev()"></div></div>
+<div class="cg"><label>Max x <span class="tip" title="Upper bound for summation">?</span></label><div class="sig"><input type="range" id="chebX" min="100" max="50000" value="1000" oninput="document.getElementById('chebXv').value=this.value;drawChebyshev()"><input type="number" id="chebXv" value="1000" min="10" max="100000" onkeydown="if(event.key==='Enter')drawChebyshev()"></div></div>
 <div class="cg"><label>Function</label><select id="chebFunc" onchange="drawChebyshev()">
 <option value="psi">ψ(x) = Σ Λ(n)</option>
 <option value="theta">θ(x) = Σ log p</option>
@@ -2379,7 +2385,7 @@ The explicit formula connects ψ(x) to zeta zeros: ψ(x) = x - Σ_ρ x^ρ/ρ - l
 
 <div id="tli" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max x <span class="tip" title="Upper bound for integration">?</span></label><div class="sig"><input type="range" id="liX" min="10" max="100000" value="1000" oninput="document.getElementById('liXv').value=this.value;drawLi()"><input type="number" id="liXv" value="1000" min="10" max="500000" onchange="document.getElementById('liX').value=Math.min(100000,this.value);drawLi()"></div></div>
+<div class="cg"><label>Max x <span class="tip" title="Upper bound for integration">?</span></label><div class="sig"><input type="range" id="liX" min="10" max="100000" value="1000" oninput="document.getElementById('liXv').value=this.value;drawLi()"><input type="number" id="liXv" value="1000" min="10" max="500000" onkeydown="if(event.key==='Enter')drawLi()"></div></div>
 <div class="cg"><label>Visualization</label><select id="liViz" onchange="drawLi()">
 <option value="comparison">π(x) vs Li(x) vs x/ln(x)</option>
 <option value="error">Error π(x) - Li(x)</option>
@@ -2437,7 +2443,7 @@ Li(x) = ∫₂ˣ dt/ln(t) &nbsp;&nbsp;|&nbsp;&nbsp; π(x) ~ Li(x) &nbsp;&nbsp;|&
 
 <div id="tdiv" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="divN" min="50" max="10000" value="500" oninput="document.getElementById('divNv').value=this.value;drawDivisor()"><input type="number" id="divNv" value="500" min="10" max="50000" onchange="document.getElementById('divN').value=Math.min(10000,this.value);drawDivisor()"></div></div>
+<div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="divN" min="50" max="10000" value="500" oninput="document.getElementById('divNv').value=this.value;drawDivisor()"><input type="number" id="divNv" value="500" min="10" max="50000" onkeydown="if(event.key==='Enter')drawDivisor()"></div></div>
 <div class="cg"><label>Function</label><select id="divFunc" onchange="drawDivisor()">
 <option value="tau">τ(n) = d(n) Divisor Count</option>
 <option value="sigma">σ(n) Sum of Divisors</option>
@@ -2496,7 +2502,7 @@ The abundancy index σ(n)/n classifies numbers: deficient (σ(n)/n < 2), perfect
 
 <div id="tliou" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="liouN" min="100" max="50000" value="1000" oninput="document.getElementById('liouNv').value=this.value;drawLiouville()"><input type="number" id="liouNv" value="1000" min="10" max="100000" onchange="document.getElementById('liouN').value=Math.min(50000,this.value);drawLiouville()"></div></div>
+<div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="liouN" min="100" max="50000" value="1000" oninput="document.getElementById('liouNv').value=this.value;drawLiouville()"><input type="number" id="liouNv" value="1000" min="10" max="100000" onkeydown="if(event.key==='Enter')drawLiouville()"></div></div>
 <div class="cg"><label>Visualization</label><select id="liouViz" onchange="drawLiouville()">
 <option value="cumulative">L(x) = Σλ(n) Cumulative</option>
 <option value="normalized">L(x)/√x Normalized</option>
@@ -2553,7 +2559,7 @@ Pólya conjectured (1919) that L(x) ≤ 0 for all x ≥ 2, meaning more integers
 
 <div id="tmang" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="mangN" min="50" max="5000" value="500" oninput="document.getElementById('mangNv').value=this.value;drawMangoldt()"><input type="number" id="mangNv" value="500" min="10" max="20000" onchange="document.getElementById('mangN').value=Math.min(5000,this.value);drawMangoldt()"></div></div>
+<div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="mangN" min="50" max="5000" value="500" oninput="document.getElementById('mangNv').value=this.value;drawMangoldt()"><input type="number" id="mangNv" value="500" min="10" max="20000" onkeydown="if(event.key==='Enter')drawMangoldt()"></div></div>
 <div class="cg"><label>Visualization</label><select id="mangViz" onchange="drawMangoldt()">
 <option value="bars">Λ(n) Bar Chart</option>
 <option value="cumulative">ψ(x) = Σ Λ(n)</option>
@@ -2611,8 +2617,8 @@ The explicit formula directly connects Λ(n) to zeta zeros: ψ(x) = x - Σ_ρ x^
 
 <div id="tram" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Modulus q <span class="tip" title="Denominator for Ramanujan sum">?</span></label><div class="sig"><input type="range" id="ramQ" min="2" max="100" value="12" oninput="document.getElementById('ramQv').value=this.value;drawRamanujan()"><input type="number" id="ramQv" value="12" min="2" max="500" onchange="document.getElementById('ramQ').value=Math.min(100,this.value);drawRamanujan()"></div></div>
-<div class="cg"><label>Max n <span class="tip" title="Range for n values">?</span></label><div class="sig"><input type="range" id="ramN" min="10" max="500" value="100" oninput="document.getElementById('ramNv').value=this.value;drawRamanujan()"><input type="number" id="ramNv" value="100" min="10" max="2000" onchange="document.getElementById('ramN').value=Math.min(500,this.value);drawRamanujan()"></div></div>
+<div class="cg"><label>Modulus q <span class="tip" title="Denominator for Ramanujan sum">?</span></label><div class="sig"><input type="range" id="ramQ" min="2" max="100" value="12" oninput="document.getElementById('ramQv').value=this.value;drawRamanujan()"><input type="number" id="ramQv" value="12" min="2" max="500" onkeydown="if(event.key==='Enter')drawRamanujan()"></div></div>
+<div class="cg"><label>Max n <span class="tip" title="Range for n values">?</span></label><div class="sig"><input type="range" id="ramN" min="10" max="500" value="100" oninput="document.getElementById('ramNv').value=this.value;drawRamanujan()"><input type="number" id="ramNv" value="100" min="10" max="2000" onkeydown="if(event.key==='Enter')drawRamanujan()"></div></div>
 <div class="cg"><label>Visualization</label><select id="ramViz" onchange="drawRamanujan()">
 <option value="heatmap">c_q(n) Heatmap (q vs n)</option>
 <option value="fixedq">c_q(n) for Fixed q</option>
@@ -2665,7 +2671,7 @@ c_q(n) = Σ_{gcd(a,q)=1} e^{2πian/q} = μ(q/d)·φ(q)/φ(q/d) where d = gcd(n,q
 
 <div id="tulam" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Spiral Size <span class="tip" title="Width/height in cells">?</span></label><div class="sig"><input type="range" id="ulamSize" min="51" max="401" step="2" value="101" oninput="document.getElementById('ulamSizev').value=this.value;drawUlam()"><input type="number" id="ulamSizev" value="101" min="11" step="2" max="501" onchange="document.getElementById('ulamSize').value=Math.min(401,this.value);drawUlam()"></div></div>
+<div class="cg"><label>Spiral Size <span class="tip" title="Width/height in cells">?</span></label><div class="sig"><input type="range" id="ulamSize" min="51" max="401" step="2" value="101" oninput="document.getElementById('ulamSizev').value=this.value;drawUlam()"><input type="number" id="ulamSizev" value="101" min="11" step="2" max="501" onkeydown="if(event.key==='Enter')drawUlam()"></div></div>
 <div class="cg"><label>Start Number</label><input type="number" id="ulamStart" value="1" min="1" max="1000000" onchange="drawUlam()"></div>
 <div class="cg"><label>Highlight</label><select id="ulamHL" onchange="drawUlam()">
 <option value="primes">Primes Only</option>
@@ -2721,7 +2727,7 @@ Spiral: 1 → 2 → 3 → ... counterclockwise &nbsp;&nbsp;|&nbsp;&nbsp; Diagona
 
 <div id="tsacks" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max n <span class="tip" title="Highest integer to plot">?</span></label><div class="sig"><input type="range" id="sacksN" min="1000" max="100000" value="10000" oninput="document.getElementById('sacksNv').value=this.value;drawSacks()"><input type="number" id="sacksNv" value="10000" min="100" max="500000" onchange="document.getElementById('sacksN').value=Math.min(100000,this.value);drawSacks()"></div></div>
+<div class="cg"><label>Max n <span class="tip" title="Highest integer to plot">?</span></label><div class="sig"><input type="range" id="sacksN" min="1000" max="100000" value="10000" oninput="document.getElementById('sacksNv').value=this.value;drawSacks()"><input type="number" id="sacksNv" value="10000" min="100" max="500000" onkeydown="if(event.key==='Enter')drawSacks()"></div></div>
 <div class="cg"><label>Highlight</label><select id="sacksHL" onchange="drawSacks()">
 <option value="primes">Primes Only</option>
 <option value="all">All Integers</option>
@@ -2780,7 +2786,7 @@ Position: r = √n, θ = 2π√n &nbsp;&nbsp;|&nbsp;&nbsp; Squares on x-axis &nb
 
 <div id="thardy" class="tab">
 <div class="ctrl">
-<div class="cg"><label>t Range <span class="tip" title="Imaginary part of s = ½ + it">?</span></label><div class="sig"><input type="range" id="hardyT" min="10" max="200" value="50" oninput="document.getElementById('hardyTv').value=this.value;drawHardy()"><input type="number" id="hardyTv" value="50" min="1" max="1000" onchange="document.getElementById('hardyT').value=Math.min(200,this.value);drawHardy()"></div></div>
+<div class="cg"><label>t Range <span class="tip" title="Imaginary part of s = ½ + it">?</span></label><div class="sig"><input type="range" id="hardyT" min="10" max="200" value="50" oninput="document.getElementById('hardyTv').value=this.value;drawHardy()"><input type="number" id="hardyTv" value="50" min="1" max="1000" onkeydown="if(event.key==='Enter')drawHardy()"></div></div>
 <div class="cg"><label>Resolution</label><div class="sig"><input type="range" id="hardyRes" min="500" max="5000" value="2000" step="100" oninput="document.getElementById('hardyResv').value=this.value;drawHardy()"><input type="number" id="hardyResv" value="2000" min="100" max="10000" onchange="drawHardy()"></div></div>
 <div class="cg"><label>Visualization</label><select id="hardyViz" onchange="drawHardy()">
 <option value="zt">Z(t) Function</option>
@@ -2834,7 +2840,7 @@ Z(t) = e^{iθ(t)}ζ(½+it) ∈ ℝ &nbsp;&nbsp;|&nbsp;&nbsp; θ(t) = arg(Γ(¼+i
 
 <div id="tgram" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max n <span class="tip" title="Number of Gram points">?</span></label><div class="sig"><input type="range" id="gramN" min="10" max="500" value="100" oninput="document.getElementById('gramNv').value=this.value;drawGram()"><input type="number" id="gramNv" value="100" min="5" max="2000" onchange="document.getElementById('gramN').value=Math.min(500,this.value);drawGram()"></div></div>
+<div class="cg"><label>Max n <span class="tip" title="Number of Gram points">?</span></label><div class="sig"><input type="range" id="gramN" min="10" max="500" value="100" oninput="document.getElementById('gramNv').value=this.value;drawGram()"><input type="number" id="gramNv" value="100" min="5" max="2000" onkeydown="if(event.key==='Enter')drawGram()"></div></div>
 <div class="cg"><label>Visualization</label><select id="gramViz" onchange="drawGram()">
 <option value="grampoints">Gram Points g_n</option>
 <option value="theta">θ(t) Function</option>
@@ -2887,7 +2893,7 @@ Gram's Law states (-1)ⁿZ(g_n) > 0, equivalent to exactly one zero in [g_{n-1},
 
 <div id="texplicit" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max x <span class="tip" title="Upper bound for π(x)">?</span></label><div class="sig"><input type="range" id="explicitX" min="100" max="10000" value="1000" oninput="document.getElementById('explicitXv').value=this.value;drawExplicit()"><input type="number" id="explicitXv" value="1000" min="10" max="100000" onchange="document.getElementById('explicitX').value=Math.min(10000,this.value);drawExplicit()"></div></div>
+<div class="cg"><label>Max x <span class="tip" title="Upper bound for π(x)">?</span></label><div class="sig"><input type="range" id="explicitX" min="100" max="10000" value="1000" oninput="document.getElementById('explicitXv').value=this.value;drawExplicit()"><input type="number" id="explicitXv" value="1000" min="10" max="100000" onkeydown="if(event.key==='Enter')drawExplicit()"></div></div>
 <div class="cg"><label>Number of Zeros</label><div class="sig"><input type="range" id="explicitZeros" min="0" max="100" value="20" oninput="document.getElementById('explicitZerosv').value=this.value;drawExplicit()"><input type="number" id="explicitZerosv" value="20" min="0" max="500" onchange="drawExplicit()"></div></div>
 <div class="cg"><label>Visualization</label><select id="explicitViz" onchange="drawExplicit()">
 <option value="buildup">Build π(x) from Zeros</option>
@@ -2941,8 +2947,155 @@ This formula proves that zeta zeros DIRECTLY control prime distribution! If RH h
 </div>
 </div>
 
+<div id="tzerocount" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max T <span class="tip" title="Height on critical line">?</span></label><div class="sig"><input type="range" id="zcountT" min="20" max="500" value="100" oninput="document.getElementById('zcountTv').value=this.value;drawZeroCount()"><input type="number" id="zcountTv" value="100" min="10" max="2000" onkeydown="if(event.key==='Enter')drawZeroCount()"></div></div>
+<div class="cg"><label>Visualization</label><select id="zcountViz" onchange="drawZeroCount()">
+<option value="count">N(T) vs T</option>
+<option value="compare">N(T) vs Approximation</option>
+<option value="error">Error S(T)</option>
+<option value="stairs">Staircase Plot</option>
+</select></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="zcountShowApprox" checked onchange="drawZeroCount()"> Riemann-von Mangoldt</label>
+<label><input type="checkbox" id="zcountShowZeros" checked onchange="drawZeroCount()"> Mark Zeros</label>
+</div></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('zcountTv').value=50;drawZeroCount()">T≤50</button>
+<button onclick="document.getElementById('zcountTv').value=100;drawZeroCount()">T≤100</button>
+<button onclick="document.getElementById('zcountTv').value=200;drawZeroCount()">T≤200</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawZeroCount()">Compute</button><button onclick="screenshotZeroCount()">Screenshot</button><button class="s" onclick="csvZeroCount()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Zero Counting: N(T) = #{ρ : 0 < Im(ρ) < T}</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Count of zeros with imaginary part less than T. Riemann-von Mangoldt: N(T) ~ (T/2π)log(T/2πe).</p>
+<canvas id="czerocount" width="800" height="500"></canvas><div class="al" id="alzerocount"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('zcountLiveStats','ZeroCount_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="zcountLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>N(T) Growth Rate</h3><div class="pc" id="pzcountGrowth"></div></div>
+<div class="viz"><h3>S(T) = N(T) - ⟨N(T)⟩</h3><div class="pc" id="pzcountS"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(200,100,255,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Zero Counting Function N(T)</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+N(T) counts zeros ρ of ζ(s) with 0 < Im(ρ) < T. The Riemann-von Mangoldt formula gives N(T) = (T/2π)log(T/2πe) + O(log T). More precisely, N(T) = (1/π)θ(T) + 1 + S(T), where S(T) = (1/π)arg ζ(½+iT) is the "error" term.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (RH Connection):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+RH implies S(T) = O(log T / log log T), much smaller than the unconditional O(log T). The oscillations in S(T) encode deep information about zero spacing. Large values of |S(T)| correspond to unusual zero distributions.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+N(T) = (T/2π)log(T/2πe) + O(log T) &nbsp;&nbsp;|&nbsp;&nbsp; S(T) = N(T) - ⟨N(T)⟩ &nbsp;&nbsp;|&nbsp;&nbsp; RH ⟹ S(T) small
+</div>
+</div>
+</div>
+
+<div id="targand" class="tab">
+<div class="ctrl">
+<div class="cg"><label>σ Range <span class="tip" title="Real part range">?</span></label><div style="display:flex;gap:.3rem"><input type="number" id="argandS1" value="-2" step="0.5" style="width:60px" onchange="drawArgand()"><span>to</span><input type="number" id="argandS2" value="4" step="0.5" style="width:60px" onchange="drawArgand()"></div></div>
+<div class="cg"><label>t Range <span class="tip" title="Imaginary part range">?</span></label><div style="display:flex;gap:.3rem"><input type="number" id="argandT1" value="-30" step="5" style="width:60px" onchange="drawArgand()"><span>to</span><input type="number" id="argandT2" value="30" step="5" style="width:60px" onchange="drawArgand()"></div></div>
+<div class="cg"><label>Resolution</label><input type="range" id="argandRes" min="50" max="300" value="150" onchange="drawArgand()"></div>
+<div class="cg"><label>Color Mode</label><select id="argandCol" onchange="drawArgand()">
+<option value="phase">Phase (Argument)</option>
+<option value="modulus">Modulus |ζ(s)|</option>
+<option value="logmod">Log |ζ(s)|</option>
+<option value="real">Re(ζ(s))</option>
+<option value="imag">Im(ζ(s))</option>
+</select></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="argandShowCrit" checked onchange="drawArgand()"> Critical Line</label>
+<label><input type="checkbox" id="argandShowZeros" checked onchange="drawArgand()"> Zeros</label>
+<label><input type="checkbox" id="argandShowPole" checked onchange="drawArgand()"> Pole at s=1</label>
+</div></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('argandS1').value=-2;document.getElementById('argandS2').value=4;document.getElementById('argandT1').value=-30;document.getElementById('argandT2').value=30;drawArgand()">Standard</button>
+<button onclick="document.getElementById('argandS1').value=0;document.getElementById('argandS2').value=1;document.getElementById('argandT1').value=10;document.getElementById('argandT2').value=30;drawArgand()">First Zeros</button>
+<button onclick="document.getElementById('argandS1').value=-4;document.getElementById('argandS2').value=2;document.getElementById('argandT1').value=-5;document.getElementById('argandT2').value=5;drawArgand()">Wide View</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawArgand()">Compute</button><button onclick="screenshotArgand()">Screenshot</button></div>
+<div class="g2">
+<div class="viz"><h3>ζ(s) Domain Coloring — Complex Plane Visualization</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Phase portrait of ζ(s). Zeros appear as color wheel centers. Critical line Re(s)=½ shown.</p>
+<canvas id="cargand" width="700" height="700"></canvas><div class="al" id="alargand"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('argandLiveStats','Argand_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="argandLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,200,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Domain Coloring & Zeta Visualization</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Domain coloring represents complex functions by mapping output to color: phase (argument) → hue, modulus → brightness. For ζ(s), zeros appear as points where all colors meet (full color wheel), and the pole at s=1 shows as a bright singularity. The critical strip 0 < Re(s) < 1 contains all nontrivial zeros.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Visual RH):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+RH states all nontrivial zeros lie on Re(s)=½. In domain coloring, this means all color-wheel centers (zeros) in the critical strip should align vertically on the critical line. The trivial zeros at s=-2,-4,-6,... are visible on the negative real axis.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+Color: arg(ζ(s)) → Hue &nbsp;&nbsp;|&nbsp;&nbsp; Zeros: full color wheel &nbsp;&nbsp;|&nbsp;&nbsp; RH: zeros on Re(s)=½
+</div>
+</div>
+</div>
+
+<div id="tzetareal" class="tab">
+<div class="ctrl">
+<div class="cg"><label>s Range <span class="tip" title="Real axis range">?</span></label><div style="display:flex;gap:.3rem"><input type="number" id="zetarealS1" value="-10" step="1" style="width:60px" onchange="drawZetaReal()"><span>to</span><input type="number" id="zetarealS2" value="10" step="1" style="width:60px" onchange="drawZetaReal()"></div></div>
+<div class="cg"><label>Resolution</label><input type="range" id="zetarealRes" min="200" max="2000" value="1000" onchange="drawZetaReal()"></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="zetarealShowPole" checked onchange="drawZetaReal()"> Pole at s=1</label>
+<label><input type="checkbox" id="zetarealShowTrivial" checked onchange="drawZetaReal()"> Trivial Zeros</label>
+<label><input type="checkbox" id="zetarealShowSpecial" checked onchange="drawZetaReal()"> Special Values</label>
+</div></div>
+<div class="cg"><label>Y Clamp</label><input type="range" id="zetarealYclamp" min="2" max="20" value="5" onchange="drawZetaReal()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('zetarealS1').value=-10;document.getElementById('zetarealS2').value=10;drawZetaReal()">Full Range</button>
+<button onclick="document.getElementById('zetarealS1').value=1.01;document.getElementById('zetarealS2').value=5;drawZetaReal()">Positive Only</button>
+<button onclick="document.getElementById('zetarealS1').value=-8;document.getElementById('zetarealS2').value=0;drawZetaReal()">Negative Only</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawZetaReal()">Compute</button><button onclick="screenshotZetaReal()">Screenshot</button><button class="s" onclick="csvZetaReal()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>ζ(s) on Real Axis — From Basel to Trivial Zeros</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Zeta on real line: pole at s=1, special values ζ(2)=π²/6, trivial zeros at s=-2,-4,-6,...</p>
+<canvas id="czetareal" width="800" height="500"></canvas><div class="al" id="alzetareal"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('zetarealLiveStats','ZetaReal_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="zetarealLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Special Values ζ(n)</h3><div class="pc" id="pzetarealSpecial"></div></div>
+<div class="viz"><h3>ζ(s) Near Pole</h3><div class="pc" id="pzetarealPole"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(100,255,200,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Riemann Zeta on Real Axis</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+On the real axis, ζ(s) reveals its fundamental structure: a simple pole at s=1 with residue 1, the Basel problem ζ(2)=π²/6, Apéry's constant ζ(3)≈1.202, and trivial zeros at negative even integers s=-2,-4,-6,... from the functional equation. For s>1, ζ(s) = Σn^{-s} converges absolutely.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Functional Equation):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The functional equation ζ(s) = 2ˢπ^{s-1}sin(πs/2)Γ(1-s)ζ(1-s) connects values at s and 1-s. This explains why ζ(-2n)=0 (trivial zeros) and gives ζ(0)=-½, ζ(-1)=-1/12 (Ramanujan summation!).
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+ζ(2)=π²/6 &nbsp;|&nbsp; ζ(4)=π⁴/90 &nbsp;|&nbsp; ζ(-2n)=0 &nbsp;|&nbsp; ζ(0)=-½ &nbsp;|&nbsp; ζ(-1)=-1/12
+</div>
+</div>
+</div>
+
 <div id="ref" class="sec">
-<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>38 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
+<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>41 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
 
 <div class="rs"><h3>Mathematical Credits & Historical Attribution</h3>
 <p style="color:var(--txt2);margin-bottom:1rem">This platform visualizes theorems and concepts developed by brilliant mathematicians over centuries:</p>
@@ -2963,7 +3116,7 @@ This formula proves that zeta zeros DIRECTLY control prime distribution! If RH h
 <div class="fb"><strong>Harald Cramér (1893-1985)</strong> — Cramér's conjecture on prime gaps: g_n = O((ln p_n)²), probabilistic model for primes.</div>
 </div>
 
-<div class="rs"><h3>All 38 Interactive Tabs</h3>
+<div class="rs"><h3>All 41 Interactive Tabs</h3>
 <h4>Lattice & Geometry (Tabs 1-3)</h4>
 <div class="fb"><strong>2D Lattice</strong> — Gauss circle problem: count lattice points in disk. Primitive density → 6/π² (Euler). 15+ color schemes.</div>
 <div class="fb"><strong>3D Ball</strong> — Extends to 3D sphere. Primitive density → 1/ζ(3) ≈ 0.832 (Apéry's constant). Drag rotation.</div>
@@ -3021,6 +3174,9 @@ This formula proves that zeta zeros DIRECTLY control prime distribution! If RH h
 <div class="fb"><strong>Hardy Z(t)</strong> — Z(t)=e^{iθ(t)}ζ(½+it) is REAL. Sign changes = zeros on critical line. RH: all zeros are sign changes. First zeros: 14.135, 21.022, 25.011...</div>
 <div class="fb"><strong>Gram Points</strong> — g_n where θ(g_n)=nπ. Organize zero counting. Gram's Law: one zero per interval (~73%). Violations form Gram blocks. Lehmer pairs.</div>
 <div class="fb"><strong>Explicit π(x)</strong> — π(x)=Li(x)-Σ_ρ Li(x^ρ)-log(2)+... Each zero ρ contributes oscillation. Animation builds π(x) from zeros. RH ⟹ O(√x log x) error.</div>
+<div class="fb"><strong>N(T) Zeros</strong> — Zero counting N(T)=#{ρ: 0<Im(ρ)<T}. Riemann-von Mangoldt: N(T)~(T/2π)log(T/2πe). Error S(T) encodes zero spacing.</div>
+<div class="fb"><strong>ζ(s) Argand</strong> — Domain coloring of ζ(s) in complex plane. Phase→hue, modulus→brightness. Zeros appear as color wheels. Critical line Re(s)=½ highlighted.</div>
+<div class="fb"><strong>ζ(s) Real</strong> — Zeta on real axis: pole at s=1, Basel ζ(2)=π²/6, Apéry ζ(3), trivial zeros at s=-2,-4,-6,... Functional equation visualization.</div>
 </div>
 
 <div class="rs"><h3>Key Theorems Visualized</h3>
@@ -3117,6 +3273,10 @@ const INV_ZETA7 = 0.99171786507468023731390850206009357;
 const INV_ZETA8 = 0.99593897568449780461998282310567081;
 
 let P=4,D={},rx=0,ry=0,rz=0,panX=0,panY=0,anim3d=false,pts2d=[],pts3d=[],gausP=[];
+// Debounce for sliders
+let draw2DTimer=null,draw3DTimer=null;
+function draw2DDebounced(){clearTimeout(draw2DTimer);draw2DTimer=setTimeout(draw2D,50);}
+function draw3DDebounced(){clearTimeout(draw3DTimer);draw3DTimer=setTimeout(draw3D,50);}
 const fmt=n=>{if(n===0)return'0';if(n==null||isNaN(n)||!isFinite(n))return'—';return parseFloat(n).toFixed(P);};
 const fmtH=n=>{if(n===0)return'0';if(n==null||isNaN(n)||!isFinite(n))return'—';return parseFloat(n).toPrecision(17);}; // High precision format
 const gcd=(a,b)=>{a=Math.abs(Math.round(a));b=Math.abs(Math.round(b));while(b)[a,b]=[b,a%b];return a||1;};
@@ -3155,7 +3315,7 @@ const gridC=()=>isDark()?'rgba(0,217,255,0.12)':'rgba(0,102,204,0.15)';
 const bordC=()=>isDark()?'rgba(0,217,255,0.5)':'rgba(0,102,204,0.6)';
 function toggleTheme(){document.body.classList.toggle('light');document.getElementById('thm').textContent=isDark()?'D':'L';draw2D();if(document.getElementById('t3d').classList.contains('active'))draw3D();}
 function showSec(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.snav .nbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
-function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();if(id==='tmert')drawMertens();if(id==='tcheb')drawChebyshev();if(id==='tli')drawLi();if(id==='tdiv')drawDivisor();if(id==='tliou')drawLiouville();if(id==='tmang')drawMangoldt();if(id==='tram')drawRamanujan();if(id==='tulam')drawUlam();if(id==='tsacks')drawSacks();if(id==='thardy')drawHardy();if(id==='tgram')drawGram();if(id==='texplicit')drawExplicit();}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();if(id==='tmert')drawMertens();if(id==='tcheb')drawChebyshev();if(id==='tli')drawLi();if(id==='tdiv')drawDivisor();if(id==='tliou')drawLiouville();if(id==='tmang')drawMangoldt();if(id==='tram')drawRamanujan();if(id==='tulam')drawUlam();if(id==='tsacks')drawSacks();if(id==='thardy')drawHardy();if(id==='tgram')drawGram();if(id==='texplicit')drawExplicit();if(id==='tzerocount')drawZeroCount();if(id==='targand')drawArgand();if(id==='tzetareal')drawZetaReal();}
 
 async function screenshotDashboard(elemId, title='Dashboard'){
 const el=document.getElementById(elemId);if(!el)return;
@@ -3209,6 +3369,7 @@ const xVals=[-2,-1,-0.5,0.5,1,2];
 xVals.forEach(x=>{if(Math.abs(x)<0.01)return;const centerY=1/x,radius=1/Math.abs(x);ctx.beginPath();ctx.arc(cx+rad,cy-centerY*rad,radius*rad,x>0?Math.PI:0,x>0?0:Math.PI,x>0);ctx.stroke();});}}
 
 function draw2D(){
+try{
 const c=document.getElementById('c2d'),ctx=c.getContext('2d'),R=+document.getElementById('r2dv').value||+document.getElementById('r2d').value,sh=document.getElementById('sh2d').value,col=document.getElementById('col2d').value,lbl=document.getElementById('lbl2d').value,zm=+document.getElementById('zm2d').value,lblsz=+document.getElementById('lblsz2d').value,ptSz=+document.getElementById('ptSz2d').value;
 const smithEnabled=document.getElementById('smith2d').checked,smithAlpha=+document.getElementById('smithA2d').value,smithRMode=document.getElementById('smithR2d').value;
 const smithGrid=document.getElementById('smithGrid2d').checked,smithConstR=document.getElementById('smithCircR2d').checked,smithConstX=document.getElementById('smithArcX2d').checked;
@@ -3341,7 +3502,8 @@ ${gcdKeys.length>6?'<span style="color:var(--txt2)">...</span>':''}
 • ζ(2) = π²/6 ≈ ${fmt(z2)}
 </div>
 </div>`;
-c.onclick=e=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);for(let idx=0;idx<pts2d.length;idx++){const pt=pts2d[idx];let px,py;if(smithEnabled){const theta=Math.atan2(pt.y,pt.x);const dist=Math.sqrt(pt.x*pt.x+pt.y*pt.y);let r=1;if(smithRMode==='index')r=1+(idx/pts2d.length)*2;else if(smithRMode==='dist')r=0.5+dist/(R*2);const sm=smithTransform(r,theta,smithAlpha);px=cx+sm.x*smithRad;py=cy-sm.y*smithRad;}else{px=cx+pt.x*sc;py=cy-pt.y*sc;}if(Math.hypot(mx-px,my-py)<12){const theta=Math.atan2(pt.y,pt.x);const sm=smithEnabled?smithTransform(1,theta,smithAlpha):{x:0,y:0};modal('2D Point Analysis',[['Coordinates',`(${pt.x}, ${pt.y})`],['GCD(x,y)',pt.g],['Primitive',pt.p?'Yes':'No'],['Distance',Math.sqrt(pt.x*pt.x+pt.y*pt.y)],['θ (radians)',theta.toFixed(4)],smithEnabled?['Γ (Smith)',`${sm.x.toFixed(4)} + ${sm.y.toFixed(4)}i`]:['Norm',pt.x*pt.x+pt.y*pt.y]]);break;}}};}
+c.onclick=e=>{const rect=c.getBoundingClientRect(),mx=(e.clientX-rect.left)*(c.width/rect.width),my=(e.clientY-rect.top)*(c.height/rect.height);for(let idx=0;idx<pts2d.length;idx++){const pt=pts2d[idx];let px,py;if(smithEnabled){const theta=Math.atan2(pt.y,pt.x);const dist=Math.sqrt(pt.x*pt.x+pt.y*pt.y);let r=1;if(smithRMode==='index')r=1+(idx/pts2d.length)*2;else if(smithRMode==='dist')r=0.5+dist/(R*2);const sm=smithTransform(r,theta,smithAlpha);px=cx+sm.x*smithRad;py=cy-sm.y*smithRad;}else{px=cx+pt.x*sc;py=cy-pt.y*sc;}if(Math.hypot(mx-px,my-py)<12){const theta=Math.atan2(pt.y,pt.x);const sm=smithEnabled?smithTransform(1,theta,smithAlpha):{x:0,y:0};modal('2D Point Analysis',[['Coordinates',`(${pt.x}, ${pt.y})`],['GCD(x,y)',pt.g],['Primitive',pt.p?'Yes':'No'],['Distance',Math.sqrt(pt.x*pt.x+pt.y*pt.y)],['θ (radians)',theta.toFixed(4)],smithEnabled?['Γ (Smith)',`${sm.x.toFixed(4)} + ${sm.y.toFixed(4)}i`]:['Norm',pt.x*pt.x+pt.y*pt.y]]);break;}}};
+}catch(e){console.error('draw2D error:',e);}}
 function exp2D(){const c=document.getElementById('c2d');c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mobius_2d.png';a.click();});}
 function csv2D(){let s='x,y,gcd,primitive\n';for(const p of pts2d)s+=`${p.x},${p.y},${p.g},${p.p}\n`;dl(s,'mobius_2d.csv');}
 
@@ -11466,6 +11628,555 @@ for(let i = 0; i < explicitData.xs.length; i++) {
 s += `${explicitData.xs[i]},${explicitData.piActual[i]},${explicitData.liApprox[i]},${explicitData.zeroContrib[i]},${explicitData.zeroSum[i]},${explicitData.piActual[i] - explicitData.zeroSum[i]}\n`;
 }
 dl(s, 'explicit_formula.csv');
+}
+
+// ==================== ZERO COUNTING N(T) ====================
+let zcountData = {T: [], N: [], approx: [], S: []};
+
+function riemannVonMangoldt(T) {
+// N(T) ~ (T/2π)log(T/2πe) + 7/8
+if(T < 1) return 0;
+return (T / (2*PI)) * Math.log(T / (2*PI*Math.E)) + 7/8;
+}
+
+function countZerosUpTo(T) {
+let count = 0;
+for(const gamma of ZETA_ZEROS) {
+if(gamma <= T) count++;
+else break;
+}
+return count;
+}
+
+function drawZeroCount() {
+const c = document.getElementById('czerocount'), ctx = c.getContext('2d');
+const maxT = +document.getElementById('zcountTv').value || 100;
+const viz = document.getElementById('zcountViz').value;
+const showApprox = document.getElementById('zcountShowApprox').checked;
+const showZeros = document.getElementById('zcountShowZeros').checked;
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+// Compute data
+const Tvals = [], Nvals = [], approxVals = [], Svals = [];
+const step = Math.max(0.5, maxT / 500);
+for(let T = 1; T <= maxT; T += step) {
+const N = countZerosUpTo(T);
+const approx = riemannVonMangoldt(T);
+Tvals.push(T); Nvals.push(N); approxVals.push(approx); Svals.push(N - approx);
+}
+zcountData = {T: Tvals, N: Nvals, approx: approxVals, S: Svals};
+
+const zerosInRange = ZETA_ZEROS.filter(g => g <= maxT);
+const finalN = countZerosUpTo(maxT);
+const finalApprox = riemannVonMangoldt(maxT);
+
+const pad = 60, w = c.width - 2*pad, h = c.height - 2*pad;
+
+let yMin, yMax, yData;
+if(viz === 'error') {
+yData = Svals;
+yMin = Math.min(...Svals) - 0.5; yMax = Math.max(...Svals) + 0.5;
+} else if(viz === 'stairs') {
+yData = Nvals;
+yMin = 0; yMax = Math.max(...Nvals) * 1.1;
+} else {
+yData = Nvals;
+yMin = 0; yMax = Math.max(...Nvals, ...approxVals) * 1.1;
+}
+
+const scX = w / maxT, scY = h / (yMax - yMin);
+
+// Grid
+ctx.strokeStyle = gridC(); ctx.lineWidth = 0.5;
+for(let i = 0; i <= 10; i++) {
+const gx = pad + i * w / 10, gy = pad + i * h / 10;
+ctx.beginPath(); ctx.moveTo(gx, pad); ctx.lineTo(gx, c.height - pad); ctx.stroke();
+ctx.beginPath(); ctx.moveTo(pad, gy); ctx.lineTo(c.width - pad, gy); ctx.stroke();
+}
+
+// Zero line for error plot
+if(viz === 'error') {
+const y0 = c.height - pad + yMin * scY;
+ctx.strokeStyle = 'rgba(255,215,0,0.5)'; ctx.lineWidth = 1;
+ctx.beginPath(); ctx.moveTo(pad, y0); ctx.lineTo(c.width - pad, y0); ctx.stroke();
+}
+
+// Draw approximation
+if(showApprox && viz !== 'error') {
+ctx.strokeStyle = '#ff6496'; ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < Tvals.length; i++) {
+const px = pad + Tvals[i] * scX;
+const py = c.height - pad - (approxVals[i] - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+}
+
+// Draw N(T) or S(T)
+ctx.strokeStyle = viz === 'error' ? '#9664ff' : '#00d9ff'; ctx.lineWidth = 2;
+if(viz === 'stairs') {
+ctx.beginPath();
+let prevY = c.height - pad;
+for(let i = 0; i < zerosInRange.length; i++) {
+const px = pad + zerosInRange[i] * scX;
+const py = c.height - pad - ((i + 1) - yMin) * scY;
+ctx.lineTo(px, prevY); ctx.lineTo(px, py);
+prevY = py;
+}
+ctx.lineTo(c.width - pad, prevY);
+ctx.stroke();
+} else {
+ctx.beginPath();
+for(let i = 0; i < Tvals.length; i++) {
+const px = pad + Tvals[i] * scX;
+const py = c.height - pad - (yData[i] - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+}
+
+// Mark zeros
+if(showZeros && viz !== 'error') {
+ctx.fillStyle = '#ffd700';
+for(let i = 0; i < zerosInRange.length; i++) {
+const px = pad + zerosInRange[i] * scX;
+const py = c.height - pad - ((i + 1) - yMin) * scY;
+ctx.beginPath(); ctx.arc(px, py, 4, 0, 2*PI); ctx.fill();
+}
+}
+
+// Title & labels
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800'; ctx.font = 'bold 14px Segoe UI'; ctx.textAlign = 'center';
+ctx.fillText(`Zero Counting N(T) — T ≤ ${maxT}`, c.width/2, 25);
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '12px Segoe UI';
+ctx.fillText('T', c.width/2, c.height - 15);
+ctx.save(); ctx.translate(15, c.height/2); ctx.rotate(-PI/2);
+ctx.fillText(viz === 'error' ? 'S(T)' : 'N(T)', 0, 0); ctx.restore();
+
+legend('alzerocount', 'N(T)', [['N(T)', finalN, '#00d9ff'], ['Approx', fmt(finalApprox), '#ff6496'], ['S(T)', fmt(finalN - finalApprox), '#9664ff']]);
+
+document.getElementById('zcountLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${finalN}</div><div style="font-size:.7rem;color:var(--txt2)">N(${maxT})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${fmt(finalApprox)}</div><div style="font-size:.7rem;color:var(--txt2)">R-vM APPROX</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#9664ff">${fmt(finalN - finalApprox)}</div><div style="font-size:.7rem;color:var(--txt2)">S(T) ERROR</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Zeros in Range</strong>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;font-size:.7rem;font-family:monospace">
+${zerosInRange.slice(0, 10).map((z, i) => `<span style="background:var(--bg1);padding:2px 4px;border-radius:3px">γ${i+1}=${z.toFixed(2)}</span>`).join('')}
+</div>
+</div>
+<div style="background:rgba(0,217,255,.1);padding:8px;border-radius:6px">
+<strong style="color:#00d9ff">Riemann-von Mangoldt</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">N(T) = (T/2π)log(T/2πe) + 7/8 + S(T)</div>
+</div>`;
+
+Plotly.newPlot('pzcountGrowth', [
+{x: Tvals, y: Nvals, name: 'N(T)', type: 'scatter', mode: 'lines', line: {color: '#00d9ff'}},
+{x: Tvals, y: approxVals, name: 'Approx', type: 'scatter', mode: 'lines', line: {color: '#ff6496', dash: 'dash'}}
+], {...plo(), xaxis: {title: 'T'}, yaxis: {title: 'N(T)'}});
+
+Plotly.newPlot('pzcountS', [{x: Tvals, y: Svals, type: 'scatter', mode: 'lines', line: {color: '#9664ff'}}], {...plo(), xaxis: {title: 'T'}, yaxis: {title: 'S(T)'}});
+
+c.onclick = e => {
+const rect = c.getBoundingClientRect();
+const T = (e.clientX - rect.left - pad) / scX * (c.width / rect.width);
+if(T > 0 && T <= maxT) {
+const N = countZerosUpTo(T);
+const approx = riemannVonMangoldt(T);
+modal(`Zero Count at T = ${fmt(T)}`, [['T', fmt(T)], ['N(T)', N], ['Approx', fmt(approx)], ['S(T)', fmt(N - approx)]]);
+}
+};
+}
+
+async function screenshotZeroCount() {
+await screenshotUnified('czerocount', 'zcountLiveStats', `Zero Counting N(T)`, 'zero_count.png', {dashH: 280});
+}
+
+function csvZeroCount() {
+let s = 'T,N_T,approx,S_T\n';
+for(let i = 0; i < zcountData.T.length; i++) s += `${zcountData.T[i]},${zcountData.N[i]},${zcountData.approx[i]},${zcountData.S[i]}\n`;
+dl(s, 'zero_count.csv');
+}
+
+// ==================== ZETA ARGAND (DOMAIN COLORING) ====================
+// Complex zeta approximation
+function zetaComplex(sigma, t, terms = 50) {
+// For sigma > 1, series converges well
+if(sigma > 1) {
+let re = 0, im = 0;
+for(let n = 1; n <= terms; n++) {
+const mag = Math.pow(n, -sigma);
+const phase = -t * Math.log(n);
+re += mag * Math.cos(phase);
+im += mag * Math.sin(phase);
+}
+return {re, im};
+}
+// For critical strip and left half-plane, use Dirichlet eta with more terms
+// η(s) = (1 - 2^{1-s}) ζ(s), so ζ(s) = η(s) / (1 - 2^{1-s})
+let etaRe = 0, etaIm = 0;
+const useTerms = Math.max(terms * 3, 150);
+for(let n = 1; n <= useTerms; n++) {
+const sign = (n % 2 === 1) ? 1 : -1;
+const mag = Math.pow(n, -sigma);
+const phase = -t * Math.log(n);
+etaRe += sign * mag * Math.cos(phase);
+etaIm += sign * mag * Math.sin(phase);
+}
+// Compute 1 - 2^{1-s} = 1 - 2^{1-sigma} * e^{-it*log(2)}
+const pow2 = Math.pow(2, 1 - sigma);
+const phase2 = -t * Math.log(2);
+const denom_re = 1 - pow2 * Math.cos(phase2);
+const denom_im = pow2 * Math.sin(phase2);
+const denom_mag = denom_re * denom_re + denom_im * denom_im;
+if(denom_mag < 1e-10) return {re: 1e10, im: 0}; // Near pole
+// ζ = η / denom (complex division)
+const re = (etaRe * denom_re + etaIm * denom_im) / denom_mag;
+const im = (etaIm * denom_re - etaRe * denom_im) / denom_mag;
+return {re, im};
+}
+
+function drawArgand() {
+const c = document.getElementById('cargand'), ctx = c.getContext('2d');
+const s1 = +document.getElementById('argandS1').value;
+const s2 = +document.getElementById('argandS2').value;
+const t1 = +document.getElementById('argandT1').value;
+const t2 = +document.getElementById('argandT2').value;
+const res = +document.getElementById('argandRes').value;
+const colMode = document.getElementById('argandCol').value;
+const showCrit = document.getElementById('argandShowCrit').checked;
+const showZeros = document.getElementById('argandShowZeros').checked;
+const showPole = document.getElementById('argandShowPole').checked;
+
+const imgData = ctx.createImageData(c.width, c.height);
+const dSigma = (s2 - s1) / c.width;
+const dT = (t2 - t1) / c.height;
+
+for(let py = 0; py < c.height; py++) {
+const t = t2 - py * dT;
+for(let px = 0; px < c.width; px++) {
+const sigma = s1 + px * dSigma;
+const z = zetaComplex(sigma, t, Math.min(res, 100));
+const mag = Math.sqrt(z.re * z.re + z.im * z.im);
+const phase = Math.atan2(z.im, z.re);
+
+let r, g, b;
+if(colMode === 'phase') {
+const hue = (phase + PI) / (2 * PI);
+const sat = 0.8;
+const light = 0.5 + 0.3 * Math.tanh(Math.log(mag + 0.1));
+[r, g, b] = hslToRgb(hue, sat, light);
+} else if(colMode === 'modulus') {
+const v = Math.tanh(mag / 3);
+r = g = b = Math.floor(v * 255);
+} else if(colMode === 'logmod') {
+const v = (Math.log(mag + 1) / 5 + 0.5);
+r = g = b = Math.floor(Math.min(1, Math.max(0, v)) * 255);
+} else if(colMode === 'real') {
+const v = Math.tanh(z.re / 2);
+r = v > 0 ? Math.floor(v * 255) : 0;
+b = v < 0 ? Math.floor(-v * 255) : 0;
+g = 0;
+} else {
+const v = Math.tanh(z.im / 2);
+r = v > 0 ? Math.floor(v * 255) : 0;
+b = v < 0 ? Math.floor(-v * 255) : 0;
+g = 0;
+}
+
+const idx = (py * c.width + px) * 4;
+imgData.data[idx] = r;
+imgData.data[idx + 1] = g;
+imgData.data[idx + 2] = b;
+imgData.data[idx + 3] = 255;
+}
+}
+ctx.putImageData(imgData, 0, 0);
+
+// Critical line
+if(showCrit) {
+const critX = (0.5 - s1) / (s2 - s1) * c.width;
+ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 2; ctx.setLineDash([5, 3]);
+ctx.beginPath(); ctx.moveTo(critX, 0); ctx.lineTo(critX, c.height); ctx.stroke();
+ctx.setLineDash([]);
+}
+
+// Zeros
+if(showZeros) {
+ctx.fillStyle = '#ffd700';
+for(const gamma of ZETA_ZEROS) {
+if(gamma >= t1 && gamma <= t2) {
+const px = (0.5 - s1) / (s2 - s1) * c.width;
+const py = (t2 - gamma) / (t2 - t1) * c.height;
+ctx.beginPath(); ctx.arc(px, py, 4, 0, 2*PI); ctx.fill();
+}
+if(-gamma >= t1 && -gamma <= t2) {
+const px = (0.5 - s1) / (s2 - s1) * c.width;
+const py = (t2 - (-gamma)) / (t2 - t1) * c.height;
+ctx.beginPath(); ctx.arc(px, py, 4, 0, 2*PI); ctx.fill();
+}
+}
+}
+
+// Pole at s=1
+if(showPole && s1 < 1 && s2 > 1 && t1 < 0 && t2 > 0) {
+const px = (1 - s1) / (s2 - s1) * c.width;
+const py = (t2 - 0) / (t2 - t1) * c.height;
+ctx.strokeStyle = '#ff0000'; ctx.lineWidth = 2;
+ctx.beginPath(); ctx.arc(px, py, 8, 0, 2*PI); ctx.stroke();
+ctx.fillStyle = '#ff0000'; ctx.font = '12px Segoe UI';
+ctx.fillText('pole', px + 12, py);
+}
+
+// Axes labels
+ctx.fillStyle = '#fff'; ctx.font = '11px Segoe UI';
+ctx.fillText(`σ=${s1}`, 5, c.height - 5);
+ctx.fillText(`σ=${s2}`, c.width - 40, c.height - 5);
+ctx.fillText(`t=${t2}`, 5, 15);
+ctx.fillText(`t=${t1}`, 5, c.height - 20);
+
+legend('alargand', 'ζ(s) Domain', [['Re range', `[${s1},${s2}]`, '#00d9ff'], ['Im range', `[${t1},${t2}]`, '#ff6496']]);
+
+const zerosVis = ZETA_ZEROS.filter(g => g >= t1 && g <= t2).length * 2;
+document.getElementById('argandLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">[${s1}, ${s2}]</div><div style="font-size:.7rem;color:var(--txt2)">σ RANGE</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff6496">[${t1}, ${t2}]</div><div style="font-size:.7rem;color:var(--txt2)">t RANGE</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Visible Features</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Zeros visible:</span><span style="color:#ffd700">${zerosVis}</span>
+<span>Critical line:</span><span style="color:#00ff88">${showCrit ? 'σ=½' : 'hidden'}</span>
+<span>Pole:</span><span style="color:#ff6496">${s1 < 1 && s2 > 1 ? 's=1' : 'out of view'}</span>
+<span>Color:</span><span style="color:#9664ff">${colMode}</span>
+</div>
+</div>
+<div style="background:rgba(255,215,0,.1);padding:8px;border-radius:6px">
+<strong style="color:#ffd700">Domain Coloring</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">Hue = arg(ζ), brightness = |ζ|. Zeros show full color wheels.</div>
+</div>`;
+}
+
+function hslToRgb(h, s, l) {
+let r, g, b;
+if(s === 0) { r = g = b = l; }
+else {
+const hue2rgb = (p, q, t) => {
+if(t < 0) t += 1; if(t > 1) t -= 1;
+if(t < 1/6) return p + (q - p) * 6 * t;
+if(t < 1/2) return q;
+if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+return p;
+};
+const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+const p = 2 * l - q;
+r = hue2rgb(p, q, h + 1/3);
+g = hue2rgb(p, q, h);
+b = hue2rgb(p, q, h - 1/3);
+}
+return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+async function screenshotArgand() {
+await screenshotUnified('cargand', 'argandLiveStats', `ζ(s) Domain Coloring`, 'zeta_argand.png', {dashH: 250});
+}
+
+// ==================== ZETA REAL AXIS ====================
+let zetarealData = {s: [], zeta: []};
+
+function zetaReal(s) {
+if(s === 1) return Infinity;
+if(s > 1) {
+// Direct series
+let sum = 0;
+for(let n = 1; n <= 10000; n++) sum += Math.pow(n, -s);
+return sum;
+}
+// Use stored values or functional equation approximation
+if(s === 2) return ZETA2;
+if(s === 3) return ZETA3;
+if(s === 4) return ZETA4;
+if(s === 0) return -0.5;
+if(s === -1) return -1/12;
+if(s < 0 && s === Math.floor(s) && s % 2 === 0) return 0; // Trivial zeros
+// Approximation via reflection for other negative values
+if(s < 0) {
+const s1 = 1 - s;
+const zeta1s = zetaReal(s1);
+// Functional equation: ζ(s) = 2^s π^{s-1} sin(πs/2) Γ(1-s) ζ(1-s)
+const factor = Math.pow(2, s) * Math.pow(PI, s - 1) * Math.sin(PI * s / 2);
+// Γ(1-s) approximation via Stirling for large 1-s
+const gamma1s = gamma(1 - s);
+return factor * gamma1s * zeta1s;
+}
+// 0 < s < 1: Dirichlet eta function
+let sum = 0;
+for(let n = 1; n <= 10000; n++) sum += Math.pow(-1, n + 1) * Math.pow(n, -s);
+return sum / (1 - Math.pow(2, 1 - s));
+}
+
+function gamma(x) {
+// Lanczos approximation
+if(x < 0.5) return PI / (Math.sin(PI * x) * gamma(1 - x));
+x -= 1;
+const g = 7;
+const c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+let sum = c[0];
+for(let i = 1; i < g + 2; i++) sum += c[i] / (x + i);
+const t = x + g + 0.5;
+return Math.sqrt(2 * PI) * Math.pow(t, x + 0.5) * Math.exp(-t) * sum;
+}
+
+function drawZetaReal() {
+const c = document.getElementById('czetareal'), ctx = c.getContext('2d');
+const s1 = +document.getElementById('zetarealS1').value;
+const s2 = +document.getElementById('zetarealS2').value;
+const res = +document.getElementById('zetarealRes').value;
+const yClamp = +document.getElementById('zetarealYclamp').value;
+const showPole = document.getElementById('zetarealShowPole').checked;
+const showTrivial = document.getElementById('zetarealShowTrivial').checked;
+const showSpecial = document.getElementById('zetarealShowSpecial').checked;
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+const pad = 60, w = c.width - 2*pad, h = c.height - 2*pad;
+const ds = (s2 - s1) / res;
+
+const sVals = [], zVals = [];
+for(let i = 0; i <= res; i++) {
+const s = s1 + i * ds;
+if(Math.abs(s - 1) < 0.01) continue; // Skip pole
+const z = zetaReal(s);
+if(isFinite(z) && Math.abs(z) < 1000) {
+sVals.push(s); zVals.push(z);
+}
+}
+zetarealData = {s: sVals, zeta: zVals};
+
+const yMin = -yClamp, yMax = yClamp;
+const scX = w / (s2 - s1), scY = h / (yMax - yMin);
+
+// Grid
+ctx.strokeStyle = gridC(); ctx.lineWidth = 0.5;
+for(let i = 0; i <= 10; i++) {
+const gx = pad + i * w / 10, gy = pad + i * h / 10;
+ctx.beginPath(); ctx.moveTo(gx, pad); ctx.lineTo(gx, c.height - pad); ctx.stroke();
+ctx.beginPath(); ctx.moveTo(pad, gy); ctx.lineTo(c.width - pad, gy); ctx.stroke();
+}
+
+// Zero line
+const y0 = c.height - pad + yMin * scY;
+ctx.strokeStyle = 'rgba(255,215,0,0.5)'; ctx.lineWidth = 1;
+ctx.beginPath(); ctx.moveTo(pad, y0); ctx.lineTo(c.width - pad, y0); ctx.stroke();
+
+// Draw ζ(s)
+ctx.strokeStyle = '#00d9ff'; ctx.lineWidth = 2;
+ctx.beginPath();
+let started = false;
+for(let i = 0; i < sVals.length; i++) {
+const px = pad + (sVals[i] - s1) * scX;
+const clampedZ = Math.max(yMin, Math.min(yMax, zVals[i]));
+const py = c.height - pad - (clampedZ - yMin) * scY;
+if(!started) { ctx.moveTo(px, py); started = true; }
+else if(Math.abs(zVals[i] - zVals[i-1]) < yClamp * 2) ctx.lineTo(px, py);
+else { ctx.stroke(); ctx.beginPath(); ctx.moveTo(px, py); }
+}
+ctx.stroke();
+
+// Pole indicator
+if(showPole && s1 < 1 && s2 > 1) {
+const poleX = pad + (1 - s1) * scX;
+ctx.strokeStyle = '#ff6496'; ctx.lineWidth = 2; ctx.setLineDash([5, 3]);
+ctx.beginPath(); ctx.moveTo(poleX, pad); ctx.lineTo(poleX, c.height - pad); ctx.stroke();
+ctx.setLineDash([]);
+ctx.fillStyle = '#ff6496'; ctx.font = '11px Segoe UI';
+ctx.fillText('pole s=1', poleX + 5, pad + 15);
+}
+
+// Trivial zeros
+if(showTrivial) {
+ctx.fillStyle = '#9664ff';
+for(let n = -2; n >= s1; n -= 2) {
+const px = pad + (n - s1) * scX;
+ctx.beginPath(); ctx.arc(px, y0, 6, 0, 2*PI); ctx.fill();
+}
+}
+
+// Special values
+if(showSpecial) {
+const specials = [[2, ZETA2, 'ζ(2)=π²/6'], [3, ZETA3, 'ζ(3)≈1.202'], [4, ZETA4, 'ζ(4)'], [0, -0.5, 'ζ(0)=-½']];
+ctx.fillStyle = '#ffd700';
+for(const [s, z, label] of specials) {
+if(s >= s1 && s <= s2) {
+const px = pad + (s - s1) * scX;
+const py = c.height - pad - (Math.max(yMin, Math.min(yMax, z)) - yMin) * scY;
+ctx.beginPath(); ctx.arc(px, py, 5, 0, 2*PI); ctx.fill();
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '10px Segoe UI';
+ctx.fillText(label, px + 8, py - 5);
+ctx.fillStyle = '#ffd700';
+}
+}
+}
+
+// Labels
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800'; ctx.font = 'bold 14px Segoe UI'; ctx.textAlign = 'center';
+ctx.fillText(`ζ(s) on Real Axis — s ∈ [${s1}, ${s2}]`, c.width/2, 25);
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '12px Segoe UI';
+ctx.fillText('s', c.width/2, c.height - 15);
+ctx.save(); ctx.translate(15, c.height/2); ctx.rotate(-PI/2); ctx.fillText('ζ(s)', 0, 0); ctx.restore();
+
+legend('alzetareal', 'ζ(s) Real', [['ζ(2)', fmt(ZETA2), '#ffd700'], ['ζ(3)', fmt(ZETA3), '#00d9ff'], ['ζ(0)', '-0.5', '#9664ff']]);
+
+document.getElementById('zetarealLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#ffd700">${ZETA2.toFixed(8)}</div><div style="font-size:.7rem;color:var(--txt2)">ζ(2) = π²/6</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#00d9ff">${ZETA3.toFixed(8)}</div><div style="font-size:.7rem;color:var(--txt2)">ζ(3) APÉRY</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#ff6496">-1/12</div><div style="font-size:.7rem;color:var(--txt2)">ζ(-1)</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Special Values</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>ζ(2) = π²/6:</span><span style="color:#ffd700">${ZETA2.toFixed(10)}</span>
+<span>ζ(4) = π⁴/90:</span><span style="color:#00d9ff">${ZETA4.toFixed(10)}</span>
+<span>ζ(0):</span><span style="color:#9664ff">-0.5</span>
+<span>ζ(-1):</span><span style="color:#ff6496">-1/12 ≈ ${(-1/12).toFixed(10)}</span>
+</div>
+</div>
+<div style="background:rgba(150,100,255,.1);padding:8px;border-radius:6px">
+<strong style="color:#9664ff">Trivial Zeros</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">ζ(-2)=ζ(-4)=ζ(-6)=...=0 from functional equation</div>
+</div>`;
+
+const specVals = [2, 3, 4, 5, 6, 7, 8].map(n => ({n, z: zeta(n)}));
+Plotly.newPlot('pzetarealSpecial', [{x: specVals.map(v => v.n), y: specVals.map(v => v.z), type: 'bar', marker: {color: '#ffd700'}}], {...plo(), xaxis: {title: 'n'}, yaxis: {title: 'ζ(n)'}});
+
+const nearPole = [];
+for(let s = 1.01; s <= 2; s += 0.05) nearPole.push({s, z: zetaReal(s)});
+Plotly.newPlot('pzetarealPole', [{x: nearPole.map(v => v.s), y: nearPole.map(v => v.z), type: 'scatter', mode: 'lines+markers', line: {color: '#ff6496'}}], {...plo(), xaxis: {title: 's'}, yaxis: {title: 'ζ(s)'}});
+
+c.onclick = e => {
+const rect = c.getBoundingClientRect();
+const s = s1 + (e.clientX - rect.left - pad) / scX;
+if(s >= s1 && s <= s2 && Math.abs(s - 1) > 0.05) {
+const z = zetaReal(s);
+modal(`ζ(${fmt(s)})`, [['s', fmt(s)], ['ζ(s)', fmt(z)], ['1/ζ(s)', fmt(1/z)]]);
+}
+};
+}
+
+async function screenshotZetaReal() {
+await screenshotUnified('czetareal', 'zetarealLiveStats', `ζ(s) on Real Axis`, 'zeta_real.png', {dashH: 280});
+}
+
+function csvZetaReal() {
+let s = 's,zeta_s\n';
+for(let i = 0; i < zetarealData.s.length; i++) s += `${zetarealData.s[i]},${zetarealData.zeta[i]}\n`;
+dl(s, 'zeta_real.csv');
 }
 
 draw2D();
