@@ -540,6 +540,15 @@ P(gcd(x,y) = 1) = 6/π² = 1/ζ(2) = 0.6079271018540266
 </div>
 
 <div id="t3d" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">3D Lattice Ball — Apéry's Constant 1/ζ(3)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">In three dimensions, primitive lattice point density approaches 1/ζ(3) ≈ 0.832, where ζ(3) is Apéry's constant (proved irrational in 1978). The 3D visualization shows points (x,y,z) with gcd(x,y,z)=1 inside a ball. Drag to rotate. Higher dimensions follow the pattern 1/ζ(k) for k-dimensional balls.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('R3d').value=5;draw3D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=5</button>
+<button onclick="document.getElementById('R3d').value=8;draw3D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=8</button>
+<button onclick="document.getElementById('R3d').value=12;draw3D()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=12</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Radius R <span class="tip" title="Ball radius">?</span></label><div class="sig"><input type="range" id="r3d" min="1" max="50" step=".5" value="4" oninput="document.getElementById('r3dv').value=this.value;draw3DDebounced()"><input type="number" id="r3dv" value="4" min="1" step=".5" max="343"><button onclick="draw3D()" style="padding:2px 8px;margin-left:4px;border-radius:4px;border:1px solid var(--bord);background:var(--acc);color:#000;cursor:pointer;font-weight:bold">Go</button></div></div>
 <div class="cg"><label>X Rotation <span class="tip" title="Rotation around X axis">?</span></label><div class="sig"><input type="number" id="rotX" value="0" min="0" max="360" step="1" style="width:60px" onchange="rx=this.value*Math.PI/180;draw3D()"><span style="color:var(--txt2)">°</span><input type="range" id="rotXr" min="0" max="360" value="0" oninput="document.getElementById('rotX').value=this.value;rx=this.value*Math.PI/180;draw3D()"></div></div>
@@ -604,6 +613,15 @@ P(gcd(x,y,z) = 1) = 1/ζ(3) = 0.8319073725807075
 </div>
 
 <div id="tmob" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Möbius Function μ(n) — The Sieve's Heart</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The Möbius function μ(n) equals (-1)^k if n is squarefree with k prime factors, and 0 otherwise. It's the multiplicative inverse of the constant function under Dirichlet convolution. The Mertens function M(x) = Σμ(n) for n≤x satisfies |M(x)| = O(x^{1/2+ε}) iff RH is true. μ(n) powers inclusion-exclusion counting.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('mobNv').value=100;drawMobius()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100</button>
+<button onclick="document.getElementById('mobNv').value=500;drawMobius()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=500</button>
+<button onclick="document.getElementById('mobMode').value='mertens';drawMobius()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Mertens M(x)</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N <span class="tip" title="Compute μ(n) for n ≤ N">?</span></label><div class="sig"><input type="range" id="mobN" min="10" max="500" step="10" value="100" oninput="document.getElementById('mobNv').value=this.value"><input type="number" id="mobNv" value="100" min="2" max="2000"  onkeydown="if(event.key==='Enter')drawMobius()"></div></div>
 <div class="cg"><label>Visualization</label><select id="mobViz" onchange="drawMobius()">
@@ -663,6 +681,14 @@ P(gcd(x,y,z) = 1) = 1/ζ(3) = 0.8319073725807075
 </div>
 
 <div id="tcayley" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Cayley Transform — Disk ↔ Half-Plane</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The Cayley transform w = i(1+z)/(1-z) maps the unit disk to the upper half-plane, and its inverse maps ℍ → 𝔻. This conformal map is fundamental to hyperbolic geometry and automorphic forms. Ford circles tangent to ℝ at rationals transform to horocycles.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('cayN').value=10;drawCayley()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=10</button>
+<button onclick="document.getElementById('cayMode').value='ford';drawCayley()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Ford Circles</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Radius R <span class="tip" title="Lattice boundary">?</span></label><div class="sig"><input type="range" id="rcay" min="1" max="50" step=".5" value="6" oninput="document.getElementById('rcayv').value=this.value;drawCayley()"><input type="number" id="rcayv" value="6" min="1" step=".5" onkeydown="if(event.key==='Enter')drawCayley()"></div></div>
 <div class="cg"><label>View Range <span class="tip" title="Upper half-plane extent">?</span></label><input type="number" id="cayRange" value="4" min="1" max="20" step=".5" onchange="drawCayley()"></div>
@@ -722,6 +748,15 @@ w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²
 </div>
 
 <div id="tprim" class="tab">
+<div style="background:linear-gradient(135deg,#ff8c0022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff8c00">
+<h3 style="color:#ff8c00;margin-bottom:.5rem">Primitive Roots — Generators of (ℤ/nℤ)×</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">A primitive root mod n is a generator of the multiplicative group (ℤ/nℤ)×. Exists iff n ∈ {1,2,4,p^k,2p^k} for odd prime p. The discrete logarithm problem — finding k where g^k ≡ a — is computationally hard, forming the basis of Diffie-Hellman cryptography.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('primM').value=7;drawPrimRoot()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 7</button>
+<button onclick="document.getElementById('primM').value=17;drawPrimRoot()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 17</button>
+<button onclick="document.getElementById('primM').value=23;drawPrimRoot()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 23</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Modulus M <span class="tip" title="Ring ℤ/Mℤ">?</span></label><div class="sig"><input type="range" id="mprim" min="2" max="500" step="1" value="17" oninput="document.getElementById('mprimv').value=this.value;drawPrimRoot()"><input type="number" id="mprimv" value="17" min="2" onkeydown="if(event.key==='Enter')drawPrimRoot()"></div></div>
 <div class="cg"><label>Generator g <span class="tip" title="Primitive root candidate">?</span></label><div class="sig"><input type="number" id="gprim" value="3" min="1" max="500"><button onclick="drawPrimRoot()">Use</button><button onclick="findPrimRoot()">Find Smallest</button><button onclick="findAllPrimRoots()">Find All</button></div></div>
@@ -775,6 +810,15 @@ w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²
 </div>
 
 <div id="tfarey" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">Farey Sequences — Ordered Rationals</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The Farey sequence F_n contains all reduced fractions p/q with 0 ≤ p/q ≤ 1 and q ≤ n, in order. Adjacent fractions a/b, c/d satisfy |ad-bc|=1 (mediant property). |F_n| ~ 3n²/π². Farey sequences connect to Ford circles, continued fractions, and the Riemann Hypothesis.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('fareyN').value=7;drawFarey()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">F₇</button>
+<button onclick="document.getElementById('fareyN').value=12;drawFarey()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">F₁₂</button>
+<button onclick="document.getElementById('fareyN').value=20;drawFarey()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">F₂₀</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max Denominator Q <span class="tip" title="Farey sequence F_Q">?</span></label><div class="sig"><input type="range" id="fareyQ" min="2" max="50" value="8" oninput="document.getElementById('fareyQv').value=this.value;drawFarey()"><input type="number" id="fareyQv" value="8" min="2" max="100" onkeydown="if(event.key==='Enter')drawFarey()"></div></div>
 <div class="cg"><label>Visualization</label><select id="fareyViz" onchange="drawFarey()">
@@ -849,6 +893,16 @@ w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²
 </div>
 
 <div id="tmod" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Modular Rings — Residue Class Geometry</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Integers arranged on concentric rings by residue class mod M reveal prime distribution patterns. Primes avoid certain residue classes (those sharing factors with M). The φ(M) coprime residue classes form the multiplicative group (ℤ/Mℤ)×. Multi-modulus view shows nested structure; single-M view projects onto Farey channels.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('modViewMode').value='multi';document.getElementById('modMax').value=12;drawModRings()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Multi M≤12</button>
+<button onclick="document.getElementById('modViewMode').value='multi';document.getElementById('modMax').value=30;drawModRings()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Multi M≤30</button>
+<button onclick="document.getElementById('modViewMode').value='single';document.getElementById('modSingleM').value=30;drawModRings()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Single M=30</button>
+<button onclick="document.getElementById('modViewMode').value='single';document.getElementById('modSingleM').value=210;drawModRings()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Primorial 210</button>
+</div>
+</div>
 <div class="ctrl" style="background:rgba(255,215,0,.1);border-radius:6px;padding:.5rem;margin-bottom:.5rem">
 <div class="cg"><label><strong>View Mode</strong></label><select id="modViewMode" onchange="drawModRings()">
 <option value="multi">Multi-Modulus Rings (M₁ to M₂)</option>
@@ -992,6 +1046,15 @@ The "gap connections" between consecutive coprime residues within each ring reve
 </div>
 
 <div id="terr" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">Error Analysis — RH Connection via E(R)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The error E(R) = V(R) - 6R²/π² between actual primitive count and predicted shows systematic patterns. The Riemann Hypothesis implies |E(R)| = O(R^{1/2+ε}) for any ε > 0. Analyzing normalized error E(R)/R reveals oscillations connected to zeta zeros. This tab provides multiple views of the error term behavior.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('errRmax').value=50;runErrNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤50</button>
+<button onclick="document.getElementById('errRmax').value=100;runErrNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤100</button>
+<button onclick="document.getElementById('errRmax').value=200;runErrNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R≤200</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max Radius <span class="tip" title="Upper limit for R">?</span></label><div class="sig"><input type="range" id="errR" min="5" max="500" value="25" oninput="document.getElementById('errRv').value=this.value"><input type="number" id="errRv" value="25" min="2" max="1000"  onkeydown="if(event.key==='Enter')runErrNew()"></div></div>
 <div class="cg"><label>Shape</label><select id="errSh"><option value="circle">Circle</option><option value="square">Square</option></select></div>
@@ -1047,6 +1110,14 @@ N(R) = Vol(K)·R^n / ζ(n) + O(R^(n-1)) &nbsp;|&nbsp; |Error| = O(R^θ)
 </div>
 
 <div id="tdim" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Higher Dimensions — 1/ζ(k) Density Pattern</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The primitive density in k-dimensional balls approaches 1/ζ(k). For k=2: 6/π² ≈ 0.608. For k=3: 1/ζ(3) ≈ 0.832. As k→∞, density→1. This tab compares densities across dimensions and verifies the theoretical predictions with actual counts.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('dimKmax').value=6;runDimNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">k≤6</button>
+<button onclick="document.getElementById('dimR').value=20;runDimNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=20</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max Dimension <span class="tip" title="Compute up to this dimension">?</span></label><div class="sig"><input type="range" id="dimMax" min="3" max="30" step="1" value="12" oninput="document.getElementById('dimMaxV').value=this.value"><input type="number" id="dimMaxV" value="12" min="2" max="50"  onkeydown="if(event.key==='Enter')runDimNew()"></div></div>
 <div class="cg"><label>Radius R <span class="tip" title="Ball radius (lower for high dims)">?</span></label><div class="sig"><input type="range" id="rdim" min="1" max="20" step=".5" value="5" oninput="document.getElementById('rdimv').value=this.value"><input type="number" id="rdimv" value="5" min="1" max="50"  onkeydown="if(event.key==='Enter')runDimNew()"></div></div>
@@ -1090,6 +1161,14 @@ P(gcd = 1) = 1/ζ(n) → 1 as n → ∞ &nbsp;|&nbsp; Vol(Bⁿ) = π^(n/2) / Γ(
 </div>
 
 <div id="tsh" class="tab">
+<div style="background:linear-gradient(135deg,#ff8c0022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff8c00">
+<h3 style="color:#ff8c00;margin-bottom:.5rem">Möbius Shells — GCD Layer Decomposition</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Every lattice point belongs to exactly one "shell" defined by its GCD value g. The g=1 shell contains primitive points. Higher shells (g=2,3,...) contribute to total count via Möbius inversion. Shell counts satisfy Σ_{d|g} shell(d) = total(g). This decomposition underlies the 1/ζ(k) formula.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('shR').value=15;drawSh()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=15</button>
+<button onclick="document.getElementById('shR').value=30;drawSh()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=30</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rsh" min="1" max="50" value="10" oninput="document.getElementById('rshv').value=this.value;runShNew()"><input type="number" id="rshv" value="10" min="1" max="100" onkeydown="if(event.key==='Enter')runShNew()"></div></div>
 <div class="cg"><label>Max k <span class="tip" title="Maximum shell divisor">?</span></label><div class="sig"><input type="range" id="shK" min="5" max="50" value="15" oninput="document.getElementById('shKv').value=this.value;runShNew()"><input type="number" id="shKv" value="15" min="1" max="100" onkeydown="if(event.key==='Enter')runShNew()"></div></div>
@@ -1166,6 +1245,14 @@ P(6) = L(6) - L(3) - L(2) + L(1) - L(1.5) - L(1.2) + ...
 </div>
 
 <div id="tgcd" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">GCD Distribution — Statistical Analysis</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The GCD of random pairs follows a remarkable distribution: P(gcd=g) = 1/(g²ζ(2)) = 6/(π²g²). Mean GCD ≈ 1.645 (= ζ(2)). The proportion with gcd=1 is 6/π² ≈ 60.8%. This tab analyzes GCD statistics across lattice regions.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('gcdR').value=20;drawGCD()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=20</button>
+<button onclick="document.getElementById('gcdR').value=50;drawGCD()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=50</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rgcd" min="1" max="500" value="15" oninput="document.getElementById('rgcdv').value=this.value"><input type="number" id="rgcdv" value="15" min="1" max="1000"  onkeydown="if(event.key==='Enter')runGcdNew()"></div></div>
 <div class="cg"><label>Shape</label><select id="gcdShape" onchange="runGCD()"><option value="circle">Circle (x²+y²≤R²)</option><option value="square">Square (|x|,|y|≤R)</option></select></div>
@@ -1213,6 +1300,14 @@ P(gcd = k) = 1/(k² · ζ(2)) = 6/(π²k²) &nbsp;|&nbsp; P(gcd = 1) = 0.6079271
 </div>
 
 <div id="tgaus" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Gaussian Integers ℤ[i] — Complex Lattice</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Gaussian integers a+bi form a lattice in ℂ with unique factorization. Gaussian primes are primes p≡3(mod 4), or π where ππ̄=p for p≡1(mod 4), or 1+i (above 2). The norm N(z)=|z|²=a²+b² is multiplicative. Units are {±1, ±i}.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('gausR').value=10;drawGaus()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=10</button>
+<button onclick="document.getElementById('gausMode').value='primes';drawGaus()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Gaussian Primes</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Radius R <span class="tip" title="|a+bi| ≤ R">?</span></label><div class="sig"><input type="range" id="rgaus" min="1" max="50" step=".5" value="8" oninput="document.getElementById('rgausv').value=this.value;drawGaus()"><input type="number" id="rgausv" value="8" min="1" step=".5" onkeydown="if(event.key==='Enter')drawGaus()"></div></div>
 <div class="cg"><label>Zoom <span class="tip" title="Zoom level">?</span></label><div class="sig"><input type="range" id="zmgaus" min=".5" max="3" step=".1" value="1" oninput="drawGaus();document.getElementById('zmgausv').textContent=this.value+'x'"><span id="zmgausv" style="color:var(--txt2);min-width:40px">1x</span></div></div>
@@ -1287,6 +1382,15 @@ N(a+bi) = a² + b² &nbsp;|&nbsp; p = a²+b² ⟺ p=2 or p≡1 (mod 4)
 </div>
 
 <div id="tcirc" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">Circle Problem — Gauss's Lattice Count</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The Gauss circle problem asks: how many lattice points lie inside a circle of radius R? The answer N(R) = πR² + E(R) where |E(R)| = O(R^θ). The best known θ ≈ 131/208 ≈ 0.63. Conjectured θ = 1/2 + ε. Connected to the Riemann Hypothesis through divisor sums.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('circRv').value=20;drawCircleViz();runCircNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=20</button>
+<button onclick="document.getElementById('circRv').value=50;drawCircleViz();runCircNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=50</button>
+<button onclick="document.getElementById('circRv').value=100;drawCircleViz();runCircNew()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=100</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max Radius <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="circR" min="5" max="500" value="25" oninput="document.getElementById('circRv').value=this.value;document.getElementById('circVizR').value=Math.min(30,this.value);drawCircleViz();runCircNew()"><input type="number" id="circRv" value="25" min="2" max="1000" onkeydown="if(event.key==='Enter'){document.getElementById('circVizR').value=Math.min(30,this.value);drawCircleViz();runCircNew()}"></div></div>
 <div class="cg"><label>Step Size</label><select id="circStep"><option value="0.5">0.5</option><option value="1" selected>1</option><option value="2">2</option></select></div>
@@ -1349,6 +1453,14 @@ N(R) = πR² + r(R) &nbsp;where&nbsp; |r(R)| = O(R^θ), θ ≤ 131/208 ≈ 0.63
 </div>
 
 <div id="tdens" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Density Verification — 1/ζ(k) Empirical Test</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">This tab empirically verifies that primitive lattice point density converges to 1/ζ(k). Compare actual ratios V(R)/|B_R| against theoretical 1/ζ(k) values as R increases. The convergence rate depends on the error term behavior.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('densR').value=30;drawDensity()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=30</button>
+<button onclick="document.getElementById('densR').value=100;drawDensity()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=100</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Fixed Radius R <span class="tip" title="Ball radius for sampling">?</span></label><div class="sig"><input type="range" id="densR" min="3" max="30" value="12" oninput="document.getElementById('densRv').textContent=this.value"><span id="densRv" style="color:var(--txt2)">12</span></div></div>
 <div class="cg"><label>Max Dimension <span class="tip" title="Compute up to this dimension">?</span></label><div class="sig"><input type="range" id="densMaxK" min="3" max="20" value="10" oninput="document.getElementById('densMaxKv').textContent=this.value"><span id="densMaxKv" style="color:var(--txt2)">10</span></div></div>
@@ -1401,6 +1513,15 @@ P(gcd(x₁,...,xₖ)=1) = 1/ζ(k) → 1 as k → ∞
 </div>
 
 <div id="tdir" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">Dirichlet Characters — L-function Building Blocks</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Dirichlet characters χ mod q are completely multiplicative functions with χ(n+q)=χ(n). They form an orthogonal basis for functions on (ℤ/qℤ)×. The L-function L(s,χ) = Σχ(n)/n^s generalizes ζ(s). Dirichlet proved infinitely many primes in arithmetic progressions using these.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('dirQ').value=5;drawDirichlet()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 5</button>
+<button onclick="document.getElementById('dirQ').value=8;drawDirichlet()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 8</button>
+<button onclick="document.getElementById('dirQ').value=12;drawDirichlet()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 12</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Modulus M <span class="tip" title="Character modulus">?</span></label><div class="sig"><input type="range" id="dirM" min="2" max="100" value="12" oninput="document.getElementById('dirMv').value=this.value;drawDirichlet()"><input type="number" id="dirMv" value="12" min="2" max="500" onkeydown="if(event.key==='Enter')drawDirichlet()"></div></div>
 <div class="cg"><label>Character Index <span class="tip" title="Which character (1 to φ(M))">?</span></label><div class="sig"><input type="range" id="dirIdx" min="0" max="10" value="0" oninput="document.getElementById('dirIdxV').textContent=this.value;drawDirichlet()"><span id="dirIdxV" style="color:var(--txt2)">0</span> <span id="dirIdxLabel" style="color:#ffd700;font-size:.8rem">(Principal χ₀)</span></div></div>
@@ -1474,6 +1595,15 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 </div>
 
 <div id="ttwin" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Twin Primes — Pairs (p, p+2)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Twin primes are pairs (p, p+2) both prime: (3,5), (5,7), (11,13), (17,19)... The twin prime conjecture (unproven) states infinitely many exist. Brun proved Σ1/p over twin primes converges (B₂ ≈ 1.902). Zhang (2013) proved bounded gaps; current bound is 246.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('twinNv').value=1000;drawTwin()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+<button onclick="document.getElementById('twinNv').value=10000;drawTwin()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=10000</button>
+<button onclick="document.getElementById('twinNv').value=100000;drawTwin()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N <span class="tip" title="Search primes up to N">?</span></label><div class="sig"><input type="range" id="twinN" min="100" max="10000" step="100" value="1000" oninput="document.getElementById('twinNv').value=this.value"><input type="number" id="twinNv" value="1000" min="10" max="100000"  onkeydown="if(event.key==='Enter')drawTwin()"></div></div>
 <div class="cg"><label>Gap Size g <span class="tip" title="Find prime pairs (p, p+g)">?</span></label><div class="sig"><input type="range" id="twinG" min="2" max="30" step="2" value="2" oninput="document.getElementById('twinGv').value=this.value;drawTwin()"><input type="number" id="twinGv" value="2" min="2" max="100" step="2" onkeydown="if(event.key==='Enter')drawTwin()"></div></div>
@@ -1552,6 +1682,15 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 </div>
 
 <div id="tpi" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Prime Counting π(x) — The Central Function</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">π(x) counts primes ≤ x. The Prime Number Theorem: π(x) ~ x/ln(x) ~ Li(x). Gauss conjectured, Hadamard/de la Vallée Poussin proved (1896). The error π(x) - Li(x) oscillates, with RH implying |error| = O(√x log x). First crossover where π(x) > Li(x) is near 10^316.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('piNv').value=100;drawPi()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100</button>
+<button onclick="document.getElementById('piNv').value=1000;drawPi()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+<button onclick="document.getElementById('piNv').value=10000;drawPi()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=10000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max x <span class="tip" title="Count primes up to x">?</span></label><div class="sig"><input type="range" id="piX" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('piXv').value=this.value"><input type="number" id="piXv" value="10000" min="10" max="1000000"  onkeydown="if(event.key==='Enter')drawPi()"></div></div>
 <div class="cg"><label>Step Size</label><select id="piStep" onchange="drawPi()">
@@ -1630,6 +1769,14 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 </div>
 
 <div id="tcomp" class="tab">
+<div style="background:linear-gradient(135deg,#ff8c0022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff8c00">
+<h3 style="color:#ff8c00;margin-bottom:.5rem">Composite Channels — Modular Structure</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Composite moduli create "channels" of residue classes with multiplicative structure. For M = p₁p₂...pₖ, the Chinese Remainder Theorem decomposes (ℤ/Mℤ)× ≅ ∏(ℤ/pᵢℤ)×. This tab visualizes how composites distribute across residue channels.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('compM').value=30;drawComp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M=30</button>
+<button onclick="document.getElementById('compM').value=210;drawComp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">M=210</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Composite M <span class="tip" title="Composite modulus to analyze">?</span></label><div class="sig"><input type="range" id="compM" min="4" max="500" value="60" oninput="document.getElementById('compMv').value=this.value;drawComp()"><input type="number" id="compMv" value="60" min="4" max="2000" onkeydown="if(event.key==='Enter')drawComp()"></div></div>
 <div class="cg"><label>Visualization</label><select id="compViz" onchange="drawComp()">
@@ -1742,6 +1889,14 @@ Coprime: 1,5,7,11 | Channels: 12,6,4,3,2,1
 </div>
 
 <div id="tcopair" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">Coprime Pairs — V(R) and E(R) Analysis</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">V(R) counts coprime pairs (a,b) with a²+b² ≤ R². Asymptotically V(R) ~ 6R²/π². The error E(R) = V(R) - 6R²/π² is the primary object connecting lattice counting to RH. The conjecture |E(R)| = O(R^{1/2+ε}) is equivalent to RH for related zeta functions.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('copairRv').value=30;drawCopair()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=30</button>
+<button onclick="document.getElementById('copairRv').value=100;drawCopair()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">R=100</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Grid Size N <span class="tip" title="Count coprime pairs in N×N grid">?</span></label><div class="sig"><input type="range" id="copairN" min="10" max="500" value="60" oninput="document.getElementById('copairNv').value=this.value"><input type="number" id="copairNv" value="60" min="5" max="2000"  onkeydown="if(event.key==='Enter')drawCopair()"></div></div>
 <div class="cg"><label>Visualization</label><select id="copairViz" onchange="drawCopair()">
@@ -1841,6 +1996,14 @@ V(R) = 6R²/π² + E(R) &nbsp;|&nbsp; RH ⟺ |E(R)| = O(R^(½+ε))
 </div>
 
 <div id="tsierp" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Sierpiński Problem — Uncovered Integers</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Sierpiński (1964) asked which positive integers cannot be expressed as 6ab ± a ± b for positive a,b. There are 78 such "uncovered" integers ≤ 1000. The complete characterization remains open. This connects to representations by binary quadratic forms.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('sierpNv').value=100;drawSierp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100</button>
+<button onclick="document.getElementById('sierpNv').value=1000;drawSierp()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N <span class="tip" title="Check which numbers 1..N can be expressed as 6ab±a±b">?</span></label><div class="sig"><input type="range" id="sierpN" min="50" max="500" value="200" oninput="document.getElementById('sierpNv').value=this.value"><input type="number" id="sierpNv" value="200" min="20" max="2000"  onkeydown="if(event.key==='Enter')drawSierp()"></div></div>
 <div class="cg"><label>Visualization</label><select id="sierpViz" onchange="drawSierp()">
@@ -1916,6 +2079,14 @@ n = 6ab ± a ± b &nbsp;|&nbsp; Are infinitely many integers uncovered?
 </div>
 
 <div id="tkfree" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">k-Free Integers — Squarefree Generalization</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">A k-free integer has no prime factor with multiplicity ≥ k. Squarefree = 2-free. The density of k-free integers is 1/ζ(k). For k=2: 6/π² ≈ 60.8% are squarefree. The error term follows |error| = O(N^{1/k}). Möbius function μ(n) indicates 2-free status.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('kfreeK').value=2;drawKfree()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">k=2 (Squarefree)</button>
+<button onclick="document.getElementById('kfreeK').value=3;drawKfree()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">k=3 (Cubefree)</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N <span class="tip" title="Count k-free integers up to N">?</span></label><div class="sig"><input type="range" id="kfreeN" min="100" max="5000" value="1000" oninput="document.getElementById('kfreeNv').value=this.value"><input type="number" id="kfreeNv" value="1000" min="50" max="50000"  onkeydown="if(event.key==='Enter')drawKfree()"></div></div>
 <div class="cg"><label>k (power)</label><select id="kfreeK" onchange="drawKfree()">
@@ -1982,6 +2153,15 @@ Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
 </div>
 
 <div id="teuler" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Euler Product — ζ(s) = ∏(1-p⁻ˢ)⁻¹</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Euler's product formula ζ(s) = ∏_p(1-p^{-s})^{-1} connects the zeta function to primes. Taking partial products gives approximations to π and ζ(2n). Each prime contributes a factor. The formula encodes the Fundamental Theorem of Arithmetic.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('eulerPmaxv').value=100;drawEuler()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">p≤100</button>
+<button onclick="document.getElementById('eulerPmaxv').value=1000;drawEuler()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">p≤1000</button>
+<button onclick="document.getElementById('eulerTarget').value='zeta2';drawEuler()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Compute ζ(2)</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Compute</label><select id="eulerTarget" onchange="drawEuler()">
 <option value="pi">π (from ζ(2)=π²/6)</option>
@@ -2060,6 +2240,14 @@ Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
 </div>
 
 <div id="tchord" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Chord CV Analysis — Prime Detection Heuristic</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The Chord Coefficient of Variation (CV) measures uniformity of chord lengths between n-th roots of unity. Primes show lower CV (more uniform) than composites. This heuristic achieves ~92% prime/composite separation for n ≤ 10000. Based on Getachew (2025) framework.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('chordNv').value=100;drawChord()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100</button>
+<button onclick="document.getElementById('chordNv').value=1000;drawChord()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max n <span class="tip" title="Analyze chord uniformity for moduli up to n">?</span></label><div class="sig"><input type="range" id="chordN" min="50" max="500" value="200" oninput="document.getElementById('chordNv').value=this.value"><input type="number" id="chordNv" value="200" min="20" max="2000"  onkeydown="if(event.key==='Enter')drawChord()"></div></div>
 <div class="cg"><label>Visualization</label><select id="chordViz" onchange="drawChord()">
@@ -2143,6 +2331,15 @@ CV(n) = σ_L / μ_L &nbsp;|&nbsp; L_i = 2·sin(π·gap_i/n) &nbsp;|&nbsp; Prime:
 </div>
 
 <div id="tgold" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Goldbach Conjecture — Every Even ≥ 4 = p + q</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Goldbach's conjecture (1742): every even integer ≥ 4 is the sum of two primes. Verified to 4×10^18. The partition count G(n) = #{(p,q): p+q=n, p≤q prime} grows roughly like n/(ln n)². The "Goldbach comet" plots G(n) vs n. Hardy-Littlewood gave a conjectural asymptotic.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('goldNv').value=100;drawGoldbach()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100</button>
+<button onclick="document.getElementById('goldNv').value=1000;drawGoldbach()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+<button onclick="document.getElementById('goldNv').value=10000;drawGoldbach()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=10000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="goldN" min="10" max="10000" step="10" value="200" oninput="document.getElementById('goldNv').value=this.value"><input type="number" id="goldNv" value="200" min="10" max="50000"  onkeydown="if(event.key==='Enter')drawGoldbach()"></div></div>
 <div class="cg"><label>Test Even <span class="tip" title="Test specific even number">?</span></label><input type="number" id="goldTest" value="100" min="4" step="2" onkeydown="if(event.key==='Enter')drawGoldbach()"></div>
@@ -2192,6 +2389,15 @@ CV(n) = σ_L / μ_L &nbsp;|&nbsp; L_i = 2·sin(π·gap_i/n) &nbsp;|&nbsp; Prime:
 </div>
 
 <div id="tgap" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">Prime Gaps — g_n = p_{n+1} - p_n</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Prime gaps g_n = p_{n+1} - p_n vary irregularly. Average gap ~ ln(p_n). Cramér conjectured max gap = O((ln p)²). Record gaps grow slowly. The ratio g_n/ln(p_n) has mean 1 but large fluctuations. Zhang (2013) proved lim inf g_n < 70 million; now < 246.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('gapNv').value=1000;drawGap()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+<button onclick="document.getElementById('gapNv').value=10000;drawGap()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=10000</button>
+<button onclick="document.getElementById('gapMode').value='records';drawGap()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Record Gaps</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N <span class="tip" title="Upper limit for primes">?</span></label><div class="sig"><input type="range" id="gapN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('gapNv').value=this.value"><input type="number" id="gapNv" value="1000" min="100" max="500000"  onkeydown="if(event.key==='Enter')drawGap()"></div></div>
 <div class="cg"><label>Visualization</label><select id="gapViz" onchange="drawGap()"><option value="scatter">Gap Scatter</option><option value="histogram">Gap Histogram</option><option value="records">Record Gaps</option><option value="ratio">Gap/ln(p) Ratio</option></select></div>
@@ -2242,6 +2448,14 @@ g_n = p_{n+1} - p_n &nbsp;|&nbsp; Cramér: g_n = O((ln p_n)²) &nbsp;|&nbsp; Ave
 </div>
 
 <div id="tsoph" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Sophie Germain Primes — p and 2p+1 Both Prime</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Sophie Germain primes p have 2p+1 also prime (called safe prime). Examples: 2, 3, 5, 11, 23, 29, 41, 53, 83, 89... Used in cryptography (strong primes). Cunningham chains: sequences where each term generates the next. Conjecture: infinitely many Sophie Germain primes.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('sophNv').value=1000;drawSophie()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+<button onclick="document.getElementById('sophNv').value=10000;drawSophie()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=10000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N <span class="tip" title="Upper limit for search">?</span></label><div class="sig"><input type="range" id="sophN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('sophNv').value=this.value"><input type="number" id="sophNv" value="1000" min="100" max="500000"  onkeydown="if(event.key==='Enter')drawSophie()"></div></div>
 <div class="cg"><label>Type</label><select id="sophType" onchange="drawSophie()"><option value="sophie">Sophie Germain (p, 2p+1)</option><option value="safe">Safe Primes (2p+1)</option><option value="cunningham1">Cunningham Chain 1st</option><option value="cunningham2">Cunningham Chain 2nd</option></select></div>
@@ -2294,6 +2508,14 @@ p is Sophie Germain prime ⟺ p and 2p+1 both prime &nbsp;|&nbsp; 2p+1 is called
 </div>
 
 <div id="tmert" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Mertens Function M(x) — Cumulative μ(n)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">M(x) = Σ_{n≤x} μ(n) tracks the cumulative Möbius function. The Mertens conjecture |M(x)| < √x was disproved (Odlyzko-te Riele, 1985), but RH ⟺ M(x) = O(x^{1/2+ε}). The ratio M(x)/√x oscillates, with proven bounds |M(x)| < x for all x.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('mertNv').value=1000;drawMertens()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">x=1000</button>
+<button onclick="document.getElementById('mertNv').value=10000;drawMertens()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">x=10000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max x <span class="tip" title="Upper bound for summation">?</span></label><div class="sig"><input type="range" id="mertX" min="100" max="50000" value="1000" oninput="document.getElementById('mertXv').value=this.value;drawMertens()"><input type="number" id="mertXv" value="1000" min="10" max="100000" onkeydown="if(event.key==='Enter')drawMertens()"></div></div>
 <div class="cg"><label>Visualization</label><select id="mertViz" onchange="drawMertens()">
@@ -2352,6 +2574,14 @@ RH ⟺ M(x) = O(x^{1/2+ε}) ∀ε>0 &nbsp;&nbsp;|&nbsp;&nbsp; M(x) = Σ_{n≤x} 
 </div>
 
 <div id="tcheb" class="tab">
+<div style="background:linear-gradient(135deg,#ff8c0022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff8c00">
+<h3 style="color:#ff8c00;margin-bottom:.5rem">Chebyshev Functions ψ(x), θ(x)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">ψ(x) = Σ_{p^k≤x} log p and θ(x) = Σ_{p≤x} log p. The PNT states ψ(x) ~ x. RH implies ψ(x) = x + O(√x log²x). Chebyshev proved 0.92 < ψ(x)/x < 1.11 without PNT. The explicit formula ψ(x) = x - Σ_ρ x^ρ/ρ - log(2π) connects to zeta zeros.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('chebNv').value=1000;drawChebyshev()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">x=1000</button>
+<button onclick="document.getElementById('chebNv').value=10000;drawChebyshev()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">x=10000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max x <span class="tip" title="Upper bound for summation">?</span></label><div class="sig"><input type="range" id="chebX" min="100" max="50000" value="1000" oninput="document.getElementById('chebXv').value=this.value;drawChebyshev()"><input type="number" id="chebXv" value="1000" min="10" max="100000" onkeydown="if(event.key==='Enter')drawChebyshev()"></div></div>
 <div class="cg"><label>Function</label><select id="chebFunc" onchange="drawChebyshev()">
@@ -2409,6 +2639,14 @@ The explicit formula connects ψ(x) to zeta zeros: ψ(x) = x - Σ_ρ x^ρ/ρ - l
 </div>
 
 <div id="tli" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">Logarithmic Integral Li(x)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Li(x) = ∫₂ˣ dt/ln(t) is the best simple approximation to π(x). The PNT states π(x) ~ Li(x). Littlewood proved π(x) - Li(x) changes sign infinitely often. First sign change (Skewes number) is near 10^316. Under RH: |π(x) - Li(x)| = O(√x log x).</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('liNv').value=1000;drawLi()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">x=1000</button>
+<button onclick="document.getElementById('liNv').value=10000;drawLi()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">x=10000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max x <span class="tip" title="Upper bound for integration">?</span></label><div class="sig"><input type="range" id="liX" min="10" max="100000" value="1000" oninput="document.getElementById('liXv').value=this.value;drawLi()"><input type="number" id="liXv" value="1000" min="10" max="500000" onkeydown="if(event.key==='Enter')drawLi()"></div></div>
 <div class="cg"><label>Visualization</label><select id="liViz" onchange="drawLi()">
@@ -2467,6 +2705,14 @@ Li(x) = ∫₂ˣ dt/ln(t) &nbsp;&nbsp;|&nbsp;&nbsp; π(x) ~ Li(x) &nbsp;&nbsp;|&
 </div>
 
 <div id="tdiv" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Divisor Functions d(n), σ(n)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">τ(n) = d(n) counts divisors; σ(n) sums them. Both are multiplicative. Average d(n) ~ log n. Highly composite numbers maximize d(n). Perfect numbers satisfy σ(n) = 2n. Robin's inequality: σ(n) < e^γ n log log n for n > 5040 ⟺ RH.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('divNv').value=100;drawDivisor()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100</button>
+<button onclick="document.getElementById('divNv').value=1000;drawDivisor()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="divN" min="50" max="10000" value="500" oninput="document.getElementById('divNv').value=this.value;drawDivisor()"><input type="number" id="divNv" value="500" min="10" max="50000" onkeydown="if(event.key==='Enter')drawDivisor()"></div></div>
 <div class="cg"><label>Function</label><select id="divFunc" onchange="drawDivisor()">
@@ -2526,6 +2772,14 @@ The abundancy index σ(n)/n classifies numbers: deficient (σ(n)/n < 2), perfect
 </div>
 
 <div id="tliou" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">Liouville Function λ(n)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">λ(n) = (-1)^{Ω(n)} where Ω(n) counts prime factors with multiplicity. Completely multiplicative: λ(mn) = λ(m)λ(n). The Pólya conjecture L(x) = Σλ(n) ≤ 0 was disproved; first counterexample near 906 million. RH ⟹ L(x) = O(x^{1/2+ε}).</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('liouNv').value=1000;drawLiouville()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=1000</button>
+<button onclick="document.getElementById('liouNv').value=10000;drawLiouville()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=10000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="liouN" min="100" max="50000" value="1000" oninput="document.getElementById('liouNv').value=this.value;drawLiouville()"><input type="number" id="liouNv" value="1000" min="10" max="100000" onkeydown="if(event.key==='Enter')drawLiouville()"></div></div>
 <div class="cg"><label>Visualization</label><select id="liouViz" onchange="drawLiouville()">
@@ -2583,6 +2837,14 @@ Pólya conjectured (1919) that L(x) ≤ 0 for all x ≥ 2, meaning more integers
 </div>
 
 <div id="tmang" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Von Mangoldt Function Λ(n)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Λ(n) = log p if n = p^k for prime p, else 0. It's the "prime indicator with weights." ψ(x) = Σ Λ(n). The explicit formula ψ(x) = x - Σ_ρ x^ρ/ρ - log(2π) - ½log(1-x⁻²) shows how zeros govern prime distribution.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('mangNv').value=100;drawMangoldt()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=100</button>
+<button onclick="document.getElementById('mangNv').value=500;drawMangoldt()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=500</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max n <span class="tip" title="Upper bound for computation">?</span></label><div class="sig"><input type="range" id="mangN" min="50" max="5000" value="500" oninput="document.getElementById('mangNv').value=this.value;drawMangoldt()"><input type="number" id="mangNv" value="500" min="10" max="20000" onkeydown="if(event.key==='Enter')drawMangoldt()"></div></div>
 <div class="cg"><label>Visualization</label><select id="mangViz" onchange="drawMangoldt()">
@@ -2641,6 +2903,14 @@ The explicit formula directly connects Λ(n) to zeta zeros: ψ(x) = x - Σ_ρ x^
 </div>
 
 <div id="tram" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Ramanujan Sums c_q(n)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">c_q(n) = Σ_{gcd(a,q)=1} e^{2πian/q} is always an integer (remarkable!). They form an orthogonal basis for arithmetic functions. c_q(n) = μ(q/gcd(q,n))φ(q)/φ(q/gcd(q,n)). Used in the circle method and additive number theory.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('ramQmax').value=20;drawRamanujan()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">q≤20</button>
+<button onclick="document.getElementById('ramQmax').value=50;drawRamanujan()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">q≤50</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Modulus q <span class="tip" title="Denominator for Ramanujan sum">?</span></label><div class="sig"><input type="range" id="ramQ" min="2" max="100" value="12" oninput="document.getElementById('ramQv').value=this.value;drawRamanujan()"><input type="number" id="ramQv" value="12" min="2" max="500" onkeydown="if(event.key==='Enter')drawRamanujan()"></div></div>
 <div class="cg"><label>Max n <span class="tip" title="Range for n values">?</span></label><div class="sig"><input type="range" id="ramN" min="10" max="500" value="100" oninput="document.getElementById('ramNv').value=this.value;drawRamanujan()"><input type="number" id="ramNv" value="100" min="10" max="2000" onkeydown="if(event.key==='Enter')drawRamanujan()"></div></div>
@@ -2695,6 +2965,14 @@ c_q(n) = Σ_{gcd(a,q)=1} e^{2πian/q} = μ(q/d)·φ(q)/φ(q/d) where d = gcd(n,q
 </div>
 
 <div id="tulam" class="tab">
+<div style="background:linear-gradient(135deg,#ff8c0022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff8c00">
+<h3 style="color:#ff8c00;margin-bottom:.5rem">Ulam Spiral — Primes in Square Grid</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Stanisław Ulam (1963) arranged integers in a square spiral and noticed primes cluster on diagonals. These correspond to quadratic polynomials like n² + n + 41 (Euler's famous prime-rich polynomial). The visual reveals hidden structure in prime distribution.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('ulamNv').value=10000;drawUlam()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=10000</button>
+<button onclick="document.getElementById('ulamNv').value=40000;drawUlam()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=40000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Spiral Size <span class="tip" title="Width/height in cells">?</span></label><div class="sig"><input type="range" id="ulamSize" min="51" max="401" step="2" value="101" oninput="document.getElementById('ulamSizev').value=this.value;drawUlam()"><input type="number" id="ulamSizev" value="101" min="11" step="2" max="501" onkeydown="if(event.key==='Enter')drawUlam()"></div></div>
 <div class="cg"><label>Start Number</label><input type="number" id="ulamStart" value="1" min="1" max="1000000" onchange="drawUlam()"></div>
@@ -2751,6 +3029,14 @@ Spiral: 1 → 2 → 3 → ... counterclockwise &nbsp;&nbsp;|&nbsp;&nbsp; Diagona
 </div>
 
 <div id="tsacks" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">Sacks Spiral — Archimedean Prime Pattern</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Robert Sacks's spiral places n at polar coordinates (√n, 2π√n). Primes form curved arms corresponding to quadratic residues. Perfect squares lie on the positive x-axis. The visualization reveals parabolic curves of prime-rich quadratics.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('sacksNv').value=10000;drawSacks()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=10000</button>
+<button onclick="document.getElementById('sacksNv').value=50000;drawSacks()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">N=50000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max n <span class="tip" title="Highest integer to plot">?</span></label><div class="sig"><input type="range" id="sacksN" min="1000" max="100000" value="10000" oninput="document.getElementById('sacksNv').value=this.value;drawSacks()"><input type="number" id="sacksNv" value="10000" min="100" max="500000" onkeydown="if(event.key==='Enter')drawSacks()"></div></div>
 <div class="cg"><label>Highlight</label><select id="sacksHL" onchange="drawSacks()">
@@ -2810,6 +3096,14 @@ Position: r = √n, θ = 2π√n &nbsp;&nbsp;|&nbsp;&nbsp; Squares on x-axis &nb
 </div>
 
 <div id="thardy" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Hardy Z-Function — Real Zeta Proxy</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Z(t) = e^{iθ(t)}ζ(½+it) is REAL-valued. Its sign changes correspond exactly to zeros of ζ(s) on the critical line. RH states ALL nontrivial zeros are sign changes of Z(t). First zeros at t ≈ 14.135, 21.022, 25.011. Over 10^13 zeros verified on the line.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('hardyTmax').value=50;drawHardy()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">t≤50</button>
+<button onclick="document.getElementById('hardyTmax').value=100;drawHardy()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">t≤100</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>t Range <span class="tip" title="Imaginary part of s = ½ + it">?</span></label><div class="sig"><input type="range" id="hardyT" min="10" max="200" value="50" oninput="document.getElementById('hardyTv').value=this.value;drawHardy()"><input type="number" id="hardyTv" value="50" min="1" max="1000" onkeydown="if(event.key==='Enter')drawHardy()"></div></div>
 <div class="cg"><label>Resolution</label><div class="sig"><input type="range" id="hardyRes" min="500" max="5000" value="2000" step="100" oninput="document.getElementById('hardyResv').value=this.value;drawHardy()"><input type="number" id="hardyResv" value="2000" min="100" max="10000" onchange="drawHardy()"></div></div>
@@ -2864,6 +3158,14 @@ Z(t) = e^{iθ(t)}ζ(½+it) ∈ ℝ &nbsp;&nbsp;|&nbsp;&nbsp; θ(t) = arg(Γ(¼+i
 </div>
 
 <div id="tgram" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">Gram Points — Zero Organization</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Gram points g_n satisfy θ(g_n) = nπ. They organize zero counting: "Gram's Law" expects one zero per Gram interval (holds ~73%). Violations (Gram blocks) and Lehmer pairs (close zeros) reveal fine structure. Rosser's rule refines counting.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('gramNmax').value=30;drawGram()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n≤30</button>
+<button onclick="document.getElementById('gramNmax').value=100;drawGram()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n≤100</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max n <span class="tip" title="Number of Gram points">?</span></label><div class="sig"><input type="range" id="gramN" min="10" max="500" value="100" oninput="document.getElementById('gramNv').value=this.value;drawGram()"><input type="number" id="gramNv" value="100" min="5" max="2000" onkeydown="if(event.key==='Enter')drawGram()"></div></div>
 <div class="cg"><label>Visualization</label><select id="gramViz" onchange="drawGram()">
@@ -2917,6 +3219,14 @@ Gram's Law states (-1)ⁿZ(g_n) > 0, equivalent to exactly one zero in [g_{n-1},
 </div>
 
 <div id="texplicit" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Explicit Formula — π(x) from Zeros</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The explicit formula π(x) = Li(x) - Σ_ρ Li(x^ρ) - log(2) + ∫_x^∞ dt/(t(t²-1)log t) builds π(x) from zeta zeros ρ. Each zero contributes an oscillation. Animation shows how zeros accumulate to match π(x). RH controls error magnitude.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('explicitNzeros').value=10;drawExplicit()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">10 zeros</button>
+<button onclick="document.getElementById('explicitNzeros').value=50;drawExplicit()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">50 zeros</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max x <span class="tip" title="Upper bound for π(x)">?</span></label><div class="sig"><input type="range" id="explicitX" min="100" max="10000" value="1000" oninput="document.getElementById('explicitXv').value=this.value;drawExplicit()"><input type="number" id="explicitXv" value="1000" min="10" max="100000" onkeydown="if(event.key==='Enter')drawExplicit()"></div></div>
 <div class="cg"><label>Number of Zeros</label><div class="sig"><input type="range" id="explicitZeros" min="0" max="100" value="20" oninput="document.getElementById('explicitZerosv').value=this.value;drawExplicit()"><input type="number" id="explicitZerosv" value="20" min="0" max="500" onchange="drawExplicit()"></div></div>
@@ -2973,6 +3283,14 @@ This formula proves that zeta zeros DIRECTLY control prime distribution! If RH h
 </div>
 
 <div id="tzerocount" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Zero Counting N(T)</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">N(T) = #{ρ: 0 < Im(ρ) < T} counts zeros up to height T. Riemann-von Mangoldt: N(T) = (T/2π)log(T/2πe) + O(log T). The error S(T) encodes zero spacing statistics. Zero density estimates constrain possible RH violations.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('zcountTmax').value=50;drawZeroCount()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">T=50</button>
+<button onclick="document.getElementById('zcountTmax').value=100;drawZeroCount()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">T=100</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max T <span class="tip" title="Height on critical line">?</span></label><div class="sig"><input type="range" id="zcountT" min="20" max="500" value="100" oninput="document.getElementById('zcountTv').value=this.value;drawZeroCount()"><input type="number" id="zcountTv" value="100" min="10" max="2000" onkeydown="if(event.key==='Enter')drawZeroCount()"></div></div>
 <div class="cg"><label>Visualization</label><select id="zcountViz" onchange="drawZeroCount()">
@@ -3023,6 +3341,14 @@ N(T) = (T/2π)log(T/2πe) + O(log T) &nbsp;&nbsp;|&nbsp;&nbsp; S(T) = N(T) - ⟨
 </div>
 
 <div id="targand" class="tab">
+<div style="background:linear-gradient(135deg,#ff8c0022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff8c00">
+<h3 style="color:#ff8c00;margin-bottom:.5rem">ζ(s) Argand — Complex Domain Coloring</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Domain coloring shows ζ(s) in the complex plane: phase → hue, modulus → brightness. Zeros appear as color wheel singularities. The critical line Re(s) = ½ and the pole at s = 1 are visible. Trivial zeros at s = -2, -4, -6, ... appear on the negative real axis.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('argandXmin').value=-5;document.getElementById('argandXmax').value=5;drawArgand()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">[-5,5]×[-30,30]</button>
+<button onclick="document.getElementById('argandYmax').value=50;drawArgand()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Higher Im(s)</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>σ Range <span class="tip" title="Real part range">?</span></label><div style="display:flex;gap:.3rem"><input type="number" id="argandS1" value="-2" step="0.5" style="width:60px" onchange="drawArgand()"><span>to</span><input type="number" id="argandS2" value="4" step="0.5" style="width:60px" onchange="drawArgand()"></div></div>
 <div class="cg"><label>t Range <span class="tip" title="Imaginary part range">?</span></label><div style="display:flex;gap:.3rem"><input type="number" id="argandT1" value="-30" step="5" style="width:60px" onchange="drawArgand()"><span>to</span><input type="number" id="argandT2" value="30" step="5" style="width:60px" onchange="drawArgand()"></div></div>
@@ -3073,6 +3399,14 @@ Color: arg(ζ(s)) → Hue &nbsp;&nbsp;|&nbsp;&nbsp; Zeros: full color wheel &nbs
 </div>
 
 <div id="tzetareal" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">ζ(s) Real Axis — Pole and Values</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">On the real axis: ζ(s) has a pole at s=1, special values ζ(2)=π²/6, ζ(4)=π⁴/90, ζ(3)≈1.202 (Apéry). Trivial zeros at s=-2,-4,-6,... from the functional equation. For s<0, ζ(s) = 2^s π^{s-1} sin(πs/2) Γ(1-s) ζ(1-s).</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('zetarealXmin').value=-10;document.getElementById('zetarealXmax').value=5;drawZetaReal()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Full Range</button>
+<button onclick="document.getElementById('zetarealXmin').value=1.001;document.getElementById('zetarealXmax').value=10;drawZetaReal()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">s > 1</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>s Range <span class="tip" title="Real axis range">?</span></label><div style="display:flex;gap:.3rem"><input type="number" id="zetarealS1" value="-10" step="1" style="width:60px" onchange="drawZetaReal()"><span>to</span><input type="number" id="zetarealS2" value="10" step="1" style="width:60px" onchange="drawZetaReal()"></div></div>
 <div class="cg"><label>Resolution</label><input type="range" id="zetarealRes" min="200" max="2000" value="1000" onchange="drawZetaReal()"></div>
@@ -3120,6 +3454,14 @@ The functional equation ζ(s) = 2ˢπ^{s-1}sin(πs/2)Γ(1-s)ζ(1-s) connects val
 </div>
 
 <div id="tmontgomery" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Montgomery Pair Correlation</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Hugh Montgomery (1973) discovered that the pair correlation of zeta zeros follows R₂(x) = 1 - (sin πx/πx)². This matches GUE random matrix statistics! His famous encounter with Dyson at tea revealed the connection. Implies zeros "repel" each other.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('montNzeros').value=100;drawMontgomery()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">100 zeros</button>
+<button onclick="document.getElementById('montNzeros').value=500;drawMontgomery()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">500 zeros</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max Zeros <span class="tip" title="Number of zeros to analyze">?</span></label><div class="sig"><input type="range" id="montN" min="10" max="80" value="50" oninput="document.getElementById('montNv').value=this.value;drawMontgomery()"><input type="number" id="montNv" value="50" min="5" max="80" onkeydown="if(event.key==='Enter')drawMontgomery()"></div></div>
 <div class="cg"><label>Bin Width <span class="tip" title="Histogram bin width">?</span></label><div class="sig"><input type="range" id="montBin" min="0.05" max="0.5" step="0.05" value="0.1" oninput="drawMontgomery()"><span id="montBinV" style="color:var(--txt2)">0.1</span></div></div>
@@ -3158,6 +3500,14 @@ R₂(x) = 1 - (sin(πx)/(πx))² &nbsp;&nbsp;|&nbsp;&nbsp; Zeros repel: P(gap→
 </div>
 
 <div id="tgue" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">GUE Statistics — Random Matrix Theory</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Zeta zeros follow Gaussian Unitary Ensemble statistics from random matrix theory. The Wigner surmise P(s) = (π/2)s exp(-πs²/4) gives nearest-neighbor spacing. Level repulsion: P(0) = 0 (zeros don't cluster). This deep connection remains mysterious.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('gueNzeros').value=200;drawGUE()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">200 zeros</button>
+<button onclick="document.getElementById('gueNzeros').value=1000;drawGUE()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">1000 zeros</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max Zeros <span class="tip" title="Number of zeros to analyze">?</span></label><div class="sig"><input type="range" id="gueN" min="10" max="80" value="50" oninput="document.getElementById('gueNv').value=this.value;drawGUE()"><input type="number" id="gueNv" value="50" min="5" max="80" onkeydown="if(event.key==='Enter')drawGUE()"></div></div>
 <div class="cg"><label>View Mode</label><select id="gueMode" onchange="drawGUE()">
@@ -3196,6 +3546,14 @@ Wigner: P(s) = (32/π²)s²e^{-4s²/π} &nbsp;|&nbsp; Poisson: P(s) = e^{-s}
 </div>
 
 <div id="tprimerace" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Prime Races — Chebyshev Bias</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Chebyshev noticed primes ≡ 3 (mod 4) tend to outnumber those ≡ 1 (mod 4). Rubinstein-Sarnak (1994) proved under GRH that 3 leads ~99.59% of the time! The bias comes from low-lying zeros of L-functions. "π(x;4,3) vs π(x;4,1)" race visualized.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('raceQ').value=4;drawPrimeRace()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 4</button>
+<button onclick="document.getElementById('raceQ').value=3;drawPrimeRace()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 3</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max x <span class="tip" title="Count primes up to x">?</span></label><div class="sig"><input type="range" id="raceX" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('raceXv').value=this.value"><input type="number" id="raceXv" value="10000" min="100" max="1000000" onkeydown="if(event.key==='Enter')drawPrimeRace()"></div></div>
 <div class="cg"><label>Modulus q</label><select id="raceQ" onchange="drawPrimeRace()">
@@ -3244,6 +3602,14 @@ Under GRH, primes ≡ 3 (mod 4) lead ~99.59% of the "time" (in logarithmic densi
 </div>
 
 <div id="tlfunc" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">L-Functions — Dirichlet Series</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">L(s,χ) = Σ χ(n)/n^s generalizes ζ(s) using Dirichlet characters. The principal character gives ζ(s) times local factors. Non-principal L-functions are entire. GRH: all nontrivial zeros satisfy Re(s) = ½. They encode prime distribution in arithmetic progressions.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('lfuncQ').value=5;drawLfunc()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 5</button>
+<button onclick="document.getElementById('lfuncQ').value=7;drawLfunc()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 7</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Modulus q <span class="tip" title="Character modulus">?</span></label><div class="sig"><input type="range" id="lfuncQ" min="3" max="50" value="5" oninput="document.getElementById('lfuncQv').value=this.value;drawLfunc()"><input type="number" id="lfuncQv" value="5" min="3" max="100" onkeydown="if(event.key==='Enter')drawLfunc()"></div></div>
 <div class="cg"><label>s value (real part)</label><div class="sig"><input type="range" id="lfuncS" min="1.1" max="10" step="0.1" value="2" oninput="document.getElementById('lfuncSv').value=this.value;drawLfunc()"><input type="number" id="lfuncSv" value="2" min="1.01" max="20" step="0.1" onkeydown="if(event.key==='Enter')drawLfunc()"></div></div>
@@ -3287,6 +3653,14 @@ L(s,χ) = Σ χ(n)/nˢ = ∏ₚ (1-χ(p)p⁻ˢ)⁻¹ &nbsp;&nbsp;|&nbsp;&nbsp; G
 </div>
 
 <div id="tlfunczeros" class="tab">
+<div style="background:linear-gradient(135deg,#ff8c0022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff8c00">
+<h3 style="color:#ff8c00;margin-bottom:.5rem">L-Function Zeros</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Each L(s,χ) has its own set of zeros, all conjectured on Re(s) = ½ (GRH). Low-lying zeros (small imaginary part) cause the Chebyshev bias. Comparing zero distributions across characters reveals universal behavior matching random matrix predictions.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('lzeroQ').value=5;drawLfuncZeros()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 5 zeros</button>
+<button onclick="document.getElementById('lzeroQ').value=8;drawLfuncZeros()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 8 zeros</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Modulus q <span class="tip" title="Character modulus">?</span></label><div class="sig"><input type="range" id="lzeroQ" min="3" max="20" value="5" oninput="document.getElementById('lzeroQv').value=this.value;drawLfuncZeros()"><input type="number" id="lzeroQv" value="5" min="3" max="50" onkeydown="if(event.key==='Enter')drawLfuncZeros()"></div></div>
 <div class="cg"><label>t Range <span class="tip" title="Imaginary part range">?</span></label><div class="sig"><input type="range" id="lzeroT" min="10" max="100" value="30" oninput="document.getElementById('lzeroTv').value=this.value;drawLfuncZeros()"><input type="number" id="lzeroTv" value="30" min="5" max="200" onkeydown="if(event.key==='Enter')drawLfuncZeros()"></div></div>
@@ -3325,6 +3699,14 @@ N(T,χ) ~ (T/π)log(qT/2πe) &nbsp;&nbsp;|&nbsp;&nbsp; Each L(s,χ) has infinite
 </div>
 
 <div id="tquantum" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">Quantum Orbitals — Number Theory Analogy</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Hydrogen wavefunctions ψ_{nlm}(r,θ,φ) = R_{nl}(r)Y_l^m(θ,φ) have radial nodes at zeros of Laguerre polynomials. The quantization parallels prime factorization. Spherical harmonics Y_l^m connect to k-dimensional ball volumes. The Casimir operator eigenvalues mirror zeta special values.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('quantumN').value=3;document.getElementById('quantumL').value=2;drawQuantum()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">3d orbital</button>
+<button onclick="document.getElementById('quantumN').value=4;document.getElementById('quantumL').value=1;drawQuantum()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4p orbital</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Principal n <span class="tip" title="Principal quantum number (energy level)">?</span></label><div class="sig"><input type="range" id="quantumN" min="1" max="7" value="3" oninput="document.getElementById('quantumNv').value=this.value;drawQuantum()"><input type="number" id="quantumNv" value="3" min="1" max="10" onkeydown="if(event.key==='Enter')drawQuantum()"></div></div>
 <div class="cg"><label>Angular l <span class="tip" title="Angular momentum quantum number (0=s, 1=p, 2=d, 3=f)">?</span></label><div class="sig"><input type="range" id="quantumL" min="0" max="6" value="1" oninput="document.getElementById('quantumLv').value=this.value;drawQuantum()"><input type="number" id="quantumLv" value="1" min="0" max="9" onkeydown="if(event.key==='Enter')drawQuantum()"></div></div>
@@ -3385,6 +3767,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- PRIME K-TUPLES TAB -->
 <div id="tktuples" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Prime k-Tuples — Generalized Twin Primes</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Prime k-tuples generalize twin primes to patterns like (p, p+2, p+6) for prime triplets or (p, p+2, p+6, p+8) for prime quadruplets. The Hardy-Littlewood conjecture predicts their density using a product over primes. Admissible patterns (no residue class mod p covers all positions) can occur infinitely often. The first prime quadruplet is (5, 7, 11, 13).</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('ktN').value=1000;document.getElementById('ktType').value='twin';drawKtuples()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Twin Primes</button>
+<button onclick="document.getElementById('ktN').value=10000;document.getElementById('ktType').value='triplet';drawKtuples()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Triplets</button>
+<button onclick="document.getElementById('ktN').value=100000;document.getElementById('ktType').value='quadruplet';drawKtuples()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Quadruplets</button>
+<button onclick="document.getElementById('ktN').value=1000000;document.getElementById('ktType').value='sexy';drawKtuples()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Sexy Primes (p,p+6)</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N</label><div class="sig"><input type="range" id="ktupleN" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('ktupleNv').value=this.value"><input type="number" id="ktupleNv" value="10000" min="10" max="1000000" onkeydown="if(event.key==='Enter')drawKtuples()"></div></div>
 <div class="cg"><label>Tuple Type</label><select id="ktupleType" onchange="drawKtuples()">
@@ -3407,6 +3799,15 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- CARMICHAEL TAB -->
 <div id="tcarmichael" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">Carmichael Numbers — Pseudoprimes</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Carmichael numbers are composite numbers n satisfying a^n ≡ a (mod n) for all integers a — they pass Fermat's primality test despite being composite. The smallest is 561 = 3·11·17. Korselt's criterion: n is Carmichael iff n is squarefree and (p-1)|(n-1) for all primes p|n. There are infinitely many (Alford-Granville-Pomerance, 1994).</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('carmNv').value=1000;drawCarmichael()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">To 1000</button>
+<button onclick="document.getElementById('carmNv').value=10000;drawCarmichael()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">To 10,000</button>
+<button onclick="document.getElementById('carmNv').value=100000;drawCarmichael()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">To 100,000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N</label><div class="sig"><input type="range" id="carmN" min="1000" max="1000000" step="1000" value="100000" oninput="document.getElementById('carmNv').value=this.value"><input type="number" id="carmNv" value="100000" min="100" max="10000000" onkeydown="if(event.key==='Enter')drawCarmichael()"></div></div>
 <div class="cg"><label>Test Base a</label><input type="number" id="carmBase" value="2" min="2" max="100"></div>
@@ -3421,6 +3822,15 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- MERSENNE TAB -->
 <div id="tmersenne" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">Mersenne Primes — 2^p - 1</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Mersenne primes have the form M_p = 2^p - 1 where p is prime (necessary but not sufficient). They're connected to perfect numbers: if M_p is prime, then 2^{p-1}·M_p is perfect. The Lucas-Lehmer test efficiently determines primality. GIMPS (Great Internet Mersenne Prime Search) has found the largest known primes. As of 2024, 51 Mersenne primes are known, the largest being 2^82,589,933 - 1 with 24,862,048 digits.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('mersNv').value=100;drawMersenne()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">p ≤ 100</button>
+<button onclick="document.getElementById('mersNv').value=1000;drawMersenne()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">p ≤ 1000</button>
+<button onclick="document.getElementById('mersNv').value=10000;drawMersenne()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">p ≤ 10000</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max Exponent p</label><div class="sig"><input type="range" id="mersP" min="10" max="1000" value="100" oninput="document.getElementById('mersPv').value=this.value"><input type="number" id="mersPv" value="100" min="2" max="10000" onkeydown="if(event.key==='Enter')drawMersenne()"></div></div>
 <div class="cg"><label>Show</label><select id="mersMode" onchange="drawMersenne()">
@@ -3439,6 +3849,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- CONTINUED FRACTIONS TAB -->
 <div id="tcontinued" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Continued Fractions — Best Rational Approximations</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Every real number has a continued fraction [a₀; a₁, a₂, ...] giving best rational approximations. Convergents p_n/q_n satisfy |x - p_n/q_n| < 1/q_n². Quadratic irrationals have eventually periodic expansions. The golden ratio φ = [1; 1, 1, 1, ...] has the slowest convergence. Famous: π = [3; 7, 15, 1, 292, ...], with 355/113 being exceptionally accurate.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('cfNum').value='pi';drawContinued()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">π</button>
+<button onclick="document.getElementById('cfNum').value='e';drawContinued()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">e</button>
+<button onclick="document.getElementById('cfNum').value='phi';drawContinued()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">φ (Golden)</button>
+<button onclick="document.getElementById('cfNum').value='sqrt2';drawContinued()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">√2</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Number</label><select id="cfNum" onchange="drawContinued()">
 <option value="pi">π</option>
@@ -3461,6 +3881,15 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- STERN-BROCOT TAB -->
 <div id="tsternbrocot" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Stern-Brocot Tree — All Positive Rationals</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The Stern-Brocot tree contains every positive rational exactly once, in lowest terms. Starting from 0/1 and 1/0, each fraction a/b has left child (a+c)/(b+d) using its ancestor c/d. The mediant property connects to Farey sequences. Path from root encodes the continued fraction. The tree is a complete binary tree organizing ℚ⁺ beautifully.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('sbDepth').value=5;drawSternBrocot()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Depth 5</button>
+<button onclick="document.getElementById('sbDepth').value=7;drawSternBrocot()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Depth 7</button>
+<button onclick="document.getElementById('sbDepth').value=10;drawSternBrocot()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Depth 10</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Depth</label><input type="range" id="sbDepth" min="3" max="10" value="6" oninput="drawSternBrocot()"></div>
 <div class="cg"><label>Highlight</label><select id="sbHighlight" onchange="drawSternBrocot()">
@@ -3479,6 +3908,15 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- PYTHAGOREAN TAB -->
 <div id="tpythag" class="tab">
+<div style="background:linear-gradient(135deg,#ff8c0022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff8c00">
+<h3 style="color:#ff8c00;margin-bottom:.5rem">Pythagorean Triples — Integer Right Triangles</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Pythagorean triples (a, b, c) satisfy a² + b² = c². Primitive triples (gcd = 1) are parametrized by a = m² - n², b = 2mn, c = m² + n² where gcd(m,n) = 1 and m-n is odd. The tree structure shows all primitives derive from (3,4,5) by three matrix transformations. There are infinitely many primitive triples, with density ~1/(2π) log N.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('pythMax').value=100;document.getElementById('pythMode').value='list';drawPythag()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">c ≤ 100</button>
+<button onclick="document.getElementById('pythMax').value=1000;drawPythag()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">c ≤ 1000</button>
+<button onclick="document.getElementById('pythMode').value='tree';drawPythag()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Tree View</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max Hypotenuse</label><div class="sig"><input type="range" id="pythC" min="10" max="1000" value="100" oninput="document.getElementById('pythCv').value=this.value;drawPythag()"><input type="number" id="pythCv" value="100" min="5" max="10000" onkeydown="if(event.key==='Enter')drawPythag()"></div></div>
 <div class="cg"><label>Show</label><select id="pythMode" onchange="drawPythag()">
@@ -3497,6 +3935,15 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- SUM OF SQUARES TAB -->
 <div id="tsumsquares" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">Sum of Squares — r₂(n) Representations</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The function r₂(n) counts representations of n as a sum of two squares: n = a² + b² (including signs and order). Fermat's theorem: prime p is sum of two squares iff p = 2 or p ≡ 1 (mod 4). General n is representable iff no prime p ≡ 3 (mod 4) appears to an odd power. Jacobi's formula: r₂(n) = 4(d₁(n) - d₃(n)) where d_i counts divisors ≡ i (mod 4).</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('ssqN').value=100;document.getElementById('ssqMode').value='heatmap';drawSumSquares()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">r₂(n) Heatmap</button>
+<button onclick="document.getElementById('ssqN').value=50;document.getElementById('ssqMode').value='circle';drawSumSquares()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">Lattice Points</button>
+<button onclick="document.getElementById('ssqTest').value=65;drawSumSquares()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">65 = 1²+8² = 4²+7²</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N</label><div class="sig"><input type="range" id="ssqN" min="10" max="500" value="100" oninput="document.getElementById('ssqNv').value=this.value;drawSumSquares()"><input type="number" id="ssqNv" value="100" min="1" max="1000" onkeydown="if(event.key==='Enter')drawSumSquares()"></div></div>
 <div class="cg"><label>Squares k</label><select id="ssqK" onchange="drawSumSquares()">
@@ -3515,6 +3962,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- QUADRATIC RESIDUES TAB -->
 <div id="tquadres" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Quadratic Residues — Legendre Symbol Patterns</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">A quadratic residue mod p is an integer a where x² ≡ a (mod p) has a solution. The Legendre symbol (a/p) = 1 if a is a QR, -1 if not, 0 if p|a. Exactly (p-1)/2 non-zero residues are QRs. Quadratic reciprocity: (p/q)(q/p) = (-1)^{(p-1)(q-1)/4}. This "golden theorem" (Gauss) connects residue structure across primes.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('qrP').value=17;drawQuadRes()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 17</button>
+<button onclick="document.getElementById('qrP').value=23;drawQuadRes()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 23</button>
+<button onclick="document.getElementById('qrP').value=101;drawQuadRes()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">mod 101</button>
+<button onclick="document.getElementById('qrMode').value='reciprocity';drawQuadRes()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Reciprocity</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Modulus p</label><div class="sig"><input type="range" id="qrP" min="3" max="200" value="23" oninput="document.getElementById('qrPv').value=this.value;drawQuadRes()"><input type="number" id="qrPv" value="23" min="3" max="1000" onkeydown="if(event.key==='Enter')drawQuadRes()"></div></div>
 <div class="cg"><label>View</label><select id="qrMode" onchange="drawQuadRes()">
@@ -3533,6 +3990,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- PARTITIONS TAB -->
 <div id="tpartition" class="tab">
+<div style="background:linear-gradient(135deg,#ff8c0022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff8c00">
+<h3 style="color:#ff8c00;margin-bottom:.5rem">Partition Function p(n) — Ways to Sum</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The partition function p(n) counts ways to write n as a sum of positive integers, ignoring order. For example, p(5) = 7: 5, 4+1, 3+2, 3+1+1, 2+2+1, 2+1+1+1, 1+1+1+1+1. Hardy and Ramanujan proved the asymptotic formula p(n) ~ exp(π√(2n/3))/(4n√3). Ramanujan discovered remarkable congruences: p(5n+4) ≡ 0 (mod 5).</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('partNv').value=50;drawPartition()">p(n) to 50</button>
+<button onclick="document.getElementById('partNv').value=100;drawPartition()">p(n) to 100</button>
+<button onclick="document.getElementById('partTest').value=10;drawPartition()">Show p(10)=42</button>
+<button onclick="document.getElementById('partTest').value=100;drawPartition()">Show p(100)</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N</label><div class="sig"><input type="range" id="partN" min="10" max="200" value="50" oninput="document.getElementById('partNv').value=this.value"><input type="number" id="partNv" value="50" min="1" max="500" onkeydown="if(event.key==='Enter')drawPartition()"></div></div>
 <div class="cg"><label>Test n</label><input type="number" id="partTest" value="10" min="1" max="100"></div>
@@ -3552,6 +4019,15 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- BERNOULLI TAB -->
 <div id="tbernoulli" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Bernoulli Numbers — Zeta at Negative Integers</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Bernoulli numbers Bₙ appear in the power sum formula 1^k + 2^k + ... + n^k and connect to ζ(-n). They satisfy ζ(2n) = (-1)^{n+1}B_{2n}(2π)^{2n}/(2(2n)!), explaining why ζ(2) = π²/6. The tangent function has Taylor coefficients involving Bernoulli numbers. B₁ = -1/2 (or +1/2 by convention), and all odd Bₙ = 0 for n ≥ 3.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('bernNv').value=20;drawBernoulli()">B_n to 20</button>
+<button onclick="document.getElementById('bernNv').value=50;drawBernoulli()">B_n to 50</button>
+<button onclick="document.getElementById('bernMode').value='zeta';drawBernoulli()">ζ Connection</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max n</label><div class="sig"><input type="range" id="bernN" min="5" max="50" value="20" oninput="document.getElementById('bernNv').value=this.value;drawBernoulli()"><input type="number" id="bernNv" value="20" min="1" max="100" onkeydown="if(event.key==='Enter')drawBernoulli()"></div></div>
 <div class="cg"><label>Show</label><select id="bernMode" onchange="drawBernoulli()">
@@ -3570,6 +4046,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- FIBONACCI TAB -->
 <div id="tfibonacci" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Fibonacci Sequence — Golden Ratio & Nature</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The Fibonacci sequence F_n = F_{n-1} + F_{n-2} with F_1 = F_2 = 1 appears throughout mathematics and nature. The ratio F_n/F_{n-1} → φ = (1+√5)/2 ≈ 1.618 (golden ratio). Zeckendorf's theorem: every positive integer has a unique representation as a sum of non-consecutive Fibonacci numbers. Lucas numbers follow the same recurrence with L_1=1, L_2=3.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('fibNv').value=20;document.getElementById('fibMode').value='sequence';drawFibonacci()">F_n to 20</button>
+<button onclick="document.getElementById('fibNv').value=50;document.getElementById('fibMode').value='ratio';drawFibonacci()">Ratio → φ</button>
+<button onclick="document.getElementById('fibMode').value='spiral';drawFibonacci()">Golden Spiral</button>
+<button onclick="document.getElementById('fibMode').value='lucas';drawFibonacci()">Lucas Numbers</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Terms</label><div class="sig"><input type="range" id="fibN" min="10" max="100" value="30" oninput="document.getElementById('fibNv').value=this.value;drawFibonacci()"><input type="number" id="fibNv" value="30" min="5" max="200" onkeydown="if(event.key==='Enter')drawFibonacci()"></div></div>
 <div class="cg"><label>Show</label><select id="fibMode" onchange="drawFibonacci()">
@@ -3589,6 +4075,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- CATALAN TAB -->
 <div id="tcatalan" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Catalan Numbers — Combinatorial Ubiquity</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Catalan numbers C_n = (2n)!/((n+1)!n!) count numerous structures: valid parenthesizations, binary trees with n+1 leaves, paths below diagonal, triangulations of polygons, and more. They satisfy C_n = ΣC_iC_{n-1-i} and have generating function (1-√(1-4x))/(2x). The sequence 1, 1, 2, 5, 14, 42, 132, ... grows like 4ⁿ/(n^{3/2}√π).</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('catNv').value=10;document.getElementById('catMode').value='sequence';drawCatalan()">C_n to 10</button>
+<button onclick="document.getElementById('catMode').value='paths';drawCatalan()">Lattice Paths</button>
+<button onclick="document.getElementById('catMode').value='trees';drawCatalan()">Binary Trees</button>
+<button onclick="document.getElementById('catMode').value='parentheses';drawCatalan()">Parentheses</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max n</label><div class="sig"><input type="range" id="catN" min="5" max="30" value="15" oninput="document.getElementById('catNv').value=this.value;drawCatalan()"><input type="number" id="catNv" value="15" min="1" max="50" onkeydown="if(event.key==='Enter')drawCatalan()"></div></div>
 <div class="cg"><label>Visualization</label><select id="catMode" onchange="drawCatalan()">
@@ -3608,6 +4104,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- ALIQUOT TAB -->
 <div id="taliquot" class="tab">
+<div style="background:linear-gradient(135deg,#ff649622,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">Aliquot Sequences — Iterated Sum of Divisors</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The aliquot sequence of n iterates s(n) = σ(n) - n (sum of proper divisors). Perfect numbers are fixed points (s(n)=n). Amicable pairs satisfy s(a)=b, s(b)=a (e.g., 220↔284). Sociable numbers form longer cycles. The Catalan-Dickson conjecture asks if all sequences either terminate at 0, reach a perfect number, or enter a cycle. The sequence starting at 276 is famously unresolved.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('aliqN').value=12;drawAliquot()">Start at 12</button>
+<button onclick="document.getElementById('aliqN').value=220;drawAliquot()">220 (Amicable)</button>
+<button onclick="document.getElementById('aliqN').value=276;drawAliquot()">276 (Open)</button>
+<button onclick="document.getElementById('aliqN').value=1184;drawAliquot()">1184 (Amicable)</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Starting n</label><div class="sig"><input type="range" id="aliqN" min="2" max="1000" value="276" oninput="document.getElementById('aliqNv').value=this.value"><input type="number" id="aliqNv" value="276" min="2" max="10000" onkeydown="if(event.key==='Enter')drawAliquot()"></div></div>
 <div class="cg"><label>Max Steps</label><input type="number" id="aliqSteps" value="100" min="10" max="1000"></div>
@@ -3626,6 +4132,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- CYCLOTOMIC TAB -->
 <div id="tcyclotomic" class="tab">
+<div style="background:linear-gradient(135deg,#9664ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #9664ff">
+<h3 style="color:#9664ff;margin-bottom:.5rem">Cyclotomic Polynomials — Roots of Unity</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">The n-th cyclotomic polynomial Φₙ(x) is the minimal polynomial of primitive n-th roots of unity. It has degree φ(n) and integer coefficients. The factorization xⁿ - 1 = ∏_{d|n} Φ_d(x) connects roots of unity to divisibility. Cyclotomic fields ℚ(ζₙ) are fundamental in algebraic number theory and Fermat's Last Theorem.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('cycNv').value=12;document.getElementById('cycN').value=12;document.getElementById('cycMode').value='roots';drawCyclotomic()">n=12 Roots</button>
+<button onclick="document.getElementById('cycNv').value=7;document.getElementById('cycN').value=7;document.getElementById('cycMode').value='roots';drawCyclotomic()">n=7 (Prime)</button>
+<button onclick="document.getElementById('cycNv').value=30;document.getElementById('cycN').value=30;document.getElementById('cycMode').value='degrees';drawCyclotomic()">Degrees to 30</button>
+<button onclick="document.getElementById('cycNv').value=105;document.getElementById('cycN').value=105;document.getElementById('cycMode').value='degrees';drawCyclotomic()">n=105 (Φ has coeff ≠ ±1)</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max n</label><div class="sig"><input type="range" id="cycN" min="5" max="50" value="20" oninput="document.getElementById('cycNv').value=this.value;drawCyclotomic()"><input type="number" id="cycNv" value="20" min="1" max="100" onkeydown="if(event.key==='Enter')drawCyclotomic()"></div></div>
 <div class="cg"><label>View</label><select id="cycMode" onchange="drawCyclotomic()">
@@ -3644,6 +4160,18 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- COLLATZ TAB -->
 <div id="tcollatz" class="tab">
+<div style="background:linear-gradient(135deg,rgba(255,100,150,.1),rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ff6496">
+<h3 style="color:#ff6496;margin-bottom:.5rem">Collatz Conjecture — The Simplest Unsolved Problem</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Start with any positive integer n. If even, divide by 2; if odd, multiply by 3 and add 1. The Collatz conjecture states that this sequence always reaches 1. Despite its elementary statement, it remains unproven since 1937. Erdős said "Mathematics is not yet ready for such problems." Trajectories exhibit chaotic behavior with unpredictable stopping times.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('collNv').value=27;document.getElementById('collN').value=27;document.getElementById('collMode').value='single';drawCollatz()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n=27 (111 steps)</button>
+<button onclick="document.getElementById('collNv').value=97;document.getElementById('collN').value=97;document.getElementById('collMode').value='single';drawCollatz()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n=97</button>
+<button onclick="document.getElementById('collNv').value=871;document.getElementById('collN').value=871;document.getElementById('collMode').value='single';drawCollatz()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n=871 (178 steps)</button>
+<button onclick="document.getElementById('collNv').value=6171;document.getElementById('collN').value=6171;document.getElementById('collMode').value='single';drawCollatz()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">n=6171</button>
+<button onclick="document.getElementById('collNv').value=1000;document.getElementById('collMode').value='stopping';drawCollatz()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Stopping Times</button>
+<button onclick="document.getElementById('collNv').value=100;document.getElementById('collMode').value='tree';drawCollatz()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Inverse Tree</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Starting n</label><div class="sig"><input type="range" id="collN" min="1" max="10000" value="27" oninput="document.getElementById('collNv').value=this.value"><input type="number" id="collNv" value="27" min="1" max="1000000" onkeydown="if(event.key==='Enter')drawCollatz()"></div></div>
 <div class="cg"><label>Mode</label><select id="collMode" onchange="drawCollatz()">
@@ -3658,10 +4186,32 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 <div class="viz"><h3>Live Statistics</h3><div id="collLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
 </div>
 <div class="viz"><h3>Trajectory</h3><div id="pcoll1" style="height:280px"></div></div>
+<div style="padding:1rem;background:rgba(255,100,150,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:#ff6496;margin-bottom:.5rem">Collatz Conjecture Theory</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+T(n) = n/2 if n even, 3n+1 if n odd. Conjecture: T^k(n) = 1 for some k.
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>Stopping Time:</strong> Smallest k where T^k(n) < n. Total stopping time reaches 1.</div>
+<div><strong>Record Holders:</strong> n=27 takes 111 steps, reaching max value 9232.</div>
+<div><strong>Verified:</strong> Conjecture verified for all n < 2⁶⁸ ≈ 2.95 × 10²⁰.</div>
+<div><strong>Heuristic:</strong> Average trajectory decreases by factor 3/4 per step (geometric).</div>
+</div>
+</div>
 </div>
 
 <!-- HIGHLY COMPOSITE TAB -->
 <div id="thighcomp" class="tab">
+<div style="background:linear-gradient(135deg,#00d9ff22,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00d9ff">
+<h3 style="color:#00d9ff;margin-bottom:.5rem">Highly Composite Numbers — Divisor Records</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">A highly composite number (HCN) has more divisors than any smaller positive integer. Ramanujan studied them extensively in 1915. HCNs have the form 2^{a₁}·3^{a₂}·5^{a₃}... with a₁ ≥ a₂ ≥ a₃ ≥ ... They're "anti-primes" in some sense. Superior highly composite numbers minimize n^{1/d(n)} and have deep connections to the Riemann Hypothesis.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('hcNv').value=1000;document.getElementById('hcMode').value='hc';drawHighComp()">HCN to 1000</button>
+<button onclick="document.getElementById('hcNv').value=100000;document.getElementById('hcMode').value='hc';drawHighComp()">HCN to 100K</button>
+<button onclick="document.getElementById('hcMode').value='superior';drawHighComp()">Superior HCN</button>
+<button onclick="document.getElementById('hcMode').value='abundant';drawHighComp()">Abundant Numbers</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N</label><div class="sig"><input type="range" id="hcN" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('hcNv').value=this.value"><input type="number" id="hcNv" value="10000" min="10" max="1000000" onkeydown="if(event.key==='Enter')drawHighComp()"></div></div>
 <div class="cg"><label>Type</label><select id="hcMode" onchange="drawHighComp()">
@@ -3680,6 +4230,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- PERFECT NUMBERS TAB -->
 <div id="tperfect" class="tab">
+<div style="background:linear-gradient(135deg,#00ff8822,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #00ff88">
+<h3 style="color:#00ff88;margin-bottom:.5rem">Perfect Numbers — When σ(n) = 2n</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">A perfect number equals the sum of its proper divisors: σ(n) = 2n. Euclid proved 2^{p-1}(2^p - 1) is perfect when 2^p - 1 is prime (Mersenne prime). Euler proved all even perfect numbers have this form. Whether odd perfect numbers exist is unknown — if they do, they exceed 10^{1500}. Only 51 perfect numbers are known.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('perfNv').value=100;document.getElementById('perfMode').value='perfect';drawPerfect()">Find to 100</button>
+<button onclick="document.getElementById('perfNv').value=10000;document.getElementById('perfMode').value='perfect';drawPerfect()">Perfect to 10K</button>
+<button onclick="document.getElementById('perfNv').value=1000;document.getElementById('perfMode').value='abundant';drawPerfect()">Abundant</button>
+<button onclick="document.getElementById('perfNv').value=1000;document.getElementById('perfMode').value='deficient';drawPerfect()">Deficient</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max N</label><div class="sig"><input type="range" id="perfN" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('perfNv').value=this.value"><input type="number" id="perfNv" value="10000" min="10" max="10000000" onkeydown="if(event.key==='Enter')drawPerfect()"></div></div>
 <div class="cg"><label>Show</label><select id="perfMode" onchange="drawPerfect()">
@@ -3698,6 +4258,16 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- TAXICAB TAB -->
 <div id="ttaxicab" class="tab">
+<div style="background:linear-gradient(135deg,#ffd70022,rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Taxicab Numbers — Hardy-Ramanujan & Sums of Cubes</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Taxicab numbers are the smallest integers expressible as sums of two positive cubes in n different ways. Ta(2) = 1729 is famous from Hardy's visit to Ramanujan, who instantly recognized it as "the smallest number expressible as the sum of two cubes in two different ways": 1729 = 1³ + 12³ = 9³ + 10³. These connect to Fermat's Last Theorem and Diophantine equations.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('taxiN').value=2;drawTaxicab()">Ta(2) = 1729</button>
+<button onclick="document.getElementById('taxiN').value=3;drawTaxicab()">Ta(3)</button>
+<button onclick="document.getElementById('taxiN').value=4;drawTaxicab()">Ta(4)</button>
+<button onclick="document.getElementById('taxiMaxv').value=100000;drawTaxicab()">Search to 100K</button>
+</div>
+</div>
 <div class="ctrl">
 <div class="cg"><label>Max Sum</label><div class="sig"><input type="range" id="taxiN" min="1000" max="100000" step="1000" value="20000" oninput="document.getElementById('taxiNv').value=this.value"><input type="number" id="taxiNv" value="20000" min="100" max="1000000" onkeydown="if(event.key==='Enter')drawTaxicab()"></div></div>
 <div class="cg"><label>Min Ways k</label><select id="taxiK" onchange="drawTaxicab()">
@@ -3716,26 +4286,61 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <!-- ELLIPTIC CURVES TAB -->
 <div id="telliptic" class="tab">
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(0,217,255,.05));padding:1rem;border-radius:8px;margin-bottom:1rem;border-left:4px solid #ffd700">
+<h3 style="color:#ffd700;margin-bottom:.5rem">Elliptic Curves — Algebraic Groups & Cryptography</h3>
+<p style="color:var(--txt2);font-size:.9rem;margin-bottom:.75rem">Elliptic curves are cubic curves with a remarkable group structure. The set of rational points E(ℚ) forms a finitely generated abelian group (Mordell-Weil theorem). Over finite fields 𝔽_p, elliptic curves are fundamental to modern cryptography (ECC). The Birch and Swinnerton-Dyer conjecture connects the rank of E(ℚ) to the behavior of L(E,s) at s=1 — one of the seven Millennium Prize Problems.</p>
+<div style="display:flex;flex-wrap:wrap;gap:.5rem">
+<button onclick="document.getElementById('ellA').value=-1;document.getElementById('ellB').value=1;document.getElementById('ellMode').value='real';drawElliptic()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">y²=x³-x+1</button>
+<button onclick="document.getElementById('ellA').value=0;document.getElementById('ellB').value=-2;document.getElementById('ellMode').value='real';drawElliptic()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">y²=x³-2</button>
+<button onclick="document.getElementById('ellA').value=-2;document.getElementById('ellB').value=1;document.getElementById('ellMode').value='real';drawElliptic()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">y²=x³-2x+1</button>
+<button onclick="document.getElementById('ellA').value=-1;document.getElementById('ellB').value=0;document.getElementById('ellMode').value='real';drawElliptic()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">y²=x³-x (CM)</button>
+<button onclick="document.getElementById('ellA').value=-1;document.getElementById('ellB').value=1;document.getElementById('ellP').value=23;document.getElementById('ellMode').value='modp';drawElliptic()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">E(𝔽₂₃)</button>
+<button onclick="document.getElementById('ellA').value=-1;document.getElementById('ellB').value=1;document.getElementById('ellP').value=97;document.getElementById('ellMode').value='modp';drawElliptic()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">E(𝔽₉₇)</button>
+<button onclick="document.getElementById('ellA').value=-1;document.getElementById('ellB').value=1;document.getElementById('ellMode').value='group';drawElliptic()" style="padding:4px 10px;border-radius:4px;border:1px solid var(--bord);background:#1a472a;color:#fff;cursor:pointer">Group Law Demo</button>
+</div>
+</div>
 <div class="ctrl">
-<div class="cg"><label>a coefficient</label><input type="number" id="ellA" value="-1" step="1"></div>
-<div class="cg"><label>b coefficient</label><input type="number" id="ellB" value="1" step="1"></div>
+<div class="cg"><label>a coefficient</label><input type="number" id="ellA" value="-1" step="1" onchange="drawElliptic()"></div>
+<div class="cg"><label>b coefficient</label><input type="number" id="ellB" value="1" step="1" onchange="drawElliptic()"></div>
 <div class="cg"><label>View</label><select id="ellMode" onchange="drawElliptic()">
 <option value="real">Real Points y² = x³ + ax + b</option>
 <option value="modp">Points mod p</option>
 <option value="group">Group Law</option>
 </select></div>
-<div class="cg"><label>Prime p (for mod)</label><input type="number" id="ellP" value="23" min="3" max="1000"></div>
+<div class="cg"><label>Prime p (for mod)</label><input type="number" id="ellP" value="23" min="3" max="1000" onchange="drawElliptic()"></div>
 </div>
 <div class="bg"><button onclick="drawElliptic()">Draw Curve</button><button onclick="screenshotElliptic()">Screenshot</button><button onclick="exportAllElliptic()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvElliptic()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Elliptic Curve y² = x³ + ax + b</h3><canvas id="cell" width="700" height="500"></canvas></div>
 <div class="viz"><h3>Live Statistics</h3><div id="ellLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
 </div>
-<div class="viz"><h3>Point Count</h3><div id="pell1" style="height:280px"></div></div>
+<div class="viz"><h3>Point Distribution</h3><div id="pell1" style="height:280px"></div></div>
+<div style="padding:1rem;background:rgba(255,215,0,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:#ffd700;margin-bottom:.5rem">Elliptic Curve Theory & Number Theory Connections</h4>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+E: y² = x³ + ax + b, Δ = -16(4a³ + 27b²) ≠ 0
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
+<div><strong>Weierstrass Form:</strong> Standard form y² = x³ + ax + b. Smooth iff discriminant Δ ≠ 0.</div>
+<div><strong>Group Law:</strong> Chord-tangent process. P + Q found by line through P,Q, reflect third intersection.</div>
+<div><strong>Hasse's Theorem:</strong> |#E(𝔽_p) - p - 1| ≤ 2√p. Point count close to p+1.</div>
+<div><strong>Mordell-Weil:</strong> E(ℚ) ≅ ℤʳ ⊕ E(ℚ)_tors. Rank r is key invariant.</div>
+<div><strong>BSD Conjecture:</strong> ord_{s=1} L(E,s) = rank(E(ℚ)). Millennium Prize Problem ($1M).</div>
+<div><strong>Cryptography:</strong> ECDSA, ECDH use discrete log hardness on E(𝔽_p). secp256k1 for Bitcoin.</div>
+</div>
+<div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
+<strong style="color:#ffd700">Famous Curves:</strong>
+<div style="font-size:.85rem;color:var(--txt2);margin-top:.5rem">
+• <strong>y² = x³ - x:</strong> Complex multiplication by i, conductor 32<br>
+• <strong>y² = x³ - 2:</strong> Related to Fermat's Last Theorem for n=3<br>
+• <strong>secp256k1:</strong> y² = x³ + 7 over 𝔽_p (p = 2²⁵⁶ - 2³² - 977), used in Bitcoin
+</div>
+</div>
+</div>
 </div>
 
 <div id="ref" class="sec">
-<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>65 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
+<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>65 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, preset examples, multiple charts, CSV export, and click-to-inspect modals.</p></div>
 
 <div class="rs"><h3>Mathematical Credits & Historical Attribution</h3>
 <p style="color:var(--txt2);margin-bottom:1rem">This platform visualizes theorems and concepts developed by brilliant mathematicians over centuries:</p>
@@ -3831,6 +4436,39 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 
 <h4>Quantum-Number Theory (Tab 47)</h4>
 <div class="fb"><strong>Quantum Orbitals</strong> — ψ_{nlm}(r,θ,φ) = R_{nl}(r)Y_l^m(θ,φ). Radial nodes (n-l-1) mirror zeta zeros. Spherical harmonics Y_l^m connect to k-dimensional ball volumes. Quantization ↔ coprimality.</div>
+
+<h4>Prime Patterns (Tabs 48-50)</h4>
+<div class="fb"><strong>Prime k-Tuples</strong> — Generalized twin primes: triplets (p, p+2, p+6), quadruplets (p, p+2, p+6, p+8). Hardy-Littlewood conjecture predicts density. Admissibility criterion.</div>
+<div class="fb"><strong>Carmichael Numbers</strong> — Composite n with a^n ≡ a (mod n) for all a. Pass Fermat test. 561 = 3·11·17 is smallest. Korselt's criterion. Infinitely many exist (1994).</div>
+<div class="fb"><strong>Mersenne Primes</strong> — M_p = 2^p - 1 where p is prime. Connected to perfect numbers. Lucas-Lehmer test. GIMPS project. 51 known, largest has 24M+ digits.</div>
+
+<h4>Rational Approximation (Tabs 51-52)</h4>
+<div class="fb"><strong>Continued Fractions</strong> — [a₀; a₁, a₂, ...] gives best rational approximations. φ = [1;1,1,...] slowest convergence. π = [3;7,15,1,292,...]. Quadratic irrationals are periodic.</div>
+<div class="fb"><strong>Stern-Brocot Tree</strong> — Complete binary tree containing all positive rationals exactly once. Mediant property. Path encodes continued fraction. Connects to Farey sequences.</div>
+
+<h4>Diophantine Equations (Tabs 53-55)</h4>
+<div class="fb"><strong>Pythagorean Triples</strong> — (a,b,c) with a²+b²=c². Parametrized by a=m²-n², b=2mn, c=m²+n². Tree structure from (3,4,5). Infinitely many primitives.</div>
+<div class="fb"><strong>Sum of Squares</strong> — r₂(n) counts n=a²+b². Fermat: prime p=□+□ iff p≡1(mod 4). Jacobi: r₂(n)=4(d₁(n)-d₃(n)). Gauss circle problem connection.</div>
+<div class="fb"><strong>Quadratic Residues</strong> — QR mod p: x²≡a has solution. Legendre symbol (a/p). Quadratic reciprocity: (p/q)(q/p)=(-1)^{(p-1)(q-1)/4}. Gauss's "golden theorem".</div>
+
+<h4>Combinatorial Sequences (Tabs 56-59)</h4>
+<div class="fb"><strong>Partitions p(n)</strong> — Ways to write n as sum. p(5)=7. Hardy-Ramanujan asymptotic. Ramanujan congruences: p(5n+4)≡0(mod 5). Generating function ∏(1-x^k)^{-1}.</div>
+<div class="fb"><strong>Bernoulli Numbers</strong> — B_n in power sums and ζ(-n). ζ(2n)=(-1)^{n+1}B_{2n}(2π)^{2n}/(2(2n)!). B₂=1/6 → ζ(2)=π²/6. Tangent Taylor coefficients.</div>
+<div class="fb"><strong>Fibonacci</strong> — F_n=F_{n-1}+F_{n-2}. Ratio→φ=(1+√5)/2. Binet formula. Zeckendorf representation. Lucas numbers. Golden spiral. Ubiquitous in nature.</div>
+<div class="fb"><strong>Catalan Numbers</strong> — C_n=(2n)!/((n+1)!n!). Count: parentheses, binary trees, lattice paths, triangulations. C_n~4ⁿ/(n^{3/2}√π). Over 200 combinatorial interpretations.</div>
+
+<h4>Divisor Theory (Tabs 60-63)</h4>
+<div class="fb"><strong>Aliquot Sequences</strong> — Iterate s(n)=σ(n)-n. Perfect: fixed point. Amicable: 2-cycle (220↔284). Sociable: longer cycles. 276 sequence: open problem after 10⁹ iterations.</div>
+<div class="fb"><strong>Cyclotomic</strong> — Φ_n(x) minimal polynomial of primitive n-th roots. deg=φ(n). x^n-1=∏_{d|n}Φ_d(x). Integer coefficients (remarkable!). Φ₁₀₅ first with |coeff|>1.</div>
+<div class="fb"><strong>Highly Composite</strong> — d(n)>d(m) for all m<n. Ramanujan (1915). Form 2^a·3^b·5^c... with a≥b≥c. "Anti-primes". Robin's inequality ↔ RH.</div>
+<div class="fb"><strong>Perfect Numbers</strong> — σ(n)=2n. Euclid: 2^{p-1}(2^p-1) perfect when M_p prime. All even perfect have this form. Odd perfect: unknown if exist (if so, >10^{1500}).</div>
+
+<h4>Famous Numbers (Tabs 64-65)</h4>
+<div class="fb"><strong>Taxicab</strong> — Ta(n) = smallest sum of cubes n ways. Ta(2)=1729 (Hardy-Ramanujan). 1729=1³+12³=9³+10³. Ta(3)=87539319. Fermat-Wiles connection.</div>
+<div class="fb"><strong>Elliptic Curves</strong> — y²=x³+ax+b forms abelian group. Mordell-Weil: E(ℚ)≅ℤʳ⊕torsion. BSD conjecture (Millennium Prize). ECDSA cryptography. secp256k1 for Bitcoin.</div>
+
+<h4>Dynamics (Tab 66: Collatz)</h4>
+<div class="fb"><strong>Collatz Conjecture</strong> — T(n)=n/2 or 3n+1. Conjecture: all sequences reach 1. Simplest unsolved problem. Verified to 2^68. n=27 takes 111 steps. Erdős: "not ready for such problems".</div>
 </div>
 
 <div class="rs"><h3>Key Theorems Visualized</h3>
@@ -4314,85 +4952,153 @@ out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b)
 // Screenshot ALL elements on a tab (canvases + charts + stats)
 async function screenshotTabAll(config){
 const {canvases=[], charts=[], dashId, title, filename} = config;
-const scale=2, pad=30, gap=20, chartH=300;
+const scale=2, pad=40, gap=20;
 const loadedCanvases=canvases.map(id=>document.getElementById(id)).filter(c=>c);
 const loadedCharts=charts.map(id=>document.getElementById(id)).filter(p=>p&&p.offsetWidth);
 const dashData=dashId?extractDashboardData(dashId):{cards:[],sections:[]};
 const isDk=isDark();
 
-// Calculate dimensions
-let totalH=60; // title
-const canvasH=loadedCanvases.length?Math.max(...loadedCanvases.map(c=>c.height))+gap:0;
-const canvasW=loadedCanvases.length?loadedCanvases.reduce((a,c)=>a+c.width+gap,0)-gap:0;
-totalH+=canvasH;
+// Calculate max width needed
+let maxW = 800;
+loadedCanvases.forEach(c => { if(c.width > maxW) maxW = c.width; });
 
-// Charts in 2 columns
-const chartRows=Math.ceil(loadedCharts.length/2);
-const chartTotalH=chartRows*(chartH+gap);
-totalH+=chartTotalH;
+// Total width with padding
+const totalW = maxW + pad * 2;
+const chartW = (totalW - pad * 2 - gap) / 2;
+const chartH = 280;
 
-// Dashboard
-const dashH=dashData.cards.length||dashData.sections.length?300:0;
-totalH+=dashH;
-totalH+=pad*2+40; // padding + footer
+// Calculate total height
+let totalH = 70; // Title + subtitle
 
-const totalW=Math.max(canvasW,800)+pad*2;
+// Add canvas heights (stacked vertically, each with label)
+loadedCanvases.forEach(c => {
+totalH += c.height + 35; // canvas + label + gap
+});
+
+// Add chart heights (2-column grid)
+const chartRows = Math.ceil(loadedCharts.length / 2);
+totalH += chartRows * (chartH + 30); // charts + labels
+
+// Add dashboard height
+const hasDash = dashData.cards.length > 0 || dashData.sections.length > 0;
+const dashH = hasDash ? 320 : 0;
+totalH += dashH;
+
+// Footer
+totalH += 40;
 
 // Create output canvas
-const out=document.createElement('canvas');
-out.width=totalW*scale;
-out.height=totalH*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const out = document.createElement('canvas');
+out.width = totalW * scale;
+out.height = totalH * scale;
+const ctx = out.getContext('2d');
+ctx.scale(scale, scale);
 
 // Background
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';
-ctx.fillRect(0,0,totalW,totalH);
+ctx.fillStyle = isDk ? '#0d1321' : '#ffffff';
+ctx.fillRect(0, 0, totalW, totalH);
 
 // Title
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';
-ctx.font='bold 20px Segoe UI';ctx.textAlign='center';
-ctx.fillText(title+' — Complete Export',totalW/2,pad+15);
-let cy=pad+40;
+ctx.fillStyle = isDk ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 22px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(title, totalW / 2, pad);
 
-// Draw canvases side by side
-if(loadedCanvases.length){
-let cx=pad;
-loadedCanvases.forEach(c=>{
-ctx.drawImage(c,cx,cy,c.width,c.height);
-cx+=c.width+gap;
+ctx.fillStyle = isDk ? '#00d9ff' : '#0066cc';
+ctx.font = '12px Segoe UI';
+ctx.fillText('Complete Tab Export — All Visualizations + Statistics', totalW / 2, pad + 20);
+
+let cy = pad + 45;
+
+// Draw each canvas with label
+loadedCanvases.forEach((c, i) => {
+// Label
+ctx.fillStyle = isDk ? '#00d9ff' : '#0066cc';
+ctx.font = 'bold 12px Segoe UI';
+ctx.textAlign = 'left';
+ctx.fillText(`Canvas ${i + 1}: ${c.id}`, pad, cy);
+cy += 18;
+
+// Center the canvas
+const cx = (totalW - c.width) / 2;
+ctx.drawImage(c, cx, cy, c.width, c.height);
+
+// Border around canvas
+ctx.strokeStyle = isDk ? '#334' : '#ddd';
+ctx.lineWidth = 1;
+ctx.strokeRect(cx - 1, cy - 1, c.width + 2, c.height + 2);
+
+cy += c.height + gap;
 });
-cy+=canvasH;
-}
 
 // Draw charts in 2-column grid
-if(loadedCharts.length){
-const chartW=(totalW-pad*2-gap)/2;
-const chartImgs=await Promise.all(loadedCharts.map(p=>Plotly.toImage(p,{format:'png',width:chartW,height:chartH,scale:2})));
-const chartLoaded=await Promise.all(chartImgs.map(src=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=src;})));
-chartLoaded.forEach((img,i)=>{
-const col=i%2, row=Math.floor(i/2);
-const x=pad+col*(chartW+gap);
-const y=cy+row*(chartH+gap);
-ctx.drawImage(img,x,y,chartW,chartH);
+if (loadedCharts.length) {
+ctx.fillStyle = isDk ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'left';
+ctx.fillText('Charts:', pad, cy);
+cy += 20;
+
+try {
+const chartImgs = await Promise.all(loadedCharts.map(p => 
+Plotly.toImage(p, { format: 'png', width: chartW * scale, height: chartH * scale })
+));
+const chartLoaded = await Promise.all(chartImgs.map(src => new Promise(r => {
+const img = new Image();
+img.onload = () => r(img);
+img.onerror = () => r(null);
+img.src = src;
+})));
+
+chartLoaded.forEach((img, i) => {
+if (!img) return;
+const col = i % 2;
+const row = Math.floor(i / 2);
+const x = pad + col * (chartW + gap);
+const y = cy + row * (chartH + 10);
+ctx.drawImage(img, x, y, chartW, chartH);
 });
-cy+=chartTotalH;
+
+cy += chartRows * (chartH + 10) + gap;
+} catch (e) {
+console.error('Chart export error:', e);
+}
 }
 
 // Draw dashboard
-if(dashH){
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';
-ctx.fillRect(pad,cy,totalW-pad*2,dashH-20);
-ctx.textAlign='left';
-renderDashboard(ctx,dashData,pad+10,cy+15,totalW-pad*2-20,isDk);
-cy+=dashH;
+if (hasDash) {
+ctx.fillStyle = isDk ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'left';
+ctx.fillText('Live Statistics Dashboard:', pad, cy);
+cy += 15;
+
+ctx.fillStyle = isDk ? '#151b2d' : '#f8f8f8';
+ctx.fillRect(pad, cy, totalW - pad * 2, dashH - 40);
+ctx.strokeStyle = isDk ? '#334' : '#ddd';
+ctx.strokeRect(pad, cy, totalW - pad * 2, dashH - 40);
+
+ctx.textAlign = 'left';
+renderDashboard(ctx, dashData, pad + 15, cy + 20, totalW - pad * 2 - 30, isDk);
+cy += dashH - 20;
 }
 
 // Footer
-ctx.fillStyle=isDk?'#506080':'#888';
-ctx.font='11px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — @7dview — wessengetachew.github.io',totalW/2,totalH-15);
+ctx.fillStyle = isDk ? '#506080' : '#888';
+ctx.font = '11px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText('Möbius Shell Sieve — @7dview — wessengetachew.github.io', totalW / 2, totalH - 15);
 
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;a.click();},'image/png',1.0);
+// Timestamp
+ctx.font = '9px Segoe UI';
+ctx.fillText(new Date().toISOString().split('T')[0], totalW / 2, totalH - 5);
+
+out.toBlob(b => {
+const a = document.createElement('a');
+a.href = URL.createObjectURL(b);
+a.download = filename;
+a.click();
+}, 'image/png', 1.0);
 }
 
 // Tab-specific export all functions
