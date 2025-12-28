@@ -141,8 +141,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <h3>Key Insights</h3>
 <ul>
 <li><strong>ζ(n)^(-1) Density:</strong> The inverse zeta function emerges as the natural density of primitive integers.</li>
-<li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</li>
-<li><strong>Multi-Scale Sieve:</strong> The Möbius inversion acts as a geometric filter.</li>
+<li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</strong>Multi-Scale Sieve:</strong> The Möbius inversion acts as a geometric filter.</li>
 <li><strong>Dimension Universal:</strong> The formula holds for all dimensions n ≥ 3.</li>
 <li><strong>GCD Multiplication Table:</strong> The 2D lattice within a circle is fundamentally a bounded GCD multiplication table. Each point (x,y) represents an entry where gcd(x,y) determines the "cell value". The primitive points (GCD=1) correspond to coprime pairs—the units in the multiplicative structure.</li>
 <li><strong>Four-Quadrant Symmetry:</strong> The lattice exhibits 4-fold rotational symmetry, mirroring the structure of modular arithmetic tables when viewed as rings.</li>
@@ -435,6 +434,11 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <button class="tbtn" onclick="showTab('tzerocount',this)">N(T) Zeros</button>
 <button class="tbtn" onclick="showTab('targand',this)">ζ(s) Argand</button>
 <button class="tbtn" onclick="showTab('tzetareal',this)">ζ(s) Real</button>
+<button class="tbtn" onclick="showTab('tmontgomery',this)">Montgomery</button>
+<button class="tbtn" onclick="showTab('tgue',this)">GUE Stats</button>
+<button class="tbtn" onclick="showTab('tprimerace',this)">Prime Races</button>
+<button class="tbtn" onclick="showTab('tlfunc',this)">L-functions</button>
+<button class="tbtn" onclick="showTab('tlfunczeros',this)">L-func Zeros</button>
 </div>
 
 <div id="t2d" class="tab active">
@@ -3094,8 +3098,213 @@ The functional equation ζ(s) = 2ˢπ^{s-1}sin(πs/2)Γ(1-s)ζ(1-s) connects val
 </div>
 </div>
 
+<div id="tmontgomery" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max Zeros <span class="tip" title="Number of zeros to analyze">?</span></label><div class="sig"><input type="range" id="montN" min="10" max="80" value="50" oninput="document.getElementById('montNv').value=this.value;drawMontgomery()"><input type="number" id="montNv" value="50" min="5" max="80" onkeydown="if(event.key==='Enter')drawMontgomery()"></div></div>
+<div class="cg"><label>Bin Width <span class="tip" title="Histogram bin width">?</span></label><div class="sig"><input type="range" id="montBin" min="0.05" max="0.5" step="0.05" value="0.1" oninput="drawMontgomery()"><span id="montBinV" style="color:var(--txt2)">0.1</span></div></div>
+<div class="cg"><label>View Mode</label><select id="montMode" onchange="drawMontgomery()">
+<option value="histogram">Pair Correlation Histogram</option>
+<option value="scatter">Zero Spacing Scatter</option>
+<option value="cumulative">Cumulative Distribution</option>
+</select></div>
+<div class="cg"><label>Show GUE Prediction</label><input type="checkbox" id="montGUE" checked onchange="drawMontgomery()"></div>
+</div>
+<div class="bg"><button onclick="drawMontgomery()">Compute</button><button onclick="screenshotMontgomery()">Screenshot</button><button class="s" onclick="csvMontgomery()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Montgomery Pair Correlation — Zero Spacing Statistics</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Distribution of normalized gaps between consecutive zeros of ζ(s).</p>
+<canvas id="cmontgomery" width="800" height="500"></canvas><div class="al" id="almontgomery"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('montLiveStats','Montgomery_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="montLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,200,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Montgomery Pair Correlation Conjecture</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Hugh Montgomery (1973) discovered that the pair correlation of zeros of ζ(s) matches the eigenvalue statistics of random Hermitian matrices from the Gaussian Unitary Ensemble (GUE). The pair correlation function R₂(x) = 1 - (sin(πx)/(πx))² describes how zeros "repel" each other.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Dyson's Connection):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Freeman Dyson recognized Montgomery's result matched random matrix theory. This suggests deep connections between quantum chaos, nuclear physics (energy levels), and prime numbers. The zeros behave like eigenvalues of a random Hamiltonian!
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+R₂(x) = 1 - (sin(πx)/(πx))² &nbsp;&nbsp;|&nbsp;&nbsp; Zeros repel: P(gap→0) → 0
+</div>
+</div>
+</div>
+
+<div id="tgue" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max Zeros <span class="tip" title="Number of zeros to analyze">?</span></label><div class="sig"><input type="range" id="gueN" min="10" max="80" value="50" oninput="document.getElementById('gueNv').value=this.value;drawGUE()"><input type="number" id="gueNv" value="50" min="5" max="80" onkeydown="if(event.key==='Enter')drawGUE()"></div></div>
+<div class="cg"><label>View Mode</label><select id="gueMode" onchange="drawGUE()">
+<option value="spacing">Nearest Neighbor Spacing</option>
+<option value="unfolded">Unfolded Zeros</option>
+<option value="wigner">Wigner vs Poisson</option>
+</select></div>
+<div class="cg"><label>Show Wigner Surmise</label><input type="checkbox" id="gueWigner" checked onchange="drawGUE()"></div>
+<div class="cg"><label>Show Poisson</label><input type="checkbox" id="guePoisson" checked onchange="drawGUE()"></div>
+</div>
+<div class="bg"><button onclick="drawGUE()">Compute</button><button onclick="screenshotGUE()">Screenshot</button><button class="s" onclick="csvGUE()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>GUE Random Matrix Statistics</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Nearest neighbor spacing distribution compared to random matrix predictions.</p>
+<canvas id="cgue" width="800" height="500"></canvas><div class="al" id="algue"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('gueLiveStats','GUE_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="gueLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,200,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Random Matrix Theory & Zeta Zeros</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Wigner Surmise:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+For GUE matrices, Wigner derived the nearest neighbor spacing distribution: P(s) = (32/π²)s² exp(-4s²/π). This shows level repulsion — small spacings are suppressed. Zeta zeros follow this remarkably well!
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #ff6496">
+<strong style="color:#ff6496">Poisson (Random) vs GUE:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Random (uncorrelated) levels have Poisson spacing: P(s) = exp(-s). This has maximum at s=0, meaning small gaps are most likely. GUE zeros are anti-correlated, with P(0)=0. Zeta zeros behave like GUE, not Poisson!
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+Wigner: P(s) = (32/π²)s²e^{-4s²/π} &nbsp;|&nbsp; Poisson: P(s) = e^{-s}
+</div>
+</div>
+</div>
+
+<div id="tprimerace" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max x <span class="tip" title="Count primes up to x">?</span></label><div class="sig"><input type="range" id="raceX" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('raceXv').value=this.value"><input type="number" id="raceXv" value="10000" min="100" max="1000000" onkeydown="if(event.key==='Enter')drawPrimeRace()"></div></div>
+<div class="cg"><label>Modulus q</label><select id="raceQ" onchange="drawPrimeRace()">
+<option value="4">mod 4: 1 vs 3</option>
+<option value="3">mod 3: 1 vs 2</option>
+<option value="8">mod 8: 1,3,5,7</option>
+<option value="5">mod 5: 1,2,3,4</option>
+<option value="6">mod 6: 1 vs 5</option>
+</select></div>
+<div class="cg"><label>View Mode</label><select id="raceMode" onchange="drawPrimeRace()">
+<option value="difference">Difference π(x;q,a) - π(x;q,b)</option>
+<option value="ratio">Ratio π(x;q,a) / π(x;q,b)</option>
+<option value="both">Both Counts</option>
+</select></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('raceXv').value=1000;document.getElementById('raceX').value=1000;drawPrimeRace()">x=1K</button>
+<button onclick="document.getElementById('raceXv').value=10000;document.getElementById('raceX').value=10000;drawPrimeRace()">x=10K</button>
+<button onclick="document.getElementById('raceXv').value=100000;document.getElementById('raceX').value=100000;drawPrimeRace()">x=100K</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawPrimeRace()">Compute</button><button onclick="screenshotPrimeRace()">Screenshot</button><button class="s" onclick="csvPrimeRace()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Prime Races — Chebyshev Bias Visualization</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Which residue class has more primes? Track the race as x increases.</p>
+<canvas id="cprimerace" width="800" height="500"></canvas><div class="al" id="alprimerace"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('raceLiveStats','PrimeRace_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="raceLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,200,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Chebyshev's Bias in Prime Races</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">The Phenomenon:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Chebyshev (1853) noticed that primes ≡ 3 (mod 4) seem to outnumber primes ≡ 1 (mod 4). Though both classes have density 1/2 asymptotically, non-quadratic residues "win" more often. This is the Chebyshev bias.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Rubinstein-Sarnak (1994):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Under GRH, primes ≡ 3 (mod 4) lead ~99.59% of the "time" (in logarithmic density). The bias connects to zeros of L-functions: L(s,χ₄) with χ₄(-1)=-1 causes the asymmetry.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+π(x;4,3) > π(x;4,1) for ~99.59% of x &nbsp;&nbsp;|&nbsp;&nbsp; First 3→1 lead change: x = 26861
+</div>
+</div>
+</div>
+
+<div id="tlfunc" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Modulus q <span class="tip" title="Character modulus">?</span></label><div class="sig"><input type="range" id="lfuncQ" min="3" max="50" value="5" oninput="document.getElementById('lfuncQv').value=this.value;drawLfunc()"><input type="number" id="lfuncQv" value="5" min="3" max="100" onkeydown="if(event.key==='Enter')drawLfunc()"></div></div>
+<div class="cg"><label>s value (real part)</label><div class="sig"><input type="range" id="lfuncS" min="1.1" max="10" step="0.1" value="2" oninput="document.getElementById('lfuncSv').value=this.value;drawLfunc()"><input type="number" id="lfuncSv" value="2" min="1.01" max="20" step="0.1" onkeydown="if(event.key==='Enter')drawLfunc()"></div></div>
+<div class="cg"><label>View Mode</label><select id="lfuncMode" onchange="drawLfunc()">
+<option value="values">L(s,χ) Values</option>
+<option value="characters">Character Table</option>
+<option value="euler">Euler Product</option>
+</select></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('lfuncQv').value=3;document.getElementById('lfuncQ').value=3;drawLfunc()">q=3</button>
+<button onclick="document.getElementById('lfuncQv').value=4;document.getElementById('lfuncQ').value=4;drawLfunc()">q=4</button>
+<button onclick="document.getElementById('lfuncQv').value=5;document.getElementById('lfuncQ').value=5;drawLfunc()">q=5</button>
+<button onclick="document.getElementById('lfuncQv').value=7;document.getElementById('lfuncQ').value=7;drawLfunc()">q=7</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawLfunc()">Compute</button><button onclick="screenshotLfunc()">Screenshot</button><button class="s" onclick="csvLfunc()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Dirichlet L-Functions — L(s,χ) for mod q Characters</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Compute L(s,χ) for all Dirichlet characters χ mod q.</p>
+<canvas id="clfunc" width="800" height="500"></canvas><div class="al" id="allfunc"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('lfuncLiveStats','Lfunc_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="lfuncLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,200,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Dirichlet L-Functions & Generalized RH</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Definition:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+For a Dirichlet character χ mod q: L(s,χ) = Σ χ(n)/nˢ = ∏ₚ (1-χ(p)/pˢ)⁻¹. When χ=χ₀ (principal), L(s,χ₀) = ζ(s)∏_{p|q}(1-p⁻ˢ). Non-principal L-functions are entire (no pole).
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Generalized Riemann Hypothesis:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+GRH states that ALL nontrivial zeros of ALL Dirichlet L-functions lie on Re(s)=½. This implies strong results about prime distribution in arithmetic progressions and the Chebyshev bias.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+L(s,χ) = Σ χ(n)/nˢ = ∏ₚ (1-χ(p)p⁻ˢ)⁻¹ &nbsp;&nbsp;|&nbsp;&nbsp; GRH: all zeros on Re(s)=½
+</div>
+</div>
+</div>
+
+<div id="tlfunczeros" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Modulus q <span class="tip" title="Character modulus">?</span></label><div class="sig"><input type="range" id="lzeroQ" min="3" max="20" value="5" oninput="document.getElementById('lzeroQv').value=this.value;drawLfuncZeros()"><input type="number" id="lzeroQv" value="5" min="3" max="50" onkeydown="if(event.key==='Enter')drawLfuncZeros()"></div></div>
+<div class="cg"><label>t Range <span class="tip" title="Imaginary part range">?</span></label><div class="sig"><input type="range" id="lzeroT" min="10" max="100" value="30" oninput="document.getElementById('lzeroTv').value=this.value;drawLfuncZeros()"><input type="number" id="lzeroTv" value="30" min="5" max="200" onkeydown="if(event.key==='Enter')drawLfuncZeros()"></div></div>
+<div class="cg"><label>View Mode</label><select id="lzeroMode" onchange="drawLfuncZeros()">
+<option value="zeros">Zero Locations</option>
+<option value="argand">Domain Coloring</option>
+<option value="critical">Critical Line</option>
+</select></div>
+<div class="cg"><label>Show All Characters</label><input type="checkbox" id="lzeroAll" checked onchange="drawLfuncZeros()"></div>
+</div>
+<div class="bg"><button onclick="drawLfuncZeros()">Compute</button><button onclick="screenshotLfuncZeros()">Screenshot</button></div>
+<div class="g2">
+<div class="viz"><h3>L-Function Zeros — Zeros of L(s,χ) on Critical Line</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Visualize zeros of Dirichlet L-functions. All should lie on Re(s)=½ (GRH).</p>
+<canvas id="clfunczeros" width="800" height="600"></canvas><div class="al" id="allfunczeros"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('lzeroLiveStats','Lfunc_Zeros_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="lzeroLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,200,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Zeros of Dirichlet L-Functions</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Zero Distribution:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Each primitive character χ mod q has its own L-function with infinitely many zeros in the critical strip. The zero-free region and zero density affect prime distribution in arithmetic progressions.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #ff6496">
+<strong style="color:#ff6496">Connection to Prime Races:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The zeros of L(s,χ) determine oscillations in π(x;q,a). Low-lying zeros (small imaginary part) cause the Chebyshev bias. If a zero existed with Re(ρ)>½, prime distribution in progressions would be badly behaved.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+N(T,χ) ~ (T/π)log(qT/2πe) &nbsp;&nbsp;|&nbsp;&nbsp; Each L(s,χ) has infinitely many zeros
+</div>
+</div>
+</div>
+
 <div id="ref" class="sec">
-<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>41 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
+<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>46 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
 
 <div class="rs"><h3>Mathematical Credits & Historical Attribution</h3>
 <p style="color:var(--txt2);margin-bottom:1rem">This platform visualizes theorems and concepts developed by brilliant mathematicians over centuries:</p>
@@ -3170,13 +3379,24 @@ The functional equation ζ(s) = 2ˢπ^{s-1}sin(πs/2)Γ(1-s)ζ(1-s) connects val
 <div class="fb"><strong>Ulam Spiral</strong> — Integers on square spiral, primes highlighted. Diagonal patterns reveal quadratic polynomials. Euler's n²+n+41. Discovered 1963.</div>
 <div class="fb"><strong>Sacks Spiral</strong> — Primes at (√n, 2π√n) Archimedean spiral. Parabolic arms from quadratic sequences. Squares on x-axis. Visual prime clustering.</div>
 
-<h4>Critical Line (Tabs 36-38)</h4>
+<h4>Critical Line (Tabs 36-41)</h4>
 <div class="fb"><strong>Hardy Z(t)</strong> — Z(t)=e^{iθ(t)}ζ(½+it) is REAL. Sign changes = zeros on critical line. RH: all zeros are sign changes. First zeros: 14.135, 21.022, 25.011...</div>
 <div class="fb"><strong>Gram Points</strong> — g_n where θ(g_n)=nπ. Organize zero counting. Gram's Law: one zero per interval (~73%). Violations form Gram blocks. Lehmer pairs.</div>
 <div class="fb"><strong>Explicit π(x)</strong> — π(x)=Li(x)-Σ_ρ Li(x^ρ)-log(2)+... Each zero ρ contributes oscillation. Animation builds π(x) from zeros. RH ⟹ O(√x log x) error.</div>
 <div class="fb"><strong>N(T) Zeros</strong> — Zero counting N(T)=#{ρ: 0<Im(ρ)<T}. Riemann-von Mangoldt: N(T)~(T/2π)log(T/2πe). Error S(T) encodes zero spacing.</div>
 <div class="fb"><strong>ζ(s) Argand</strong> — Domain coloring of ζ(s) in complex plane. Phase→hue, modulus→brightness. Zeros appear as color wheels. Critical line Re(s)=½ highlighted.</div>
 <div class="fb"><strong>ζ(s) Real</strong> — Zeta on real axis: pole at s=1, Basel ζ(2)=π²/6, Apéry ζ(3), trivial zeros at s=-2,-4,-6,... Functional equation visualization.</div>
+
+<h4>Zero Statistics (Tabs 42-43)</h4>
+<div class="fb"><strong>Montgomery Pair Correlation</strong> — Spacing between zeros follows R₂(x) = 1-(sin πx/πx)². Discovered by Hugh Montgomery (1973). Connection to GUE random matrices.</div>
+<div class="fb"><strong>GUE Statistics</strong> — Zeros follow Gaussian Unitary Ensemble (random matrix) statistics. Wigner surmise: P(s)=(π/2)s·exp(-πs²/4). Level repulsion: P(0)=0.</div>
+
+<h4>Prime Races (Tab 44)</h4>
+<div class="fb"><strong>Prime Races</strong> — Chebyshev bias: primes ≡3 (mod 4) outnumber ≡1 (mod 4) about 99.59% of the time! Rubinstein-Sarnak (1994) proved this under GRH.</div>
+
+<h4>L-Functions (Tabs 45-46)</h4>
+<div class="fb"><strong>Dirichlet L-functions</strong> — L(s,χ) = Σχ(n)/nˢ for Dirichlet characters χ mod q. Principal L-function equals ζ(s)×(local factors). Others are entire.</div>
+<div class="fb"><strong>L-function Zeros</strong> — Generalized RH: all nontrivial zeros of all L(s,χ) lie on Re(s)=½. Low-lying zeros cause the Chebyshev bias in prime races.</div>
 </div>
 
 <div class="rs"><h3>Key Theorems Visualized</h3>
@@ -3315,7 +3535,7 @@ const gridC=()=>isDark()?'rgba(0,217,255,0.12)':'rgba(0,102,204,0.15)';
 const bordC=()=>isDark()?'rgba(0,217,255,0.5)':'rgba(0,102,204,0.6)';
 function toggleTheme(){document.body.classList.toggle('light');document.getElementById('thm').textContent=isDark()?'D':'L';draw2D();if(document.getElementById('t3d').classList.contains('active'))draw3D();}
 function showSec(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.snav .nbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
-function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();if(id==='tmert')drawMertens();if(id==='tcheb')drawChebyshev();if(id==='tli')drawLi();if(id==='tdiv')drawDivisor();if(id==='tliou')drawLiouville();if(id==='tmang')drawMangoldt();if(id==='tram')drawRamanujan();if(id==='tulam')drawUlam();if(id==='tsacks')drawSacks();if(id==='thardy')drawHardy();if(id==='tgram')drawGram();if(id==='texplicit')drawExplicit();if(id==='tzerocount')drawZeroCount();if(id==='targand')drawArgand();if(id==='tzetareal')drawZetaReal();}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();if(id==='tmert')drawMertens();if(id==='tcheb')drawChebyshev();if(id==='tli')drawLi();if(id==='tdiv')drawDivisor();if(id==='tliou')drawLiouville();if(id==='tmang')drawMangoldt();if(id==='tram')drawRamanujan();if(id==='tulam')drawUlam();if(id==='tsacks')drawSacks();if(id==='thardy')drawHardy();if(id==='tgram')drawGram();if(id==='texplicit')drawExplicit();if(id==='tzerocount')drawZeroCount();if(id==='targand')drawArgand();if(id==='tzetareal')drawZetaReal();if(id==='tmontgomery')drawMontgomery();if(id==='tgue')drawGUE();if(id==='tprimerace')drawPrimeRace();if(id==='tlfunc')drawLfunc();if(id==='tlfunczeros')drawLfuncZeros();}
 
 async function screenshotDashboard(elemId, title='Dashboard'){
 const el=document.getElementById(elemId);if(!el)return;
@@ -3483,8 +3703,8 @@ ${smithEnabled?`<span>Smith Chart:</span><span style="color:#00ff88">ON (α=${sm
 <div style="margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">GCD Distribution</strong>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
-<span>Min GCD:</span><span style="color:var(--txt)">${Math.min(...gcds)}</span>
-<span>Max GCD:</span><span style="color:var(--txt)">${Math.max(...gcds)}</span>
+<span>Min GCD:</span><span style="color:var(--txt)">${gcds.reduce((a,b)=>Math.min(a,b),Infinity)}</span>
+<span>Max GCD:</span><span style="color:var(--txt)">${gcds.reduce((a,b)=>Math.max(a,b),0)}</span>
 <span>Avg GCD:</span><span style="color:var(--txt)">${fmt(gcds.reduce((a,b)=>a+b,0)/tot)}</span>
 <span>Unique GCDs:</span><span style="color:var(--txt)">${gcdKeys.length}</span>
 </div>
@@ -3712,8 +3932,8 @@ ${smithEnabled?`<span>Smith Chart:</span><span style="color:#00ff88">ON (α=${sm
 <div style="margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">GCD Distribution</strong>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
-<span>Min GCD:</span><span style="color:var(--txt)">${Math.min(...rawPts.map(p=>p.g))}</span>
-<span>Max GCD:</span><span style="color:var(--txt)">${Math.max(...rawPts.map(p=>p.g))}</span>
+<span>Min GCD:</span><span style="color:var(--txt)">${rawPts.reduce((m,p)=>Math.min(m,p.g),Infinity)}</span>
+<span>Max GCD:</span><span style="color:var(--txt)">${rawPts.reduce((m,p)=>Math.max(m,p.g),0)}</span>
 <span>Unique GCDs:</span><span style="color:var(--txt)">${gcd3dKeys.length}</span>
 </div>
 <div style="margin-top:8px;font-size:.75rem">
@@ -3778,8 +3998,8 @@ D.err.push({r,total,prim,th,primTh,err,primErr,normErr,relE:th>0?Math.abs(err)/t
 // Statistics
 const meanErr=errs.reduce((a,b)=>a+b,0)/errs.length;
 const rmsErr=Math.sqrt(errs.reduce((a,b)=>a+b*b,0)/errs.length);
-const maxAbsErr=Math.max(...errs.map(Math.abs));
-const minAbsErr=Math.min(...errs.map(Math.abs));
+const maxAbsErr=errs.reduce((m,e)=>Math.max(m,Math.abs(e)),0);
+const minAbsErr=errs.reduce((m,e)=>Math.min(m,Math.abs(e)),Infinity);
 
 // Chart 1: Theory vs Actual
 const traces1=[
@@ -3790,7 +4010,7 @@ if(compare==='primitive'||compare==='both'){
 traces1.push({x:rs,y:primThs,name:'Prim Theory',mode:'lines',line:{color:'#00ff88',width:2,dash:'dash'}});
 traces1.push({x:rs,y:prims,name:'Primitive',mode:'markers',marker:{color:'#ffd700',size:4}});}
 Plotly.newPlot('pe1',traces1,{...plo(),xaxis:{title:'Radius R'},yaxis:{title:'Count',type:useLog?'log':'linear'}});
-legend('ale1','Count Comparison',[['Max Total',Math.max(...totals),'#00d9ff'],['Max Prim',Math.max(...prims),'#ffd700']]);
+legend('ale1','Count Comparison',[['Max Total',totals.reduce((a,b)=>Math.max(a,b),0),'#00d9ff'],['Max Prim',prims.reduce((a,b)=>Math.max(a,b),0),'#ffd700']]);
 
 // Chart 2: Absolute Error
 const traces2=[{x:rs,y:errs,name:'Error',mode:'lines+markers',line:{color:'#ff006e',width:2},marker:{size:4}}];
@@ -3802,14 +4022,15 @@ legend('ale2','Absolute Error',[['Max',fmt(maxAbsErr),'#ff006e'],['RMS',fmt(rmsE
 
 // Chart 3: Relative Error %
 Plotly.newPlot('pe3',[{x:rs,y:relEs,mode:'lines+markers',line:{color:'#00ff88',width:2},marker:{size:3}}],{...plo(),xaxis:{title:'R'},yaxis:{title:'|Error|/Theory %',type:useLog?'log':'linear'}});
-legend('ale3','Relative Error',[['Max %',fmt(Math.max(...relEs)),'#ff006e'],['Min %',fmt(Math.min(...relEs)),'#00ff88']]);
+legend('ale3','Relative Error',[['Max %',fmt(relEs.reduce((a,b)=>Math.max(a,b),0)),'#ff006e'],['Min %',fmt(relEs.reduce((a,b)=>Math.min(a,b),Infinity)),'#00ff88']]);
 
 // Chart 4: Normalized Error
 Plotly.newPlot('pe4',[
 {x:rs,y:normErrs,name:`Error/R^${theta}`,mode:'lines+markers',line:{color:'#9664ff',width:2},marker:{size:3}},
 {x:rs,y:rs.map(()=>0),mode:'lines',line:{color:'#666',dash:'dash'}}
 ],{...plo(),xaxis:{title:'R'},yaxis:{title:`Error / R^${theta}`}});
-legend('ale4','Normalized',[['θ =',theta,'#9664ff'],['Bounded?',Math.max(...normErrs.map(Math.abs))<10?'Yes':'No','#00ff88']]);
+const maxNormErr=normErrs.reduce((m,e)=>Math.max(m,Math.abs(e)),0);
+legend('ale4','Normalized',[['θ =',theta,'#9664ff'],['Bounded?',maxNormErr<10?'Yes':'No','#00ff88']]);
 
 // Chart 5: Error histogram
 const errBins=[],binSize=Math.max(1,Math.ceil(maxAbsErr/10));
@@ -3836,9 +4057,9 @@ document.getElementById('errLiveStats').innerHTML=`
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Normalized Analysis (θ=${theta})</strong>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.8rem">
-<span>Max |Err|/R^θ:</span><span style="color:#9664ff">${fmt(Math.max(...normErrs.map(Math.abs)))}</span>
+<span>Max |Err|/R^θ:</span><span style="color:#9664ff">${fmt(maxNormErr)}</span>
 <span>Avg |Err|/√R:</span><span style="color:#ffd700">${fmt(D.err.reduce((a,d)=>a+d.sqrtR,0)/D.err.length)}</span>
-<span>Bounded:</span><span style="color:${Math.max(...normErrs.map(Math.abs))<20?'#00ff88':'#ff6496'}">${Math.max(...normErrs.map(Math.abs))<20?'Likely':'Unclear'}</span>
+<span>Bounded:</span><span style="color:${maxNormErr<20?'#00ff88':'#ff6496'}">${maxNormErr<20?'Likely':'Unclear'}</span>
 </div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
@@ -3910,7 +4131,7 @@ else if(col==='prime'){const pf=factorize(d.n).split('·').length;clr=d.mu===0?'
 else clr=d.sf?'#ffd700':'#333';
 ctx.fillStyle=clr;ctx.fillRect(x,y,dx-1,dy-1);}}
 else if(viz==='mertens'){
-const maxM=Math.max(...mobData.map(d=>Math.abs(d.M)));
+const maxM=mobData.reduce((m,d)=>Math.max(m,Math.abs(d.M)),0);
 const w=c.width-80,h=c.height-80,scX=w/N,scY=(h/2)/(maxM||1);
 ctx.strokeStyle=gridC();ctx.lineWidth=1;
 ctx.beginPath();ctx.moveTo(40,cy);ctx.lineTo(c.width-40,cy);ctx.stroke();
@@ -3923,7 +4144,7 @@ ctx.strokeStyle='rgba(255,100,100,0.5)';ctx.lineWidth=1;
 ctx.beginPath();mobData.forEach((d,i)=>{const x=40+d.n*scX,bound=Math.sqrt(d.n);ctx.moveTo(x,cy-bound*scY);ctx.lineTo(x,cy+bound*scY);});ctx.stroke();}
 else if(viz==='cumsum'){
 const w=c.width-80,h=c.height-80,scX=w/N;
-const vals=mobData.map(d=>d.sum1),minV=Math.min(...vals),maxV=Math.max(...vals);
+const vals=mobData.map(d=>d.sum1),minV=vals.reduce((a,b)=>Math.min(a,b),Infinity),maxV=vals.reduce((a,b)=>Math.max(a,b),-Infinity);
 const scY=h/(maxV-minV||1);
 ctx.fillStyle=isDark()?'#ffd700':'#cc8800';ctx.font='12px Segoe UI';
 ctx.fillText('Σμ(n)/n → 0 as N→∞ (equivalent to PNT)',50,30);
@@ -4028,7 +4249,7 @@ D.dim.push({n,v,z,invZ,th,computed,err,method,volRn:v*Math.pow(R,n)});}
 Plotly.newPlot('pdimZeta',[
 {x:ns,y:zs,mode:'lines+markers',name:'ζ(n)',line:{color:'#ff8c00',width:2},marker:{size:6}},
 {x:ns,y:ns.map(()=>1),mode:'lines',name:'Limit=1',line:{color:'#666',dash:'dash'}}
-],{...plo(),xaxis:{title:'Dimension n'},yaxis:{title:'ζ(n)',range:[0.9,Math.max(...zs)+0.2]}});
+],{...plo(),xaxis:{title:'Dimension n'},yaxis:{title:'ζ(n)',range:[0.9,zs.reduce((a,b)=>Math.max(a,b),0)+0.2]}});
 
 // Chart 2: 1/ζ(n) density
 Plotly.newPlot('pdimDens',[
@@ -4042,7 +4263,7 @@ Plotly.newPlot('pdimVol',[
 ],{...plo(),xaxis:{title:'Dimension n'},yaxis:{title:'Volume·Rⁿ',type:maxD>15?'log':'linear'}});
 
 // Find special values
-const maxVolIdx=vols.indexOf(Math.max(...vols));
+const maxVolIdx=vols.indexOf(vols.reduce((a,b)=>Math.max(a,b),0));
 const z2=zeta(2),z3=zeta(3),z4=zeta(4);
 
 // Live stats
@@ -4142,7 +4363,7 @@ const filtered=sfOnly?D.sh.filter(d=>d.sf):showZero?D.sh:D.sh.filter(d=>d.m!==0)
 let barColors;
 if(colorMode==='sign')barColors=filtered.map(d=>d.c>0?'#00ff88':d.c<0?'#ff006e':'#666');
 else if(colorMode==='mobius')barColors=filtered.map(d=>d.m===1?'#00d9ff':d.m===-1?'#ff8c00':'#666');
-else barColors=filtered.map(d=>`hsl(${Math.abs(d.c)/Math.max(...cs.map(Math.abs))*240},70%,50%)`);
+else{const maxAbsC=cs.reduce((m,c)=>Math.max(m,Math.abs(c)),0)||1;barColors=filtered.map(d=>`hsl(${Math.abs(d.c)/maxAbsC*240},70%,50%)`);}
 
 const traces1=[];
 if(display==='contrib'||display==='both'){
@@ -4215,7 +4436,7 @@ document.getElementById('shLiveStats').innerHTML=`
 <span>Squarefree k:</span><span style="color:#00ff88">${sfCount}</span>
 <span>Prime k:</span><span style="color:#9664ff">${primeCount}</span>
 <span>μ(k)=0 shells:</span><span style="color:#666">${D.sh.length-nonZeroCount}</span>
-<span>Largest |contrib|:</span><span style="color:#ffd700">${Math.max(...D.sh.map(d=>Math.abs(d.c)))}</span>
+<span>Largest |contrib|:</span><span style="color:#ffd700">${D.sh.reduce((m,d)=>Math.max(m,Math.abs(d.c)),0)}</span>
 </div>
 </div>`;
 
@@ -4260,7 +4481,7 @@ const mean=all.reduce((a,b)=>a+b,0)/tot;
 const sortedAll=[...all].sort((a,b)=>a-b);
 const median=sortedAll[Math.floor(tot/2)];
 const mode=sorted.reduce((a,b)=>b[1]>a[1]?b:a)[0];
-const maxGcd=Math.max(...all);
+const maxGcd=all.reduce((a,b)=>Math.max(a,b),0);
 const variance=all.reduce((a,b)=>a+(b-mean)**2,0)/tot;
 const stddev=Math.sqrt(variance);
 
@@ -4440,7 +4661,7 @@ const norms=Object.entries(nc).sort((a,b)=>+a[0]-+b[0]).slice(0,25);
 const uniqueNorms=Object.keys(nc).length;
 const sum2sqCount=Object.keys(nc).filter(n=>+n>0).length;
 legend('algaus1','ℤ[i] Theory',[['1/ζ(2) Pred',fmt(tot/z2),'#9664ff'],['Coprime 6/π²',fmt(100/z2)+'%','#ff8c00']]);
-legend('algaus2','Norm Analysis',[['Unique |z|²',uniqueNorms,'#9664ff'],['Max Norm²',Math.max(...gausP.map(p=>p.n2)),'#ff8c00']]);
+legend('algaus2','Norm Analysis',[['Unique |z|²',uniqueNorms,'#9664ff'],['Max Norm²',gausP.reduce((m,p)=>Math.max(m,p.n2),0),'#ff8c00']]);
 Plotly.newPlot('pgaus',[{x:norms.map(x=>+x[0]),y:norms.map(x=>x[1]),type:'bar',marker:{color:norms.map((_,i)=>`hsl(${i*12},70%,55%)`)}}],{...plo(),xaxis:{title:'|z|² (Norm²)'},yaxis:{title:'Count'}});
 document.getElementById('stgaus').innerHTML='';
 document.getElementById('gausLiveStats').innerHTML=`
@@ -4479,7 +4700,7 @@ document.getElementById('gausLiveStats').innerHTML=`
 <strong style="color:var(--acc)">Norm Statistics</strong>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:5px;font-size:.8rem">
 <span>Unique Norms:</span><span style="color:#9664ff">${uniqueNorms}</span>
-<span>Max |z|²:</span><span>${Math.max(...gausP.map(p=>p.n2))}</span>
+<span>Max |z|²:</span><span>${gausP.reduce((m,p)=>Math.max(m,p.n2),0)}</span>
 <span>Sum-2-Sq Norms:</span><span style="color:#00ff88">${sum2sqCount}</span>
 </div>
 </div>
@@ -12177,6 +12398,912 @@ function csvZetaReal() {
 let s = 's,zeta_s\n';
 for(let i = 0; i < zetarealData.s.length; i++) s += `${zetarealData.s[i]},${zetarealData.zeta[i]}\n`;
 dl(s, 'zeta_real.csv');
+}
+
+// ==================== MONTGOMERY PAIR CORRELATION ====================
+let montgomeryData = {gaps: [], normalized: []};
+
+function drawMontgomery() {
+const c = document.getElementById('cmontgomery'), ctx = c.getContext('2d');
+const N = Math.min(+document.getElementById('montNv').value || 50, ZETA_ZEROS.length);
+const binWidth = +document.getElementById('montBin').value || 0.1;
+const mode = document.getElementById('montMode').value;
+const showGUE = document.getElementById('montGUE').checked;
+
+// Compute normalized gaps
+const zeros = ZETA_ZEROS.slice(0, N);
+const gaps = [];
+for(let i = 1; i < zeros.length; i++) {
+const gap = zeros[i] - zeros[i-1];
+// Normalize by average spacing: 2π/log(γ_i)
+const avgSpacing = 2 * PI / Math.log(zeros[i] / (2 * PI));
+gaps.push(gap / avgSpacing);
+}
+montgomeryData = {gaps, normalized: gaps};
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+const margin = {l: 60, r: 30, t: 40, b: 50};
+const w = c.width - margin.l - margin.r;
+const h = c.height - margin.t - margin.b;
+
+if(mode === 'histogram') {
+// Create histogram
+const maxGap = Math.max(...gaps, 3);
+const bins = Math.ceil(maxGap / binWidth);
+const hist = Array(bins).fill(0);
+gaps.forEach(g => {
+const bin = Math.min(Math.floor(g / binWidth), bins - 1);
+if(bin >= 0) hist[bin]++;
+});
+const maxCount = Math.max(...hist);
+
+// Draw bars
+ctx.fillStyle = '#00d9ff';
+for(let i = 0; i < bins; i++) {
+const x = margin.l + (i / bins) * w;
+const barW = w / bins - 1;
+const barH = (hist[i] / maxCount) * h;
+ctx.fillRect(x, margin.t + h - barH, barW, barH);
+}
+
+// GUE pair correlation prediction: 1 - (sin(πx)/(πx))²
+if(showGUE) {
+ctx.strokeStyle = '#ff6496';
+ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i <= 100; i++) {
+const x = (i / 100) * maxGap;
+const px = margin.l + (x / maxGap) * w;
+// Pair correlation R2(x) = 1 - (sin(πx)/(πx))² for x > 0
+const sinc = x < 0.01 ? 1 : Math.sin(PI * x) / (PI * x);
+const r2 = 1 - sinc * sinc;
+const py = margin.t + h - r2 * h;
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+ctx.fillStyle = '#ff6496';
+ctx.font = '11px Segoe UI';
+ctx.fillText('GUE: 1-(sin πx/πx)²', c.width - 130, margin.t + 20);
+}
+
+// Axes
+ctx.strokeStyle = isDark() ? '#fff' : '#333';
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(margin.l, margin.t);
+ctx.lineTo(margin.l, margin.t + h);
+ctx.lineTo(margin.l + w, margin.t + h);
+ctx.stroke();
+
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '11px Segoe UI';
+ctx.fillText('Normalized Gap', margin.l + w/2 - 40, c.height - 10);
+ctx.save();
+ctx.translate(15, margin.t + h/2);
+ctx.rotate(-Math.PI/2);
+ctx.fillText('Count', 0, 0);
+ctx.restore();
+} else if(mode === 'scatter') {
+// Scatter plot of consecutive gaps
+ctx.fillStyle = '#00d9ff';
+for(let i = 0; i < gaps.length - 1; i++) {
+const x = margin.l + (gaps[i] / 4) * w;
+const y = margin.t + h - (gaps[i+1] / 4) * h;
+ctx.beginPath();
+ctx.arc(x, y, 3, 0, 2*PI);
+ctx.fill();
+}
+ctx.strokeStyle = isDark() ? '#fff' : '#333';
+ctx.beginPath();
+ctx.moveTo(margin.l, margin.t);
+ctx.lineTo(margin.l, margin.t + h);
+ctx.lineTo(margin.l + w, margin.t + h);
+ctx.stroke();
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '11px Segoe UI';
+ctx.fillText('Gap n', margin.l + w/2, c.height - 10);
+ctx.fillText('Gap n+1', 20, margin.t + h/2);
+} else {
+// Cumulative distribution
+const sorted = [...gaps].sort((a,b) => a - b);
+ctx.strokeStyle = '#00d9ff';
+ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < sorted.length; i++) {
+const x = margin.l + (sorted[i] / 4) * w;
+const y = margin.t + h - ((i + 1) / sorted.length) * h;
+if(i === 0) ctx.moveTo(x, y);
+else ctx.lineTo(x, y);
+}
+ctx.stroke();
+
+// GUE CDF
+if(showGUE) {
+ctx.strokeStyle = '#ff6496';
+ctx.beginPath();
+for(let i = 0; i <= 100; i++) {
+const x = (i / 100) * 4;
+const px = margin.l + (x / 4) * w;
+// Approximate Wigner surmise CDF
+const cdf = 1 - Math.exp(-PI * x * x / 4);
+const py = margin.t + h - cdf * h;
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+}
+}
+
+// Stats
+const meanGap = gaps.reduce((a,b) => a+b, 0) / gaps.length;
+const variance = gaps.reduce((a,g) => a + (g - meanGap)**2, 0) / gaps.length;
+
+legend('almontgomery', 'Pair Correlation', [['Zeros', N, '#00d9ff'], ['Mean Gap', fmt(meanGap), '#ffd700'], ['Variance', fmt(variance), '#ff6496']]);
+
+document.getElementById('montLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${N}</div><div style="font-size:.7rem;color:var(--txt2)">ZEROS ANALYZED</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${fmt(meanGap)}</div><div style="font-size:.7rem;color:var(--txt2)">MEAN NORMALIZED GAP</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff6496">${fmt(Math.sqrt(variance))}</div><div style="font-size:.7rem;color:var(--txt2)">STD DEVIATION</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Gap Statistics</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Min gap:</span><span style="color:#00d9ff">${fmt(Math.min(...gaps))}</span>
+<span>Max gap:</span><span style="color:#ff6496">${fmt(Math.max(...gaps))}</span>
+<span>GUE mean:</span><span style="color:#9664ff">1.0 (normalized)</span>
+<span>Actual mean:</span><span style="color:#ffd700">${fmt(meanGap)}</span>
+</div>
+</div>
+<div style="background:rgba(0,217,255,.1);padding:8px;border-radius:6px">
+<strong style="color:#00d9ff">Montgomery's Discovery</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">The pair correlation follows R₂(x) = 1 - (sin πx / πx)², matching GUE random matrices!</div>
+</div>`;
+}
+
+async function screenshotMontgomery() {
+await screenshotUnified('cmontgomery', 'montLiveStats', 'Montgomery Pair Correlation', 'montgomery.png');
+}
+
+function csvMontgomery() {
+let s = 'gap_index,normalized_gap\n';
+montgomeryData.gaps.forEach((g, i) => s += `${i},${g}\n`);
+dl(s, 'montgomery.csv');
+}
+
+// ==================== GUE STATISTICS ====================
+let gueData = {spacings: []};
+
+function drawGUE() {
+const c = document.getElementById('cgue'), ctx = c.getContext('2d');
+const N = Math.min(+document.getElementById('gueNv').value || 50, ZETA_ZEROS.length);
+const mode = document.getElementById('gueMode').value;
+const showWigner = document.getElementById('gueWigner').checked;
+const showPoisson = document.getElementById('guePoisson').checked;
+
+const zeros = ZETA_ZEROS.slice(0, N);
+
+// Unfold zeros: transform to have unit mean spacing
+const unfolded = zeros.map(gamma => {
+// N(T) ~ T/(2π) log(T/(2πe)) + 7/8
+return (gamma / (2*PI)) * Math.log(gamma / (2*PI*Math.E)) + 7/8;
+});
+
+// Compute spacings
+const spacings = [];
+for(let i = 1; i < unfolded.length; i++) {
+spacings.push(unfolded[i] - unfolded[i-1]);
+}
+gueData.spacings = spacings;
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+const margin = {l: 60, r: 30, t: 40, b: 50};
+const w = c.width - margin.l - margin.r;
+const h = c.height - margin.t - margin.b;
+
+if(mode === 'spacing' || mode === 'wigner') {
+// Histogram of spacings
+const maxS = Math.min(Math.max(...spacings), 4);
+const bins = 20;
+const binWidth = maxS / bins;
+const hist = Array(bins).fill(0);
+spacings.forEach(s => {
+const bin = Math.min(Math.floor(s / binWidth), bins - 1);
+if(bin >= 0) hist[bin]++;
+});
+// Normalize to probability density
+const total = spacings.length * binWidth;
+const density = hist.map(h => h / total);
+const maxDensity = Math.max(...density, 1);
+
+// Draw histogram
+ctx.fillStyle = '#00d9ff';
+for(let i = 0; i < bins; i++) {
+const x = margin.l + (i / bins) * w;
+const barW = w / bins - 1;
+const barH = (density[i] / maxDensity) * h;
+ctx.fillRect(x, margin.t + h - barH, barW, barH);
+}
+
+// Wigner surmise: P(s) = (π/2)s exp(-πs²/4)
+if(showWigner) {
+ctx.strokeStyle = '#ff6496';
+ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i <= 100; i++) {
+const s = (i / 100) * maxS;
+const px = margin.l + (s / maxS) * w;
+const wigner = (PI / 2) * s * Math.exp(-PI * s * s / 4);
+const py = margin.t + h - (wigner / maxDensity) * h;
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+ctx.fillStyle = '#ff6496';
+ctx.font = '11px Segoe UI';
+ctx.fillText('Wigner: (π/2)s·e^{-πs²/4}', c.width - 150, margin.t + 20);
+}
+
+// Poisson: P(s) = exp(-s)
+if(showPoisson) {
+ctx.strokeStyle = '#9664ff';
+ctx.lineWidth = 2;
+ctx.setLineDash([5, 3]);
+ctx.beginPath();
+for(let i = 0; i <= 100; i++) {
+const s = (i / 100) * maxS;
+const px = margin.l + (s / maxS) * w;
+const poisson = Math.exp(-s);
+const py = margin.t + h - (poisson / maxDensity) * h;
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+ctx.setLineDash([]);
+ctx.fillStyle = '#9664ff';
+ctx.fillText('Poisson: e^{-s}', c.width - 150, margin.t + 40);
+}
+} else {
+// Unfolded zeros plot
+ctx.fillStyle = '#00d9ff';
+for(let i = 0; i < unfolded.length; i++) {
+const x = margin.l + (i / unfolded.length) * w;
+const y = margin.t + h - (unfolded[i] / unfolded[unfolded.length-1]) * h;
+ctx.beginPath();
+ctx.arc(x, y, 3, 0, 2*PI);
+ctx.fill();
+}
+// Line y = x (expected for unit density)
+ctx.strokeStyle = '#ff6496';
+ctx.lineWidth = 1;
+ctx.setLineDash([5, 3]);
+ctx.beginPath();
+ctx.moveTo(margin.l, margin.t + h);
+ctx.lineTo(margin.l + w, margin.t);
+ctx.stroke();
+ctx.setLineDash([]);
+}
+
+// Axes
+ctx.strokeStyle = isDark() ? '#fff' : '#333';
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(margin.l, margin.t);
+ctx.lineTo(margin.l, margin.t + h);
+ctx.lineTo(margin.l + w, margin.t + h);
+ctx.stroke();
+
+const meanSpacing = spacings.reduce((a,b) => a+b, 0) / spacings.length;
+const varSpacing = spacings.reduce((a,s) => a + (s - meanSpacing)**2, 0) / spacings.length;
+
+legend('algue', 'GUE Statistics', [['Zeros', N, '#00d9ff'], ['Mean Spacing', fmt(meanSpacing), '#ffd700'], ['Std Dev', fmt(Math.sqrt(varSpacing)), '#ff6496']]);
+
+document.getElementById('gueLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${N}</div><div style="font-size:.7rem;color:var(--txt2)">ZEROS</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${fmt(meanSpacing)}</div><div style="font-size:.7rem;color:var(--txt2)">MEAN SPACING</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff6496">${fmt(Math.sqrt(varSpacing))}</div><div style="font-size:.7rem;color:var(--txt2)">STD DEV</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Comparison</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>GUE mean:</span><span style="color:#00d9ff">1.0</span>
+<span>GUE variance:</span><span style="color:#ff6496">${fmt(4/PI - 1)} ≈ 0.273</span>
+<span>Poisson mean:</span><span style="color:#9664ff">1.0</span>
+<span>Poisson variance:</span><span style="color:#9664ff">1.0</span>
+</div>
+</div>
+<div style="background:rgba(255,100,150,.1);padding:8px;border-radius:6px">
+<strong style="color:#ff6496">Key Difference</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">GUE: P(0) = 0 (zeros repel). Poisson: P(0) = max (no correlation). Zeta zeros follow GUE!</div>
+</div>`;
+}
+
+async function screenshotGUE() {
+await screenshotUnified('cgue', 'gueLiveStats', 'GUE Random Matrix Statistics', 'gue_stats.png');
+}
+
+function csvGUE() {
+let s = 'index,spacing\n';
+gueData.spacings.forEach((sp, i) => s += `${i},${sp}\n`);
+dl(s, 'gue_spacings.csv');
+}
+
+// ==================== PRIME RACES ====================
+let primeRaceData = {x: [], counts: {}, diff: []};
+
+function drawPrimeRace() {
+const c = document.getElementById('cprimerace'), ctx = c.getContext('2d');
+const maxX = +document.getElementById('raceXv').value || 10000;
+const q = +document.getElementById('raceQ').value;
+const mode = document.getElementById('raceMode').value;
+
+// Get residue classes to compare
+let classes = [];
+if(q === 4) classes = [1, 3];
+else if(q === 3) classes = [1, 2];
+else if(q === 8) classes = [1, 3, 5, 7];
+else if(q === 5) classes = [1, 2, 3, 4];
+else if(q === 6) classes = [1, 5];
+
+// Count primes in each class
+const counts = {};
+classes.forEach(a => counts[a] = []);
+
+const sieve = Array(maxX + 1).fill(true);
+sieve[0] = sieve[1] = false;
+for(let i = 2; i * i <= maxX; i++) {
+if(sieve[i]) for(let j = i*i; j <= maxX; j += i) sieve[j] = false;
+}
+
+const current = {};
+classes.forEach(a => current[a] = 0);
+
+const xs = [];
+const step = Math.max(1, Math.floor(maxX / 500));
+
+for(let x = 2; x <= maxX; x++) {
+if(sieve[x]) {
+const r = x % q;
+if(current[r] !== undefined) current[r]++;
+}
+if(x % step === 0 || x === maxX) {
+xs.push(x);
+classes.forEach(a => counts[a].push(current[a]));
+}
+}
+
+primeRaceData = {x: xs, counts, diff: []};
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+const margin = {l: 60, r: 30, t: 40, b: 50};
+const w = c.width - margin.l - margin.r;
+const h = c.height - margin.t - margin.b;
+
+const colors = ['#00d9ff', '#ff6496', '#ffd700', '#00ff88'];
+
+if(mode === 'both') {
+// Plot all counts
+const maxCount = Math.max(...classes.flatMap(a => counts[a]));
+classes.forEach((a, ci) => {
+ctx.strokeStyle = colors[ci % colors.length];
+ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < xs.length; i++) {
+const px = margin.l + (xs[i] / maxX) * w;
+const py = margin.t + h - (counts[a][i] / maxCount) * h;
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+});
+// Legend
+classes.forEach((a, ci) => {
+ctx.fillStyle = colors[ci % colors.length];
+ctx.fillText(`≡${a} (mod ${q})`, c.width - 100, margin.t + 15 + ci * 15);
+});
+} else if(mode === 'difference' && classes.length >= 2) {
+// Plot difference: first non-QR minus first QR
+const diff = [];
+for(let i = 0; i < xs.length; i++) {
+diff.push(counts[classes[1]][i] - counts[classes[0]][i]);
+}
+primeRaceData.diff = diff;
+
+const maxDiff = Math.max(...diff.map(Math.abs));
+const zeroY = margin.t + h / 2;
+
+// Fill regions
+ctx.fillStyle = 'rgba(0,255,136,0.2)';
+ctx.beginPath();
+ctx.moveTo(margin.l, zeroY);
+for(let i = 0; i < xs.length; i++) {
+const px = margin.l + (xs[i] / maxX) * w;
+const py = zeroY - (diff[i] / maxDiff) * (h / 2);
+ctx.lineTo(px, Math.min(py, zeroY));
+}
+ctx.lineTo(margin.l + w, zeroY);
+ctx.closePath();
+ctx.fill();
+
+ctx.fillStyle = 'rgba(255,100,150,0.2)';
+ctx.beginPath();
+ctx.moveTo(margin.l, zeroY);
+for(let i = 0; i < xs.length; i++) {
+const px = margin.l + (xs[i] / maxX) * w;
+const py = zeroY - (diff[i] / maxDiff) * (h / 2);
+ctx.lineTo(px, Math.max(py, zeroY));
+}
+ctx.lineTo(margin.l + w, zeroY);
+ctx.closePath();
+ctx.fill();
+
+// Line
+ctx.strokeStyle = '#00d9ff';
+ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < xs.length; i++) {
+const px = margin.l + (xs[i] / maxX) * w;
+const py = zeroY - (diff[i] / maxDiff) * (h / 2);
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+
+// Zero line
+ctx.strokeStyle = '#ffd700';
+ctx.lineWidth = 1;
+ctx.setLineDash([5, 3]);
+ctx.beginPath();
+ctx.moveTo(margin.l, zeroY);
+ctx.lineTo(margin.l + w, zeroY);
+ctx.stroke();
+ctx.setLineDash([]);
+
+ctx.fillStyle = '#00ff88';
+ctx.font = '11px Segoe UI';
+ctx.fillText(`≡${classes[1]} leads`, c.width - 90, margin.t + 20);
+ctx.fillStyle = '#ff6496';
+ctx.fillText(`≡${classes[0]} leads`, c.width - 90, c.height - 60);
+} else {
+// Ratio
+const ratios = [];
+for(let i = 0; i < xs.length; i++) {
+ratios.push(counts[classes[0]][i] > 0 ? counts[classes[1]][i] / counts[classes[0]][i] : 1);
+}
+const maxR = Math.max(...ratios);
+const minR = Math.min(...ratios);
+
+ctx.strokeStyle = '#00d9ff';
+ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < xs.length; i++) {
+const px = margin.l + (xs[i] / maxX) * w;
+const py = margin.t + h - ((ratios[i] - minR) / (maxR - minR)) * h;
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+
+// Line at ratio = 1
+const oneY = margin.t + h - ((1 - minR) / (maxR - minR)) * h;
+ctx.strokeStyle = '#ffd700';
+ctx.setLineDash([5, 3]);
+ctx.beginPath();
+ctx.moveTo(margin.l, oneY);
+ctx.lineTo(margin.l + w, oneY);
+ctx.stroke();
+ctx.setLineDash([]);
+}
+
+// Axes
+ctx.strokeStyle = isDark() ? '#fff' : '#333';
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(margin.l, margin.t);
+ctx.lineTo(margin.l, margin.t + h);
+ctx.lineTo(margin.l + w, margin.t + h);
+ctx.stroke();
+
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '11px Segoe UI';
+ctx.fillText('x', margin.l + w/2, c.height - 10);
+
+// Count lead changes
+let leadChanges = 0;
+if(classes.length >= 2) {
+for(let i = 1; i < xs.length; i++) {
+const prev = counts[classes[1]][i-1] - counts[classes[0]][i-1];
+const curr = counts[classes[1]][i] - counts[classes[0]][i];
+if((prev > 0 && curr <= 0) || (prev <= 0 && curr > 0)) leadChanges++;
+}
+}
+
+const finalCounts = classes.map(a => counts[a][counts[a].length - 1]);
+
+legend('alprimerace', 'Prime Race', classes.map((a, i) => [`≡${a} (mod ${q})`, finalCounts[i], colors[i % colors.length]]));
+
+document.getElementById('raceLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${maxX.toLocaleString()}</div><div style="font-size:.7rem;color:var(--txt2)">MAX X</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${leadChanges}</div><div style="font-size:.7rem;color:var(--txt2)">LEAD CHANGES</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff6496">mod ${q}</div><div style="font-size:.7rem;color:var(--txt2)">MODULUS</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Final Counts at x = ${maxX.toLocaleString()}</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+${classes.map((a, i) => `<span>π(x;${q},${a}):</span><span style="color:${colors[i % colors.length]};font-weight:bold">${finalCounts[i]}</span>`).join('')}
+</div>
+</div>
+${q === 4 ? `<div style="background:rgba(0,255,136,.1);padding:8px;border-radius:6px">
+<strong style="color:#00ff88">Chebyshev Bias (mod 4)</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">Primes ≡3 (mod 4) lead ~99.59% of the time! First switch to ≡1 leading: x=26861.</div>
+</div>` : ''}`;
+}
+
+async function screenshotPrimeRace() {
+await screenshotUnified('cprimerace', 'raceLiveStats', 'Prime Races - Chebyshev Bias', 'prime_race.png');
+}
+
+function csvPrimeRace() {
+const classes = Object.keys(primeRaceData.counts);
+let s = 'x,' + classes.map(a => `count_${a}`).join(',') + '\n';
+for(let i = 0; i < primeRaceData.x.length; i++) {
+s += primeRaceData.x[i] + ',' + classes.map(a => primeRaceData.counts[a][i]).join(',') + '\n';
+}
+dl(s, 'prime_race.csv');
+}
+
+// ==================== DIRICHLET L-FUNCTIONS ====================
+let lfuncData = {chars: [], values: []};
+
+// Generate Dirichlet characters mod q
+function dirichletChars(q) {
+const chars = [];
+// Find generators of (Z/qZ)*
+const units = [];
+for(let a = 1; a < q; a++) if(gcd(a, q) === 1) units.push(a);
+const phi = units.length;
+
+// Principal character
+const chi0 = n => gcd(n, q) === 1 ? 1 : 0;
+chars.push({label: 'χ₀', values: units.map(a => chi0(a)), fn: chi0, isPrincipal: true});
+
+// For small q, enumerate all characters
+if(q <= 12 && phi > 1) {
+for(let j = 1; j < phi; j++) {
+const chi = n => {
+if(gcd(n, q) !== 1) return 0;
+const idx = units.indexOf(n % q);
+if(idx === -1) return 0;
+// Return complex value as {re, im}
+const angle = 2 * PI * j * idx / phi;
+return {re: Math.cos(angle), im: Math.sin(angle)};
+};
+chars.push({label: `χ_${j}`, values: units.map(a => {
+const v = chi(a);
+return typeof v === 'object' ? v : {re: v, im: 0};
+}), fn: chi});
+}
+}
+
+return chars;
+}
+
+// Compute L(s, chi) for real s > 1
+function Lfunc(s, chi, q, terms = 1000) {
+let re = 0, im = 0;
+for(let n = 1; n <= terms; n++) {
+const chiN = chi(n);
+if(typeof chiN === 'number') {
+re += chiN / Math.pow(n, s);
+} else if(chiN && chiN.re !== undefined) {
+const ns = Math.pow(n, s);
+re += chiN.re / ns;
+im += chiN.im / ns;
+}
+}
+return {re, im, mag: Math.sqrt(re*re + im*im)};
+}
+
+function drawLfunc() {
+const c = document.getElementById('clfunc'), ctx = c.getContext('2d');
+const q = +document.getElementById('lfuncQv').value || 5;
+const s = +document.getElementById('lfuncSv').value || 2;
+const mode = document.getElementById('lfuncMode').value;
+
+const chars = dirichletChars(q);
+const values = chars.map(chi => Lfunc(s, chi.fn, q));
+lfuncData = {chars, values, q, s};
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+const margin = {l: 60, r: 30, t: 40, b: 50};
+const w = c.width - margin.l - margin.r;
+const h = c.height - margin.t - margin.b;
+
+if(mode === 'values') {
+// Bar chart of L(s, chi) values
+const maxMag = Math.max(...values.map(v => v.mag));
+const barWidth = w / chars.length - 5;
+
+chars.forEach((chi, i) => {
+const x = margin.l + i * (barWidth + 5);
+const barH = (values[i].mag / maxMag) * h * 0.8;
+
+ctx.fillStyle = chi.isPrincipal ? '#ffd700' : `hsl(${i * 360 / chars.length}, 70%, 50%)`;
+ctx.fillRect(x, margin.t + h - barH, barWidth, barH);
+
+// Label
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '10px Segoe UI';
+ctx.save();
+ctx.translate(x + barWidth/2, margin.t + h + 15);
+ctx.rotate(-Math.PI/4);
+ctx.fillText(chi.label, 0, 0);
+ctx.restore();
+
+// Value on top
+ctx.fillText(fmt(values[i].re), x + 2, margin.t + h - barH - 5);
+});
+
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '12px Segoe UI';
+ctx.fillText(`L(${s}, χ) for χ mod ${q}`, margin.l, margin.t - 10);
+} else if(mode === 'characters') {
+// Character table
+const units = [];
+for(let a = 1; a < q; a++) if(gcd(a, q) === 1) units.push(a);
+
+const cellW = w / (units.length + 1);
+const cellH = h / (chars.length + 1);
+
+// Header row
+ctx.fillStyle = '#00d9ff';
+ctx.font = '11px Segoe UI';
+ctx.fillText('n →', margin.l, margin.t + cellH/2);
+units.forEach((a, i) => {
+ctx.fillText(a.toString(), margin.l + (i+1) * cellW + 5, margin.t + cellH/2);
+});
+
+// Character rows
+chars.forEach((chi, j) => {
+ctx.fillStyle = '#ffd700';
+ctx.fillText(chi.label, margin.l, margin.t + (j+1.5) * cellH);
+units.forEach((a, i) => {
+const v = chi.fn(a);
+let text;
+if(typeof v === 'number') text = v.toString();
+else if(v && v.re !== undefined) {
+if(Math.abs(v.im) < 0.01) text = v.re.toFixed(2);
+else text = `${v.re.toFixed(1)}+${v.im.toFixed(1)}i`;
+} else text = '0';
+ctx.fillStyle = isDark() ? '#e0e0e0' : '#333';
+ctx.fillText(text, margin.l + (i+1) * cellW + 5, margin.t + (j+1.5) * cellH);
+});
+});
+} else {
+// Euler product visualization
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '14px Segoe UI';
+ctx.fillText(`Euler Product: L(s,χ) = ∏_p (1 - χ(p)/p^s)^{-1}`, margin.l, margin.t + 20);
+
+// Show product terms for first few primes
+const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29];
+let y = margin.t + 60;
+chars.slice(0, 4).forEach((chi, ci) => {
+ctx.fillStyle = `hsl(${ci * 90}, 70%, 50%)`;
+ctx.fillText(`${chi.label}:`, margin.l, y);
+let product = {re: 1, im: 0};
+primes.forEach((p, pi) => {
+const chiP = chi.fn(p);
+const factor = typeof chiP === 'number' ? chiP : (chiP ? chiP.re : 0);
+const term = 1 / (1 - factor / Math.pow(p, s));
+product.re *= term;
+ctx.fillStyle = isDark() ? '#e0e0e0' : '#333';
+ctx.font = '10px Segoe UI';
+ctx.fillText(`(1-χ(${p})/${p}^${s})^{-1}`, margin.l + 50 + pi * 75, y);
+});
+ctx.fillStyle = '#00ff88';
+ctx.fillText(`≈ ${product.re.toFixed(4)}`, margin.l + 50 + primes.length * 75, y);
+y += 40;
+});
+}
+
+// Axes
+ctx.strokeStyle = isDark() ? '#fff' : '#333';
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(margin.l, margin.t + h);
+ctx.lineTo(margin.l + w, margin.t + h);
+ctx.stroke();
+
+legend('allfunc', 'L-functions', [['Modulus', q, '#00d9ff'], ['s', s, '#ffd700'], ['φ(q)', chars.length, '#ff6496']]);
+
+document.getElementById('lfuncLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${q}</div><div style="font-size:.7rem;color:var(--txt2)">MODULUS q</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${chars.length}</div><div style="font-size:.7rem;color:var(--txt2)">CHARACTERS φ(q)</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff6496">${s}</div><div style="font-size:.7rem;color:var(--txt2)">s VALUE</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">L(${s}, χ) Values</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+${chars.slice(0, 6).map((chi, i) => `<span>${chi.label}:</span><span style="color:#00d9ff">${fmt(values[i].re)}${Math.abs(values[i].im) > 0.01 ? ` + ${fmt(values[i].im)}i` : ''}</span>`).join('')}
+</div>
+</div>
+<div style="background:rgba(255,215,0,.1);padding:8px;border-radius:6px">
+<strong style="color:#ffd700">Principal Character</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">L(s,χ₀) = ζ(s) × ∏_{p|q}(1-p^{-s}). Other L-functions are entire (no pole at s=1).</div>
+</div>`;
+}
+
+async function screenshotLfunc() {
+await screenshotUnified('clfunc', 'lfuncLiveStats', 'Dirichlet L-Functions', 'lfunc.png');
+}
+
+function csvLfunc() {
+let s = 'character,L_real,L_imag,L_mag\n';
+lfuncData.chars.forEach((chi, i) => {
+s += `${chi.label},${lfuncData.values[i].re},${lfuncData.values[i].im},${lfuncData.values[i].mag}\n`;
+});
+dl(s, 'lfunc.csv');
+}
+
+// ==================== L-FUNCTION ZEROS ====================
+function drawLfuncZeros() {
+const c = document.getElementById('clfunczeros'), ctx = c.getContext('2d');
+const q = +document.getElementById('lzeroQv').value || 5;
+const maxT = +document.getElementById('lzeroTv').value || 30;
+const mode = document.getElementById('lzeroMode').value;
+const showAll = document.getElementById('lzeroAll').checked;
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+const margin = {l: 60, r: 30, t: 40, b: 50};
+const w = c.width - margin.l - margin.r;
+const h = c.height - margin.t - margin.b;
+
+const chars = dirichletChars(q);
+let zerosFound = {};
+
+if(mode === 'zeros' || mode === 'critical') {
+// Plot critical line with zero locations found numerically
+const critX = margin.l + w * 0.5; // σ = 0.5
+
+// Draw critical strip
+ctx.fillStyle = 'rgba(0,217,255,0.1)';
+ctx.fillRect(margin.l + w * 0.25, margin.t, w * 0.5, h);
+
+// Critical line
+ctx.strokeStyle = '#ffd700';
+ctx.lineWidth = 2;
+ctx.setLineDash([5, 3]);
+ctx.beginPath();
+ctx.moveTo(critX, margin.t);
+ctx.lineTo(critX, margin.t + h);
+ctx.stroke();
+ctx.setLineDash([]);
+
+// For each character, find zeros by sign changes of real part
+const colors = ['#00d9ff', '#ff6496', '#00ff88', '#9664ff', '#ffd700', '#ff8c00'];
+
+chars.slice(0, showAll ? 6 : 1).forEach((chi, ci) => {
+zerosFound[chi.label] = [];
+ctx.fillStyle = colors[ci % colors.length];
+
+// Search for zeros along critical line
+for(let t = 1; t <= maxT; t += 0.5) {
+const L1 = Lfunc(0.5, chi.fn, q, 500);
+const L2 = LfuncComplex(0.5, t, chi.fn, q, 200);
+const L3 = LfuncComplex(0.5, t + 0.5, chi.fn, q, 200);
+
+// Check for sign change in real part (crude zero detection)
+if(L2.re * L3.re < 0) {
+const zeroT = t + 0.25; // Approximate
+zerosFound[chi.label].push(zeroT);
+const y = margin.t + h - (zeroT / maxT) * h;
+ctx.beginPath();
+ctx.arc(critX + (ci - 2) * 8, y, 5, 0, 2*PI);
+ctx.fill();
+}
+}
+});
+
+// Axis labels
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '11px Segoe UI';
+ctx.fillText('Re(s) = ½', critX - 30, c.height - 10);
+ctx.fillText('t = 0', margin.l + 5, margin.t + h - 5);
+ctx.fillText(`t = ${maxT}`, margin.l + 5, margin.t + 15);
+
+// Legend
+let legendY = margin.t + 20;
+chars.slice(0, showAll ? 6 : 1).forEach((chi, ci) => {
+ctx.fillStyle = colors[ci % colors.length];
+ctx.fillRect(c.width - 100, legendY, 12, 12);
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.fillText(`${chi.label}: ${zerosFound[chi.label].length}`, c.width - 85, legendY + 10);
+legendY += 18;
+});
+} else {
+// Domain coloring for L-function
+const chi = chars[1] || chars[0]; // Use first non-principal character
+const s1 = 0, s2 = 1, t1 = 0, t2 = maxT;
+
+for(let py = 0; py < c.height; py += 4) {
+const t = t2 - (py / c.height) * (t2 - t1);
+for(let px = 0; px < c.width; px += 4) {
+const sigma = s1 + (px / c.width) * (s2 - s1);
+const L = LfuncComplex(sigma, t, chi.fn, q, 100);
+const phase = Math.atan2(L.im, L.re);
+const mag = Math.sqrt(L.re * L.re + L.im * L.im);
+
+const hue = (phase + PI) / (2 * PI);
+const light = 0.5 + 0.3 * Math.tanh(Math.log(mag + 0.1));
+const [r, g, b] = hslToRgb(hue, 0.8, light);
+
+ctx.fillStyle = `rgb(${r},${g},${b})`;
+ctx.fillRect(px, py, 4, 4);
+}
+}
+
+// Critical line overlay
+ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+ctx.lineWidth = 2;
+ctx.setLineDash([5, 3]);
+const critPx = (0.5 - s1) / (s2 - s1) * c.width;
+ctx.beginPath();
+ctx.moveTo(critPx, 0);
+ctx.lineTo(critPx, c.height);
+ctx.stroke();
+ctx.setLineDash([]);
+}
+
+const totalZeros = Object.values(zerosFound).reduce((a, z) => a + z.length, 0);
+
+legend('allfunczeros', 'L-function Zeros', [['Modulus', q, '#00d9ff'], ['t Range', `[0, ${maxT}]`, '#ffd700'], ['Zeros', totalZeros || '~', '#ff6496']]);
+
+document.getElementById('lzeroLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${q}</div><div style="font-size:.7rem;color:var(--txt2)">MODULUS</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${maxT}</div><div style="font-size:.7rem;color:var(--txt2)">MAX t</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff6496">${chars.length}</div><div style="font-size:.7rem;color:var(--txt2)">CHARACTERS</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">GRH Prediction</strong>
+<div style="font-size:.8rem;color:var(--txt2);margin-top:6px">
+All nontrivial zeros of all L(s,χ) should lie on Re(s) = ½. This is the Generalized Riemann Hypothesis.
+</div>
+</div>
+<div style="background:rgba(255,100,150,.1);padding:8px;border-radius:6px">
+<strong style="color:#ff6496">Connection to Primes</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">Zeros of L(s,χ) control error in π(x;q,a). Low-lying zeros cause the Chebyshev bias!</div>
+</div>`;
+}
+
+// L-function for complex s = sigma + it
+function LfuncComplex(sigma, t, chi, q, terms = 200) {
+let re = 0, im = 0;
+for(let n = 1; n <= terms; n++) {
+const chiN = chi(n);
+const chiVal = typeof chiN === 'number' ? chiN : (chiN ? chiN.re : 0);
+if(chiVal === 0) continue;
+
+const mag = Math.pow(n, -sigma);
+const phase = -t * Math.log(n);
+re += chiVal * mag * Math.cos(phase);
+im += chiVal * mag * Math.sin(phase);
+}
+return {re, im};
+}
+
+async function screenshotLfuncZeros() {
+await screenshotUnified('clfunczeros', 'lzeroLiveStats', 'L-Function Zeros', 'lfunc_zeros.png');
 }
 
 draw2D();
