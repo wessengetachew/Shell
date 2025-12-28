@@ -16155,8 +16155,22 @@ if (mode === 'real') {
 const cx = c.width / 2, cy = c.height / 2;
 const scale = 30;
 
-// Axes
+// Grid
 ctx.strokeStyle = gridC();
+ctx.lineWidth = 0.5;
+for (let i = -10; i <= 10; i++) {
+ctx.beginPath();
+ctx.moveTo(cx + i * scale, 0);
+ctx.lineTo(cx + i * scale, c.height);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(0, cy + i * scale);
+ctx.lineTo(c.width, cy + i * scale);
+ctx.stroke();
+}
+
+// Axes
+ctx.strokeStyle = isDark() ? '#fff' : '#333';
 ctx.lineWidth = 1;
 ctx.beginPath();
 ctx.moveTo(0, cy);
@@ -16165,18 +16179,33 @@ ctx.moveTo(cx, 0);
 ctx.lineTo(cx, c.height);
 ctx.stroke();
 
-// Plot curve
-ctx.strokeStyle = '#ffd700';
-ctx.lineWidth = 2;
+// Axis labels
+ctx.fillStyle = isDark() ? '#888' : '#666';
+ctx.font = '10px Segoe UI';
+ctx.textAlign = 'center';
+for (let i = -8; i <= 8; i += 2) {
+if (i !== 0) {
+ctx.fillText(i.toString(), cx + i * scale, cy + 15);
+ctx.fillText(i.toString(), cx - 15, cy - i * scale + 4);
+}
+}
+
+// Plot curve - upper and lower branches
+ctx.fillStyle = '#ffd700';
 for (let px = 0; px < c.width; px++) {
 const x = (px - cx) / scale;
 const y2 = x * x * x + a * x + b;
 if (y2 >= 0) {
 const y = Math.sqrt(y2);
+// Upper branch
 ctx.beginPath();
-ctx.arc(px, cy - y * scale, 1, 0, 2 * PI);
-ctx.arc(px, cy + y * scale, 1, 0, 2 * PI);
+ctx.arc(px, cy - y * scale, 1.5, 0, 2 * PI);
 ctx.fill();
+// Lower branch
+ctx.beginPath();
+ctx.arc(px, cy + y * scale, 1.5, 0, 2 * PI);
+ctx.fill();
+ellipticData.push({ x: +x.toFixed(2), y: +y.toFixed(2) });
 }
 }
 } else if (mode === 'modp') {
@@ -16192,41 +16221,221 @@ ellipticData.push({ x, y });
 }
 }
 
+// Grid
 const pad = 50, size = Math.min((c.width - 2 * pad) / p, (c.height - 2 * pad) / p, 15);
+ctx.strokeStyle = gridC();
+ctx.lineWidth = 0.5;
+for (let i = 0; i <= p; i++) {
+ctx.beginPath();
+ctx.moveTo(pad + i * size, pad);
+ctx.lineTo(pad + i * size, c.height - pad);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(pad, c.height - pad - i * size);
+ctx.lineTo(pad + p * size, c.height - pad - i * size);
+ctx.stroke();
+}
+
+// Axis labels
+ctx.fillStyle = isDark() ? '#888' : '#666';
+ctx.font = '9px Segoe UI';
+ctx.textAlign = 'center';
+for (let i = 0; i < p; i += Math.ceil(p / 10)) {
+ctx.fillText(i.toString(), pad + i * size + size / 2, c.height - pad + 12);
+ctx.fillText(i.toString(), pad - 12, c.height - pad - i * size - size / 2 + 3);
+}
+
+// Points
 points.forEach(pt => {
 const px = pad + pt.x * size + size / 2;
 const py = c.height - pad - pt.y * size - size / 2;
 ctx.fillStyle = '#ffd700';
 ctx.beginPath();
-ctx.arc(px, py, size / 3, 0, 2 * PI);
+ctx.arc(px, py, Math.max(size / 3, 3), 0, 2 * PI);
 ctx.fill();
 });
+
+// Point at infinity indicator
+ctx.fillStyle = '#ff6496';
+ctx.font = 'bold 12px Segoe UI';
+ctx.textAlign = 'right';
+ctx.fillText('∞ (identity)', c.width - 20, c.height - 20);
+} else if (mode === 'group') {
+// Group law visualization: P + Q = R
+const cx = c.width / 2, cy = c.height / 2;
+const scale = 40;
+
+// Grid
+ctx.strokeStyle = gridC();
+ctx.lineWidth = 0.5;
+for (let i = -8; i <= 8; i++) {
+ctx.beginPath();
+ctx.moveTo(cx + i * scale, 0);
+ctx.lineTo(cx + i * scale, c.height);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(0, cy + i * scale);
+ctx.lineTo(c.width, cy + i * scale);
+ctx.stroke();
+}
+
+// Axes
+ctx.strokeStyle = isDark() ? '#fff' : '#333';
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(0, cy);
+ctx.lineTo(c.width, cy);
+ctx.moveTo(cx, 0);
+ctx.lineTo(cx, c.height);
+ctx.stroke();
+
+// Plot curve
+ctx.fillStyle = '#ffd700';
+for (let px = 0; px < c.width; px++) {
+const x = (px - cx) / scale;
+const y2 = x * x * x + a * x + b;
+if (y2 >= 0) {
+const y = Math.sqrt(y2);
+ctx.beginPath();
+ctx.arc(px, cy - y * scale, 1.5, 0, 2 * PI);
+ctx.fill();
+ctx.beginPath();
+ctx.arc(px, cy + y * scale, 1.5, 0, 2 * PI);
+ctx.fill();
+}
+}
+
+// Find two points P and Q on the curve for demonstration
+let P = null, Q = null;
+for (let x = -3; x <= 3 && !P; x += 0.5) {
+const y2 = x * x * x + a * x + b;
+if (y2 > 0) P = { x, y: Math.sqrt(y2) };
+}
+for (let x = 0; x <= 5 && !Q; x += 0.5) {
+const y2 = x * x * x + a * x + b;
+if (y2 > 0 && (!P || Math.abs(x - P.x) > 0.5)) Q = { x, y: Math.sqrt(y2) };
+}
+
+if (P && Q) {
+// Draw P
+ctx.fillStyle = '#00ff88';
+ctx.beginPath();
+ctx.arc(cx + P.x * scale, cy - P.y * scale, 8, 0, 2 * PI);
+ctx.fill();
+ctx.fillStyle = isDark() ? '#fff' : '#000';
+ctx.font = 'bold 12px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText('P', cx + P.x * scale, cy - P.y * scale - 15);
+
+// Draw Q
+ctx.fillStyle = '#00d9ff';
+ctx.beginPath();
+ctx.arc(cx + Q.x * scale, cy - Q.y * scale, 8, 0, 2 * PI);
+ctx.fill();
+ctx.fillText('Q', cx + Q.x * scale, cy - Q.y * scale - 15);
+
+// Line through P and Q
+const slope = (Q.y - P.y) / (Q.x - P.x);
+const intercept = P.y - slope * P.x;
+ctx.strokeStyle = '#ff6496';
+ctx.lineWidth = 2;
+ctx.setLineDash([5, 5]);
+ctx.beginPath();
+ctx.moveTo(cx - 6 * scale, cy - (-6 * slope + intercept) * scale);
+ctx.lineTo(cx + 6 * scale, cy - (6 * slope + intercept) * scale);
+ctx.stroke();
+ctx.setLineDash([]);
+
+// Find third intersection point R'
+// x³ + ax + b - (slope*x + intercept)² = 0
+// Using Vieta: x_P + x_Q + x_R' = slope²
+const xR = slope * slope - P.x - Q.x;
+const yR = slope * xR + intercept;
+const xResult = xR;
+const yResult = -yR; // Reflect over x-axis
+
+// Draw R' (intersection)
+ctx.fillStyle = '#9664ff';
+ctx.beginPath();
+ctx.arc(cx + xR * scale, cy - yR * scale, 6, 0, 2 * PI);
+ctx.fill();
+ctx.fillStyle = isDark() ? '#fff' : '#000';
+ctx.fillText("R'", cx + xR * scale + 15, cy - yR * scale);
+
+// Vertical line to P+Q
+ctx.strokeStyle = '#9664ff';
+ctx.setLineDash([3, 3]);
+ctx.beginPath();
+ctx.moveTo(cx + xR * scale, cy - yR * scale);
+ctx.lineTo(cx + xResult * scale, cy - yResult * scale);
+ctx.stroke();
+ctx.setLineDash([]);
+
+// Draw P+Q (result)
+ctx.fillStyle = '#ff6496';
+ctx.beginPath();
+ctx.arc(cx + xResult * scale, cy - yResult * scale, 8, 0, 2 * PI);
+ctx.fill();
+ctx.fillStyle = isDark() ? '#fff' : '#000';
+ctx.font = 'bold 12px Segoe UI';
+ctx.fillText('P+Q', cx + xResult * scale, cy - yResult * scale + 20);
+
+ellipticData = [
+{ x: +P.x.toFixed(2), y: +P.y.toFixed(2), label: 'P' },
+{ x: +Q.x.toFixed(2), y: +Q.y.toFixed(2), label: 'Q' },
+{ x: +xResult.toFixed(2), y: +yResult.toFixed(2), label: 'P+Q' }
+];
+}
+
+// Legend
+ctx.fillStyle = isDark() ? '#00d9ff' : '#0066cc';
+ctx.font = '11px Segoe UI';
+ctx.textAlign = 'left';
+ctx.fillText('Group Law: Draw line through P,Q → intersects at R\' → reflect to get P+Q', 20, c.height - 15);
 }
 
 ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
 ctx.font = 'bold 14px Segoe UI';
 ctx.textAlign = 'center';
-ctx.fillText(`Elliptic Curve y² = x³ + ${a}x + ${b}`, c.width / 2, 25);
+ctx.fillText(`Elliptic Curve y² = x³ ${a >= 0 ? '+' : ''}${a}x ${b >= 0 ? '+' : ''}${b}${mode === 'modp' ? ' over 𝔽_' + p : ' over ℝ'}`, c.width / 2, 25);
 
 const pointCount = ellipticData.length + 1; // +1 for point at infinity
+const hasseError = mode === 'modp' ? Math.abs(pointCount - p - 1) : 0;
+const hasseBound = mode === 'modp' ? 2 * Math.sqrt(p) : 0;
 
 document.getElementById('ellLiveStats').innerHTML = `
 <div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
-<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Elliptic Curves | FIELD: E(ℚ) or E(𝔽_p) | TYPE: y² = x³ + ax + b</div>
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Elliptic Curves | FIELD: ${mode === 'modp' ? 'E(𝔽_' + p + ')' : 'E(ℝ)'} | TYPE: y² = x³ + ax + b</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>a: <strong style="color:#00d9ff">${a}</strong></span>
+<span>b: <strong style="color:#ffd700">${b}</strong></span>
+<span>Mode: <strong style="color:#00ff88">${mode === 'modp' ? '𝔽_' + p : 'ℝ'}</strong></span>
+</div>
 </div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
-<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${a}, ${b}</div><div style="font-size:.7rem;color:var(--txt2)">a, b</div></div>
-<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${mode === 'modp' ? pointCount : '∞'}</div><div style="font-size:.7rem;color:var(--txt2)">#E(𝔽_${p})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${mode === 'modp' ? pointCount : '∞'}</div><div style="font-size:.7rem;color:var(--txt2)">#E POINTS</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${discriminant}</div><div style="font-size:.7rem;color:var(--txt2)">Δ DISCRIM</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:${discriminant !== 0 ? '#00ff88' : '#ff6496'}">${discriminant !== 0 ? 'Smooth' : 'Singular'}</div><div style="font-size:.7rem;color:var(--txt2)">TYPE</div></div>
 </div>
+${mode === 'modp' ? `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#9664ff">${fmt(hasseBound)}</div><div style="font-size:.6rem;color:var(--txt2)">HASSE BOUND 2√p</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:${hasseError <= hasseBound ? '#00ff88' : '#ff6496'}">${hasseError}</div><div style="font-size:.6rem;color:var(--txt2)">|#E - p - 1|</div></div>
+</div>` : ''}
 <div style="font-size:.8rem;color:var(--txt2)">
-<strong style="color:var(--acc)">Discriminant:</strong> Δ = -16(4a³ + 27b²) = ${discriminant}<br>
-<strong style="color:var(--acc)">Hasse bound:</strong> |#E(𝔽_p) - p - 1| ≤ 2√p<br>
-<strong style="color:var(--acc)">BSD Conjecture:</strong> Rank related to L-function order at s=1
+<strong style="color:var(--acc)">Discriminant:</strong> Δ = -16(4a³ + 27b²)<br>
+<strong style="color:var(--acc)">Hasse's Theorem:</strong> |#E(𝔽_p) - p - 1| ≤ 2√p<br>
+<strong style="color:var(--acc)">BSD Conjecture:</strong> rank(E) = ord_{s=1} L(E,s)
 </div>`;
 
-if (ellipticData.length > 0) {
-Plotly.newPlot('pell1', [{ x: ellipticData.map(pt => pt.x), y: ellipticData.map(pt => pt.y), mode: 'markers', marker: { color: '#ffd700', size: 6 } }], { ...plo(), xaxis: { title: 'x' }, yaxis: { title: 'y' } });
+if (ellipticData.length > 0 && mode === 'modp') {
+Plotly.newPlot('pell1', [{ x: ellipticData.map(pt => pt.x), y: ellipticData.map(pt => pt.y), mode: 'markers', marker: { color: '#ffd700', size: 8 }, name: 'E(𝔽_p)' }], { ...plo(), xaxis: { title: 'x mod ' + p }, yaxis: { title: 'y mod ' + p } });
+} else if (mode === 'real') {
+// Show curve shape as scatter
+const plotData = ellipticData.filter((_, i) => i % 3 === 0);
+Plotly.newPlot('pell1', [
+{ x: plotData.map(pt => pt.x), y: plotData.map(pt => pt.y), mode: 'markers', marker: { color: '#ffd700', size: 3 }, name: 'y > 0' },
+{ x: plotData.map(pt => pt.x), y: plotData.map(pt => -pt.y), mode: 'markers', marker: { color: '#00d9ff', size: 3 }, name: 'y < 0' }
+], { ...plo(), xaxis: { title: 'x' }, yaxis: { title: 'y' } });
 }
 }
 
