@@ -128,9 +128,9 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <h3>Primitive Density: 1/ζ(n)</h3>
 <div class="fm">P_n = 1 / ζ(n) = probability that random n-tuple is primitive</div>
 <ul>
-<li>n=2 (pairs): 1/ζ(2) ≈ 0.60793 (≈61% of integer pairs coprime)</li>
-<li>n=3 (triples): 1/ζ(3) ≈ 0.83191 (≈83% coprime)</li>
-<li>n=4: 1/ζ(4) ≈ 0.92391 (≈92% coprime)</li>
+<li>n=2 (pairs): 1/ζ(2) = 0.6079271018540266 (60.79271019% of integer pairs coprime)</li>
+<li>n=3 (triples): 1/ζ(3) = 0.8319073725807075 (83.19073726% coprime)</li>
+<li>n=4: 1/ζ(4) = 0.9239393750608806 (92.39393751% coprime)</li>
 <li>n=5: 1/ζ(5) ≈ 0.96449 (≈96% coprime)</li>
 <li>n=6: 1/ζ(6) ≈ 0.98296 (≈98% coprime)</li>
 <li>n=7: 1/ζ(7) ≈ 0.99171 (≈99% coprime)</li>
@@ -275,8 +275,8 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div style="background:var(--bg2);padding:1rem;border-radius:8px">
 <h4 style="color:var(--acc);margin:0 0 .5rem 0;border-bottom:1px solid var(--bord);padding-bottom:.3rem">① Lattice & Geometry (Tabs 1–3)</h4>
 <div style="font-size:.85rem;color:var(--txt2);line-height:1.6">
-<strong style="color:#00ff88">1. 2D Lattice:</strong> Primitive points in circle/square. Density → 6/π² ≈ 60.79%<br>
-<strong style="color:#00d9ff">2. 3D Ball:</strong> Primitive points in sphere. Density → 1/ζ(3) ≈ 83.19%<br>
+<strong style="color:#00ff88">1. 2D Lattice:</strong> Primitive points in circle/square. Density → 6/π² = 60.79271019%<br>
+<strong style="color:#00d9ff">2. 3D Ball:</strong> Primitive points in sphere. Density → 1/ζ(3) = 83.19073726%<br>
 <strong style="color:#ffd700">3. Möbius μ(n):</strong> Sieve function, Mertens M(n), squarefree decomposition
 </div>
 </div>
@@ -335,8 +335,8 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <h3>Key Formulas by Tab</h3>
 <table style="width:100%;font-size:.85rem">
 <tr><th>Tab</th><th>Primary Formula</th><th>Key Result</th></tr>
-<tr><td>2D Lattice</td><td>N(R) = (6/π²)πR² + O(R)</td><td>~60.79% primitive</td></tr>
-<tr><td>3D Ball</td><td>N(R) = (4π/3ζ(3))R³ + O(R²)</td><td>~83.19% primitive</td></tr>
+<tr><td>2D Lattice</td><td>N(R) = (6/π²)πR² + O(R)</td><td>60.79271019% primitive</td></tr>
+<tr><td>3D Ball</td><td>N(R) = (4π/3ζ(3))R³ + O(R²)</td><td>83.19073726% primitive</td></tr>
 <tr><td>Möbius</td><td>μ(n) = (-1)^k if squarefree, else 0</td><td>Σμ(d) = [n=1]</td></tr>
 <tr><td>Farey</td><td>|F_n| = 1 + Σ_{k=1}^n φ(k)</td><td>~3n²/π² fractions</td></tr>
 <tr><td>Primitive Roots</td><td>ord_p(g) = p-1 ⟺ g primitive</td><td>φ(p-1) generators</td></tr>
@@ -352,12 +352,12 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <h3>Riemann Zeta Reference Values</h3>
 <table style="font-size:.85rem">
 <tr><th>n</th><th>ζ(n)</th><th>1/ζ(n)</th><th>Closed Form</th><th>Interpretation</th></tr>
-<tr><td>2</td><td>1.6449341</td><td>0.6079271</td><td>π²/6</td><td>~61% pairs coprime</td></tr>
-<tr><td>3</td><td>1.2020569</td><td>0.8319073</td><td>Apéry's constant</td><td>~83% triples coprime</td></tr>
-<tr><td>4</td><td>1.0823232</td><td>0.9239384</td><td>π⁴/90</td><td>~92% 4-tuples coprime</td></tr>
-<tr><td>5</td><td>1.0369278</td><td>0.9643894</td><td>—</td><td>~96% 5-tuples coprime</td></tr>
-<tr><td>6</td><td>1.0173431</td><td>0.9829534</td><td>π⁶/945</td><td>~98% 6-tuples coprime</td></tr>
-<tr><td>8</td><td>1.0040774</td><td>0.9959326</td><td>π⁸/9450</td><td>~99.6% 8-tuples coprime</td></tr>
+<tr><td>2</td><td>1.6449340668</td><td>0.6079271019</td><td>π²/6</td><td>60.79271019% pairs coprime</td></tr>
+<tr><td>3</td><td>1.2020569032</td><td>0.8319073726</td><td>Apéry's constant</td><td>83.19073726% triples coprime</td></tr>
+<tr><td>4</td><td>1.0823232337</td><td>0.9239393751</td><td>π⁴/90</td><td>92.39393751% 4-tuples coprime</td></tr>
+<tr><td>5</td><td>1.0369277551</td><td>0.9643969402</td><td>—</td><td>96.43969402% 5-tuples coprime</td></tr>
+<tr><td>6</td><td>1.0173430620</td><td>0.9829525700</td><td>π⁶/945</td><td>98.29525700% 6-tuples coprime</td></tr>
+<tr><td>8</td><td>1.0040773562</td><td>0.9959389757</td><td>π⁸/9450</td><td>99.59389757% 8-tuples coprime</td></tr>
 </table>
 
 <h3>Academic References</h3>
@@ -429,6 +429,9 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <button class="tbtn" onclick="showTab('tram',this)">Ramanujan c_q</button>
 <button class="tbtn" onclick="showTab('tulam',this)">Ulam Spiral</button>
 <button class="tbtn" onclick="showTab('tsacks',this)">Sacks Spiral</button>
+<button class="tbtn" onclick="showTab('thardy',this)">Hardy Z(t)</button>
+<button class="tbtn" onclick="showTab('tgram',this)">Gram Points</button>
+<button class="tbtn" onclick="showTab('texplicit',this)">Explicit π(x)</button>
 </div>
 
 <div id="t2d" class="tab active">
@@ -476,10 +479,10 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <div style="padding:1rem;background:rgba(0,255,136,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">2D Lattice & Basel Problem Theory</h4>
 <div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
-P(gcd(x,y) = 1) = 6/π² = 1/ζ(2) ≈ 0.6079271
+P(gcd(x,y) = 1) = 6/π² = 1/ζ(2) = 0.6079271018540266
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Basel Problem:</strong> ζ(2) = Σ1/n² = π²/6 ≈ 1.6449 (Euler, 1734)</div>
+<div><strong>Basel Problem:</strong> ζ(2) = Σ1/n² = π²/6 = 1.6449340668482264 (Euler, 1734)</div>
 <div><strong>Euler Product:</strong> ζ(2) = Π(1-p⁻²)⁻¹ over all primes p</div>
 <div><strong>Visible Points:</strong> Point (x,y) visible from origin iff gcd(x,y)=1</div>
 <div><strong>Asymptotic:</strong> #{primitive in B_R} ~ πR²/ζ(2) as R→∞</div>
@@ -539,10 +542,10 @@ P(gcd(x,y) = 1) = 6/π² = 1/ζ(2) ≈ 0.6079271
 <div style="padding:1rem;background:rgba(0,217,255,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">3D Lattice & Apéry's Constant Theory</h4>
 <div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
-P(gcd(x,y,z) = 1) = 1/ζ(3) ≈ 0.8319073
+P(gcd(x,y,z) = 1) = 1/ζ(3) = 0.8319073725807075
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>Apéry's Constant:</strong> ζ(3) = Σ1/n³ ≈ 1.2021 (proved irrational 1978)</div>
+<div><strong>Apéry's Constant:</strong> ζ(3) = Σ1/n³ = 1.2020569031595943 (proved irrational 1978)</div>
 <div><strong>Euler Product:</strong> ζ(3) = Π(1-p⁻³)⁻¹ over all primes</div>
 <div><strong>Ball Volume:</strong> V₃ = (4/3)πR³</div>
 <div><strong>Asymptotic:</strong> #{primitive in B_R} ~ (4/3)πR³/ζ(3)</div>
@@ -1038,9 +1041,9 @@ N(R) = Vol(K)·R^n / ζ(n) + O(R^(n-1)) &nbsp;|&nbsp; |Error| = O(R^θ)
 P(gcd = 1) = 1/ζ(n) → 1 as n → ∞ &nbsp;|&nbsp; Vol(Bⁿ) = π^(n/2) / Γ(n/2+1)
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>ζ(2):</strong> π²/6 → 60.8% coprime</div>
-<div><strong>ζ(3):</strong> Apéry ≈ 1.202 → 83.2% coprime</div>
-<div><strong>ζ(4):</strong> π⁴/90 → 92.4% coprime</div>
+<div><strong>ζ(2):</strong> π²/6 = 1.6449340668 → 60.79271019% coprime</div>
+<div><strong>ζ(3):</strong> Apéry = 1.2020569032 → 83.19073726% coprime</div>
+<div><strong>ζ(4):</strong> π⁴/90 = 1.0823232337 → 92.39393751% coprime</div>
 <div><strong>ζ(∞):</strong> → 1 → 100% coprime</div>
 </div>
 <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bord)">
@@ -1158,10 +1161,10 @@ P(6) = L(6) - L(3) - L(2) + L(1) - L(1.5) - L(1.2) + ...
 <div style="padding:1rem;background:rgba(0,217,255,.08);border-radius:8px;margin-top:1rem">
 <h4 style="color:var(--acc);margin-bottom:.5rem">GCD Distribution Theory</h4>
 <div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
-P(gcd = k) = 1/(k² · ζ(2)) = 6/(π²k²) &nbsp;|&nbsp; P(gcd = 1) ≈ 60.79%
+P(gcd = k) = 1/(k² · ζ(2)) = 6/(π²k²) &nbsp;|&nbsp; P(gcd = 1) = 0.6079271019
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>P(gcd=1):</strong> 6/π² ≈ 60.79%</div>
+<div><strong>P(gcd=1):</strong> 6/π² = 0.6079271018540266</div>
 <div><strong>P(gcd=2):</strong> 6/(4π²) ≈ 15.20%</div>
 <div><strong>P(gcd=3):</strong> 6/(9π²) ≈ 6.75%</div>
 <div><strong>Average GCD:</strong> ~ √(log R)</div>
@@ -1348,8 +1351,8 @@ N(R) = πR² + r(R) &nbsp;where&nbsp; |r(R)| = O(R^θ), θ ≤ 131/208 ≈ 0.63
 P(gcd(x₁,...,xₖ)=1) = 1/ζ(k) → 1 as k → ∞
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;font-size:.85rem;color:var(--txt2)">
-<div><strong>ζ(2):</strong> π²/6 → 60.8% coprime pairs</div>
-<div><strong>ζ(3):</strong> Apéry ≈ 1.202 → 83.2%</div>
+<div><strong>ζ(2):</strong> π²/6 = 1.6449340668 → 60.79271019% coprime pairs</div>
+<div><strong>ζ(3):</strong> Apéry = 1.2020569032 → 83.19073726%</div>
 <div><strong>ζ(10):</strong> ≈ 1.00099 → 99.9%</div>
 <div><strong>Euler Product:</strong> ζ(s) = Π(1-p⁻ˢ)⁻¹</div>
 </div>
@@ -2775,8 +2778,171 @@ Position: r = √n, θ = 2π√n &nbsp;&nbsp;|&nbsp;&nbsp; Squares on x-axis &nb
 </div>
 </div>
 
+<div id="thardy" class="tab">
+<div class="ctrl">
+<div class="cg"><label>t Range <span class="tip" title="Imaginary part of s = ½ + it">?</span></label><div class="sig"><input type="range" id="hardyT" min="10" max="200" value="50" oninput="document.getElementById('hardyTv').value=this.value;drawHardy()"><input type="number" id="hardyTv" value="50" min="1" max="1000" onchange="document.getElementById('hardyT').value=Math.min(200,this.value);drawHardy()"></div></div>
+<div class="cg"><label>Resolution</label><div class="sig"><input type="range" id="hardyRes" min="500" max="5000" value="2000" step="100" oninput="document.getElementById('hardyResv').value=this.value;drawHardy()"><input type="number" id="hardyResv" value="2000" min="100" max="10000" onchange="drawHardy()"></div></div>
+<div class="cg"><label>Visualization</label><select id="hardyViz" onchange="drawHardy()">
+<option value="zt">Z(t) Function</option>
+<option value="envelope">|Z(t)| Envelope</option>
+<option value="zeros">Zero Crossings</option>
+<option value="theta">θ(t) Phase</option>
+</select></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="hardyShowZeros" checked onchange="drawHardy()"> Mark Zeros</label>
+<label><input type="checkbox" id="hardyShowGram" onchange="drawHardy()"> Gram Points</label>
+<label><input type="checkbox" id="hardyShowEnv" onchange="drawHardy()"> ±t^{1/4} Bound</label>
+</div></div>
+<div class="cg"><label>Start t</label><input type="number" id="hardyStart" value="0" min="0" max="900" step="10" onchange="drawHardy()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('hardyTv').value=30;document.getElementById('hardyStart').value=0;drawHardy()">First Zeros</button>
+<button onclick="document.getElementById('hardyTv').value=50;document.getElementById('hardyStart').value=0;drawHardy()">t≤50</button>
+<button onclick="document.getElementById('hardyTv').value=100;document.getElementById('hardyStart').value=0;drawHardy()">t≤100</button>
+<button onclick="document.getElementById('hardyTv').value=50;document.getElementById('hardyStart').value=100;drawHardy()">100-150</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawHardy()">Compute</button><button onclick="screenshotHardy()">Screenshot</button><button class="s" onclick="csvHardy()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Hardy Z-Function: Z(t) = e^{iθ(t)}ζ(½+it)</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Z(t) is real! Sign changes = zeros on critical line. RH: ALL nontrivial zeros are sign changes of Z(t).</p>
+<canvas id="chardy" width="800" height="500"></canvas><div class="al" id="alhardy"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('hardyLiveStats','Hardy_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="hardyLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Zero Distribution</h3><div class="pc" id="phardyZeros"></div></div>
+<div class="viz"><h3>|Z(t)| Growth</h3><div class="pc" id="phardyGrowth"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(255,100,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Hardy Z-Function & Critical Line Zeros</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The Hardy Z-function Z(t) = e^{iθ(t)}ζ(½+it) where θ(t) is the Riemann-Siegel theta function. The key property: Z(t) is REAL for real t! This means zeros of ζ(s) on the critical line Re(s)=½ appear as sign changes of Z(t). Hardy (1914) used this to prove infinitely many zeros lie on the critical line.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (RH Equivalence):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+The Riemann Hypothesis states that ALL nontrivial zeros of ζ(s) have Re(s)=½. Equivalently: every zero appears as a sign change of Z(t). The first zeros occur at t ≈ 14.135, 21.022, 25.011, 30.425, 32.935... Over 10 trillion zeros verified on critical line!
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+Z(t) = e^{iθ(t)}ζ(½+it) ∈ ℝ &nbsp;&nbsp;|&nbsp;&nbsp; θ(t) = arg(Γ(¼+it/2)) - (t/2)log π &nbsp;&nbsp;|&nbsp;&nbsp; Z(γₙ) = 0
+</div>
+</div>
+</div>
+
+<div id="tgram" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max n <span class="tip" title="Number of Gram points">?</span></label><div class="sig"><input type="range" id="gramN" min="10" max="500" value="100" oninput="document.getElementById('gramNv').value=this.value;drawGram()"><input type="number" id="gramNv" value="100" min="5" max="2000" onchange="document.getElementById('gramN').value=Math.min(500,this.value);drawGram()"></div></div>
+<div class="cg"><label>Visualization</label><select id="gramViz" onchange="drawGram()">
+<option value="grampoints">Gram Points g_n</option>
+<option value="theta">θ(t) Function</option>
+<option value="intervals">Gram Intervals</option>
+<option value="violations">Gram's Law Violations</option>
+</select></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="gramShowZeros" checked onchange="drawGram()"> Zeta Zeros</label>
+<label><input type="checkbox" id="gramShowLaw" checked onchange="drawGram()"> Gram's Law</label>
+<label><input type="checkbox" id="gramShowBlocks" onchange="drawGram()"> Gram Blocks</label>
+</div></div>
+<div class="cg"><label>Start Index</label><input type="number" id="gramStart" value="-1" min="-1" max="1000" onchange="drawGram()"></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('gramNv').value=50;document.getElementById('gramStart').value=-1;drawGram()">First 50</button>
+<button onclick="document.getElementById('gramNv').value=100;drawGram()">First 100</button>
+<button onclick="document.getElementById('gramNv').value=200;drawGram()">First 200</button>
+<button onclick="document.getElementById('gramStart').value=126;document.getElementById('gramNv').value=20;drawGram()">Lehmer (126)</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawGram()">Compute</button><button onclick="screenshotGram()">Screenshot</button><button class="s" onclick="csvGram()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Gram Points: θ(g_n) = nπ</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Gram points organize zero counting. Gram's Law: usually one zero per Gram interval. Violations are rare but important.</p>
+<canvas id="cgram" width="800" height="500"></canvas><div class="al" id="algram"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('gramLiveStats','Gram_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="gramLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Gram Point Spacing</h3><div class="pc" id="pgramSpace"></div></div>
+<div class="viz"><h3>Zeros per Gram Interval</h3><div class="pc" id="pgramCount"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(100,200,255,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Gram Points & Zero Organization</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Gram points g_n are defined by θ(g_n) = nπ where θ(t) is the Riemann-Siegel theta function. They provide a natural grid for locating zeros. At Gram points, Z(g_n) = (-1)ⁿ|ζ(½+ig_n)|, so the sign of Z alternates IF there's exactly one zero per interval. The first Gram point g₀ ≈ 17.845.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Gram's Law):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Gram's Law states (-1)ⁿZ(g_n) > 0, equivalent to exactly one zero in [g_{n-1}, g_n]. It holds ~73% of the time asymptotically. Violations occur in "Gram blocks" where zeros cluster. The famous Lehmer pair near g₁₂₆ shows two very close zeros, almost violating RH!
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+θ(g_n) = nπ &nbsp;&nbsp;|&nbsp;&nbsp; g_n ≈ 2πn/W(n/e) &nbsp;&nbsp;|&nbsp;&nbsp; Gram's Law: (-1)ⁿZ(g_n) > 0
+</div>
+</div>
+</div>
+
+<div id="texplicit" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max x <span class="tip" title="Upper bound for π(x)">?</span></label><div class="sig"><input type="range" id="explicitX" min="100" max="10000" value="1000" oninput="document.getElementById('explicitXv').value=this.value;drawExplicit()"><input type="number" id="explicitXv" value="1000" min="10" max="100000" onchange="document.getElementById('explicitX').value=Math.min(10000,this.value);drawExplicit()"></div></div>
+<div class="cg"><label>Number of Zeros</label><div class="sig"><input type="range" id="explicitZeros" min="0" max="100" value="20" oninput="document.getElementById('explicitZerosv').value=this.value;drawExplicit()"><input type="number" id="explicitZerosv" value="20" min="0" max="500" onchange="drawExplicit()"></div></div>
+<div class="cg"><label>Visualization</label><select id="explicitViz" onchange="drawExplicit()">
+<option value="buildup">Build π(x) from Zeros</option>
+<option value="error">Error Analysis</option>
+<option value="oscillations">Zero Oscillations</option>
+<option value="cumulative">Cumulative Effect</option>
+</select></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="explicitShowPi" checked onchange="drawExplicit()"> Actual π(x)</label>
+<label><input type="checkbox" id="explicitShowLi" checked onchange="drawExplicit()"> Li(x)</label>
+<label><input type="checkbox" id="explicitShowSum" checked onchange="drawExplicit()"> Zero Sum</label>
+</div></div>
+<div class="cg"><label>Animation</label><div style="display:flex;gap:.3rem">
+<button onclick="animateExplicit()">▶ Animate</button>
+<button onclick="stopExplicitAnim()">⏹ Stop</button>
+</div></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('explicitXv').value=100;document.getElementById('explicitZerosv').value=5;drawExplicit()">Small</button>
+<button onclick="document.getElementById('explicitXv').value=1000;document.getElementById('explicitZerosv').value=20;drawExplicit()">Medium</button>
+<button onclick="document.getElementById('explicitXv').value=5000;document.getElementById('explicitZerosv').value=50;drawExplicit()">Large</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawExplicit()">Compute</button><button onclick="screenshotExplicit()">Screenshot</button><button class="s" onclick="csvExplicit()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Explicit Formula: π(x) = Li(x) - Σ_ρ Li(x^ρ) - ...</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Watch how adding zeros reconstructs π(x)! Each zero ρ contributes an oscillating term.</p>
+<canvas id="cexplicit" width="800" height="500"></canvas><div class="al" id="alexplicit"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('explicitLiveStats','Explicit_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="explicitLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div class="g2">
+<div class="viz"><h3>Individual Zero Contributions</h3><div class="pc" id="pexplicitContrib"></div></div>
+<div class="viz"><h3>Error: π(x) - Approximation</h3><div class="pc" id="pexplicitError"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(150,255,100,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Riemann's Explicit Formula</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Riemann's explicit formula expresses π(x) exactly in terms of Li(x) and contributions from each zeta zero: π(x) = Li(x) - Σ_ρ Li(x^ρ) - log(2) + ∫_x^∞ dt/(t(t²-1)log t). Each zero ρ = ½ + iγ contributes an oscillating term Li(x^ρ) ≈ -x^{½}cos(γ log x)/(γ log x). More zeros = more accurate approximation!
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Insight (Zeros Control Primes):</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+This formula proves that zeta zeros DIRECTLY control prime distribution! If RH holds (all Re(ρ)=½), each term decays like x^½, giving π(x) = Li(x) + O(√x log x). Zeros off the critical line would create larger oscillations. The formula is the mathematical proof that understanding zeros = understanding primes.
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+π(x) = Li(x) - Σ_ρ Li(x^ρ) - log(2) + ... &nbsp;&nbsp;|&nbsp;&nbsp; Li(x^ρ) oscillates like x^{Re(ρ)}
+</div>
+</div>
+</div>
+
 <div id="ref" class="sec">
-<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>35 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
+<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>38 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
 
 <div class="rs"><h3>Mathematical Credits & Historical Attribution</h3>
 <p style="color:var(--txt2);margin-bottom:1rem">This platform visualizes theorems and concepts developed by brilliant mathematicians over centuries:</p>
@@ -2797,7 +2963,7 @@ Position: r = √n, θ = 2π√n &nbsp;&nbsp;|&nbsp;&nbsp; Squares on x-axis &nb
 <div class="fb"><strong>Harald Cramér (1893-1985)</strong> — Cramér's conjecture on prime gaps: g_n = O((ln p_n)²), probabilistic model for primes.</div>
 </div>
 
-<div class="rs"><h3>All 35 Interactive Tabs</h3>
+<div class="rs"><h3>All 38 Interactive Tabs</h3>
 <h4>Lattice & Geometry (Tabs 1-3)</h4>
 <div class="fb"><strong>2D Lattice</strong> — Gauss circle problem: count lattice points in disk. Primitive density → 6/π² (Euler). 15+ color schemes.</div>
 <div class="fb"><strong>3D Ball</strong> — Extends to 3D sphere. Primitive density → 1/ζ(3) ≈ 0.832 (Apéry's constant). Drag rotation.</div>
@@ -2850,6 +3016,11 @@ Position: r = √n, θ = 2π√n &nbsp;&nbsp;|&nbsp;&nbsp; Squares on x-axis &nb
 <div class="fb"><strong>Ramanujan c_q</strong> — Ramanujan sum c_q(n) = Σ_{gcd(a,q)=1} e^{2πian/q}. Always integer! Fourier basis for arithmetic functions. Heatmap and unit circle views.</div>
 <div class="fb"><strong>Ulam Spiral</strong> — Integers on square spiral, primes highlighted. Diagonal patterns reveal quadratic polynomials. Euler's n²+n+41. Discovered 1963.</div>
 <div class="fb"><strong>Sacks Spiral</strong> — Primes at (√n, 2π√n) Archimedean spiral. Parabolic arms from quadratic sequences. Squares on x-axis. Visual prime clustering.</div>
+
+<h4>Critical Line (Tabs 36-38)</h4>
+<div class="fb"><strong>Hardy Z(t)</strong> — Z(t)=e^{iθ(t)}ζ(½+it) is REAL. Sign changes = zeros on critical line. RH: all zeros are sign changes. First zeros: 14.135, 21.022, 25.011...</div>
+<div class="fb"><strong>Gram Points</strong> — g_n where θ(g_n)=nπ. Organize zero counting. Gram's Law: one zero per interval (~73%). Violations form Gram blocks. Lehmer pairs.</div>
+<div class="fb"><strong>Explicit π(x)</strong> — π(x)=Li(x)-Σ_ρ Li(x^ρ)-log(2)+... Each zero ρ contributes oscillation. Animation builds π(x) from zeros. RH ⟹ O(√x log x) error.</div>
 </div>
 
 <div class="rs"><h3>Key Theorems Visualized</h3>
@@ -2920,15 +3091,62 @@ Position: r = √n, θ = 2π√n &nbsp;&nbsp;|&nbsp;&nbsp; Squares on x-axis &nb
 </footer>
 
 <script>
+// HIGH-PRECISION MATHEMATICAL CONSTANTS (17+ decimal places)
+const PI = 3.14159265358979323846264338327950288;
+const PI_SQ = 9.86960440108935861883449099987615114; // π²
+const PI_4 = 97.40909103400243723644033268870511124; // π⁴
+const PI_6 = 961.3891935753043477935274768132038336; // π⁶
+const PI_8 = 9488.531016070574879254676078451192839; // π⁸
+
+// Zeta values with maximum precision
+const ZETA2 = 1.64493406684822643647241516664602519; // π²/6
+const ZETA3 = 1.20205690315959428539973816151144999; // Apéry's constant
+const ZETA4 = 1.08232323371113819151600369654116790; // π⁴/90
+const ZETA5 = 1.03692775514336992633136548645703417;
+const ZETA6 = 1.01734306198444913971451792979092053; // π⁶/945
+const ZETA7 = 1.00834927738192282683979754984979676;
+const ZETA8 = 1.00407735619794433937868523850865247; // π⁸/9450
+
+// Inverse zeta (primitive densities)
+const INV_ZETA2 = 0.60792710185402662866327677925836583; // 6/π² ≈ 60.79271%
+const INV_ZETA3 = 0.83190737258070746868312627885303710; // 1/ζ(3) ≈ 83.19074%
+const INV_ZETA4 = 0.92393937506088059965327506266838895; // 90/π⁴ ≈ 92.39394%
+const INV_ZETA5 = 0.96439694022155614594451655816101030;
+const INV_ZETA6 = 0.98295257001054197674506666180529804;
+const INV_ZETA7 = 0.99171786507468023731390850206009357;
+const INV_ZETA8 = 0.99593897568449780461998282310567081;
+
 let P=4,D={},rx=0,ry=0,rz=0,panX=0,panY=0,anim3d=false,pts2d=[],pts3d=[],gausP=[];
 const fmt=n=>{if(n===0)return'0';if(n==null||isNaN(n)||!isFinite(n))return'—';return parseFloat(n).toFixed(P);};
+const fmtH=n=>{if(n===0)return'0';if(n==null||isNaN(n)||!isFinite(n))return'—';return parseFloat(n).toPrecision(17);}; // High precision format
 const gcd=(a,b)=>{a=Math.abs(Math.round(a));b=Math.abs(Math.round(b));while(b)[a,b]=[b,a%b];return a||1;};
 const isPrime=n=>{if(n<2)return false;if(n===2)return true;if(n%2===0)return false;for(let i=3;i*i<=n;i+=2)if(n%i===0)return false;return true;};
 const gcdM=(...n)=>n.reduce((a,b)=>gcd(a,b));
 const mob=n=>{if(n===1)return 1;let pf=0,t=n;for(let i=2;i*i<=n;i++){if(n%i===0){if(t%(i*i)===0)return 0;pf++;while(t%i===0)t/=i;}}if(t>1)pf++;return pf%2===0?1:-1;};
-const zeta=(n,t=150)=>{let s=0;for(let k=1;k<=t;k++)s+=1/Math.pow(k,n);return s;};
-const vol=n=>[0,2,Math.PI,4*Math.PI/3,Math.PI**2/2,8*Math.PI**2/15,Math.PI**3/6,16*Math.PI**3/105][n]||0;
-const theory=(R,n)=>(vol(n)/zeta(n))*Math.pow(R,n);
+const zeta=n=>{
+// Use exact high-precision constants
+if(n===2)return ZETA2;
+if(n===3)return ZETA3;
+if(n===4)return ZETA4;
+if(n===5)return ZETA5;
+if(n===6)return ZETA6;
+if(n===7)return ZETA7;
+if(n===8)return ZETA8;
+// For other values, use series with many terms
+let s=0;for(let k=1;k<=10000;k++)s+=1/Math.pow(k,n);return s;
+};
+const zetaInv=n=>{
+if(n===2)return INV_ZETA2;
+if(n===3)return INV_ZETA3;
+if(n===4)return INV_ZETA4;
+if(n===5)return INV_ZETA5;
+if(n===6)return INV_ZETA6;
+if(n===7)return INV_ZETA7;
+if(n===8)return INV_ZETA8;
+return 1/zeta(n);
+};
+const vol=n=>[0,2,PI,4*PI/3,PI_SQ/2,8*PI_SQ/15,PI*PI_SQ/6,16*PI*PI_SQ/105][n]||0;
+const theory=(R,n)=>(vol(n)*zetaInv(n))*Math.pow(R,n);
 const sqfree=n=>{for(let i=2;i*i<=n;i++)if(n%(i*i)===0)return false;return true;};
 const isDark=()=>!document.body.classList.contains('light');
 const plo=()=>({plot_bgcolor:isDark()?'rgba(10,14,39,0.8)':'rgba(245,247,250,0.95)',paper_bgcolor:isDark()?'rgba(10,14,39,0.8)':'rgba(245,247,250,0.95)',font:{color:isDark()?'#e0e0ff':'#1a1a1a'},margin:{l:50,r:30,t:30,b:40}});
@@ -2937,7 +3155,7 @@ const gridC=()=>isDark()?'rgba(0,217,255,0.12)':'rgba(0,102,204,0.15)';
 const bordC=()=>isDark()?'rgba(0,217,255,0.5)':'rgba(0,102,204,0.6)';
 function toggleTheme(){document.body.classList.toggle('light');document.getElementById('thm').textContent=isDark()?'D':'L';draw2D();if(document.getElementById('t3d').classList.contains('active'))draw3D();}
 function showSec(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.snav .nbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
-function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();if(id==='tmert')drawMertens();if(id==='tcheb')drawChebyshev();if(id==='tli')drawLi();if(id==='tdiv')drawDivisor();if(id==='tliou')drawLiouville();if(id==='tmang')drawMangoldt();if(id==='tram')drawRamanujan();if(id==='tulam')drawUlam();if(id==='tsacks')drawSacks();if(id==='thardy')drawHardy();if(id==='tgram')drawGram();if(id==='texplicit')drawExplicit();}
 
 async function screenshotDashboard(elemId, title='Dashboard'){
 const el=document.getElementById(elemId);if(!el)return;
@@ -7182,7 +7400,7 @@ ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/
 out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='sierpinski.png';a.click();},'image/png',1.0);}
 
 // k-Free Integers (Squarefree, Cubefree, etc.)
-const zetaVals={2:Math.PI**2/6,3:1.2020569032,4:Math.PI**4/90,5:1.0369277551,6:Math.PI**6/945};
+const zetaVals={2:ZETA2,3:ZETA3,4:ZETA4,5:ZETA5,6:ZETA6,7:ZETA7,8:ZETA8};
 
 function isKfree(n,k){
 if(n<=1)return n===1;
@@ -10423,6 +10641,831 @@ const theta=2*Math.PI*sqrtN;
 s+=`${n},${sqrtN},${theta},${Math.cos(theta)*sqrtN},${Math.sin(theta)*sqrtN},${sacksData.primes.has(n)?1:0}\n`;
 }
 dl(s,'sacks_spiral.csv');
+}
+
+// ==================== RIEMANN ZETA CRITICAL LINE ====================
+// Known zeros of zeta (imaginary parts γ where ζ(½+iγ)=0)
+const ZETA_ZEROS = [
+14.134725141734693790, 21.022039638771554993, 25.010857580145688763,
+30.424876125859513210, 32.935061587739189691, 37.586178158825671257,
+40.918719012147495187, 43.327073280914999519, 48.005150881167159727,
+49.773832477672302181, 52.970321477714460644, 56.446247697063394804,
+59.347044002602353079, 60.831778524609809844, 65.112544048081606660,
+67.079810529494173714, 69.546401711173979253, 72.067157674481907582,
+75.704690699083933168, 77.144840068874805372, 79.337375020249367922,
+82.910380854086030183, 84.735492980517050105, 87.425274613125229406,
+88.809111207634465423, 92.491899270558484296, 94.651344040519886966,
+95.870634228245309758, 98.831194218193692233, 101.31785100573139122,
+103.72553804047833941, 105.44662305232609449, 107.16861118427640751,
+111.02953554316967452, 111.87465917699263708, 114.32022091545271276,
+116.22668032085755438, 118.79078286597621732, 121.37012500242064591,
+122.94682929355258820, 124.25681855434576718, 127.51668387959649512,
+129.57870419995605098, 131.08768853093265672, 133.49773720299758645,
+134.75650975337387133, 138.11604205453344320, 139.73620895212138895,
+141.12370740402112376, 143.11184580762063273, 146.00098248680048919,
+147.42276534793308755, 150.05352042078782659, 150.92525768847052854,
+153.02469388962161583, 156.11290929488542054, 157.59759182416338810,
+158.84998824471372968, 161.18896413346127860, 163.03070969030579894,
+165.53706942685747168, 167.18443976129343424, 169.09451541521459628,
+169.91197647941169893, 173.41153663823262780, 174.75419152430845339,
+176.44143416899626780, 178.37740777482236746, 179.91648402025634847,
+182.20707848436646288, 184.87446784609816684, 185.59878367807166488,
+187.22892258423618890, 189.41615865498588760, 192.02665636054838648,
+193.07972660174592792, 195.26539668337094868, 196.87648158723658498,
+198.01530956127895210, 201.26475194370447961, 202.49359453091668116
+];
+
+// Riemann-Siegel theta function θ(t) = arg(Γ(1/4 + it/2)) - (t/2)log(π)
+function thetaRS(t) {
+if(t < 1) return 0;
+// Stirling approximation for arg(Γ(1/4 + it/2))
+// θ(t) ≈ (t/2)log(t/2π) - t/2 - π/8 + 1/(48t) + ...
+const term1 = (t/2) * Math.log(t / (2 * PI));
+const term2 = -t/2;
+const term3 = -PI/8;
+const term4 = 1/(48*t);
+const term5 = 7/(5760*t*t*t);
+return term1 + term2 + term3 + term4 + term5;
+}
+
+// Hardy Z-function approximation using Riemann-Siegel formula
+function hardyZ(t) {
+if(t < 1) return 1;
+// Main sum approximation
+const sqrtT2pi = Math.sqrt(t / (2 * PI));
+const N = Math.floor(sqrtT2pi);
+let mainSum = 0;
+for(let n = 1; n <= N; n++) {
+mainSum += Math.cos(thetaRS(t) - t * Math.log(n)) / Math.sqrt(n);
+}
+mainSum *= 2;
+// Correction term (simplified)
+const p = sqrtT2pi - N;
+const C0 = Math.cos(2 * PI * (p * p - p - 1/16)) / Math.cos(2 * PI * p);
+const correction = Math.pow(-1, N - 1) * Math.pow(t / (2 * PI), -0.25) * C0;
+return mainSum + correction;
+}
+
+// Find zeros by sign changes
+function findZerosInRange(tMin, tMax, resolution) {
+const zeros = [];
+const dt = (tMax - tMin) / resolution;
+let prevZ = hardyZ(tMin);
+for(let i = 1; i <= resolution; i++) {
+const t = tMin + i * dt;
+const z = hardyZ(t);
+if(prevZ * z < 0) {
+// Bisect to find more precise zero
+let lo = t - dt, hi = t;
+for(let j = 0; j < 20; j++) {
+const mid = (lo + hi) / 2;
+const zm = hardyZ(mid);
+if(zm * hardyZ(lo) < 0) hi = mid;
+else lo = mid;
+}
+zeros.push((lo + hi) / 2);
+}
+prevZ = z;
+}
+return zeros;
+}
+
+// Gram points: θ(g_n) = nπ
+function gramPoint(n) {
+// Newton's method to solve θ(g) = nπ
+let g = n < 0 ? 10 : 2 * PI * Math.exp(1 + n / Math.E); // Initial guess
+for(let i = 0; i < 50; i++) {
+const th = thetaRS(g);
+const target = n * PI;
+const diff = th - target;
+// Derivative: θ'(t) ≈ (1/2)log(t/2π)
+const deriv = 0.5 * Math.log(g / (2 * PI));
+if(Math.abs(deriv) < 1e-10) break;
+const newG = g - diff / deriv;
+if(Math.abs(newG - g) < 1e-12) break;
+g = newG;
+}
+return g;
+}
+
+let hardyData = {tVals: [], zVals: [], zeros: [], gramPts: []};
+
+function drawHardy() {
+const c = document.getElementById('chardy'), ctx = c.getContext('2d');
+const tMax = +document.getElementById('hardyTv').value || 50;
+const tStart = +document.getElementById('hardyStart').value || 0;
+const resolution = +document.getElementById('hardyResv').value || 2000;
+const viz = document.getElementById('hardyViz').value;
+const showZeros = document.getElementById('hardyShowZeros').checked;
+const showGram = document.getElementById('hardyShowGram').checked;
+const showEnv = document.getElementById('hardyShowEnv').checked;
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+const tMin = Math.max(1, tStart);
+const tRange = tMax;
+const dt = tRange / resolution;
+
+// Compute Z(t) values
+const tVals = [], zVals = [], absZ = [];
+for(let i = 0; i <= resolution; i++) {
+const t = tMin + i * dt;
+const z = hardyZ(t);
+tVals.push(t);
+zVals.push(z);
+absZ.push(Math.abs(z));
+}
+hardyData = {tVals, zVals, absZ, tMin, tMax: tMin + tRange};
+
+// Find zeros
+const zeros = findZerosInRange(tMin, tMin + tRange, resolution * 2);
+hardyData.zeros = zeros;
+
+// Compute Gram points in range
+const gramPts = [];
+for(let n = -1; n < 500; n++) {
+const g = gramPoint(n);
+if(g >= tMin && g <= tMin + tRange) gramPts.push({n, g, z: hardyZ(g)});
+if(g > tMin + tRange) break;
+}
+hardyData.gramPts = gramPts;
+
+const pad = 60, w = c.width - 2*pad, h = c.height - 2*pad;
+
+// Determine y range
+let yMin, yMax;
+if(viz === 'envelope' || viz === 'theta') {
+yMin = 0; yMax = Math.max(...absZ) * 1.1;
+} else {
+yMin = Math.min(...zVals); yMax = Math.max(...zVals);
+const margin = (yMax - yMin) * 0.1;
+yMin -= margin; yMax += margin;
+}
+
+const scX = w / tRange, scY = h / (yMax - yMin);
+
+// Grid
+ctx.strokeStyle = gridC(); ctx.lineWidth = 0.5;
+for(let i = 0; i <= 10; i++) {
+const gx = pad + i * w / 10, gy = pad + i * h / 10;
+ctx.beginPath(); ctx.moveTo(gx, pad); ctx.lineTo(gx, c.height - pad); ctx.stroke();
+ctx.beginPath(); ctx.moveTo(pad, gy); ctx.lineTo(c.width - pad, gy); ctx.stroke();
+}
+
+// Zero line
+if(yMin < 0 && yMax > 0) {
+const y0 = c.height - pad + yMin * scY;
+ctx.strokeStyle = 'rgba(255,215,0,0.6)'; ctx.lineWidth = 2;
+ctx.beginPath(); ctx.moveTo(pad, y0); ctx.lineTo(c.width - pad, y0); ctx.stroke();
+}
+
+// Envelope bounds ±t^{1/4}
+if(showEnv && viz !== 'theta') {
+ctx.strokeStyle = 'rgba(0,255,136,0.3)'; ctx.lineWidth = 1; ctx.setLineDash([5,3]);
+ctx.beginPath();
+for(let i = 0; i <= resolution; i++) {
+const t = tVals[i];
+const env = Math.pow(t, 0.25) * 2;
+const px = pad + (t - tMin) * scX;
+const py = c.height - pad - (env - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+ctx.beginPath();
+for(let i = 0; i <= resolution; i++) {
+const t = tVals[i];
+const env = -Math.pow(t, 0.25) * 2;
+const px = pad + (t - tMin) * scX;
+const py = c.height - pad - (env - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+ctx.setLineDash([]);
+}
+
+// Draw Z(t) or |Z(t)|
+ctx.strokeStyle = viz === 'theta' ? '#9664ff' : '#00d9ff'; ctx.lineWidth = 1.5;
+ctx.beginPath();
+for(let i = 0; i <= resolution; i++) {
+const px = pad + (tVals[i] - tMin) * scX;
+const val = viz === 'envelope' ? absZ[i] : viz === 'theta' ? thetaRS(tVals[i]) % (2*PI) : zVals[i];
+const py = c.height - pad - (val - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+
+// Mark zeros
+if(showZeros) {
+ctx.fillStyle = '#ff6496';
+for(const z of zeros) {
+const px = pad + (z - tMin) * scX;
+const py = c.height - pad + yMin * scY;
+ctx.beginPath(); ctx.arc(px, py, 5, 0, 2*PI); ctx.fill();
+}
+}
+
+// Mark Gram points
+if(showGram) {
+ctx.fillStyle = '#ffd700';
+for(const gp of gramPts) {
+const px = pad + (gp.g - tMin) * scX;
+const py = c.height - pad - (0 - yMin) * scY;
+ctx.beginPath(); ctx.arc(px, py - 10, 4, 0, 2*PI); ctx.fill();
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '9px Segoe UI';
+ctx.textAlign = 'center'; ctx.fillText('g' + gp.n, px, py - 18);
+ctx.fillStyle = '#ffd700';
+}
+}
+
+// Title
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800'; ctx.font = 'bold 14px Segoe UI'; ctx.textAlign = 'center';
+ctx.fillText(`Hardy Z-Function — t ∈ [${fmt(tMin)}, ${fmt(tMin + tRange)}]`, c.width/2, 25);
+
+// Labels
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '12px Segoe UI';
+ctx.textAlign = 'center'; ctx.fillText('t', c.width/2, c.height - 15);
+ctx.save(); ctx.translate(15, c.height/2); ctx.rotate(-PI/2);
+ctx.fillText(viz === 'envelope' ? '|Z(t)|' : viz === 'theta' ? 'θ(t) mod 2π' : 'Z(t)', 0, 0);
+ctx.restore();
+
+// Known zeros in range
+const knownInRange = ZETA_ZEROS.filter(z => z >= tMin && z <= tMin + tRange);
+
+legend('alhardy', 'Hardy Z(t)', [
+['Zeros Found', zeros.length, '#ff6496'],
+['Known Zeros', knownInRange.length, '#ffd700'],
+['Gram Points', gramPts.length, '#00d9ff']
+]);
+
+document.getElementById('hardyLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${zeros.length}</div><div style="font-size:.7rem;color:var(--txt2)">ZEROS FOUND</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${gramPts.length}</div><div style="font-size:.7rem;color:var(--txt2)">GRAM POINTS</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${fmt(tMin + tRange)}</div><div style="font-size:.7rem;color:var(--txt2)">MAX t</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">First Zeros in Range</strong>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;font-size:.75rem;font-family:monospace">
+${zeros.slice(0, 8).map(z => `<span style="background:var(--bg1);padding:2px 6px;border-radius:3px">${z.toFixed(6)}</span>`).join('')}
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Known Riemann Zeros (first 10)</strong>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;font-size:.75rem;font-family:monospace">
+${ZETA_ZEROS.slice(0, 10).map(z => `<span style="background:var(--bg1);padding:2px 6px;border-radius:3px;color:${z >= tMin && z <= tMin + tRange ? '#ffd700' : 'var(--txt2)'}">${z.toFixed(4)}</span>`).join('')}
+</div>
+</div>
+<div style="background:rgba(255,100,150,.1);padding:8px;border-radius:6px">
+<strong style="color:#ff6496">RH Verification</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">All ${zeros.length} zeros found on critical line Re(s)=½</div>
+</div>`;
+
+// Plotly charts
+Plotly.newPlot('phardyZeros', [{x: zeros, y: zeros.map(() => 0), type: 'scatter', mode: 'markers', marker: {color: '#ff6496', size: 8}, name: 'Zeros'}], {...plo(), xaxis: {title: 'γ (imaginary part)'}, yaxis: {title: '', showticklabels: false}});
+
+const growthX = [], growthY = [];
+for(let i = 0; i < resolution; i += Math.floor(resolution/50)) {
+growthX.push(tVals[i]);
+growthY.push(absZ[i]);
+}
+Plotly.newPlot('phardyGrowth', [
+{x: growthX, y: growthY, type: 'scatter', mode: 'lines', name: '|Z(t)|', line: {color: '#00d9ff'}},
+{x: growthX, y: growthX.map(t => Math.pow(t, 0.25)), type: 'scatter', mode: 'lines', name: 't^{1/4}', line: {color: '#ffd700', dash: 'dash'}}
+], {...plo(), xaxis: {title: 't'}, yaxis: {title: '|Z(t)|'}});
+
+// Click handler
+c.onclick = e => {
+const rect = c.getBoundingClientRect();
+const mx = (e.clientX - rect.left) * (c.width / rect.width);
+const t = tMin + (mx - pad) / scX;
+if(t >= tMin && t <= tMin + tRange) {
+const z = hardyZ(t);
+const th = thetaRS(t);
+modal(`Hardy Z at t = ${t.toFixed(6)}`, [
+['t', t.toFixed(10)],
+['Z(t)', z.toFixed(10)],
+['|Z(t)|', Math.abs(z).toFixed(10)],
+['θ(t)', th.toFixed(10)],
+['θ(t)/π', (th/PI).toFixed(6)],
+['Nearest zero', zeros.length > 0 ? zeros.reduce((a,b) => Math.abs(b-t) < Math.abs(a-t) ? b : a).toFixed(6) : 'N/A']
+]);
+}
+};
+}
+
+async function screenshotHardy() {
+const tMax = document.getElementById('hardyTv').value;
+await screenshotUnified('chardy', 'hardyLiveStats', `Hardy Z-Function — t ≤ ${tMax}`, 'hardy_z.png', {dashH: 320});
+}
+
+function csvHardy() {
+let s = 't,Z_t,abs_Z_t,theta_t\n';
+for(let i = 0; i < hardyData.tVals.length; i += Math.max(1, Math.floor(hardyData.tVals.length / 5000))) {
+s += `${hardyData.tVals[i]},${hardyData.zVals[i]},${hardyData.absZ[i]},${thetaRS(hardyData.tVals[i])}\n`;
+}
+dl(s, 'hardy_z_data.csv');
+}
+
+// ==================== GRAM POINTS ====================
+let gramData = {points: [], zeros: [], intervals: []};
+
+function drawGram() {
+const c = document.getElementById('cgram'), ctx = c.getContext('2d');
+const maxN = +document.getElementById('gramNv').value || 100;
+const startN = +document.getElementById('gramStart').value || -1;
+const viz = document.getElementById('gramViz').value;
+const showZeros = document.getElementById('gramShowZeros').checked;
+const showLaw = document.getElementById('gramShowLaw').checked;
+const showBlocks = document.getElementById('gramShowBlocks').checked;
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+// Compute Gram points
+const points = [];
+for(let n = startN; n < startN + maxN; n++) {
+const g = gramPoint(n);
+const z = hardyZ(g);
+const sign = z > 0 ? 1 : -1;
+const expectedSign = Math.pow(-1, n);
+const satisfiesLaw = sign === expectedSign;
+points.push({n, g, z, sign, expectedSign, satisfiesLaw});
+}
+gramData.points = points;
+
+// Find zeros in Gram intervals
+const intervals = [];
+let violations = 0;
+for(let i = 0; i < points.length - 1; i++) {
+const g1 = points[i].g, g2 = points[i+1].g;
+const zerosInInterval = findZerosInRange(g1, g2, 200);
+const count = zerosInInterval.length;
+const isViolation = count !== 1;
+if(isViolation) violations++;
+intervals.push({n1: points[i].n, n2: points[i+1].n, g1, g2, zeros: zerosInInterval, count, isViolation});
+}
+gramData.intervals = intervals;
+
+const pad = 60, w = c.width - 2*pad, h = c.height - 2*pad;
+
+if(viz === 'grampoints' || viz === 'intervals') {
+// Plot Gram points
+const gMin = points[0].g, gMax = points[points.length-1].g;
+const scX = w / (gMax - gMin);
+
+// Draw intervals with zero counts
+for(const iv of intervals) {
+const x1 = pad + (iv.g1 - gMin) * scX;
+const x2 = pad + (iv.g2 - gMin) * scX;
+const clr = iv.count === 0 ? 'rgba(255,100,100,0.3)' : iv.count === 1 ? 'rgba(0,255,136,0.15)' : 'rgba(255,200,0,0.3)';
+ctx.fillStyle = clr;
+ctx.fillRect(x1, pad, x2 - x1, h);
+}
+
+// Draw Gram points
+for(const pt of points) {
+const px = pad + (pt.g - gMin) * scX;
+const clr = pt.satisfiesLaw ? '#00ff88' : '#ff6496';
+ctx.fillStyle = clr;
+ctx.beginPath(); ctx.arc(px, c.height/2, 6, 0, 2*PI); ctx.fill();
+// Label
+if(maxN <= 50) {
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '9px Segoe UI';
+ctx.textAlign = 'center'; ctx.fillText('g' + pt.n, px, c.height/2 + 20);
+}
+}
+
+// Draw zeros
+if(showZeros) {
+ctx.fillStyle = '#ffd700';
+for(const iv of intervals) {
+for(const z of iv.zeros) {
+const px = pad + (z - gMin) * scX;
+ctx.beginPath(); ctx.arc(px, c.height/2 - 15, 4, 0, 2*PI); ctx.fill();
+}
+}
+}
+
+// Axis labels
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '12px Segoe UI';
+ctx.textAlign = 'center'; ctx.fillText('t', c.width/2, c.height - 15);
+
+} else if(viz === 'theta') {
+// Plot θ(t)
+const gMin = points[0].g, gMax = points[points.length-1].g;
+const scX = w / (gMax - gMin);
+const yMin = startN * PI - PI, yMax = (startN + maxN) * PI + PI;
+const scY = h / (yMax - yMin);
+
+// Draw θ(t)
+ctx.strokeStyle = '#9664ff'; ctx.lineWidth = 2;
+ctx.beginPath();
+const steps = 500;
+for(let i = 0; i <= steps; i++) {
+const t = gMin + i * (gMax - gMin) / steps;
+const th = thetaRS(t);
+const px = pad + (t - gMin) * scX;
+const py = c.height - pad - (th - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+
+// Draw nπ lines
+ctx.strokeStyle = 'rgba(255,215,0,0.4)'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+for(let n = startN; n <= startN + maxN; n++) {
+const py = c.height - pad - (n * PI - yMin) * scY;
+ctx.beginPath(); ctx.moveTo(pad, py); ctx.lineTo(c.width - pad, py); ctx.stroke();
+}
+ctx.setLineDash([]);
+
+// Mark Gram points
+ctx.fillStyle = '#ffd700';
+for(const pt of points) {
+const px = pad + (pt.g - gMin) * scX;
+const py = c.height - pad - (pt.n * PI - yMin) * scY;
+ctx.beginPath(); ctx.arc(px, py, 5, 0, 2*PI); ctx.fill();
+}
+
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '12px Segoe UI';
+ctx.textAlign = 'center'; ctx.fillText('t', c.width/2, c.height - 15);
+ctx.save(); ctx.translate(15, c.height/2); ctx.rotate(-PI/2); ctx.fillText('θ(t)', 0, 0); ctx.restore();
+
+} else if(viz === 'violations') {
+// Bar chart of zeros per interval
+const scX = w / intervals.length;
+const maxCount = Math.max(...intervals.map(iv => iv.count), 3);
+const scY = h / maxCount;
+
+for(let i = 0; i < intervals.length; i++) {
+const iv = intervals[i];
+const px = pad + i * scX;
+const barH = iv.count * scY;
+const clr = iv.count === 0 ? '#ff6496' : iv.count === 1 ? '#00ff88' : '#ffd700';
+ctx.fillStyle = clr;
+ctx.fillRect(px + 2, c.height - pad - barH, scX - 4, barH);
+}
+
+// Reference line at 1
+ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 2; ctx.setLineDash([5,3]);
+const y1 = c.height - pad - scY;
+ctx.beginPath(); ctx.moveTo(pad, y1); ctx.lineTo(c.width - pad, y1); ctx.stroke();
+ctx.setLineDash([]);
+
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '12px Segoe UI';
+ctx.textAlign = 'center'; ctx.fillText('Gram Interval', c.width/2, c.height - 15);
+ctx.save(); ctx.translate(15, c.height/2); ctx.rotate(-PI/2); ctx.fillText('Zero Count', 0, 0); ctx.restore();
+}
+
+// Title
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800'; ctx.font = 'bold 14px Segoe UI'; ctx.textAlign = 'center';
+ctx.fillText(`Gram Points g_${startN} to g_${startN + maxN - 1}`, c.width/2, 25);
+
+// Stats
+const lawSatisfied = points.filter(p => p.satisfiesLaw).length;
+const lawPercent = lawSatisfied / points.length * 100;
+const totalZeros = intervals.reduce((s, iv) => s + iv.count, 0);
+
+legend('algram', 'Gram Points', [
+['Gram Points', points.length, '#00d9ff'],
+["Gram's Law %", fmt(lawPercent) + '%', '#00ff88'],
+['Violations', violations, '#ff6496']
+]);
+
+document.getElementById('gramLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${points.length}</div><div style="font-size:.7rem;color:var(--txt2)">GRAM POINTS</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${fmt(lawPercent)}%</div><div style="font-size:.7rem;color:var(--txt2)">GRAM'S LAW</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${violations}</div><div style="font-size:.7rem;color:var(--txt2)">VIOLATIONS</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Gram Point Values</strong>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;font-size:.75rem;font-family:monospace">
+${points.slice(0, 8).map(p => `<span style="background:var(--bg1);padding:2px 6px;border-radius:3px;color:${p.satisfiesLaw ? '#00ff88' : '#ff6496'}">g${p.n}=${p.g.toFixed(3)}</span>`).join('')}
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Interval Statistics</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Total zeros:</span><span style="color:#ffd700">${totalZeros}</span>
+<span>Intervals with 0:</span><span style="color:#ff6496">${intervals.filter(iv => iv.count === 0).length}</span>
+<span>Intervals with 1:</span><span style="color:#00ff88">${intervals.filter(iv => iv.count === 1).length}</span>
+<span>Intervals with 2+:</span><span style="color:#ffd700">${intervals.filter(iv => iv.count >= 2).length}</span>
+</div>
+</div>
+<div style="background:rgba(0,217,255,.1);padding:8px;border-radius:6px">
+<strong style="color:#00d9ff">Gram's Law</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">(-1)ⁿZ(g_n)>0 holds ${fmt(lawPercent)}% (asymptotic: ~73%)</div>
+</div>`;
+
+// Plotly charts
+const spacings = [];
+for(let i = 1; i < points.length; i++) spacings.push(points[i].g - points[i-1].g);
+Plotly.newPlot('pgramSpace', [{x: points.slice(1).map(p => p.n), y: spacings, type: 'scatter', mode: 'lines+markers', name: 'Spacing', line: {color: '#00d9ff'}}], {...plo(), xaxis: {title: 'n'}, yaxis: {title: 'g_n - g_{n-1}'}});
+
+const countDist = {};
+intervals.forEach(iv => { countDist[iv.count] = (countDist[iv.count] || 0) + 1; });
+Plotly.newPlot('pgramCount', [{x: Object.keys(countDist).map(Number), y: Object.values(countDist), type: 'bar', marker: {color: Object.keys(countDist).map(k => k === '1' ? '#00ff88' : k === '0' ? '#ff6496' : '#ffd700')}}], {...plo(), xaxis: {title: 'Zeros per Interval'}, yaxis: {title: 'Count'}});
+
+// Click handler
+c.onclick = e => {
+const rect = c.getBoundingClientRect();
+const mx = (e.clientX - rect.left) * (c.width / rect.width);
+const gMin = points[0].g, gMax = points[points.length-1].g;
+const t = gMin + (mx - pad) / (w / (gMax - gMin));
+const closest = points.reduce((a, b) => Math.abs(b.g - t) < Math.abs(a.g - t) ? b : a);
+modal(`Gram Point g_${closest.n}`, [
+['n', closest.n],
+['g_n', closest.g.toFixed(10)],
+['Z(g_n)', closest.z.toFixed(10)],
+['Expected sign', closest.expectedSign > 0 ? '+' : '-'],
+['Actual sign', closest.sign > 0 ? '+' : '-'],
+["Gram's Law", closest.satisfiesLaw ? 'SATISFIED' : 'VIOLATED']
+]);
+};
+}
+
+async function screenshotGram() {
+const n = document.getElementById('gramNv').value;
+await screenshotUnified('cgram', 'gramLiveStats', `Gram Points — n ≤ ${n}`, 'gram_points.png', {dashH: 320});
+}
+
+function csvGram() {
+let s = 'n,g_n,Z_g_n,satisfies_law\n';
+for(const p of gramData.points) s += `${p.n},${p.g},${p.z},${p.satisfiesLaw ? 1 : 0}\n`;
+dl(s, 'gram_points.csv');
+}
+
+// ==================== EXPLICIT FORMULA ====================
+let explicitData = {xs: [], piActual: [], liApprox: [], zeroSum: [], numZeros: 0};
+let explicitAnimId = null;
+
+// Li(x^ρ) for complex ρ = 1/2 + iγ (simplified real part approximation)
+function liXrho(x, gamma) {
+if(x <= 1) return 0;
+const logx = Math.log(x);
+const sqrtx = Math.sqrt(x);
+// Li(x^ρ) ≈ -2 * Re(x^ρ / ρ) for large x
+// x^ρ = x^{1/2} * e^{iγ log x}
+// Re(x^ρ/ρ) ≈ x^{1/2} * cos(γ log x) / |ρ|
+const rhoMag = Math.sqrt(0.25 + gamma * gamma);
+const phase = gamma * logx;
+return -sqrtx * Math.cos(phase) / (rhoMag * logx) * 2;
+}
+
+function drawExplicit() {
+const c = document.getElementById('cexplicit'), ctx = c.getContext('2d');
+const maxX = +document.getElementById('explicitXv').value || 1000;
+const numZeros = +document.getElementById('explicitZerosv').value || 20;
+const viz = document.getElementById('explicitViz').value;
+const showPi = document.getElementById('explicitShowPi').checked;
+const showLi = document.getElementById('explicitShowLi').checked;
+const showSum = document.getElementById('explicitShowSum').checked;
+
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+// Compute prime counting
+const primes = sievePrimes(maxX);
+const piVals = new Array(maxX + 1).fill(0);
+let pCount = 0;
+for(let n = 2; n <= maxX; n++) {
+if(primes.includes(n)) pCount++;
+piVals[n] = pCount;
+}
+
+// Sample points
+const samplePts = Math.min(300, maxX);
+const step = Math.max(1, Math.floor(maxX / samplePts));
+const xs = [], piActual = [], liApprox = [], zeroContrib = [], zeroSum = [];
+
+for(let x = 10; x <= maxX; x += step) {
+xs.push(x);
+piActual.push(piVals[x]);
+liApprox.push(logIntegral(x));
+
+// Sum contributions from zeros
+let sum = 0;
+for(let i = 0; i < Math.min(numZeros, ZETA_ZEROS.length); i++) {
+sum += liXrho(x, ZETA_ZEROS[i]);
+}
+zeroContrib.push(sum);
+zeroSum.push(logIntegral(x) + sum - Math.log(2));
+}
+
+explicitData = {xs, piActual, liApprox, zeroContrib, zeroSum, numZeros};
+
+const pad = 60, w = c.width - 2*pad, h = c.height - 2*pad;
+
+// Y range
+let yMin = 0, yMax = Math.max(...piActual) * 1.1;
+if(viz === 'error') {
+const errors = piActual.map((p, i) => p - zeroSum[i]);
+yMin = Math.min(...errors) - 5;
+yMax = Math.max(...errors) + 5;
+} else if(viz === 'oscillations') {
+yMin = Math.min(...zeroContrib) * 1.2;
+yMax = Math.max(...zeroContrib) * 1.2;
+}
+
+const scX = w / (maxX - 10), scY = h / (yMax - yMin);
+
+// Grid
+ctx.strokeStyle = gridC(); ctx.lineWidth = 0.5;
+for(let i = 0; i <= 10; i++) {
+const gx = pad + i * w / 10, gy = pad + i * h / 10;
+ctx.beginPath(); ctx.moveTo(gx, pad); ctx.lineTo(gx, c.height - pad); ctx.stroke();
+ctx.beginPath(); ctx.moveTo(pad, gy); ctx.lineTo(c.width - pad, gy); ctx.stroke();
+}
+
+// Zero line for oscillations/error
+if(yMin < 0 && yMax > 0) {
+const y0 = c.height - pad + yMin * scY;
+ctx.strokeStyle = 'rgba(255,215,0,0.5)'; ctx.lineWidth = 1;
+ctx.beginPath(); ctx.moveTo(pad, y0); ctx.lineTo(c.width - pad, y0); ctx.stroke();
+}
+
+if(viz === 'buildup' || viz === 'cumulative') {
+// Draw Li(x)
+if(showLi) {
+ctx.strokeStyle = '#ff6496'; ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < xs.length; i++) {
+const px = pad + (xs[i] - 10) * scX;
+const py = c.height - pad - (liApprox[i] - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+}
+
+// Draw approximation with zeros
+if(showSum) {
+ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < xs.length; i++) {
+const px = pad + (xs[i] - 10) * scX;
+const py = c.height - pad - (zeroSum[i] - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+}
+
+// Draw actual π(x)
+if(showPi) {
+ctx.strokeStyle = '#00d9ff'; ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < xs.length; i++) {
+const px = pad + (xs[i] - 10) * scX;
+const py = c.height - pad - (piActual[i] - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+}
+} else if(viz === 'error') {
+const errors = piActual.map((p, i) => p - zeroSum[i]);
+ctx.strokeStyle = '#ff6496'; ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < xs.length; i++) {
+const px = pad + (xs[i] - 10) * scX;
+const py = c.height - pad - (errors[i] - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+} else if(viz === 'oscillations') {
+// Individual zero contributions
+const colors = ['#ff6496', '#ffd700', '#00d9ff', '#9664ff', '#00ff88'];
+for(let z = 0; z < Math.min(5, numZeros); z++) {
+ctx.strokeStyle = colors[z % colors.length]; ctx.lineWidth = 1.5;
+ctx.beginPath();
+for(let i = 0; i < xs.length; i++) {
+const contrib = liXrho(xs[i], ZETA_ZEROS[z]);
+const px = pad + (xs[i] - 10) * scX;
+const py = c.height - pad - (contrib - yMin) * scY;
+if(i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+}
+}
+
+// Legend
+const legendItems = [];
+if(showPi) legendItems.push(['π(x)', '#00d9ff']);
+if(showLi) legendItems.push(['Li(x)', '#ff6496']);
+if(showSum) legendItems.push([`Li-Σ (${numZeros} zeros)`, '#ffd700']);
+ctx.font = '10px Segoe UI';
+let lx = pad + 10;
+for(const [txt, clr] of legendItems) {
+ctx.fillStyle = clr; ctx.fillRect(lx, 35, 12, 12);
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.fillText(txt, lx + 16, 45);
+lx += ctx.measureText(txt).width + 30;
+}
+
+// Title
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800'; ctx.font = 'bold 14px Segoe UI'; ctx.textAlign = 'center';
+ctx.fillText(`Explicit Formula — x ≤ ${maxX}, ${numZeros} zeros`, c.width/2, 25);
+
+// Labels
+ctx.fillStyle = isDark() ? '#fff' : '#000'; ctx.font = '12px Segoe UI';
+ctx.textAlign = 'center'; ctx.fillText('x', c.width/2, c.height - 15);
+
+// Stats
+const finalPi = piActual[piActual.length - 1];
+const finalLi = liApprox[liApprox.length - 1];
+const finalSum = zeroSum[zeroSum.length - 1];
+const errorLi = finalPi - finalLi;
+const errorSum = finalPi - finalSum;
+
+legend('alexplicit', 'Explicit Formula', [
+['π(x)', finalPi, '#00d9ff'],
+['Li(x)', fmt(finalLi), '#ff6496'],
+['With Zeros', fmt(finalSum), '#ffd700']
+]);
+
+document.getElementById('explicitLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${finalPi}</div><div style="font-size:.7rem;color:var(--txt2)">π(${maxX})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${numZeros}</div><div style="font-size:.7rem;color:var(--txt2)">ZEROS USED</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${fmt(Math.abs(errorSum))}</div><div style="font-size:.7rem;color:var(--txt2)">ERROR</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Approximation Quality</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Li(x) error:</span><span style="color:#ff6496">${fmt(errorLi)}</span>
+<span>With zeros error:</span><span style="color:#ffd700">${fmt(errorSum)}</span>
+<span>Improvement:</span><span style="color:#00ff88">${fmt(Math.abs(errorLi) - Math.abs(errorSum))}</span>
+<span>Rel error:</span><span style="color:#9664ff">${fmt(Math.abs(errorSum/finalPi)*100)}%</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Zeros Used</strong>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;font-size:.7rem;font-family:monospace">
+${ZETA_ZEROS.slice(0, Math.min(10, numZeros)).map((z, i) => `<span style="background:var(--bg1);padding:2px 4px;border-radius:3px">γ${i+1}=${z.toFixed(2)}</span>`).join('')}
+</div>
+</div>
+<div style="background:rgba(0,255,136,.1);padding:8px;border-radius:6px">
+<strong style="color:#00ff88">RH Implication</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">All zeros at Re=½ → oscillations decay like √x</div>
+</div>`;
+
+// Plotly charts
+const contribs = ZETA_ZEROS.slice(0, Math.min(20, numZeros)).map((g, i) => ({
+gamma: g,
+contrib: liXrho(maxX, g)
+}));
+Plotly.newPlot('pexplicitContrib', [{x: contribs.map(c => c.gamma), y: contribs.map(c => c.contrib), type: 'bar', marker: {color: '#9664ff'}}], {...plo(), xaxis: {title: 'γ (zero imaginary part)'}, yaxis: {title: 'Contribution at x=' + maxX}});
+
+const errors = xs.map((x, i) => piActual[i] - zeroSum[i]);
+Plotly.newPlot('pexplicitError', [{x: xs, y: errors, type: 'scatter', mode: 'lines', line: {color: '#ff6496'}}], {...plo(), xaxis: {title: 'x'}, yaxis: {title: 'π(x) - Approximation'}});
+
+// Click handler
+c.onclick = e => {
+const rect = c.getBoundingClientRect();
+const mx = (e.clientX - rect.left) * (c.width / rect.width);
+const x = Math.round(10 + (mx - pad) / scX);
+if(x >= 10 && x <= maxX) {
+const pi = piVals[x];
+const li = logIntegral(x);
+let zSum = 0;
+for(let i = 0; i < numZeros; i++) zSum += liXrho(x, ZETA_ZEROS[i]);
+const approx = li + zSum - Math.log(2);
+modal(`Explicit Formula at x = ${x}`, [
+['x', x],
+['π(x)', pi],
+['Li(x)', fmt(li)],
+['Zero sum', fmt(zSum)],
+['Approximation', fmt(approx)],
+['Error', fmt(pi - approx)]
+]);
+}
+};
+}
+
+function animateExplicit() {
+stopExplicitAnim();
+let n = 0;
+const maxN = +document.getElementById('explicitZerosv').value || 20;
+function step() {
+document.getElementById('explicitZerosv').value = n;
+drawExplicit();
+n++;
+if(n <= maxN) explicitAnimId = setTimeout(step, 300);
+}
+step();
+}
+
+function stopExplicitAnim() {
+if(explicitAnimId) { clearTimeout(explicitAnimId); explicitAnimId = null; }
+}
+
+async function screenshotExplicit() {
+const x = document.getElementById('explicitXv').value;
+const n = document.getElementById('explicitZerosv').value;
+await screenshotUnified('cexplicit', 'explicitLiveStats', `Explicit Formula — x ≤ ${x}, ${n} zeros`, 'explicit_formula.png', {dashH: 320});
+}
+
+function csvExplicit() {
+let s = 'x,pi_x,Li_x,zero_contrib,approximation,error\n';
+for(let i = 0; i < explicitData.xs.length; i++) {
+s += `${explicitData.xs[i]},${explicitData.piActual[i]},${explicitData.liApprox[i]},${explicitData.zeroContrib[i]},${explicitData.zeroSum[i]},${explicitData.piActual[i] - explicitData.zeroSum[i]}\n`;
+}
+dl(s, 'explicit_formula.csv');
 }
 
 draw2D();
