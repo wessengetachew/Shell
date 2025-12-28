@@ -142,7 +142,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <ul>
 <li><strong>ζ(n)^(-1) Density:</strong> The inverse zeta function emerges as the natural density of primitive integers.</li>
 <li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</li>
-<li><strong>Multi-Scale Sieve:</strong> The Möbius icts as a geometric filter.</li>
+<li><strong>Multi-Scale Sieve:</strong> The Möbicts as a geometric filter.</li>
 <li><strong>Dimension Universal:</strong> The formula holds for all dimensions n ≥ 3.</li>
 <li><strong>GCD Multiplication Table:</strong> The 2D lattice within a circle is fundamentally a bounded GCD multiplication table. Each point (x,y) represents an entry where gcd(x,y) determines the "cell value". The primitive points (GCD=1) correspond to coprime pairs—the units in the multiplicative structure.</li>
 <li><strong>Four-Quadrant Symmetry:</strong> The lattice exhibits 4-fold rotational symmetry, mirroring the structure of modular arithmetic tables when viewed as rings.</li>
@@ -2607,6 +2607,57 @@ if(title)sections.push({title:title.textContent,items});
 return{cards,sections};
 }
 
+// Universal screenshot helper for consistent format across all tabs
+async function screenshotUnified(canvasId, dashId, title, filename, options={}){
+const c=document.getElementById(canvasId);
+if(!c)return console.error('Canvas not found:',canvasId);
+const dashData=extractDashboardData(dashId);
+const scale=options.scale||2;
+const pad=options.pad||30;
+const dashH=options.dashH||350;
+const legendText=options.legend||'';
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;
+out.height=(c.height+dashH+pad*3)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+// Background
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';
+ctx.fillRect(0,0,out.width/scale,out.height/scale);
+// Title
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';
+ctx.font='bold 18px Segoe UI';
+ctx.textAlign='center';
+ctx.fillText(title,out.width/scale/2,pad);
+// Canvas
+ctx.drawImage(c,pad,pad+25,c.width,c.height);
+// Dashboard background
+const dashY=c.height+pad+45;
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';
+ctx.fillRect(pad,dashY-10,c.width,dashH);
+// Dashboard content
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
+// Optional legend text
+if(legendText){
+ctx.fillStyle=isDk?'#ffd700':'#cc8800';
+ctx.font='12px Segoe UI';
+ctx.fillText(legendText,pad+10,out.height/scale-30);
+}
+// Footer
+ctx.fillStyle=isDk?'#506080':'#888';
+ctx.font='10px Segoe UI';
+ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
+// Export
+out.toBlob(b=>{
+const a=document.createElement('a');
+a.href=URL.createObjectURL(b);
+a.download=filename;
+a.click();
+},'image/png',1.0);
+}
+
 function renderDashboard(ctx,data,x,y,w,isDk){
 let cy=y;const pad=15,colW=w/3-pad;
 // Cards
@@ -2641,68 +2692,19 @@ return cy;
 }
 
 async function screenshot2D(){
-const c=document.getElementById('c2d'),dashData=extractDashboardData('stats2dLive');
 const R=document.getElementById('r2dv').value,sh=document.getElementById('sh2d').value;
-const scale=2,pad=30,dashH=280;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-// Title
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`2D Lattice Points — R=${R}, Shape: ${sh}`,out.width/scale/2,pad);
-// Canvas
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-// Dashboard
-ctx.textAlign='left';
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-// Footer
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mobius_2d_complete.png';a.click();},'image/png',1.0);}
+await screenshotUnified('c2d','stats2dLive',`2D Lattice Points — R=${R}, Shape: ${sh}`,'mobius_2d_complete.png',{dashH:300});
+}
 
 async function screenshot3D(){
-const c=document.getElementById('c3d'),dashData=extractDashboardData('stats3dLive');
 const R=document.getElementById('r3dv').value;
-const scale=2,pad=30,dashH=300;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`3D Ball Lattice Points — R=${R}`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-ctx.textAlign='left';
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mobius_3d_complete.png';a.click();},'image/png',1.0);}
+await screenshotUnified('c3d','stats3dLive',`3D Ball Lattice Points — R=${R}`,'mobius_3d_complete.png',{dashH:320});
+}
 
 async function screenshotGaus(){
-const c=document.getElementById('cgaus'),dashData=extractDashboardData('gausLiveStats');
 const R=document.getElementById('rgausv').value,col=document.getElementById('colGaus').value;
-const scale=2,pad=30,dashH=320;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Gaussian Integers ℤ[i] — R=${R}, Color: ${col}`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-ctx.textAlign='left';
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='gaussian_complete.png';a.click();},'image/png',1.0);}
+await screenshotUnified('cgaus','gausLiveStats',`Gaussian Integers ℤ[i] — R=${R}, Color: ${col}`,'gaussian_complete.png',{dashH:320});
+}
 
 function draw3D(){
 const c=document.getElementById('c3d'),ctx=c.getContext('2d'),R=+document.getElementById('r3dv').value||+document.getElementById('r3d').value,col=document.getElementById('col3d').value,vm=document.getElementById('vm3d').value,zm=+document.getElementById('zm3d').value,ps=+document.getElementById('ps3d').value;
@@ -4673,46 +4675,16 @@ for(const f of fareyData.seq)s+=`${f.idx},${f.p},${f.q},${f.value},${f.q},${f.le
 dl(s,'farey.csv');}
 
 async function screenshotFarey(){
-const c=document.getElementById('cfarey'),dashData=extractDashboardData('fareyLiveStats');
 const Q=document.getElementById('fareyQv').value,viz=document.getElementById('fareyViz').value;
-const scale=2,pad=30,dashH=280;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Farey Sequence F_${Q} — ${viz} view`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-ctx.textAlign='left';
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH-20);
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='farey_complete.png';a.click();},'image/png',1.0);}
+await screenshotUnified('cfarey','fareyLiveStats',`Farey Sequence F_${Q} — ${viz} view`,'farey_complete.png',{dashH:300});
+}
 
 // ==================== END FAREY ====================
 
 async function screenshotPrim(){
-const c=document.getElementById('cprim'),dashData=extractDashboardData('primLiveStats');
 const M=document.getElementById('mprimv').value;
-const scale=2,pad=30,dashH=300;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Primitive Roots & Cyclic Structure (ℤ/${M}ℤ)×`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-ctx.textAlign='left';
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH-20);
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='primitive_roots_complete.png';a.click();},'image/png',1.0);}
+await screenshotUnified('cprim','primLiveStats',`Primitive Roots & Cyclic Structure (ℤ/${M}ℤ)×`,'primitive_roots_complete.png',{dashH:320});
+}
 
 let modRingData=[];
 
@@ -5368,24 +5340,9 @@ s+=`${r},${gcd(r,M)},${v.re},${v.im},${mag},${arg},${mag>0.5?1:0}\n`;}
 dl(s,'dirichlet_char.csv');}
 
 async function screenshotDir(){
-const c=document.getElementById('cdir'),dashData=extractDashboardData('dirLiveStats');
 const M=document.getElementById('dirMv').value,idx=document.getElementById('dirIdx').value;
-const scale=2,pad=30,dashH=350;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Dirichlet Character χ_${idx} mod ${M}`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-ctx.textAlign='left';
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='dirichlet_char.png';a.click();},'image/png',1.0);}
+await screenshotUnified('cdir','dirLiveStats',`Dirichlet Character χ_${idx} mod ${M}`,'dirichlet_char.png',{dashH:350});
+}
 
 // Twin Primes & Prime Gaps
 let twinData={primes:[],gaps:[],twins:[]};
@@ -5848,24 +5805,9 @@ for(let i=0;i<piData.xs.length;i++)s+=`${piData.xs[i]},${piData.pis[i]},${piData
 dl(s,'prime_counting.csv');}
 
 async function screenshotPi(){
-const c=document.getElementById('cpi'),dashData=extractDashboardData('piLiveStats');
 const X=document.getElementById('piXv').value;
-const scale=2,pad=30,dashH=320;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Prime Counting Function — x=${X}`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-ctx.textAlign='left';
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='prime_counting.png';a.click();},'image/png',1.0);}
+await screenshotUnified('cpi','piLiveStats',`Prime Counting Function — x=${X}`,'prime_counting.png',{dashH:320});
+}
 
 // Composite Channel Projection
 let compData={M:60,residues:[],channels:[]};
@@ -6131,24 +6073,9 @@ for(const res of compData.residues)s+=`${res.r},${res.g},${res.Mprime},${res.rpr
 dl(s,'composite_channels.csv');}
 
 async function screenshotComp(){
-const c=document.getElementById('ccomp'),dashData=extractDashboardData('compLiveStats');
 const M=document.getElementById('compMv').value;
-const scale=2,pad=30,dashH=350;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Composite Channel Projection — M=${M}`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-ctx.textAlign='left';
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='composite_channels.png';a.click();},'image/png',1.0);}
+await screenshotUnified('ccomp','compLiveStats',`Composite Channel Projection — M=${M}`,'composite_channels.png',{dashH:350});
+}
 
 // Coprime Pairs Grid
 let copairData={N:60,pairs:[],coprimeCount:0};
@@ -6440,24 +6367,9 @@ s+=`${a},${b},${g},${g===1?1:0},${a+b},${a*b}\n`;}}
 dl(s,'coprime_pairs.csv');}
 
 async function screenshotCopair(){
-const c=document.getElementById('ccopair'),dashData=extractDashboardData('copairLiveStats');
 const N=document.getElementById('copairNv').value;
-const scale=2,pad=30,dashH=350;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Coprime Pairs Grid — N=${N}`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-ctx.textAlign='left';
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='coprime_pairs.png';a.click();},'image/png',1.0);}
+await screenshotUnified('ccopair','copairLiveStats',`Coprime Pairs Grid — N=${N}`,'coprime_pairs.png',{dashH:350});
+}
 
 // Sierpiński Problem: 6ab ± a ± b
 let sierpData={N:200,covered:new Set(),uncovered:[]};
@@ -7176,25 +7088,9 @@ csv+=`${primes[i]},${i+1},${factor.toFixed(12)},${prod.toFixed(12)}\n`;}
 dl(csv,'euler_product.csv');}
 
 async function screenshotEuler(){
-const c=document.getElementById('ceuler'),dashData=extractDashboardData('eulerLiveStats');
-const target=document.getElementById('eulerTarget').value;
 const Pmax=document.getElementById('eulerPmaxv').value;
-const scale=2,pad=30,dashH=350;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Euler Product — Primes ≤ ${Pmax}`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-ctx.textAlign='left';
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='euler_product.png';a.click();},'image/png',1.0);}
+await screenshotUnified('ceuler','eulerLiveStats',`Euler Product — Primes ≤ ${Pmax}`,'euler_product.png',{dashH:350});
+}
 
 // Chord Length Uniformity Analysis
 let chordData={results:[]};
@@ -7586,24 +7482,9 @@ csv+=`${r.n},${r.prime?'prime':'composite'},${r.phi},${r.cv.toFixed(6)},${r.gapR
 dl(csv,'chord_uniformity.csv');}
 
 async function screenshotChord(){
-const c=document.getElementById('cchord'),dashData=extractDashboardData('chordLiveStats');
 const maxN=document.getElementById('chordNv').value;
-const scale=2,pad=30,dashH=350;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Chord Uniformity — n ≤ ${maxN}`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-ctx.textAlign='left';
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='chord_uniformity.png';a.click();},'image/png',1.0);}
+await screenshotUnified('cchord','chordLiveStats',`Chord Uniformity — n ≤ ${maxN}`,'chord_uniformity.png',{dashH:350});
+}
 
 // ==================== GOLDBACH CONJECTURE ====================
 let goldbachData={partitions:[],maxN:0};
@@ -8099,26 +7980,17 @@ ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/
 out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='sophie_germain_complete.png';a.click();},'image/png',1.0);}
 
 async function screenshotMod(){
-const c=document.getElementById('cmod'),dashData=extractDashboardData('modLiveStats');
+const viewMode=document.getElementById('modViewMode').value;
+let title;
+if(viewMode==='single'){
+const M=document.getElementById('modSingleM').value;
+title=`Modular Reduction Projection — M=${M}`;
+}else{
 const minM=document.getElementById('modMin').value,maxM=document.getElementById('modMax').value;
-const scale=2,pad=30,dashH=350;
-const out=document.createElement('canvas');
-out.width=(c.width+pad*2)*scale;out.height=(c.height+dashH+pad*3)*scale;
-const ctx=out.getContext('2d');ctx.scale(scale,scale);
-const isDk=isDark();
-ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
-ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 18px Segoe UI';ctx.textAlign='center';
-ctx.fillText(`Modular Ring System θ=2πr/M — M=${minM}→${maxM}`,out.width/scale/2,pad);
-ctx.drawImage(c,pad,pad+25,c.width,c.height);
-ctx.textAlign='left';
-const dashY=c.height+pad+45;
-ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';ctx.fillRect(pad,dashY-10,c.width,dashH);
-renderDashboard(ctx,dashData,pad+10,dashY,c.width-20,isDk);
-ctx.fillStyle=isDk?'#ffd700':'#cc8800';ctx.font='12px Segoe UI';
-ctx.fillText('Gold = GCD(r,M)=1 — Dirichlet Character Support χ(r)≠0',pad+10,out.height/scale-30);
-ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
-ctx.fillText('Möbius Shell Sieve — wessengetachew.github.io',out.width/scale/2,out.height/scale-10);
-out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='modular_rings_complete.png';a.click();},'image/png',1.0);}
+title=`Modular Ring System θ=2πr/M — M=${minM}→${maxM}`;
+}
+await screenshotUnified('cmod','modLiveStats',title,'modular_rings_complete.png',{dashH:350,legend:'Gold = GCD(r,M)=1 — Dirichlet Character Support χ(r)≠0'});
+}
 
 async function screenshot3D4K(){
 const c=document.getElementById('c3d'),dashData=extractDashboardData('stats3dLive');
