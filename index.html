@@ -441,6 +441,25 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <button class="tbtn" onclick="showTab('tlfunc',this)">L-functions</button>
 <button class="tbtn" onclick="showTab('tlfunczeros',this)">L-func Zeros</button>
 <button class="tbtn" onclick="showTab('tquantum',this)">Quantum Orbitals</button>
+<button class="tbtn" onclick="showTab('tktuples',this)">Prime k-Tuples</button>
+<button class="tbtn" onclick="showTab('tcarmichael',this)">Carmichael</button>
+<button class="tbtn" onclick="showTab('tmersenne',this)">Mersenne</button>
+<button class="tbtn" onclick="showTab('tcontinued',this)">Continued Fractions</button>
+<button class="tbtn" onclick="showTab('tsternbrocot',this)">Stern-Brocot</button>
+<button class="tbtn" onclick="showTab('tpythag',this)">Pythagorean</button>
+<button class="tbtn" onclick="showTab('tsumsquares',this)">Sum of Squares</button>
+<button class="tbtn" onclick="showTab('tquadres',this)">Quadratic Residues</button>
+<button class="tbtn" onclick="showTab('tpartition',this)">Partitions p(n)</button>
+<button class="tbtn" onclick="showTab('tbernoulli',this)">Bernoulli</button>
+<button class="tbtn" onclick="showTab('tfibonacci',this)">Fibonacci</button>
+<button class="tbtn" onclick="showTab('tcatalan',this)">Catalan</button>
+<button class="tbtn" onclick="showTab('taliquot',this)">Aliquot</button>
+<button class="tbtn" onclick="showTab('tcyclotomic',this)">Cyclotomic</button>
+<button class="tbtn" onclick="showTab('tcollatz',this)">Collatz</button>
+<button class="tbtn" onclick="showTab('thighcomp',this)">Highly Composite</button>
+<button class="tbtn" onclick="showTab('tperfect',this)">Perfect Numbers</button>
+<button class="tbtn" onclick="showTab('ttaxicab',this)">Taxicab</button>
+<button class="tbtn" onclick="showTab('telliptic',this)">Elliptic Curves</button>
 </div>
 
 <div id="t2d" class="tab active">
@@ -480,7 +499,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 </select></div>
 <div class="cg"><label>Show Residue Rings</label><input type="checkbox" id="mod2dRings" onchange="draw2D()"></div>
 </div>
-<div class="bg"><button onclick="screenshot2D()">Screenshot</button><button onclick="exp2D()">PNG Export</button><button class="s" onclick="csv2D()">CSV Export</button></div>
+<div class="bg"><button onclick="screenshot2D()">Screenshot</button><button onclick="exportAll2D()" style="background:#1a472a">📦 All</button><button onclick="exp2D()">PNG Export</button><button class="s" onclick="csv2D()">CSV Export</button><button class="s" onclick="screenshotCanvas('c2d','2D Lattice','2d_canvas.png')">Canvas Only</button><button class="s" onclick="screenshotStats('stats2dLive','2D Lattice','2d_stats.png')">Stats Only</button></div>
 <div class="g2">
 <div class="viz"><h3>2D Lattice Points Visualization (Click any point for details)</h3><canvas id="c2d" width="800" height="800"></canvas><div class="al" id="al2d"></div><div class="sg" id="st2d"></div></div>
 <div class="viz"><h3>Live Statistics Dashboard <button onclick="screenshotDashboard('stats2dLive','2D_Lattice_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K Screenshot</button></h3><div id="stats2dLive" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
@@ -546,7 +565,7 @@ P(gcd(x,y) = 1) = 6/π² = 1/ζ(2) = 0.6079271018540266
 <div class="cg"><label>Radius Scale</label><select id="smithR3d" onchange="draw3D()"><option value="unit">Unit (R=1)</option><option value="index">By Index</option><option value="dist">By Distance</option></select></div>
 <div class="cg"><label style="display:flex;gap:.5rem;flex-wrap:wrap"><input type="checkbox" id="smithGrid3d" onchange="draw3D()"> Grid</label><label><input type="checkbox" id="smithCircR3d" onchange="draw3D()"> Const-R</label><label><input type="checkbox" id="smithArcX3d" onchange="draw3D()"> Const-X</label></div>
 </div>
-<div class="bg"><button onclick="screenshot3D()">Screenshot</button><button onclick="screenshot3D4K()">4K Export</button><button onclick="anim3d=!anim3d">Auto Rotate</button><button class="s" onclick="rx=0;ry=0;rz=0;panX=0;panY=0;document.getElementById('zm3d').value=1;document.getElementById('zmv').textContent='1x';document.getElementById('rotX').value=0;document.getElementById('rotY').value=0;document.getElementById('rotZ').value=0;document.getElementById('rotXr').value=0;document.getElementById('rotYr').value=0;document.getElementById('rotZr').value=0;draw3D()">Reset View</button><button class="s" onclick="csv3D()">Export Points</button></div>
+<div class="bg"><button onclick="screenshot3D()">Screenshot</button><button onclick="exportAll3D()" style="background:#1a472a">📦 All</button><button onclick="screenshot3D4K()">4K Export</button><button onclick="anim3d=!anim3d">Auto Rotate</button><button class="s" onclick="rx=0;ry=0;rz=0;panX=0;panY=0;document.getElementById('zm3d').value=1;document.getElementById('zmv').textContent='1x';document.getElementById('rotX').value=0;document.getElementById('rotY').value=0;document.getElementById('rotZ').value=0;document.getElementById('rotXr').value=0;document.getElementById('rotYr').value=0;document.getElementById('rotZr').value=0;draw3D()">Reset View</button><button class="s" onclick="csv3D()">Export Points</button></div>
 <div class="g2">
 <div class="viz"><h3>3D Ball Visualization (Drag to rotate | Scroll to zoom | Right-click to pan)</h3><canvas id="c3d" width="700" height="700"></canvas><div class="al" id="al3d"></div><div class="sg" id="st3d"></div></div>
 <div class="viz"><h3>Live Statistics Dashboard <button onclick="screenshotDashboard('stats3dLive','3D_Ball_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K Screenshot</button></h3><div id="stats3dLive" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
@@ -600,7 +619,7 @@ P(gcd(x,y,z) = 1) = 1/ζ(3) = 0.8319073725807075
 </select></div>
 <div class="cg"><label>Point Size</label><input type="range" id="mobPtSz" min="2" max="15" value="6" onchange="drawMobius()"></div>
 </div>
-<div class="bg"><button onclick="drawMobius()">Compute</button><button onclick="screenshotMob()">Screenshot</button><button class="s" onclick="csvMob()">CSV Export</button></div>
+<div class="bg"><button onclick="drawMobius()">Compute</button><button onclick="screenshotMob()">Screenshot</button><button onclick="exportAllMob()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvMob()">CSV Export</button><button class="s" onclick="screenshotCanvas('cmob','Möbius Function','mobius_canvas.png')">Canvas</button><button class="s" onclick="screenshotStats('mobLiveStats','Möbius','mobius_stats.png')">Stats</button></div>
 <div class="g2">
 <div class="viz"><h3>Möbius Function μ(n) — The Heart of the Sieve</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">μ(n) = (-1)^k if n = p₁p₂...pₖ (k distinct primes), 0 if n has squared factor. Core identity: Σ_{d|n} μ(d) = [n=1]</p>
@@ -663,7 +682,7 @@ P(gcd(x,y,z) = 1) = 1/ζ(3) = 0.8319073725807075
 <div class="cg"><label>Ford Depth</label><input type="number" id="cayFordQ" value="8" min="1" max="20" onchange="drawCayley()"></div>
 <div class="cg"><label>Labels</label><select id="cayLbl" onchange="drawCayley()"><option value="none">None</option><option value="xy">Original (x,y)</option><option value="w">Cayley w</option><option value="frac">Fraction p/q</option></select></div>
 </div>
-<div class="bg"><button onclick="drawCayley()">Redraw</button><button onclick="screenshotCayley()">Screenshot</button><button class="s" onclick="csvCayley()">CSV Export</button></div>
+<div class="bg"><button onclick="drawCayley()">Redraw</button><button onclick="screenshotCayley()">Screenshot</button><button onclick="exportAllCay()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvCayley()">CSV Export</button></div>
 <div class="g2">
 <div class="viz"><h3>Cayley Transform: 𝔻 → ℍ Upper Half-Plane</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">w = i(1+z)/(1-z) maps unit disk to ℍ. PSL(2,ℤ) acts by Möbius transformations. Geodesics are semicircles ⊥ to ℝ.</p>
@@ -722,7 +741,7 @@ w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²
 <button onclick="setM(7)">7</button><button onclick="setM(11)">11</button><button onclick="setM(13)">13</button><button onclick="setM(17)">17</button><button onclick="setM(23)">23</button><button onclick="setM(31)">31</button><button onclick="setM(37)">37</button><button onclick="setM(41)">41</button><button onclick="setM(97)">97</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawPrimRoot()">Analyze</button><button onclick="animatePowerSeq()">Animate</button><button onclick="screenshotPrim()">Screenshot</button><button class="s" onclick="csvPrim()">CSV Export</button></div>
+<div class="bg"><button onclick="drawPrimRoot()">Analyze</button><button onclick="animatePowerSeq()">Animate</button><button onclick="screenshotPrim()">Screenshot</button><button onclick="exportAllPrim()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvPrim()">CSV Export</button></div>
 <div class="g2">
 <div class="viz"><h3>Cyclic Group (ℤ/Mℤ)×</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">g is a primitive root ⟺ ord(g) = φ(M) ⟺ ⟨g⟩ = (ℤ/Mℤ)×</p>
@@ -787,7 +806,7 @@ w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²
 </div></div>
 <div class="cg"><label>Highlight p/q</label><div class="sig"><input type="number" id="fareyP" value="0" min="0" style="width:50px">/<input type="number" id="fareyQh" value="1" min="1" style="width:50px"><button onclick="highlightFraction()">Find</button></div></div>
 </div>
-<div class="bg"><button onclick="drawFarey()">Redraw</button><button onclick="screenshotFarey()">Screenshot</button><button class="s" onclick="csvFarey()">CSV Export</button></div>
+<div class="bg"><button onclick="drawFarey()">Redraw</button><button onclick="screenshotFarey()">Screenshot</button><button onclick="exportAllFarey()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvFarey()">CSV Export</button></div>
 <div class="g2">
 <div class="viz"><h3>Farey Sequence F<sub id="fareyQdisp">8</sub></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">F_Q = {p/q : 0≤p≤q≤Q, gcd(p,q)=1} ordered by value. Neighbors satisfy |ps-qr|=1.</p>
@@ -922,7 +941,7 @@ w = i(1+z)/(1-z) &nbsp;maps&nbsp; 𝔻 → ℍ &nbsp;|&nbsp; ds² = (dx² + dy²
 <div class="cg"><label>Label Mode</label><select id="modLabel" onchange="drawModRings()"><option value="none">None</option><option value="r">Residue r</option><option value="rm">r/M Fraction</option><option value="deg">Degree θ°</option><option value="gcd">GCD Value</option></select></div>
 <div class="cg"><label>Label Size</label><input type="range" id="modLblSz" min="6" max="14" value="8" step="1" onchange="drawModRings()"></div>
 </div>
-<div class="bg"><button onclick="drawModRings()">Redraw</button><button onclick="screenshotMod()">Screenshot</button><button class="s" onclick="csvMod()">CSV Export</button></div>
+<div class="bg"><button onclick="drawModRings()">Redraw</button><button onclick="screenshotMod()">Screenshot</button><button onclick="exportAllMod()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvMod()">CSV Export</button></div>
 <div class="viz"><h3>Modular Ring System: θ = 2πr/M</h3><p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Concentric rings show residue classes. Gold points have GCD(r,M)=1 (Dirichlet character support χ(r)≠0). Direct lifts connect same residue across moduli.</p><canvas id="cmod" width="800" height="800"></canvas><div class="al" id="almod"></div><div class="sg" id="stmod"></div></div>
 <div class="g2">
 <div class="viz"><h3>Totient Density φ(M)/M</h3><div class="pc" id="pmodphi"></div></div>
@@ -987,7 +1006,7 @@ The "gap connections" between consecutive coprime residues within each ring reve
 </div></div>
 <div class="cg"><label>Compare</label><select id="errCompare"><option value="none">None</option><option value="primitive">Primitive Count</option><option value="both">Both</option></select></div>
 </div>
-<div class="bg"><button onclick="runErrNew()">Analyze</button><button onclick="runErrConvergence()">Convergence Study</button><button onclick="screenshotErr()">Screenshot</button><button class="s" onclick="csvErr()">Export CSV</button></div>
+<div class="bg"><button onclick="runErrNew()">Analyze</button><button onclick="runErrConvergence()">Convergence Study</button><button onclick="screenshotErr()">Screenshot</button><button onclick="exportAllErr()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvErr()">Export CSV</button><button class="s" onclick="screenshotChart('pe1','Error vs R','error_chart1.png')">Chart 1</button><button class="s" onclick="screenshotChart('pe2','Normalized Error','error_chart2.png')">Chart 2</button><button class="s" onclick="screenshotStats('errLiveStats','Error Analysis','error_stats.png')">Stats</button></div>
 <div class="g2">
 <div class="viz"><h3>Theory vs Actual Count</h3><div class="pc" id="pe1"></div><div class="al" id="ale1"></div></div>
 <div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('errLiveStats','Error_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="errLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
@@ -1037,7 +1056,7 @@ N(R) = Vol(K)·R^n / ζ(n) + O(R^(n-1)) &nbsp;|&nbsp; |Error| = O(R^θ)
 <option value="full">Full Compute (slow)</option>
 </select></div>
 </div>
-<div class="bg"><button onclick="runDimNew()">Compute All Dimensions</button><button onclick="screenshotDim()">Screenshot</button><button class="s" onclick="csvDim()">Export CSV</button></div>
+<div class="bg"><button onclick="runDimNew()">Compute All Dimensions</button><button onclick="screenshotDim()">Screenshot</button><button onclick="exportAllDim()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvDim()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>ζ(n) Convergence to 1</h3><div class="pc" id="pdimZeta"></div></div>
 <div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('dimLiveStats','Dimension_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="dimLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
@@ -1085,7 +1104,7 @@ P(gcd = 1) = 1/ζ(n) → 1 as n → ∞ &nbsp;|&nbsp; Vol(Bⁿ) = π^(n/2) / Γ(
 </div></div>
 <div class="cg"><label>Color Mode</label><select id="shColor" onchange="runShNew()"><option value="sign">By Sign (±)</option><option value="mobius">By μ(k)</option><option value="magnitude">By |Contribution|</option></select></div>
 </div>
-<div class="bg"><button onclick="runShNew()">Analyze Shells</button><button onclick="animateShells()">Animate</button><button onclick="screenshotSh()">Screenshot</button><button class="s" onclick="csvSh()">Export CSV</button></div>
+<div class="bg"><button onclick="runShNew()">Analyze Shells</button><button onclick="animateShells()">Animate</button><button onclick="screenshotSh()">Screenshot</button><button onclick="exportAllSh()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvSh()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Möbius Shell Contributions</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Primitive count P(R) = Σ μ(k)·L(R/k) where L counts all lattice points</p>
@@ -1153,7 +1172,7 @@ P(6) = L(6) - L(3) - L(2) + L(1) - L(1.5) - L(1.2) + ...
 <div class="cg"><label>Analysis Mode</label><select id="gcdMode"><option value="full">Full Distribution</option><option value="avg">Average GCD Study</option><option value="coprime">Coprime Focus</option></select></div>
 <div class="cg"><label>Top N GCDs</label><input type="number" id="gcdTopN" value="20" min="5" max="50" onkeydown="if(event.key==='Enter')runGcdNew()"></div>
 </div>
-<div class="bg"><button onclick="runGCD()">Analyze GCD</button><button onclick="runGCDConvergence()">Convergence Study</button><button onclick="screenshotGCD()">Screenshot</button><button class="s" onclick="csvGCD()">Export CSV</button></div>
+<div class="bg"><button onclick="runGCD()">Analyze GCD</button><button onclick="runGCDConvergence()">Convergence Study</button><button onclick="screenshotGCD()">Screenshot</button><button onclick="exportAllGCD()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvGCD()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>GCD Frequency Distribution</h3><div class="pc" id="pgcd1"></div><div class="al" id="algcd1"></div></div>
 <div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('gcdLiveStats','GCD_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="gcdLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div></div>
@@ -1228,7 +1247,7 @@ P(gcd = k) = 1/(k² · ζ(2)) = 6/(π²k²) &nbsp;|&nbsp; P(gcd = 1) = 0.6079271
 <div class="cg"><label><input type="checkbox" id="gausAssoc" onchange="drawGaus()"> Show Associates</label>
 <label><input type="checkbox" id="gausConj" onchange="drawGaus()"> Connect Conjugates</label></div>
 </div>
-<div class="bg"><button onclick="screenshotGaus()">Screenshot</button><button onclick="drawGaus()">Analyze</button><button class="s" onclick="expGaus()">PNG Export</button><button class="s" onclick="csvGaus()">CSV Export</button></div>
+<div class="bg"><button onclick="screenshotGaus()">Screenshot</button><button onclick="exportAllGaus()" style="background:#1a472a">📦 All</button><button onclick="drawGaus()">Analyze</button><button class="s" onclick="expGaus()">PNG Export</button><button class="s" onclick="csvGaus()">CSV Export</button></div>
 <div class="g2">
 <div class="viz"><h3>Complex Plane ℤ[i] (Click points)</h3><canvas id="cgaus" width="700" height="700"></canvas><div class="al" id="algaus1"></div></div>
 <div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('gausLiveStats','Gaussian_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="gausLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.85rem"></div>
@@ -1277,7 +1296,7 @@ N(a+bi) = a² + b² &nbsp;|&nbsp; p = a²+b² ⟺ p=2 or p≡1 (mod 4)
 <label><input type="checkbox" id="circPrim"> Primitive Only</label>
 </div></div>
 </div>
-<div class="bg"><button onclick="runCircNew()">Analyze</button><button onclick="drawCircleViz()">Visualize</button><button onclick="screenshotCirc()">Screenshot</button><button class="s" onclick="csvCirc()">Export CSV</button></div>
+<div class="bg"><button onclick="runCircNew()">Analyze</button><button onclick="drawCircleViz()">Visualize</button><button onclick="screenshotCirc()">Screenshot</button><button onclick="exportAllCirc()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvCirc()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Gauss Circle Visualization</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Lattice points inside circle of radius R. Count ≈ πR² with error O(R^θ).</p>
@@ -1340,7 +1359,7 @@ N(R) = πR² + r(R) &nbsp;where&nbsp; |r(R)| = O(R^θ), θ ≤ 131/208 ≈ 0.63
 </select></div>
 <div class="cg"><label>Sample Size</label><input type="number" id="densSample" value="10000" min="1000" max="100000" step="1000" onkeydown="if(event.key==='Enter')runDensity()"></div>
 </div>
-<div class="bg"><button onclick="runDensNew()">Compute All</button><button onclick="runConvergence()">Convergence Test</button><button onclick="screenshotDens()">Screenshot</button><button class="s" onclick="csvDens()">Export CSV</button></div>
+<div class="bg"><button onclick="runDensNew()">Compute All</button><button onclick="runConvergence()">Convergence Test</button><button onclick="screenshotDens()">Screenshot</button><button onclick="exportAllDens()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvDens()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>1/ζ(k) Density Convergence</h3><div class="pc" id="pdens1"></div><div class="al" id="aldens1"></div></div>
 <div class="viz"><h3>ζ(k) → 1 as k → ∞</h3><div class="pc" id="pdensZeta"></div></div>
@@ -1409,7 +1428,7 @@ P(gcd(x₁,...,xₖ)=1) = 1/ζ(k) → 1 as k → ∞
 <div class="cg"><label>Point Size</label><input type="range" id="dirPtSz" min="3" max="15" value="8" onchange="drawDirichlet()"></div>
 <div class="cg"><label>L-function Terms</label><input type="number" id="dirLterms" value="100" min="10" max="1000" step="10" onchange="drawDirichlet()"></div>
 </div>
-<div class="bg"><button onclick="drawDirichlet()">Compute</button><button onclick="showAllChars()">All Characters</button><button onclick="screenshotDir()">Screenshot</button><button class="s" onclick="csvDir()">Export CSV</button></div>
+<div class="bg"><button onclick="drawDirichlet()">Compute</button><button onclick="showAllChars()">All Characters</button><button onclick="screenshotDir()">Screenshot</button><button onclick="exportAllDir()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvDir()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Dirichlet Character χ mod <span id="dirMdisp">12</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">χ(r) ≠ 0 (gold) when gcd(r,M)=1. χ(r) = 0 (gray) when gcd(r,M) > 1. Characters map units to roots of unity.</p>
@@ -1487,7 +1506,7 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 <option value="quadruplet">Quadruplet (p,p+2,p+6,p+8)</option>
 </select></div>
 </div>
-<div class="bg"><button onclick="drawTwin()">Analyze</button><button onclick="screenshotTwin()">Screenshot</button><button class="s" onclick="csvTwin()">Export CSV</button></div>
+<div class="bg"><button onclick="drawTwin()">Analyze</button><button onclick="screenshotTwin()">Screenshot</button><button onclick="exportAllTwin()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvTwin()">Export CSV</button><button class="s" onclick="screenshotCanvas('ctwin','Twin Primes','twin_canvas.png')">Canvas</button><button class="s" onclick="screenshotChart('ptwin1','Twin Distribution','twin_chart.png')">Chart</button><button class="s" onclick="screenshotStats('twinLiveStats','Twin Primes','twin_stats.png')">Stats</button></div>
 <div class="g2">
 <div class="viz"><h3>Prime Gap Analysis up to N = <span id="twinNdisp">1000</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Twin primes (p, p+2) become rarer but are conjectured infinite. Brun proved Σ1/p (twin) converges.</p>
@@ -1562,7 +1581,7 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 </div></div>
 <div class="cg"><label>Point Size</label><input type="range" id="piPtSz" min="2" max="10" value="4" onchange="drawPi()"></div>
 </div>
-<div class="bg"><button onclick="drawPi()">Compute</button><button onclick="screenshotPi()">Screenshot</button><button class="s" onclick="csvPi()">Export CSV</button></div>
+<div class="bg"><button onclick="drawPi()">Compute</button><button onclick="screenshotPi()">Screenshot</button><button onclick="exportAllPi()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvPi()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Prime Counting Function π(x) up to <span id="piXdisp">10000</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">π(x) counts primes ≤ x. PNT: π(x) ~ x/ln(x). Li(x) is the best elementary approximation.</p>
@@ -1665,7 +1684,7 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 <option value="reducible">Reducible Only</option>
 </select></div>
 </div>
-<div class="bg"><button onclick="drawComp()">Analyze</button><button onclick="screenshotComp()">Screenshot</button><button class="s" onclick="csvComp()">Export CSV</button></div>
+<div class="bg"><button onclick="drawComp()">Analyze</button><button onclick="screenshotComp()">Screenshot</button><button onclick="exportAllComp()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvComp()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Composite Channel Projection: M = <span id="compMdisp">60</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Cyan = coprime (gcd=1), Red = reducible (gcd>1). Lines show projection r/M → r'/M' where M'=M/gcd(r,M).</p>
@@ -1766,7 +1785,7 @@ Coprime: 1,5,7,11 | Channels: 12,6,4,3,2,1
 <button onclick="stopCopairAnim()">Stop</button>
 <span id="copairAnimN" style="margin-left:8px;color:#ffd700">N=60</span></div>
 </div>
-<div class="bg"><button onclick="drawCopair()">Compute</button><button onclick="screenshotCopair()">Screenshot</button><button class="s" onclick="csvCopair()">Export CSV</button></div>
+<div class="bg"><button onclick="drawCopair()">Compute</button><button onclick="screenshotCopair()">Screenshot</button><button onclick="exportAllCopair()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvCopair()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Coprime Lattice: 1 ≤ a,b ≤ <span id="copairNdisp">60</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Primitive vectors (gcd=1) are visible from origin. V(R)/πR² → 6/π² connects to Riemann Hypothesis.</p>
@@ -1851,7 +1870,7 @@ V(R) = 6R²/π² + E(R) &nbsp;|&nbsp; RH ⟺ |E(R)| = O(R^(½+ε))
 <button onclick="document.getElementById('sierpNv').value=1000;drawSierp()" style="padding:2px 6px">1000</button>
 </div>
 </div>
-<div class="bg"><button onclick="drawSierp()">Analyze</button><button onclick="screenshotSierp()">Screenshot</button><button class="s" onclick="csvSierp()">Export CSV</button></div>
+<div class="bg"><button onclick="drawSierp()">Analyze</button><button onclick="screenshotSierp()">Screenshot</button><button onclick="exportAllSierp()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvSierp()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Sierpiński Coverage: n ≤ <span id="sierpNdisp">200</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Green = expressible as 6ab±a±b. Red = uncovered (Sierpiński candidates). Status: UNSOLVED since 1964.</p>
@@ -1917,7 +1936,7 @@ n = 6ab ± a ± b &nbsp;|&nbsp; Are infinitely many integers uncovered?
 <label><input type="checkbox" id="kfreeBound" checked onchange="drawKfree()"> Error Bound</label>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawKfree()">Compute</button><button onclick="screenshotKfree()">Screenshot</button><button class="s" onclick="csvKfree()">Export CSV</button></div>
+<div class="bg"><button onclick="drawKfree()">Compute</button><button onclick="screenshotKfree()">Screenshot</button><button onclick="exportAllKfree()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvKfree()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>k-Free Integers: k=<span id="kfreeKdisp">2</span>, N=<span id="kfreeNdisp">1000</span></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">n is k-free if no prime p has p^k | n. Count Q_k(N) ~ N/ζ(k) with error O(N^(1/k)).</p>
@@ -1992,7 +2011,7 @@ Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
 <button onclick="document.getElementById('eulerPmaxv').value=50000;drawEuler()" style="padding:2px 6px">50K</button>
 </div>
 </div>
-<div class="bg"><button onclick="drawEuler()">Compute</button><button onclick="screenshotEuler()">Screenshot</button><button class="s" onclick="csvEuler()">Export CSV</button></div>
+<div class="bg"><button onclick="drawEuler()">Compute</button><button onclick="screenshotEuler()">Screenshot</button><button onclick="exportAllEuler()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvEuler()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Euler Product: ζ(s) = ∏<sub>p</sub>(1-p<sup>-s</sup>)<sup>-1</sup></h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Computing <span id="eulerTargetDisp">π</span> using primes ≤ <span id="eulerPmaxDisp">1000</span>. Basel: ζ(2)=π²/6.</p>
@@ -2058,7 +2077,7 @@ Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
 <label><input type="checkbox" id="chordLabels" onchange="drawChord()"> Labels</label>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawChord()">Analyze</button><button onclick="screenshotChord()">Screenshot</button><button class="s" onclick="csvChord()">Export CSV</button></div>
+<div class="bg"><button onclick="drawChord()">Analyze</button><button onclick="screenshotChord()">Screenshot</button><button onclick="exportAllChord()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvChord()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Chord Length Uniformity: CV(n) = σ/μ</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Primes have uniform coprime spacing (low CV). Composites have irregular gaps (high CV). Separation grows with n.</p>
@@ -2132,7 +2151,7 @@ CV(n) = σ_L / μ_L &nbsp;|&nbsp; L_i = 2·sin(π·gap_i/n) &nbsp;|&nbsp; Prime:
 <div class="cg"><label>Point Size</label><input type="range" id="goldPtSz" min="1" max="8" step="0.5" value="3" onchange="drawGoldbach()"></div>
 <div class="cg"><label><input type="checkbox" id="goldGrid" checked onchange="drawGoldbach()"> Grid</label>
 <label><input type="checkbox" id="goldTrend" checked onchange="drawGoldbach()"> Trend Line</label></div>
-<div class="bg"><button onclick="drawGoldbach()">Analyze</button><button class="s" onclick="expGoldbach()">PNG</button><button class="s" onclick="csvGoldbach()">CSV</button><button onclick="screenshotGoldbach()">Screenshot</button></div>
+<div class="bg"><button onclick="drawGoldbach()">Analyze</button><button class="s" onclick="expGoldbach()">PNG</button><button class="s" onclick="csvGoldbach()">CSV</button><button onclick="screenshotGoldbach()">Screenshot</button><button onclick="exportAllGold()" style="background:#1a472a">📦 All</button></div>
 </div>
 <div class="vc">
 <div class="viz"><canvas id="cgold" width="700" height="450"></canvas><div class="als"><div id="algold1" class="al"></div><div id="algold2" class="al"></div></div></div>
@@ -2180,7 +2199,7 @@ CV(n) = σ_L / μ_L &nbsp;|&nbsp; L_i = 2·sin(π·gap_i/n) &nbsp;|&nbsp; Prime:
 <div class="cg"><label>Point Size</label><input type="range" id="gapPtSz" min="1" max="8" step="0.5" value="2" onchange="drawGap()"></div>
 <div class="cg"><label><input type="checkbox" id="gapGrid" checked onchange="drawGap()"> Grid</label>
 <label><input type="checkbox" id="gapCramér" checked onchange="drawGap()"> Cramér Bound</label></div>
-<div class="bg"><button onclick="drawGap()">Analyze</button><button class="s" onclick="expGap()">PNG</button><button class="s" onclick="csvGap()">CSV</button><button onclick="screenshotGap()">Screenshot</button></div>
+<div class="bg"><button onclick="drawGap()">Analyze</button><button class="s" onclick="expGap()">PNG</button><button class="s" onclick="csvGap()">CSV</button><button onclick="screenshotGap()">Screenshot</button><button onclick="exportAllGap()" style="background:#1a472a">📦 All</button></div>
 </div>
 <div class="vc">
 <div class="viz"><canvas id="cgap" width="700" height="450"></canvas><div class="als"><div id="algap1" class="al"></div><div id="algap2" class="al"></div></div></div>
@@ -2230,7 +2249,7 @@ g_n = p_{n+1} - p_n &nbsp;|&nbsp; Cramér: g_n = O((ln p_n)²) &nbsp;|&nbsp; Ave
 <div class="cg"><label>Point Size</label><input type="range" id="sophPtSz" min="1" max="8" step="0.5" value="3" onchange="drawSophie()"></div>
 <div class="cg"><label><input type="checkbox" id="sophGrid" checked onchange="drawSophie()"> Grid</label>
 <label><input type="checkbox" id="sophPairs" checked onchange="drawSophie()"> Connect Pairs</label></div>
-<div class="bg"><button onclick="drawSophie()">Analyze</button><button class="s" onclick="expSophie()">PNG</button><button class="s" onclick="csvSophie()">CSV</button><button onclick="screenshotSophie()">Screenshot</button></div>
+<div class="bg"><button onclick="drawSophie()">Analyze</button><button class="s" onclick="expSophie()">PNG</button><button class="s" onclick="csvSophie()">CSV</button><button onclick="screenshotSophie()">Screenshot</button><button onclick="exportAllSoph()" style="background:#1a472a">📦 All</button></div>
 </div>
 <div class="vc">
 <div class="viz"><canvas id="csoph" width="700" height="450"></canvas><div class="als"><div id="alsoph1" class="al"></div><div id="alsoph2" class="al"></div></div></div>
@@ -2301,7 +2320,7 @@ p is Sophie Germain prime ⟺ p and 2p+1 both prime &nbsp;|&nbsp; 2p+1 is called
 <button onclick="document.getElementById('mertXv').value=50000;drawMertens()">50K</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawMertens()">Compute</button><button onclick="screenshotMertens()">Screenshot</button><button class="s" onclick="csvMertens()">Export CSV</button></div>
+<div class="bg"><button onclick="drawMertens()">Compute</button><button onclick="screenshotMertens()">Screenshot</button><button onclick="exportAllMert()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvMertens()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Mertens Function M(x) = Σμ(n) for n≤x</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Click any point for details. RH ⟺ M(x) = O(x^{1/2+ε}) for all ε>0.</p>
@@ -2358,7 +2377,7 @@ RH ⟺ M(x) = O(x^{1/2+ε}) ∀ε>0 &nbsp;&nbsp;|&nbsp;&nbsp; M(x) = Σ_{n≤x} 
 <button onclick="document.getElementById('chebXv').value=10000;drawChebyshev()">10K</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawChebyshev()">Compute</button><button onclick="screenshotChebyshev()">Screenshot</button><button class="s" onclick="csvChebyshev()">Export CSV</button></div>
+<div class="bg"><button onclick="drawChebyshev()">Compute</button><button onclick="screenshotChebyshev()">Screenshot</button><button onclick="exportAllCheb()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvChebyshev()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Chebyshev Functions ψ(x) and θ(x)</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">ψ(x) counts prime powers weighted by log. PNT: ψ(x) ~ x. RH: ψ(x) = x + O(x^{1/2+ε}).</p>
@@ -2416,7 +2435,7 @@ The explicit formula connects ψ(x) to zeta zeros: ψ(x) = x - Σ_ρ x^ρ/ρ - l
 <button onclick="document.getElementById('liXv').value=100000;drawLi()">100K</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawLi()">Compute</button><button onclick="screenshotLi()">Screenshot</button><button class="s" onclick="csvLi()">Export CSV</button></div>
+<div class="bg"><button onclick="drawLi()">Compute</button><button onclick="screenshotLi()">Screenshot</button><button onclick="exportAllLi()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvLi()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Logarithmic Integral Li(x) = ∫₂ˣ dt/ln(t)</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Li(x) is the best elementary approximation to π(x). Click points for details.</p>
@@ -2475,7 +2494,7 @@ Li(x) = ∫₂ˣ dt/ln(t) &nbsp;&nbsp;|&nbsp;&nbsp; π(x) ~ Li(x) &nbsp;&nbsp;|&
 <button onclick="document.getElementById('divNv').value=5000;drawDivisor()">5K</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawDivisor()">Compute</button><button onclick="screenshotDivisor()">Screenshot</button><button class="s" onclick="csvDivisor()">Export CSV</button></div>
+<div class="bg"><button onclick="drawDivisor()">Compute</button><button onclick="screenshotDivisor()">Screenshot</button><button onclick="exportAllDiv()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvDivisor()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Divisor Functions τ(n) and σ(n)</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">τ(n) counts divisors, σ(n) sums them. Click points for factorization details.</p>
@@ -2532,7 +2551,7 @@ The abundancy index σ(n)/n classifies numbers: deficient (σ(n)/n < 2), perfect
 <button onclick="document.getElementById('liouNv').value=10000;drawLiouville()">10K</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawLiouville()">Compute</button><button onclick="screenshotLiouville()">Screenshot</button><button class="s" onclick="csvLiouville()">Export CSV</button></div>
+<div class="bg"><button onclick="drawLiouville()">Compute</button><button onclick="screenshotLiouville()">Screenshot</button><button onclick="exportAllLiou()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvLiouville()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Liouville Function L(x) = Σλ(n)</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">λ(n) = (-1)^{Ω(n)} where Ω(n) counts prime factors with multiplicity. RH connection via Pólya conjecture.</p>
@@ -2590,7 +2609,7 @@ Pólya conjectured (1919) that L(x) ≤ 0 for all x ≥ 2, meaning more integers
 <button onclick="document.getElementById('mangNv').value=2000;drawMangoldt()">2K</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawMangoldt()">Compute</button><button onclick="screenshotMangoldt()">Screenshot</button><button class="s" onclick="csvMangoldt()">Export CSV</button></div>
+<div class="bg"><button onclick="drawMangoldt()">Compute</button><button onclick="screenshotMangoldt()">Screenshot</button><button onclick="exportAllMang()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvMangoldt()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Von Mangoldt Function Λ(n)</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Λ(n) = log p if n = p^k for prime p, else 0. Core building block for Chebyshev functions.</p>
@@ -2644,7 +2663,7 @@ The explicit formula directly connects Λ(n) to zeta zeros: ψ(x) = x - Σ_ρ x^
 <button onclick="document.getElementById('ramQv').value=60;drawRamanujan()">q=60</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawRamanujan()">Compute</button><button onclick="screenshotRamanujan()">Screenshot</button><button class="s" onclick="csvRamanujan()">Export CSV</button></div>
+<div class="bg"><button onclick="drawRamanujan()">Compute</button><button onclick="screenshotRamanujan()">Screenshot</button><button onclick="exportAllRam()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvRamanujan()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Ramanujan Sum c_q(n) = Σ_{gcd(a,q)=1} e^{2πian/q}</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Sum of primitive q-th roots of unity raised to power n. Always an integer! Click for details.</p>
@@ -2700,7 +2719,7 @@ c_q(n) = Σ_{gcd(a,q)=1} e^{2πian/q} = μ(q/d)·φ(q)/φ(q/d) where d = gcd(n,q
 <button onclick="document.getElementById('ulamSizev').value=401;drawUlam()">401×401</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawUlam()">Generate</button><button onclick="screenshotUlam()">Screenshot</button><button class="s" onclick="csvUlam()">Export CSV</button></div>
+<div class="bg"><button onclick="drawUlam()">Generate</button><button onclick="screenshotUlam()">Screenshot</button><button onclick="exportAllUlam()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvUlam()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Ulam Spiral — Primes on Integer Spiral</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Integers spiral outward; primes cluster along diagonals. Discovered by Stanisław Ulam (1963).</p>
@@ -2759,7 +2778,7 @@ Spiral: 1 → 2 → 3 → ... counterclockwise &nbsp;&nbsp;|&nbsp;&nbsp; Diagona
 <button onclick="document.getElementById('sacksNv').value=100000;drawSacks()">100K</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawSacks()">Generate</button><button onclick="screenshotSacks()">Screenshot</button><button class="s" onclick="csvSacks()">Export CSV</button></div>
+<div class="bg"><button onclick="drawSacks()">Generate</button><button onclick="screenshotSacks()">Screenshot</button><button onclick="exportAllSacks()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvSacks()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Sacks Spiral — Primes on √n Archimedean Spiral</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Each integer n at angle θ = 2π√n, radius r = √n. Primes form curved arms. Click for details.</p>
@@ -2813,7 +2832,7 @@ Position: r = √n, θ = 2π√n &nbsp;&nbsp;|&nbsp;&nbsp; Squares on x-axis &nb
 <button onclick="document.getElementById('hardyTv').value=50;document.getElementById('hardyStart').value=100;drawHardy()">100-150</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawHardy()">Compute</button><button onclick="screenshotHardy()">Screenshot</button><button class="s" onclick="csvHardy()">Export CSV</button></div>
+<div class="bg"><button onclick="drawHardy()">Compute</button><button onclick="screenshotHardy()">Screenshot</button><button onclick="exportAllHardy()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvHardy()">Export CSV</button><button class="s" onclick="screenshotCanvas('chardy','Hardy Z(t)','hardy_canvas.png')">Canvas</button><button class="s" onclick="screenshotChart('phardyZeros','Zero Locations','hardy_zeros.png')">Zeros</button><button class="s" onclick="screenshotStats('hardyLiveStats','Hardy Z(t)','hardy_stats.png')">Stats</button></div>
 <div class="g2">
 <div class="viz"><h3>Hardy Z-Function: Z(t) = e^{iθ(t)}ζ(½+it)</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Z(t) is real! Sign changes = zeros on critical line. RH: ALL nontrivial zeros are sign changes of Z(t).</p>
@@ -2866,7 +2885,7 @@ Z(t) = e^{iθ(t)}ζ(½+it) ∈ ℝ &nbsp;&nbsp;|&nbsp;&nbsp; θ(t) = arg(Γ(¼+i
 <button onclick="document.getElementById('gramStart').value=126;document.getElementById('gramNv').value=20;drawGram()">Lehmer (126)</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawGram()">Compute</button><button onclick="screenshotGram()">Screenshot</button><button class="s" onclick="csvGram()">Export CSV</button></div>
+<div class="bg"><button onclick="drawGram()">Compute</button><button onclick="screenshotGram()">Screenshot</button><button onclick="exportAllGram()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvGram()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Gram Points: θ(g_n) = nπ</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Gram points organize zero counting. Gram's Law: usually one zero per Gram interval. Violations are rare but important.</p>
@@ -2922,7 +2941,7 @@ Gram's Law states (-1)ⁿZ(g_n) > 0, equivalent to exactly one zero in [g_{n-1},
 <button onclick="document.getElementById('explicitXv').value=5000;document.getElementById('explicitZerosv').value=50;drawExplicit()">Large</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawExplicit()">Compute</button><button onclick="screenshotExplicit()">Screenshot</button><button class="s" onclick="csvExplicit()">Export CSV</button></div>
+<div class="bg"><button onclick="drawExplicit()">Compute</button><button onclick="screenshotExplicit()">Screenshot</button><button onclick="exportAllExplicit()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvExplicit()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Explicit Formula: π(x) = Li(x) - Σ_ρ Li(x^ρ) - ...</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Watch how adding zeros reconstructs π(x)! Each zero ρ contributes an oscillating term.</p>
@@ -2972,7 +2991,7 @@ This formula proves that zeta zeros DIRECTLY control prime distribution! If RH h
 <button onclick="document.getElementById('zcountTv').value=200;drawZeroCount()">T≤200</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawZeroCount()">Compute</button><button onclick="screenshotZeroCount()">Screenshot</button><button class="s" onclick="csvZeroCount()">Export CSV</button></div>
+<div class="bg"><button onclick="drawZeroCount()">Compute</button><button onclick="screenshotZeroCount()">Screenshot</button><button onclick="exportAllZcount()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvZeroCount()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Zero Counting: N(T) = #{ρ : 0 < Im(ρ) < T}</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Count of zeros with imaginary part less than T. Riemann-von Mangoldt: N(T) ~ (T/2π)log(T/2πe).</p>
@@ -3026,7 +3045,7 @@ N(T) = (T/2π)log(T/2πe) + O(log T) &nbsp;&nbsp;|&nbsp;&nbsp; S(T) = N(T) - ⟨
 <button onclick="document.getElementById('argandS1').value=-4;document.getElementById('argandS2').value=2;document.getElementById('argandT1').value=-5;document.getElementById('argandT2').value=5;drawArgand()">Wide View</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawArgand()">Compute</button><button onclick="screenshotArgand()">Screenshot</button></div>
+<div class="bg"><button onclick="drawArgand()">Compute</button><button onclick="screenshotArgand()">Screenshot</button><button onclick="exportAllArgand()" style="background:#1a472a">📦 All</button></div>
 <div class="g2">
 <div class="viz"><h3>ζ(s) Domain Coloring — Complex Plane Visualization</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Phase portrait of ζ(s). Zeros appear as color wheel centers. Critical line Re(s)=½ shown.</p>
@@ -3069,7 +3088,7 @@ Color: arg(ζ(s)) → Hue &nbsp;&nbsp;|&nbsp;&nbsp; Zeros: full color wheel &nbs
 <button onclick="document.getElementById('zetarealS1').value=-8;document.getElementById('zetarealS2').value=0;drawZetaReal()">Negative Only</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawZetaReal()">Compute</button><button onclick="screenshotZetaReal()">Screenshot</button><button class="s" onclick="csvZetaReal()">Export CSV</button></div>
+<div class="bg"><button onclick="drawZetaReal()">Compute</button><button onclick="screenshotZetaReal()">Screenshot</button><button onclick="exportAllZetareal()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvZetaReal()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>ζ(s) on Real Axis — From Basel to Trivial Zeros</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Zeta on real line: pole at s=1, special values ζ(2)=π²/6, trivial zeros at s=-2,-4,-6,...</p>
@@ -3111,7 +3130,7 @@ The functional equation ζ(s) = 2ˢπ^{s-1}sin(πs/2)Γ(1-s)ζ(1-s) connects val
 </select></div>
 <div class="cg"><label>Show GUE Prediction</label><input type="checkbox" id="montGUE" checked onchange="drawMontgomery()"></div>
 </div>
-<div class="bg"><button onclick="drawMontgomery()">Compute</button><button onclick="screenshotMontgomery()">Screenshot</button><button class="s" onclick="csvMontgomery()">Export CSV</button></div>
+<div class="bg"><button onclick="drawMontgomery()">Compute</button><button onclick="screenshotMontgomery()">Screenshot</button><button onclick="exportAllMont()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvMontgomery()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Montgomery Pair Correlation — Zero Spacing Statistics</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Distribution of normalized gaps between consecutive zeros of ζ(s).</p>
@@ -3149,7 +3168,7 @@ R₂(x) = 1 - (sin(πx)/(πx))² &nbsp;&nbsp;|&nbsp;&nbsp; Zeros repel: P(gap→
 <div class="cg"><label>Show Wigner Surmise</label><input type="checkbox" id="gueWigner" checked onchange="drawGUE()"></div>
 <div class="cg"><label>Show Poisson</label><input type="checkbox" id="guePoisson" checked onchange="drawGUE()"></div>
 </div>
-<div class="bg"><button onclick="drawGUE()">Compute</button><button onclick="screenshotGUE()">Screenshot</button><button class="s" onclick="csvGUE()">Export CSV</button></div>
+<div class="bg"><button onclick="drawGUE()">Compute</button><button onclick="screenshotGUE()">Screenshot</button><button onclick="exportAllGUE()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvGUE()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>GUE Random Matrix Statistics</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Nearest neighbor spacing distribution compared to random matrix predictions.</p>
@@ -3197,7 +3216,7 @@ Wigner: P(s) = (32/π²)s²e^{-4s²/π} &nbsp;|&nbsp; Poisson: P(s) = e^{-s}
 <button onclick="document.getElementById('raceXv').value=100000;document.getElementById('raceX').value=100000;drawPrimeRace()">x=100K</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawPrimeRace()">Compute</button><button onclick="screenshotPrimeRace()">Screenshot</button><button class="s" onclick="csvPrimeRace()">Export CSV</button></div>
+<div class="bg"><button onclick="drawPrimeRace()">Compute</button><button onclick="screenshotPrimeRace()">Screenshot</button><button onclick="exportAllRace()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvPrimeRace()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Prime Races — Chebyshev Bias Visualization</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Which residue class has more primes? Track the race as x increases.</p>
@@ -3240,7 +3259,7 @@ Under GRH, primes ≡ 3 (mod 4) lead ~99.59% of the "time" (in logarithmic densi
 <button onclick="document.getElementById('lfuncQv').value=7;document.getElementById('lfuncQ').value=7;drawLfunc()">q=7</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawLfunc()">Compute</button><button onclick="screenshotLfunc()">Screenshot</button><button class="s" onclick="csvLfunc()">Export CSV</button></div>
+<div class="bg"><button onclick="drawLfunc()">Compute</button><button onclick="screenshotLfunc()">Screenshot</button><button onclick="exportAllLfunc()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvLfunc()">Export CSV</button></div>
 <div class="g2">
 <div class="viz"><h3>Dirichlet L-Functions — L(s,χ) for mod q Characters</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Compute L(s,χ) for all Dirichlet characters χ mod q.</p>
@@ -3278,7 +3297,7 @@ L(s,χ) = Σ χ(n)/nˢ = ∏ₚ (1-χ(p)p⁻ˢ)⁻¹ &nbsp;&nbsp;|&nbsp;&nbsp; G
 </select></div>
 <div class="cg"><label>Show All Characters</label><input type="checkbox" id="lzeroAll" checked onchange="drawLfuncZeros()"></div>
 </div>
-<div class="bg"><button onclick="drawLfuncZeros()">Compute</button><button onclick="screenshotLfuncZeros()">Screenshot</button></div>
+<div class="bg"><button onclick="drawLfuncZeros()">Compute</button><button onclick="screenshotLfuncZeros()">Screenshot</button><button onclick="exportAllLzero()" style="background:#1a472a">📦 All</button></div>
 <div class="g2">
 <div class="viz"><h3>L-Function Zeros — Zeros of L(s,χ) on Critical Line</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Visualize zeros of Dirichlet L-functions. All should lie on Re(s)=½ (GRH).</p>
@@ -3330,7 +3349,7 @@ N(T,χ) ~ (T/π)log(qT/2πe) &nbsp;&nbsp;|&nbsp;&nbsp; Each L(s,χ) has infinite
 <button onclick="document.getElementById('quantumN').value=4;document.getElementById('quantumNv').value=4;document.getElementById('quantumL').value=3;document.getElementById('quantumLv').value=3;document.getElementById('quantumM').value=0;document.getElementById('quantumMv').value=0;drawQuantum()">4f</button>
 </div></div>
 </div>
-<div class="bg"><button onclick="drawQuantum()">Compute</button><button onclick="screenshotQuantum()">Screenshot</button><button class="s" onclick="csvQuantum()">Export CSV</button></div>
+<div class="bg"><button onclick="drawQuantum()">Compute</button><button onclick="screenshotQuantum()">Screenshot</button><button onclick="exportAllQuantum()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvQuantum()">Export CSV</button><button class="s" onclick="screenshotCanvas('cquantum','Quantum Orbital','quantum_canvas.png')">Canvas</button><button class="s" onclick="screenshotStats('quantumLiveStats','Quantum Orbitals','quantum_stats.png')">Stats</button></div>
 <div class="g2">
 <div class="viz"><h3>Quantum Orbital ψ_{n,l,m} — Hydrogen Wavefunction Visualization</h3>
 <p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Electron probability density |ψ|² for hydrogen-like orbitals. Nodes connect to zeta zeros!</p>
@@ -3364,8 +3383,359 @@ Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre
 </div>
 </div>
 
+<!-- PRIME K-TUPLES TAB -->
+<div id="tktuples" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max N</label><div class="sig"><input type="range" id="ktupleN" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('ktupleNv').value=this.value"><input type="number" id="ktupleNv" value="10000" min="10" max="1000000" onkeydown="if(event.key==='Enter')drawKtuples()"></div></div>
+<div class="cg"><label>Tuple Type</label><select id="ktupleType" onchange="drawKtuples()">
+<option value="twin">Twins (p, p+2)</option>
+<option value="cousin">Cousins (p, p+4)</option>
+<option value="sexy">Sexy (p, p+6)</option>
+<option value="triplet">Triplets (p, p+2, p+6)</option>
+<option value="quadruplet">Quadruplets</option>
+<option value="quintuplet">Quintuplets</option>
+<option value="sextuplet">Sextuplets</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawKtuples()">Analyze</button><button onclick="screenshotKtuples()">Screenshot</button><button onclick="exportAllKtuples()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvKtuples()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Prime k-Tuples Distribution</h3><canvas id="cktuples" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="ktuplesLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Tuple Density</h3><div id="pktuples1" style="height:280px"></div></div>
+</div>
+
+<!-- CARMICHAEL TAB -->
+<div id="tcarmichael" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max N</label><div class="sig"><input type="range" id="carmN" min="1000" max="1000000" step="1000" value="100000" oninput="document.getElementById('carmNv').value=this.value"><input type="number" id="carmNv" value="100000" min="100" max="10000000" onkeydown="if(event.key==='Enter')drawCarmichael()"></div></div>
+<div class="cg"><label>Test Base a</label><input type="number" id="carmBase" value="2" min="2" max="100"></div>
+</div>
+<div class="bg"><button onclick="drawCarmichael()">Find Carmichaels</button><button onclick="screenshotCarmichael()">Screenshot</button><button onclick="exportAllCarmichael()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvCarmichael()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Carmichael Numbers (Pseudoprimes)</h3><canvas id="ccarm" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="carmLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Growth Rate</h3><div id="pcarm1" style="height:280px"></div></div>
+</div>
+
+<!-- MERSENNE TAB -->
+<div id="tmersenne" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max Exponent p</label><div class="sig"><input type="range" id="mersP" min="10" max="1000" value="100" oninput="document.getElementById('mersPv').value=this.value"><input type="number" id="mersPv" value="100" min="2" max="10000" onkeydown="if(event.key==='Enter')drawMersenne()"></div></div>
+<div class="cg"><label>Show</label><select id="mersMode" onchange="drawMersenne()">
+<option value="all">All 2^p - 1</option>
+<option value="prime">Mersenne Primes Only</option>
+<option value="factors">With Factorizations</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawMersenne()">Compute</button><button onclick="screenshotMersenne()">Screenshot</button><button onclick="exportAllMersenne()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvMersenne()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Mersenne Numbers 2^p - 1</h3><canvas id="cmers" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="mersLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Known Mersenne Primes</h3><div id="pmers1" style="height:280px"></div></div>
+</div>
+
+<!-- CONTINUED FRACTIONS TAB -->
+<div id="tcontinued" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Number</label><select id="cfNum" onchange="drawContinued()">
+<option value="pi">π</option>
+<option value="e">e</option>
+<option value="phi">(1+√5)/2 Golden</option>
+<option value="sqrt2">√2</option>
+<option value="sqrt3">√3</option>
+<option value="custom">Custom</option>
+</select></div>
+<div class="cg"><label>Custom Value</label><input type="number" id="cfCustom" value="3.14159" step="0.0001" onchange="document.getElementById('cfNum').value='custom';drawContinued()"></div>
+<div class="cg"><label>Terms</label><input type="range" id="cfTerms" min="5" max="50" value="20" oninput="drawContinued()"></div>
+</div>
+<div class="bg"><button onclick="drawContinued()">Compute</button><button onclick="screenshotContinued()">Screenshot</button><button onclick="exportAllContinued()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvContinued()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Continued Fraction Expansion</h3><canvas id="ccf" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="cfLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Convergent Errors</h3><div id="pcf1" style="height:280px"></div></div>
+</div>
+
+<!-- STERN-BROCOT TAB -->
+<div id="tsternbrocot" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Depth</label><input type="range" id="sbDepth" min="3" max="10" value="6" oninput="drawSternBrocot()"></div>
+<div class="cg"><label>Highlight</label><select id="sbHighlight" onchange="drawSternBrocot()">
+<option value="none">None</option>
+<option value="farey">Farey Connection</option>
+<option value="path">Path to Fraction</option>
+</select></div>
+<div class="cg"><label>Target p/q</label><input type="number" id="sbP" value="3" min="1" style="width:50px">/<input type="number" id="sbQ" value="5" min="1" style="width:50px"></div>
+</div>
+<div class="bg"><button onclick="drawSternBrocot()">Generate</button><button onclick="screenshotSternBrocot()">Screenshot</button><button onclick="exportAllSternBrocot()" style="background:#1a472a">📦 All</button></div>
+<div class="g2">
+<div class="viz"><h3>Stern-Brocot Tree</h3><canvas id="csb" width="700" height="600"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="sbLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+</div>
+
+<!-- PYTHAGOREAN TAB -->
+<div id="tpythag" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max Hypotenuse</label><div class="sig"><input type="range" id="pythC" min="10" max="1000" value="100" oninput="document.getElementById('pythCv').value=this.value;drawPythag()"><input type="number" id="pythCv" value="100" min="5" max="10000" onkeydown="if(event.key==='Enter')drawPythag()"></div></div>
+<div class="cg"><label>Show</label><select id="pythMode" onchange="drawPythag()">
+<option value="primitive">Primitive Only</option>
+<option value="all">All Triples</option>
+<option value="tree">Generation Tree</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawPythag()">Generate</button><button onclick="screenshotPythag()">Screenshot</button><button onclick="exportAllPythag()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvPythag()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Pythagorean Triples a² + b² = c²</h3><canvas id="cpyth" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="pythLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Triple Distribution</h3><div id="ppyth1" style="height:280px"></div></div>
+</div>
+
+<!-- SUM OF SQUARES TAB -->
+<div id="tsumsquares" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max N</label><div class="sig"><input type="range" id="ssqN" min="10" max="500" value="100" oninput="document.getElementById('ssqNv').value=this.value;drawSumSquares()"><input type="number" id="ssqNv" value="100" min="1" max="1000" onkeydown="if(event.key==='Enter')drawSumSquares()"></div></div>
+<div class="cg"><label>Squares k</label><select id="ssqK" onchange="drawSumSquares()">
+<option value="2">r₂(n) - Two Squares</option>
+<option value="3">r₃(n) - Three Squares</option>
+<option value="4">r₄(n) - Four Squares</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawSumSquares()">Compute</button><button onclick="screenshotSumSquares()">Screenshot</button><button onclick="exportAllSumSquares()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvSumSquares()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Sum of Squares Representations</h3><canvas id="cssq" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="ssqLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>r_k(n) Distribution</h3><div id="pssq1" style="height:280px"></div></div>
+</div>
+
+<!-- QUADRATIC RESIDUES TAB -->
+<div id="tquadres" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Modulus p</label><div class="sig"><input type="range" id="qrP" min="3" max="200" value="23" oninput="document.getElementById('qrPv').value=this.value;drawQuadRes()"><input type="number" id="qrPv" value="23" min="3" max="1000" onkeydown="if(event.key==='Enter')drawQuadRes()"></div></div>
+<div class="cg"><label>View</label><select id="qrMode" onchange="drawQuadRes()">
+<option value="grid">Residue Grid</option>
+<option value="legendre">Legendre Symbol</option>
+<option value="paley">Paley Graph</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawQuadRes()">Compute</button><button onclick="screenshotQuadRes()">Screenshot</button><button onclick="exportAllQuadRes()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvQuadRes()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Quadratic Residues mod p</h3><canvas id="cqr" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="qrLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Legendre Symbol Pattern</h3><div id="pqr1" style="height:280px"></div></div>
+</div>
+
+<!-- PARTITIONS TAB -->
+<div id="tpartition" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max N</label><div class="sig"><input type="range" id="partN" min="10" max="200" value="50" oninput="document.getElementById('partNv').value=this.value"><input type="number" id="partNv" value="50" min="1" max="500" onkeydown="if(event.key==='Enter')drawPartition()"></div></div>
+<div class="cg"><label>Test n</label><input type="number" id="partTest" value="10" min="1" max="100"></div>
+<div class="cg"><label>View</label><select id="partMode" onchange="drawPartition()">
+<option value="growth">Growth p(n)</option>
+<option value="ferrers">Ferrers Diagrams</option>
+<option value="congruences">Ramanujan Congruences</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawPartition()">Compute</button><button onclick="screenshotPartition()">Screenshot</button><button onclick="exportAllPartition()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvPartition()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Partition Function p(n)</h3><canvas id="cpart" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="partLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Partition Growth</h3><div id="ppart1" style="height:280px"></div></div>
+</div>
+
+<!-- BERNOULLI TAB -->
+<div id="tbernoulli" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max n</label><div class="sig"><input type="range" id="bernN" min="5" max="50" value="20" oninput="document.getElementById('bernNv').value=this.value;drawBernoulli()"><input type="number" id="bernNv" value="20" min="1" max="100" onkeydown="if(event.key==='Enter')drawBernoulli()"></div></div>
+<div class="cg"><label>Show</label><select id="bernMode" onchange="drawBernoulli()">
+<option value="values">Bₙ Values</option>
+<option value="zeta">ζ(-n) Connection</option>
+<option value="sums">Power Sums</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawBernoulli()">Compute</button><button onclick="screenshotBernoulli()">Screenshot</button><button onclick="exportAllBernoulli()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvBernoulli()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Bernoulli Numbers Bₙ</h3><canvas id="cbern" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="bernLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Connection to ζ(s)</h3><div id="pbern1" style="height:280px"></div></div>
+</div>
+
+<!-- FIBONACCI TAB -->
+<div id="tfibonacci" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Terms</label><div class="sig"><input type="range" id="fibN" min="10" max="100" value="30" oninput="document.getElementById('fibNv').value=this.value;drawFibonacci()"><input type="number" id="fibNv" value="30" min="5" max="200" onkeydown="if(event.key==='Enter')drawFibonacci()"></div></div>
+<div class="cg"><label>Show</label><select id="fibMode" onchange="drawFibonacci()">
+<option value="spiral">Golden Spiral</option>
+<option value="ratio">φ Convergence</option>
+<option value="zeckendorf">Zeckendorf</option>
+<option value="pisano">Pisano Periods</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawFibonacci()">Compute</button><button onclick="screenshotFibonacci()">Screenshot</button><button onclick="exportAllFibonacci()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvFibonacci()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Fibonacci Sequence</h3><canvas id="cfib" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="fibLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Ratio Convergence to φ</h3><div id="pfib1" style="height:280px"></div></div>
+</div>
+
+<!-- CATALAN TAB -->
+<div id="tcatalan" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max n</label><div class="sig"><input type="range" id="catN" min="5" max="30" value="15" oninput="document.getElementById('catNv').value=this.value;drawCatalan()"><input type="number" id="catNv" value="15" min="1" max="50" onkeydown="if(event.key==='Enter')drawCatalan()"></div></div>
+<div class="cg"><label>Visualization</label><select id="catMode" onchange="drawCatalan()">
+<option value="lattice">Lattice Paths</option>
+<option value="dyck">Dyck Paths</option>
+<option value="trees">Binary Trees</option>
+<option value="triangulations">Triangulations</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawCatalan()">Compute</button><button onclick="screenshotCatalan()">Screenshot</button><button onclick="exportAllCatalan()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvCatalan()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Catalan Numbers Cₙ</h3><canvas id="ccat" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="catLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Growth of Cₙ</h3><div id="pcat1" style="height:280px"></div></div>
+</div>
+
+<!-- ALIQUOT TAB -->
+<div id="taliquot" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Starting n</label><div class="sig"><input type="range" id="aliqN" min="2" max="1000" value="276" oninput="document.getElementById('aliqNv').value=this.value"><input type="number" id="aliqNv" value="276" min="2" max="10000" onkeydown="if(event.key==='Enter')drawAliquot()"></div></div>
+<div class="cg"><label>Max Steps</label><input type="number" id="aliqSteps" value="100" min="10" max="1000"></div>
+<div class="cg"><label>Mode</label><select id="aliqMode" onchange="drawAliquot()">
+<option value="single">Single Sequence</option>
+<option value="classify">Classify 1-N</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawAliquot()">Trace</button><button onclick="screenshotAliquot()">Screenshot</button><button onclick="exportAllAliquot()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvAliquot()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Aliquot Sequence s(n) = σ(n) - n</h3><canvas id="caliq" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="aliqLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Sequence Trajectory</h3><div id="paliq1" style="height:280px"></div></div>
+</div>
+
+<!-- CYCLOTOMIC TAB -->
+<div id="tcyclotomic" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max n</label><div class="sig"><input type="range" id="cycN" min="5" max="50" value="20" oninput="document.getElementById('cycNv').value=this.value;drawCyclotomic()"><input type="number" id="cycNv" value="20" min="1" max="100" onkeydown="if(event.key==='Enter')drawCyclotomic()"></div></div>
+<div class="cg"><label>View</label><select id="cycMode" onchange="drawCyclotomic()">
+<option value="roots">Roots of Unity</option>
+<option value="poly">Polynomial Coefficients</option>
+<option value="degree">Degree φ(n)</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawCyclotomic()">Compute</button><button onclick="screenshotCyclotomic()">Screenshot</button><button onclick="exportAllCyclotomic()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvCyclotomic()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Cyclotomic Polynomials Φₙ(x)</h3><canvas id="ccyc" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="cycLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Polynomial Degrees</h3><div id="pcyc1" style="height:280px"></div></div>
+</div>
+
+<!-- COLLATZ TAB -->
+<div id="tcollatz" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Starting n</label><div class="sig"><input type="range" id="collN" min="1" max="10000" value="27" oninput="document.getElementById('collNv').value=this.value"><input type="number" id="collNv" value="27" min="1" max="1000000" onkeydown="if(event.key==='Enter')drawCollatz()"></div></div>
+<div class="cg"><label>Mode</label><select id="collMode" onchange="drawCollatz()">
+<option value="single">Single Trajectory</option>
+<option value="stopping">Stopping Times</option>
+<option value="tree">Inverse Tree</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawCollatz()">Compute</button><button onclick="screenshotCollatz()">Screenshot</button><button onclick="exportAllCollatz()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvCollatz()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Collatz Conjecture (3n+1)</h3><canvas id="ccoll" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="collLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Trajectory</h3><div id="pcoll1" style="height:280px"></div></div>
+</div>
+
+<!-- HIGHLY COMPOSITE TAB -->
+<div id="thighcomp" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max N</label><div class="sig"><input type="range" id="hcN" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('hcNv').value=this.value"><input type="number" id="hcNv" value="10000" min="10" max="1000000" onkeydown="if(event.key==='Enter')drawHighComp()"></div></div>
+<div class="cg"><label>Type</label><select id="hcMode" onchange="drawHighComp()">
+<option value="hc">Highly Composite</option>
+<option value="superior">Superior HC</option>
+<option value="abundant">Abundant</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawHighComp()">Find</button><button onclick="screenshotHighComp()">Screenshot</button><button onclick="exportAllHighComp()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvHighComp()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Highly Composite Numbers</h3><canvas id="chc" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="hcLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>d(n) Records</h3><div id="phc1" style="height:280px"></div></div>
+</div>
+
+<!-- PERFECT NUMBERS TAB -->
+<div id="tperfect" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max N</label><div class="sig"><input type="range" id="perfN" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('perfNv').value=this.value"><input type="number" id="perfNv" value="10000" min="10" max="10000000" onkeydown="if(event.key==='Enter')drawPerfect()"></div></div>
+<div class="cg"><label>Show</label><select id="perfMode" onchange="drawPerfect()">
+<option value="classify">Classification</option>
+<option value="sigma">σ(n)/n Ratio</option>
+<option value="mersenne">Mersenne Connection</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawPerfect()">Analyze</button><button onclick="screenshotPerfect()">Screenshot</button><button onclick="exportAllPerfect()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvPerfect()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Perfect, Abundant, Deficient</h3><canvas id="cperf" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="perfLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>σ(n)/n Distribution</h3><div id="pperf1" style="height:280px"></div></div>
+</div>
+
+<!-- TAXICAB TAB -->
+<div id="ttaxicab" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Max Sum</label><div class="sig"><input type="range" id="taxiN" min="1000" max="100000" step="1000" value="20000" oninput="document.getElementById('taxiNv').value=this.value"><input type="number" id="taxiNv" value="20000" min="100" max="1000000" onkeydown="if(event.key==='Enter')drawTaxicab()"></div></div>
+<div class="cg"><label>Min Ways k</label><select id="taxiK" onchange="drawTaxicab()">
+<option value="2">Ta(2) - 2 ways</option>
+<option value="3">Ta(3) - 3 ways</option>
+<option value="4">Ta(4) - 4 ways</option>
+</select></div>
+</div>
+<div class="bg"><button onclick="drawTaxicab()">Find Taxicabs</button><button onclick="screenshotTaxicab()">Screenshot</button><button onclick="exportAllTaxicab()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvTaxicab()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Taxicab Numbers (Hardy-Ramanujan)</h3><canvas id="ctaxi" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="taxiLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Representations</h3><div id="ptaxi1" style="height:280px"></div></div>
+</div>
+
+<!-- ELLIPTIC CURVES TAB -->
+<div id="telliptic" class="tab">
+<div class="ctrl">
+<div class="cg"><label>a coefficient</label><input type="number" id="ellA" value="-1" step="1"></div>
+<div class="cg"><label>b coefficient</label><input type="number" id="ellB" value="1" step="1"></div>
+<div class="cg"><label>View</label><select id="ellMode" onchange="drawElliptic()">
+<option value="real">Real Points y² = x³ + ax + b</option>
+<option value="modp">Points mod p</option>
+<option value="group">Group Law</option>
+</select></div>
+<div class="cg"><label>Prime p (for mod)</label><input type="number" id="ellP" value="23" min="3" max="1000"></div>
+</div>
+<div class="bg"><button onclick="drawElliptic()">Draw Curve</button><button onclick="screenshotElliptic()">Screenshot</button><button onclick="exportAllElliptic()" style="background:#1a472a">📦 All</button><button class="s" onclick="csvElliptic()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Elliptic Curve y² = x³ + ax + b</h3><canvas id="cell" width="700" height="500"></canvas></div>
+<div class="viz"><h3>Live Statistics</h3><div id="ellLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem"></div></div>
+</div>
+<div class="viz"><h3>Point Count</h3><div id="pell1" style="height:280px"></div></div>
+</div>
+
 <div id="ref" class="sec">
-<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>47 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
+<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>65 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
 
 <div class="rs"><h3>Mathematical Credits & Historical Attribution</h3>
 <p style="color:var(--txt2);margin-bottom:1rem">This platform visualizes theorems and concepts developed by brilliant mathematicians over centuries:</p>
@@ -3565,6 +3935,7 @@ const fmt=n=>{if(n===0)return'0';if(n==null||isNaN(n)||!isFinite(n))return'—';
 const fmtH=n=>{if(n===0)return'0';if(n==null||isNaN(n)||!isFinite(n))return'—';return parseFloat(n).toPrecision(17);}; // High precision format
 const gcd=(a,b)=>{a=Math.abs(Math.round(a));b=Math.abs(Math.round(b));while(b)[a,b]=[b,a%b];return a||1;};
 const isPrime=n=>{if(n<2)return false;if(n===2)return true;if(n%2===0)return false;for(let i=3;i*i<=n;i+=2)if(n%i===0)return false;return true;};
+const totient=n=>{if(n<1)return 0;let r=n;for(let p=2;p*p<=n;p++){if(n%p===0){while(n%p===0)n/=p;r-=r/p;}}if(n>1)r-=r/n;return Math.round(r);};
 const gcdM=(...n)=>n.reduce((a,b)=>gcd(a,b));
 const mob=n=>{if(n===1)return 1;let pf=0,t=n;for(let i=2;i*i<=n;i++){if(n%i===0){if(t%(i*i)===0)return 0;pf++;while(t%i===0)t/=i;}}if(t>1)pf++;return pf%2===0?1:-1;};
 const zeta=n=>{
@@ -3599,7 +3970,7 @@ const gridC=()=>isDark()?'rgba(0,217,255,0.12)':'rgba(0,102,204,0.15)';
 const bordC=()=>isDark()?'rgba(0,217,255,0.5)':'rgba(0,102,204,0.6)';
 function toggleTheme(){document.body.classList.toggle('light');document.getElementById('thm').textContent=isDark()?'D':'L';draw2D();if(document.getElementById('t3d').classList.contains('active'))draw3D();}
 function showSec(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.snav .nbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
-function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();if(id==='tmert')drawMertens();if(id==='tcheb')drawChebyshev();if(id==='tli')drawLi();if(id==='tdiv')drawDivisor();if(id==='tliou')drawLiouville();if(id==='tmang')drawMangoldt();if(id==='tram')drawRamanujan();if(id==='tulam')drawUlam();if(id==='tsacks')drawSacks();if(id==='thardy')drawHardy();if(id==='tgram')drawGram();if(id==='texplicit')drawExplicit();if(id==='tzerocount')drawZeroCount();if(id==='targand')drawArgand();if(id==='tzetareal')drawZetaReal();if(id==='tmontgomery')drawMontgomery();if(id==='tgue')drawGUE();if(id==='tprimerace')drawPrimeRace();if(id==='tlfunc')drawLfunc();if(id==='tlfunczeros')drawLfuncZeros();if(id==='tquantum')drawQuantum();}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();if(id==='tmert')drawMertens();if(id==='tcheb')drawChebyshev();if(id==='tli')drawLi();if(id==='tdiv')drawDivisor();if(id==='tliou')drawLiouville();if(id==='tmang')drawMangoldt();if(id==='tram')drawRamanujan();if(id==='tulam')drawUlam();if(id==='tsacks')drawSacks();if(id==='thardy')drawHardy();if(id==='tgram')drawGram();if(id==='texplicit')drawExplicit();if(id==='tzerocount')drawZeroCount();if(id==='targand')drawArgand();if(id==='tzetareal')drawZetaReal();if(id==='tmontgomery')drawMontgomery();if(id==='tgue')drawGUE();if(id==='tprimerace')drawPrimeRace();if(id==='tlfunc')drawLfunc();if(id==='tlfunczeros')drawLfuncZeros();if(id==='tquantum')drawQuantum();if(id==='tktuples')drawKtuples();if(id==='tcarmichael')drawCarmichael();if(id==='tmersenne')drawMersenne();if(id==='tcontinued')drawContinued();if(id==='tsternbrocot')drawSternBrocot();if(id==='tpythag')drawPythag();if(id==='tsumsquares')drawSumSquares();if(id==='tquadres')drawQuadRes();if(id==='tpartition')drawPartition();if(id==='tbernoulli')drawBernoulli();if(id==='tfibonacci')drawFibonacci();if(id==='tcatalan')drawCatalan();if(id==='taliquot')drawAliquot();if(id==='tcyclotomic')drawCyclotomic();if(id==='tcollatz')drawCollatz();if(id==='thighcomp')drawHighComp();if(id==='tperfect')drawPerfect();if(id==='ttaxicab')drawTaxicab();if(id==='telliptic')drawElliptic();}
 
 async function screenshotDashboard(elemId, title='Dashboard'){
 const el=document.getElementById(elemId);if(!el)return;
@@ -3881,6 +4252,197 @@ a.download=filename;
 a.click();
 },'image/png',1.0);
 }
+
+// === COMPREHENSIVE SCREENSHOT SYSTEM ===
+
+// Screenshot single canvas
+async function screenshotCanvas(canvasId, title, filename){
+const c=document.getElementById(canvasId);
+if(!c)return alert('Canvas not found');
+const scale=2,pad=30;
+const out=document.createElement('canvas');
+out.width=(c.width+pad*2)*scale;
+out.height=(c.height+pad*2+40)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font='bold 16px Segoe UI';ctx.textAlign='center';
+ctx.fillText(title,out.width/scale/2,pad);
+ctx.drawImage(c,pad,pad+20,c.width,c.height);
+ctx.fillStyle=isDark()?'#506080':'#888';ctx.font='10px Segoe UI';
+ctx.fillText('Möbius Shell Sieve',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;a.click();},'image/png',1.0);
+}
+
+// Screenshot single Plotly chart
+async function screenshotChart(plotId, title, filename){
+const p=document.getElementById(plotId);
+if(!p||!p.offsetWidth)return alert('Chart not ready');
+const img=await Plotly.toImage(p,{format:'png',width:p.offsetWidth*2,height:p.offsetHeight*2,scale:2});
+const scale=2,pad=30;
+const loaded=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=img;});
+const out=document.createElement('canvas');
+out.width=loaded.width+pad*2*scale;
+out.height=loaded.height+pad*2*scale+40*scale;
+const ctx=out.getContext('2d');
+ctx.fillStyle=canvBg();ctx.fillRect(0,0,out.width,out.height);
+ctx.fillStyle=isDark()?'#00d9ff':'#0066cc';ctx.font=`bold ${16*scale}px Segoe UI`;ctx.textAlign='center';
+ctx.fillText(title,out.width/2,pad*scale);
+ctx.drawImage(loaded,pad*scale,pad*scale+20*scale);
+ctx.fillStyle=isDark()?'#506080':'#888';ctx.font=`${10*scale}px Segoe UI`;
+ctx.fillText('Möbius Shell Sieve',out.width/2,out.height-10*scale);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;a.click();},'image/png',1.0);
+}
+
+// Screenshot stats dashboard only
+async function screenshotStats(dashId, title, filename){
+const dashData=extractDashboardData(dashId);
+const scale=2,pad=30,w=600,h=400;
+const out=document.createElement('canvas');
+out.width=(w+pad*2)*scale;out.height=(h+pad*2)*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+const isDk=isDark();
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';ctx.fillRect(0,0,out.width/scale,out.height/scale);
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';ctx.font='bold 16px Segoe UI';ctx.textAlign='center';
+ctx.fillText(title+' — Statistics',out.width/scale/2,pad);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad,pad+25,w,isDk);
+ctx.fillStyle=isDk?'#506080':'#888';ctx.font='10px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve',out.width/scale/2,out.height/scale-10);
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;a.click();},'image/png',1.0);
+}
+
+// Screenshot ALL elements on a tab (canvases + charts + stats)
+async function screenshotTabAll(config){
+const {canvases=[], charts=[], dashId, title, filename} = config;
+const scale=2, pad=30, gap=20, chartH=300;
+const loadedCanvases=canvases.map(id=>document.getElementById(id)).filter(c=>c);
+const loadedCharts=charts.map(id=>document.getElementById(id)).filter(p=>p&&p.offsetWidth);
+const dashData=dashId?extractDashboardData(dashId):{cards:[],sections:[]};
+const isDk=isDark();
+
+// Calculate dimensions
+let totalH=60; // title
+const canvasH=loadedCanvases.length?Math.max(...loadedCanvases.map(c=>c.height))+gap:0;
+const canvasW=loadedCanvases.length?loadedCanvases.reduce((a,c)=>a+c.width+gap,0)-gap:0;
+totalH+=canvasH;
+
+// Charts in 2 columns
+const chartRows=Math.ceil(loadedCharts.length/2);
+const chartTotalH=chartRows*(chartH+gap);
+totalH+=chartTotalH;
+
+// Dashboard
+const dashH=dashData.cards.length||dashData.sections.length?300:0;
+totalH+=dashH;
+totalH+=pad*2+40; // padding + footer
+
+const totalW=Math.max(canvasW,800)+pad*2;
+
+// Create output canvas
+const out=document.createElement('canvas');
+out.width=totalW*scale;
+out.height=totalH*scale;
+const ctx=out.getContext('2d');ctx.scale(scale,scale);
+
+// Background
+ctx.fillStyle=isDk?'#0d1321':'#ffffff';
+ctx.fillRect(0,0,totalW,totalH);
+
+// Title
+ctx.fillStyle=isDk?'#00d9ff':'#0066cc';
+ctx.font='bold 20px Segoe UI';ctx.textAlign='center';
+ctx.fillText(title+' — Complete Export',totalW/2,pad+15);
+let cy=pad+40;
+
+// Draw canvases side by side
+if(loadedCanvases.length){
+let cx=pad;
+loadedCanvases.forEach(c=>{
+ctx.drawImage(c,cx,cy,c.width,c.height);
+cx+=c.width+gap;
+});
+cy+=canvasH;
+}
+
+// Draw charts in 2-column grid
+if(loadedCharts.length){
+const chartW=(totalW-pad*2-gap)/2;
+const chartImgs=await Promise.all(loadedCharts.map(p=>Plotly.toImage(p,{format:'png',width:chartW,height:chartH,scale:2})));
+const chartLoaded=await Promise.all(chartImgs.map(src=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=src;})));
+chartLoaded.forEach((img,i)=>{
+const col=i%2, row=Math.floor(i/2);
+const x=pad+col*(chartW+gap);
+const y=cy+row*(chartH+gap);
+ctx.drawImage(img,x,y,chartW,chartH);
+});
+cy+=chartTotalH;
+}
+
+// Draw dashboard
+if(dashH){
+ctx.fillStyle=isDk?'#151b2d':'#f5f5f5';
+ctx.fillRect(pad,cy,totalW-pad*2,dashH-20);
+ctx.textAlign='left';
+renderDashboard(ctx,dashData,pad+10,cy+15,totalW-pad*2-20,isDk);
+cy+=dashH;
+}
+
+// Footer
+ctx.fillStyle=isDk?'#506080':'#888';
+ctx.font='11px Segoe UI';ctx.textAlign='center';
+ctx.fillText('Möbius Shell Sieve — @7dview — wessengetachew.github.io',totalW/2,totalH-15);
+
+out.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;a.click();},'image/png',1.0);
+}
+
+// Tab-specific export all functions
+function exportAll2D(){screenshotTabAll({canvases:['c2d'],dashId:'stats2dLive',title:'2D Lattice Points',filename:'2d_lattice_all.png'});}
+function exportAll3D(){screenshotTabAll({canvases:['c3d'],dashId:'stats3dLive',title:'3D Lattice Points',filename:'3d_lattice_all.png'});}
+function exportAllErr(){screenshotTabAll({charts:['pe1','pe2','pe3','pe4'],dashId:'errLiveStats',title:'Error Analysis',filename:'error_all.png'});}
+function exportAllMob(){screenshotTabAll({canvases:['cmob'],charts:['pmob1','pmob2'],dashId:'mobLiveStats',title:'Möbius Function',filename:'mobius_all.png'});}
+function exportAllDim(){screenshotTabAll({charts:['pdimNew','pdimDens','pdimVol'],dashId:'dimLiveStats',title:'Higher Dimensions',filename:'dimensions_all.png'});}
+function exportAllSh(){screenshotTabAll({charts:['psh1','psh2','psh3'],dashId:'shLiveStats',title:'Shell Analysis',filename:'shells_all.png'});}
+function exportAllGCD(){screenshotTabAll({canvases:['cgcd'],charts:['pgcd1','pgcd2'],dashId:'gcdLiveStats',title:'GCD Distribution',filename:'gcd_all.png'});}
+function exportAllGaus(){screenshotTabAll({canvases:['cgaus'],dashId:'gausLiveStats',title:'Gaussian Integers',filename:'gaussian_all.png'});}
+function exportAllCirc(){screenshotTabAll({canvases:['ccirc'],charts:['pcirc1','pcirc2','pcirc3'],dashId:'circLiveStats',title:'Circle Problem',filename:'circle_all.png'});}
+function exportAllDens(){screenshotTabAll({charts:['pdens1','pdens2','pdens3'],dashId:'densLiveStats',title:'Density 1/ζ(k)',filename:'density_all.png'});}
+function exportAllCay(){screenshotTabAll({canvases:['ccay'],dashId:'cayLiveStats',title:'Cayley Transform',filename:'cayley_all.png'});}
+function exportAllPrim(){screenshotTabAll({canvases:['cprim'],charts:['pprim1'],dashId:'primLiveStats',title:'Primitive Roots',filename:'primroot_all.png'});}
+function exportAllFarey(){screenshotTabAll({canvases:['cfarey'],charts:['pfarey1'],dashId:'fareyLiveStats',title:'Farey Sequence',filename:'farey_all.png'});}
+function exportAllMod(){screenshotTabAll({canvases:['cmod'],dashId:'modLiveStats',title:'Modular Rings',filename:'modular_all.png'});}
+function exportAllDir(){screenshotTabAll({canvases:['cdir'],charts:['pdir1','pdir2'],dashId:'dirLiveStats',title:'Dirichlet Characters',filename:'dirichlet_all.png'});}
+function exportAllTwin(){screenshotTabAll({canvases:['ctwin'],charts:['ptwin1','ptwin2'],dashId:'twinLiveStats',title:'Twin Primes',filename:'twin_all.png'});}
+function exportAllPi(){screenshotTabAll({canvases:['cpi'],charts:['ppi1','ppi2'],dashId:'piLiveStats',title:'Prime Counting π(x)',filename:'pi_all.png'});}
+function exportAllComp(){screenshotTabAll({canvases:['ccomp'],charts:['pcomp1'],dashId:'compLiveStats',title:'Composite Channels',filename:'composite_all.png'});}
+function exportAllCopair(){screenshotTabAll({canvases:['ccopair'],charts:['pcopair1','pcopair2'],dashId:'copairLiveStats',title:'Coprime Pairs',filename:'coprime_all.png'});}
+function exportAllSierp(){screenshotTabAll({canvases:['csierp'],charts:['psierp1'],dashId:'sierpLiveStats',title:'Sierpiński',filename:'sierpinski_all.png'});}
+function exportAllKfree(){screenshotTabAll({canvases:['ckfree'],charts:['pkfree1','pkfree2'],dashId:'kfreeLiveStats',title:'k-Free Integers',filename:'kfree_all.png'});}
+function exportAllEuler(){screenshotTabAll({canvases:['ceuler'],charts:['peuler1','peuler2'],dashId:'eulerLiveStats',title:'Euler Product',filename:'euler_all.png'});}
+function exportAllChord(){screenshotTabAll({canvases:['cchord'],charts:['pchord1'],dashId:'chordLiveStats',title:'Chord Uniformity',filename:'chord_all.png'});}
+function exportAllGold(){screenshotTabAll({canvases:['cgold'],charts:['pgold'],dashId:'goldLiveStats',title:'Goldbach Conjecture',filename:'goldbach_all.png'});}
+function exportAllGap(){screenshotTabAll({canvases:['cgap'],charts:['pgap1','pgap2'],dashId:'gapLiveStats',title:'Prime Gaps',filename:'gap_all.png'});}
+function exportAllSoph(){screenshotTabAll({canvases:['csoph'],charts:['psoph1'],dashId:'sophLiveStats',title:'Sophie Germain',filename:'sophie_all.png'});}
+function exportAllMert(){screenshotTabAll({canvases:['cmert'],charts:['pmertRatio','pmertDist'],dashId:'mertLiveStats',title:'Mertens M(x)',filename:'mertens_all.png'});}
+function exportAllCheb(){screenshotTabAll({canvases:['ccheb'],charts:['pcheb1','pcheb2'],dashId:'chebLiveStats',title:'Chebyshev ψ(x)',filename:'chebyshev_all.png'});}
+function exportAllLi(){screenshotTabAll({canvases:['cli'],charts:['pli1','pli2'],dashId:'liLiveStats',title:'Logarithmic Integral',filename:'li_all.png'});}
+function exportAllDiv(){screenshotTabAll({canvases:['cdiv'],charts:['pdiv1','pdiv2'],dashId:'divLiveStats',title:'Divisor Function',filename:'divisor_all.png'});}
+function exportAllLiou(){screenshotTabAll({canvases:['cliou'],charts:['pliou1','pliou2'],dashId:'liouLiveStats',title:'Liouville λ(n)',filename:'liouville_all.png'});}
+function exportAllMang(){screenshotTabAll({canvases:['cmang'],charts:['pmang1','pmang2'],dashId:'mangLiveStats',title:'Mangoldt Λ(n)',filename:'mangoldt_all.png'});}
+function exportAllRam(){screenshotTabAll({canvases:['cram'],charts:['pram1'],dashId:'ramLiveStats',title:'Ramanujan Sums',filename:'ramanujan_all.png'});}
+function exportAllUlam(){screenshotTabAll({canvases:['culam'],dashId:'ulamLiveStats',title:'Ulam Spiral',filename:'ulam_all.png'});}
+function exportAllSacks(){screenshotTabAll({canvases:['csacks'],dashId:'sacksLiveStats',title:'Sacks Spiral',filename:'sacks_all.png'});}
+function exportAllHardy(){screenshotTabAll({canvases:['chardy'],charts:['phardyZeros','phardyGrowth'],dashId:'hardyLiveStats',title:'Hardy Z(t)',filename:'hardy_all.png'});}
+function exportAllGram(){screenshotTabAll({canvases:['cgram'],charts:['pgram1'],dashId:'gramLiveStats',title:'Gram Points',filename:'gram_all.png'});}
+function exportAllExplicit(){screenshotTabAll({canvases:['cexplicit'],charts:['pexplicit1'],dashId:'explicitLiveStats',title:'Explicit π(x)',filename:'explicit_all.png'});}
+function exportAllZcount(){screenshotTabAll({canvases:['czcount'],charts:['pzcount1','pzcount2'],dashId:'zcountLiveStats',title:'N(T) Zero Counting',filename:'zerocount_all.png'});}
+function exportAllArgand(){screenshotTabAll({canvases:['cargand'],dashId:'argandLiveStats',title:'ζ(s) Argand',filename:'argand_all.png'});}
+function exportAllZetareal(){screenshotTabAll({canvases:['czetareal'],dashId:'zetarealLiveStats',title:'ζ(s) Real Axis',filename:'zetareal_all.png'});}
+function exportAllMont(){screenshotTabAll({charts:['pmontCorr','pmontHist'],dashId:'montLiveStats',title:'Montgomery Correlation',filename:'montgomery_all.png'});}
+function exportAllGUE(){screenshotTabAll({charts:['pgueSpacing','pgueHist'],dashId:'gueLiveStats',title:'GUE Statistics',filename:'gue_all.png'});}
+function exportAllRace(){screenshotTabAll({canvases:['crace'],charts:['praceCount'],dashId:'raceLiveStats',title:'Prime Races',filename:'primerace_all.png'});}
+function exportAllLfunc(){screenshotTabAll({canvases:['clfunc'],charts:['plfunc1'],dashId:'lfuncLiveStats',title:'L-functions',filename:'lfunc_all.png'});}
+function exportAllLzero(){screenshotTabAll({canvases:['clfunczeros'],dashId:'lzeroLiveStats',title:'L-function Zeros',filename:'lfunczeros_all.png'});}
+function exportAllQuantum(){screenshotTabAll({canvases:['cquantum'],dashId:'quantumLiveStats',title:'Quantum Orbitals',filename:'quantum_all.png'});}
 
 function renderDashboard(ctx,data,x,y,w,isDk){
 let cy=y;const pad=15,colW=w/3-pad;
@@ -13924,6 +14486,1753 @@ dl(csv, `quantum_${quantumData.orbital || 'orbital'}.csv`);
 async function screenshotQuantum() {
 await screenshotUnified('cquantum', 'quantumLiveStats', `Quantum Orbital ${quantumData.orbital || ''}`, 'quantum_orbital.png');
 }
+
+// ==================== PRIME K-TUPLES ====================
+let ktuplesData = [];
+const KTUPLE_PATTERNS = {
+twin: [0, 2],
+cousin: [0, 4],
+sexy: [0, 6],
+triplet: [0, 2, 6],
+quadruplet: [0, 2, 6, 8],
+quintuplet: [0, 2, 6, 8, 12],
+sextuplet: [0, 4, 6, 10, 12, 16]
+};
+
+function drawKtuples() {
+const maxN = +document.getElementById('ktupleNv').value || 10000;
+const type = document.getElementById('ktupleType').value;
+const pattern = KTUPLE_PATTERNS[type];
+const c = document.getElementById('cktuples'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+// Find all primes
+const sieve = new Array(maxN + 20).fill(true);
+sieve[0] = sieve[1] = false;
+for (let i = 2; i * i <= maxN + 20; i++) if (sieve[i]) for (let j = i * i; j <= maxN + 20; j += i) sieve[j] = false;
+
+// Find k-tuples
+ktuplesData = [];
+for (let p = 2; p <= maxN; p++) {
+if (!sieve[p]) continue;
+let valid = true;
+for (const offset of pattern) {
+if (!sieve[p + offset]) { valid = false; break; }
+}
+if (valid) ktuplesData.push({ p, tuple: pattern.map(o => p + o) });
+}
+
+// Draw visualization
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+const scale = w / maxN;
+
+// Draw tuples as vertical lines
+ctx.strokeStyle = '#ffd700';
+ctx.lineWidth = 1;
+ktuplesData.forEach(t => {
+const x = pad + t.p * scale;
+ctx.beginPath();
+ctx.moveTo(x, pad);
+ctx.lineTo(x, c.height - pad);
+ctx.stroke();
+});
+
+// Draw dots for tuple elements
+ktuplesData.slice(0, 200).forEach(t => {
+t.tuple.forEach((p, i) => {
+const x = pad + p * scale;
+const y = pad + 30 + i * 40;
+ctx.fillStyle = `hsl(${i * 60}, 80%, 60%)`;
+ctx.beginPath();
+ctx.arc(x, y, 4, 0, 2 * PI);
+ctx.fill();
+});
+});
+
+// Title
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Prime ${type} (k=${pattern.length}) up to N=${maxN}: Found ${ktuplesData.length}`, c.width / 2, 25);
+
+// Stats
+const density = ktuplesData.length / maxN * 1000;
+document.getElementById('ktuplesLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Prime k-Tuples | FIELD: ℤ (Primes) | TYPE: ${type} Pattern</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>Max N: <strong style="color:#00d9ff">${maxN}</strong></span>
+<span>k: <strong style="color:#ffd700">${pattern.length}</strong></span>
+<span>Found: <strong style="color:#00ff88">${ktuplesData.length}</strong></span>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${ktuplesData.length}</div><div style="font-size:.7rem;color:var(--txt2)">TUPLES FOUND</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${pattern.length}</div><div style="font-size:.7rem;color:var(--txt2)">TUPLE SIZE k</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${fmt(density)}</div><div style="font-size:.7rem;color:var(--txt2)">PER 1000</div></div>
+</div>
+<div style="margin-bottom:10px">
+<strong style="color:var(--acc)">Pattern: [${pattern.join(', ')}]</strong>
+<div style="font-size:.8rem;color:var(--txt2);margin-top:5px">
+First ${Math.min(5, ktuplesData.length)}: ${ktuplesData.slice(0, 5).map(t => `(${t.tuple.join(',')})`).join(', ')}
+</div>
+</div>`;
+
+// Chart
+const cumulative = [];
+let count = 0;
+for (let x = 0; x <= maxN; x += Math.max(1, Math.floor(maxN / 100))) {
+count = ktuplesData.filter(t => t.p <= x).length;
+cumulative.push({ x, count });
+}
+Plotly.newPlot('pktuples1', [{ x: cumulative.map(c => c.x), y: cumulative.map(c => c.count), mode: 'lines', line: { color: '#ffd700' } }], { ...plo(), xaxis: { title: 'N' }, yaxis: { title: 'Count' } });
+}
+
+function csvKtuples() { let s = 'p,tuple\n'; ktuplesData.forEach(t => s += `${t.p},"${t.tuple.join(',')}"\n`); dl(s, 'ktuples.csv'); }
+async function screenshotKtuples() { await screenshotUnified('cktuples', 'ktuplesLiveStats', 'Prime k-Tuples', 'ktuples.png'); }
+function exportAllKtuples() { screenshotTabAll({ canvases: ['cktuples'], charts: ['pktuples1'], dashId: 'ktuplesLiveStats', title: 'Prime k-Tuples', filename: 'ktuples_all.png' }); }
+
+// ==================== CARMICHAEL NUMBERS ====================
+let carmichaelData = [];
+
+function isCarmichael(n) {
+if (n < 3 || isPrime(n)) return false;
+// Korselt's criterion: n is Carmichael iff n is squarefree and (p-1)|(n-1) for all primes p|n
+let temp = n, factors = [];
+for (let p = 2; p * p <= temp; p++) {
+if (temp % p === 0) {
+factors.push(p);
+temp /= p;
+if (temp % p === 0) return false; // Not squarefree
+}
+}
+if (temp > 1) factors.push(temp);
+if (factors.length < 3) return false; // Must have at least 3 prime factors
+for (const p of factors) {
+if ((n - 1) % (p - 1) !== 0) return false;
+}
+return true;
+}
+
+function drawCarmichael() {
+const maxN = +document.getElementById('carmNv').value || 100000;
+const c = document.getElementById('ccarm'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+carmichaelData = [];
+for (let n = 3; n <= maxN; n += 2) {
+if (isCarmichael(n)) carmichaelData.push(n);
+}
+
+// Draw
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+ctx.fillStyle = '#ff6496';
+carmichaelData.forEach((n, i) => {
+const x = pad + (n / maxN) * w;
+const y = pad + (i / Math.max(1, carmichaelData.length - 1)) * h;
+ctx.beginPath();
+ctx.arc(x, y, 5, 0, 2 * PI);
+ctx.fill();
+});
+
+ctx.fillStyle = isDark() ? '#ff6496' : '#cc0044';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Carmichael Numbers ≤ ${maxN}: Found ${carmichaelData.length}`, c.width / 2, 25);
+
+// Known Carmichaels
+const known = [561, 1105, 1729, 2465, 2821, 6601, 8911, 10585, 15841, 29341];
+
+document.getElementById('carmLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,100,150,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ff6496">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Carmichael Numbers | FIELD: ℤ (Pseudoprimes) | TYPE: Fermat Liars</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${carmichaelData.length}</div><div style="font-size:.7rem;color:var(--txt2)">FOUND</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">561</div><div style="font-size:.7rem;color:var(--txt2)">SMALLEST</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${carmichaelData[carmichaelData.length - 1] || '—'}</div><div style="font-size:.7rem;color:var(--txt2)">LARGEST</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Definition:</strong> n is Carmichael if composite and a^(n-1) ≡ 1 (mod n) for all gcd(a,n)=1<br>
+<strong style="color:var(--acc)">First 10:</strong> ${known.join(', ')}<br>
+<strong style="color:var(--acc)">1729</strong> = Hardy-Ramanujan number (also taxicab!)
+</div>`;
+
+Plotly.newPlot('pcarm1', [{ x: carmichaelData.map((_, i) => i + 1), y: carmichaelData, mode: 'lines+markers', marker: { size: 4, color: '#ff6496' } }], { ...plo(), xaxis: { title: 'Index' }, yaxis: { title: 'Carmichael Number', type: 'log' } });
+}
+
+function csvCarmichael() { dl('n\n' + carmichaelData.join('\n'), 'carmichael.csv'); }
+async function screenshotCarmichael() { await screenshotUnified('ccarm', 'carmLiveStats', 'Carmichael Numbers', 'carmichael.png'); }
+function exportAllCarmichael() { screenshotTabAll({ canvases: ['ccarm'], charts: ['pcarm1'], dashId: 'carmLiveStats', title: 'Carmichael Numbers', filename: 'carmichael_all.png' }); }
+
+// ==================== MERSENNE NUMBERS ====================
+let mersenneData = [];
+const KNOWN_MERSENNE_PRIMES = [2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127, 521, 607, 1279];
+
+function drawMersenne() {
+const maxP = +document.getElementById('mersPv').value || 100;
+const mode = document.getElementById('mersMode').value;
+const c = document.getElementById('cmers'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+mersenneData = [];
+for (let p = 2; p <= maxP; p++) {
+if (!isPrime(p)) continue;
+const m = Math.pow(2, p) - 1;
+const isMersennePrime = KNOWN_MERSENNE_PRIMES.includes(p);
+mersenneData.push({ p, m, isPrime: isMersennePrime });
+}
+
+// Draw
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+const maxIdx = mersenneData.length;
+
+mersenneData.forEach((d, i) => {
+const x = pad + (i / maxIdx) * w;
+const y = c.height - pad - Math.min(h, Math.log10(d.m + 1) / Math.log10(mersenneData[maxIdx - 1]?.m || 10) * h);
+ctx.fillStyle = d.isPrime ? '#00ff88' : '#ff6496';
+ctx.beginPath();
+ctx.arc(x, y, d.isPrime ? 8 : 4, 0, 2 * PI);
+ctx.fill();
+if (d.isPrime && d.p <= 31) {
+ctx.fillStyle = isDark() ? '#fff' : '#000';
+ctx.font = '10px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`M${d.p}`, x, y - 12);
+}
+});
+
+ctx.fillStyle = isDark() ? '#00ff88' : '#008844';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Mersenne Numbers 2^p - 1 for prime p ≤ ${maxP}`, c.width / 2, 25);
+
+const mpCount = mersenneData.filter(d => d.isPrime).length;
+
+document.getElementById('mersLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(0,255,136,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #00ff88">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Mersenne Numbers | FIELD: 2^p - 1 | TYPE: Prime Search</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${mersenneData.length}</div><div style="font-size:.7rem;color:var(--txt2)">TESTED</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${mpCount}</div><div style="font-size:.7rem;color:var(--txt2)">PRIMES</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${fmt(100 * mpCount / mersenneData.length)}%</div><div style="font-size:.7rem;color:var(--txt2)">PRIME RATE</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Mersenne Primes in range:</strong> ${mersenneData.filter(d => d.isPrime).map(d => `M${d.p}`).join(', ') || 'None'}<br>
+<strong style="color:var(--acc)">Largest known:</strong> M82589933 (24,862,048 digits, Dec 2018)<br>
+<strong style="color:var(--acc)">GIMPS Project:</strong> Great Internet Mersenne Prime Search
+</div>`;
+
+Plotly.newPlot('pmers1', [{ x: mersenneData.map(d => d.p), y: mersenneData.map(d => Math.log10(d.m)), mode: 'lines+markers', marker: { color: mersenneData.map(d => d.isPrime ? '#00ff88' : '#666'), size: mersenneData.map(d => d.isPrime ? 10 : 4) } }], { ...plo(), xaxis: { title: 'Exponent p' }, yaxis: { title: 'log₁₀(2^p - 1)' } });
+}
+
+function csvMersenne() { let s = 'p,mersenne,is_prime\n'; mersenneData.forEach(d => s += `${d.p},${d.m},${d.isPrime}\n`); dl(s, 'mersenne.csv'); }
+async function screenshotMersenne() { await screenshotUnified('cmers', 'mersLiveStats', 'Mersenne Numbers', 'mersenne.png'); }
+function exportAllMersenne() { screenshotTabAll({ canvases: ['cmers'], charts: ['pmers1'], dashId: 'mersLiveStats', title: 'Mersenne Numbers', filename: 'mersenne_all.png' }); }
+
+// ==================== CONTINUED FRACTIONS ====================
+let cfData = { coeffs: [], convergents: [] };
+
+function continuedFraction(x, terms) {
+const coeffs = [];
+let a = Math.floor(x);
+coeffs.push(a);
+let rem = x - a;
+for (let i = 1; i < terms && rem > 1e-10; i++) {
+x = 1 / rem;
+a = Math.floor(x);
+coeffs.push(a);
+rem = x - a;
+}
+return coeffs;
+}
+
+function convergents(coeffs) {
+const conv = [];
+let h0 = 1, h1 = coeffs[0], k0 = 0, k1 = 1;
+conv.push({ p: h1, q: k1, val: h1 / k1 });
+for (let i = 1; i < coeffs.length; i++) {
+const h2 = coeffs[i] * h1 + h0;
+const k2 = coeffs[i] * k1 + k0;
+conv.push({ p: h2, q: k2, val: h2 / k2 });
+h0 = h1; h1 = h2; k0 = k1; k1 = k2;
+}
+return conv;
+}
+
+function drawContinued() {
+const numType = document.getElementById('cfNum').value;
+const terms = +document.getElementById('cfTerms').value;
+const c = document.getElementById('ccf'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+let x, name;
+switch (numType) {
+case 'pi': x = PI; name = 'π'; break;
+case 'e': x = Math.E; name = 'e'; break;
+case 'phi': x = (1 + Math.sqrt(5)) / 2; name = 'φ'; break;
+case 'sqrt2': x = Math.sqrt(2); name = '√2'; break;
+case 'sqrt3': x = Math.sqrt(3); name = '√3'; break;
+default: x = +document.getElementById('cfCustom').value; name = x.toString();
+}
+
+cfData.coeffs = continuedFraction(x, terms);
+cfData.convergents = convergents(cfData.coeffs);
+cfData.target = x;
+
+// Draw coefficients
+const pad = 50, w = c.width - 2 * pad;
+ctx.fillStyle = isDark() ? '#00d9ff' : '#0066cc';
+ctx.font = '14px Segoe UI';
+ctx.textAlign = 'center';
+
+// Display CF notation
+let cfStr = `[${cfData.coeffs[0]}; ${cfData.coeffs.slice(1, 10).join(', ')}${cfData.coeffs.length > 10 ? ', ...' : ''}]`;
+ctx.fillText(`${name} = ${cfStr}`, c.width / 2, 30);
+
+// Draw convergent visualization
+cfData.convergents.slice(0, 15).forEach((conv, i) => {
+const y = 60 + i * 28;
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.textAlign = 'left';
+ctx.fillText(`p${i}/q${i} = ${conv.p}/${conv.q} = ${conv.val.toFixed(10)}`, pad, y);
+const err = Math.abs(conv.val - x);
+ctx.fillStyle = err < 1e-8 ? '#00ff88' : err < 1e-4 ? '#ffd700' : '#ff6496';
+ctx.textAlign = 'right';
+ctx.fillText(`error: ${err.toExponential(2)}`, c.width - pad, y);
+});
+
+document.getElementById('cfLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Continued Fractions | FIELD: ℝ → ℚ Approx | TYPE: Best Rational Approximations</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${name}</div><div style="font-size:.7rem;color:var(--txt2)">NUMBER</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${cfData.coeffs.length}</div><div style="font-size:.7rem;color:var(--txt2)">TERMS</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00ff88">${Math.max(...cfData.coeffs.slice(0, 20))}</div><div style="font-size:.7rem;color:var(--txt2)">MAX COEFF</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Best approximation:</strong> ${cfData.convergents[cfData.convergents.length - 1]?.p}/${cfData.convergents[cfData.convergents.length - 1]?.q}<br>
+<strong style="color:var(--acc)">φ special:</strong> All coefficients = 1 (slowest convergence)<br>
+<strong style="color:var(--acc)">π famous:</strong> 355/113 (6 correct decimals)
+</div>`;
+
+const errors = cfData.convergents.map((c, i) => ({ i, err: Math.abs(c.val - x) }));
+Plotly.newPlot('pcf1', [{ x: errors.map(e => e.i), y: errors.map(e => e.err), mode: 'lines+markers', line: { color: '#ffd700' } }], { ...plo(), xaxis: { title: 'Convergent Index' }, yaxis: { title: 'Error', type: 'log' } });
+}
+
+function csvContinued() { let s = 'index,p,q,value,error\n'; cfData.convergents.forEach((c, i) => s += `${i},${c.p},${c.q},${c.val},${Math.abs(c.val - cfData.target)}\n`); dl(s, 'continued_fractions.csv'); }
+async function screenshotContinued() { await screenshotUnified('ccf', 'cfLiveStats', 'Continued Fractions', 'continued_fractions.png'); }
+function exportAllContinued() { screenshotTabAll({ canvases: ['ccf'], charts: ['pcf1'], dashId: 'cfLiveStats', title: 'Continued Fractions', filename: 'cf_all.png' }); }
+
+// ==================== STERN-BROCOT TREE ====================
+let sbData = [];
+
+function drawSternBrocot() {
+const depth = +document.getElementById('sbDepth').value;
+const c = document.getElementById('csb'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+// Build tree level by level using mediant property
+sbData = [];
+const levels = [[{ p: 0, q: 1 }, { p: 1, q: 1 }, { p: 1, q: 0 }]];
+
+for (let d = 0; d < depth; d++) {
+const prev = levels[d];
+const next = [prev[0]];
+for (let i = 0; i < prev.length - 1; i++) {
+const med = { p: prev[i].p + prev[i + 1].p, q: prev[i].q + prev[i + 1].q };
+next.push(med);
+next.push(prev[i + 1]);
+}
+levels.push(next);
+}
+
+// Draw tree
+const pad = 30;
+ctx.strokeStyle = gridC();
+ctx.lineWidth = 1;
+
+levels.forEach((level, d) => {
+const y = pad + 40 + d * 70;
+const validFracs = level.filter(f => f.q > 0 && f.q < 100);
+validFracs.forEach((f, i) => {
+const x = pad + (i + 0.5) / validFracs.length * (c.width - 2 * pad);
+// Draw node
+ctx.fillStyle = f.p === f.q ? '#ffd700' : gcd(f.p, f.q) === 1 ? '#00d9ff' : '#666';
+ctx.beginPath();
+ctx.arc(x, y, 12, 0, 2 * PI);
+ctx.fill();
+// Label
+ctx.fillStyle = isDark() ? '#fff' : '#000';
+ctx.font = '9px Segoe UI';
+ctx.textAlign = 'center';
+if (f.q > 0 && f.q < 20) ctx.fillText(`${f.p}/${f.q}`, x, y + 4);
+sbData.push({ p: f.p, q: f.q, depth: d });
+});
+});
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Stern-Brocot Tree — Depth ${depth}`, c.width / 2, 25);
+
+const fracCount = sbData.filter(f => f.q > 0 && f.q < 1000 && gcd(f.p, f.q) === 1).length;
+
+document.getElementById('sbLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Stern-Brocot Tree | FIELD: ℚ⁺ | TYPE: Binary Tree of Rationals</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${depth}</div><div style="font-size:.7rem;color:var(--txt2)">DEPTH</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${fracCount}</div><div style="font-size:.7rem;color:var(--txt2)">FRACTIONS</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${Math.pow(2, depth)}</div><div style="font-size:.7rem;color:var(--txt2)">LEAVES</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Mediant rule:</strong> a/b ⊕ c/d = (a+c)/(b+d)<br>
+<strong style="color:var(--acc)">Property:</strong> Every positive rational appears exactly once<br>
+<strong style="color:var(--acc)">Connection:</strong> Equivalent to Farey sequence construction
+</div>`;
+}
+
+async function screenshotSternBrocot() { await screenshotUnified('csb', 'sbLiveStats', 'Stern-Brocot Tree', 'sternbrocot.png'); }
+function exportAllSternBrocot() { screenshotTabAll({ canvases: ['csb'], dashId: 'sbLiveStats', title: 'Stern-Brocot Tree', filename: 'sternbrocot_all.png' }); }
+
+// ==================== PYTHAGOREAN TRIPLES ====================
+let pythagData = [];
+
+function drawPythag() {
+const maxC = +document.getElementById('pythCv').value || 100;
+const mode = document.getElementById('pythMode').value;
+const c = document.getElementById('cpyth'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+pythagData = [];
+// Generate using parametrization: a = m²-n², b = 2mn, c = m²+n² for m>n>0, gcd(m,n)=1, m-n odd
+for (let m = 2; m * m < maxC; m++) {
+for (let n = 1; n < m; n++) {
+if ((m - n) % 2 === 0) continue; // m-n must be odd
+if (gcd(m, n) !== 1) continue;
+let a = m * m - n * n;
+let b = 2 * m * n;
+let c_val = m * m + n * n;
+if (c_val > maxC) continue;
+if (a > b) [a, b] = [b, a];
+pythagData.push({ a, b, c: c_val, m, n, primitive: true });
+// Add non-primitive if mode is 'all'
+if (mode === 'all') {
+for (let k = 2; k * c_val <= maxC; k++) {
+pythagData.push({ a: k * a, b: k * b, c: k * c_val, m, n, primitive: false });
+}
+}
+}
+}
+
+// Sort by hypotenuse
+pythagData.sort((x, y) => x.c - y.c);
+
+// Draw
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+pythagData.slice(0, 200).forEach((t, i) => {
+const x = pad + (t.a / maxC) * w;
+const y = c.height - pad - (t.b / maxC) * h;
+ctx.fillStyle = t.primitive ? '#ffd700' : '#666';
+ctx.beginPath();
+ctx.arc(x, y, t.primitive ? 5 : 3, 0, 2 * PI);
+ctx.fill();
+});
+
+// Draw a²+b²=c² curve
+ctx.strokeStyle = '#ff6496';
+ctx.lineWidth = 1;
+ctx.setLineDash([5, 5]);
+for (let cVal = 10; cVal <= maxC; cVal += 20) {
+ctx.beginPath();
+for (let a = 1; a < cVal; a++) {
+const b = Math.sqrt(cVal * cVal - a * a);
+if (b > 0 && b < maxC) {
+const x = pad + (a / maxC) * w;
+const y = c.height - pad - (b / maxC) * h;
+if (a === 1) ctx.moveTo(x, y);
+else ctx.lineTo(x, y);
+}
+}
+ctx.stroke();
+}
+ctx.setLineDash([]);
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Pythagorean Triples a² + b² = c², c ≤ ${maxC}`, c.width / 2, 25);
+
+const primCount = pythagData.filter(t => t.primitive).length;
+
+document.getElementById('pythLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Pythagorean Triples | FIELD: ℤ³ | TYPE: a² + b² = c²</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${primCount}</div><div style="font-size:.7rem;color:var(--txt2)">PRIMITIVE</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${pythagData.length}</div><div style="font-size:.7rem;color:var(--txt2)">TOTAL</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${maxC}</div><div style="font-size:.7rem;color:var(--txt2)">MAX c</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">First triples:</strong> ${pythagData.slice(0, 5).map(t => `(${t.a},${t.b},${t.c})`).join(', ')}<br>
+<strong style="color:var(--acc)">Parametrization:</strong> a=m²-n², b=2mn, c=m²+n²<br>
+<strong style="color:var(--acc)">Famous:</strong> (3,4,5), (5,12,13), (8,15,17)
+</div>`;
+
+Plotly.newPlot('ppyth1', [{ x: pythagData.filter(t => t.primitive).map(t => t.c), y: pythagData.filter(t => t.primitive).map((_, i) => i + 1), mode: 'lines+markers', marker: { size: 4, color: '#ffd700' } }], { ...plo(), xaxis: { title: 'Hypotenuse c' }, yaxis: { title: 'Cumulative Count' } });
+}
+
+function csvPythag() { let s = 'a,b,c,primitive\n'; pythagData.forEach(t => s += `${t.a},${t.b},${t.c},${t.primitive}\n`); dl(s, 'pythagorean.csv'); }
+async function screenshotPythag() { await screenshotUnified('cpyth', 'pythLiveStats', 'Pythagorean Triples', 'pythagorean.png'); }
+function exportAllPythag() { screenshotTabAll({ canvases: ['cpyth'], charts: ['ppyth1'], dashId: 'pythLiveStats', title: 'Pythagorean Triples', filename: 'pythagorean_all.png' }); }
+
+// ==================== SUM OF SQUARES ====================
+let ssqData = [];
+
+function sumOfSquaresCount(n, k) {
+if (k === 2) {
+// r_2(n): count representations as sum of 2 squares
+let count = 0;
+for (let a = 0; a * a <= n; a++) {
+const b2 = n - a * a;
+const b = Math.sqrt(b2);
+if (b === Math.floor(b)) count++;
+}
+return count * 4; // Account for signs and order
+} else if (k === 4) {
+// r_4(n) = 8 * sum of divisors not divisible by 4
+let sum = 0;
+for (let d = 1; d <= n; d++) {
+if (n % d === 0 && d % 4 !== 0) sum += d;
+}
+return 8 * sum;
+}
+return 0;
+}
+
+function drawSumSquares() {
+const maxN = +document.getElementById('ssqNv').value || 100;
+const k = +document.getElementById('ssqK').value;
+const c = document.getElementById('cssq'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+ssqData = [];
+for (let n = 1; n <= maxN; n++) {
+const r = sumOfSquaresCount(n, k);
+ssqData.push({ n, r, representable: r > 0 });
+}
+
+// Draw grid
+const pad = 50, size = Math.min((c.width - 2 * pad) / 20, (c.height - 2 * pad) / Math.ceil(maxN / 20));
+ssqData.forEach((d, i) => {
+const col = i % 20;
+const row = Math.floor(i / 20);
+const x = pad + col * size;
+const y = pad + 30 + row * size;
+const intensity = Math.min(1, d.r / 20);
+ctx.fillStyle = d.r === 0 ? '#333' : `hsl(${120 - intensity * 120}, 80%, ${40 + intensity * 30}%)`;
+ctx.fillRect(x, y, size - 1, size - 1);
+});
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Sum of ${k} Squares: r_${k}(n) representations`, c.width / 2, 25);
+
+const representable = ssqData.filter(d => d.r > 0).length;
+const avgR = ssqData.reduce((a, d) => a + d.r, 0) / maxN;
+
+document.getElementById('ssqLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Sum of Squares | FIELD: ℤ | TYPE: r_${k}(n) Counting</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${representable}</div><div style="font-size:.7rem;color:var(--txt2)">REPRESENTABLE</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${fmt(avgR)}</div><div style="font-size:.7rem;color:var(--txt2)">AVG r_${k}(n)</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${fmt(100 * representable / maxN)}%</div><div style="font-size:.7rem;color:var(--txt2)">DENSITY</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Fermat (k=2):</strong> n = a² + b² ⟺ all primes ≡ 3 (mod 4) appear even times<br>
+<strong style="color:var(--acc)">Lagrange (k=4):</strong> Every n is sum of 4 squares<br>
+<strong style="color:var(--acc)">Jacobi:</strong> r_4(n) = 8·Σd|n,4∤d d
+</div>`;
+
+Plotly.newPlot('pssq1', [{ x: ssqData.map(d => d.n), y: ssqData.map(d => d.r), type: 'bar', marker: { color: ssqData.map(d => d.r > 0 ? '#ffd700' : '#333') } }], { ...plo(), xaxis: { title: 'n' }, yaxis: { title: `r_${k}(n)` } });
+}
+
+function csvSumSquares() { let s = 'n,r_k\n'; ssqData.forEach(d => s += `${d.n},${d.r}\n`); dl(s, 'sum_of_squares.csv'); }
+async function screenshotSumSquares() { await screenshotUnified('cssq', 'ssqLiveStats', 'Sum of Squares', 'sum_of_squares.png'); }
+function exportAllSumSquares() { screenshotTabAll({ canvases: ['cssq'], charts: ['pssq1'], dashId: 'ssqLiveStats', title: 'Sum of Squares', filename: 'sumsquares_all.png' }); }
+
+// ==================== QUADRATIC RESIDUES ====================
+let qrData = [];
+
+function legendreSymbol(a, p) {
+if (a % p === 0) return 0;
+const exp = (p - 1) / 2;
+let result = 1, base = ((a % p) + p) % p;
+let e = exp;
+while (e > 0) {
+if (e % 2 === 1) result = (result * base) % p;
+base = (base * base) % p;
+e = Math.floor(e / 2);
+}
+return result === 1 ? 1 : -1;
+}
+
+function drawQuadRes() {
+let p = +document.getElementById('qrPv').value || 23;
+// Ensure p is prime
+while (!isPrime(p) && p > 2) p--;
+document.getElementById('qrPv').value = p;
+document.getElementById('qrP').value = Math.min(p, 200);
+
+const mode = document.getElementById('qrMode').value;
+const c = document.getElementById('cqr'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+// Compute quadratic residues
+qrData = [];
+const residues = new Set();
+for (let a = 1; a < p; a++) {
+const sq = (a * a) % p;
+residues.add(sq);
+}
+for (let a = 1; a < p; a++) {
+qrData.push({ a, isResidue: residues.has(a), legendre: legendreSymbol(a, p) });
+}
+
+if (mode === 'grid') {
+// Draw grid
+const pad = 50, size = Math.min((c.width - 2 * pad) / Math.min(p, 30), 20);
+const cols = Math.min(p - 1, 30);
+qrData.slice(0, 100).forEach((d, i) => {
+const col = i % cols;
+const row = Math.floor(i / cols);
+const x = pad + col * size;
+const y = pad + 40 + row * size;
+ctx.fillStyle = d.isResidue ? '#00ff88' : '#ff6496';
+ctx.fillRect(x, y, size - 2, size - 2);
+if (size > 15) {
+ctx.fillStyle = '#000';
+ctx.font = '10px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(d.a.toString(), x + size / 2, y + size / 2 + 3);
+}
+});
+} else if (mode === 'paley') {
+// Paley graph - vertices on circle, edges between QRs
+const cx = c.width / 2, cy = c.height / 2, r = Math.min(cx, cy) - 60;
+// Draw edges
+ctx.strokeStyle = 'rgba(0,217,255,0.3)';
+ctx.lineWidth = 1;
+for (let i = 0; i < p; i++) {
+for (let j = i + 1; j < p; j++) {
+if (residues.has((j - i + p) % p) || residues.has((i - j + p) % p)) {
+const a1 = 2 * PI * i / p - PI / 2;
+const a2 = 2 * PI * j / p - PI / 2;
+ctx.beginPath();
+ctx.moveTo(cx + r * Math.cos(a1), cy + r * Math.sin(a1));
+ctx.lineTo(cx + r * Math.cos(a2), cy + r * Math.sin(a2));
+ctx.stroke();
+}
+}
+}
+// Draw vertices
+for (let i = 0; i < p; i++) {
+const angle = 2 * PI * i / p - PI / 2;
+const x = cx + r * Math.cos(angle);
+const y = cy + r * Math.sin(angle);
+ctx.fillStyle = '#ffd700';
+ctx.beginPath();
+ctx.arc(x, y, 6, 0, 2 * PI);
+ctx.fill();
+}
+}
+
+ctx.fillStyle = isDark() ? '#00ff88' : '#008844';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Quadratic Residues mod ${p}`, c.width / 2, 25);
+
+const qrCount = qrData.filter(d => d.isResidue).length;
+
+document.getElementById('qrLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(0,255,136,.15),rgba(255,100,150,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #00ff88">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Quadratic Residues | FIELD: (ℤ/pℤ)* | TYPE: Legendre Symbol</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${qrCount}</div><div style="font-size:.7rem;color:var(--txt2)">RESIDUES (QR)</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${p - 1 - qrCount}</div><div style="font-size:.7rem;color:var(--txt2)">NON-RESIDUES</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${(p - 1) / 2}</div><div style="font-size:.7rem;color:var(--txt2)">THEORY (p-1)/2</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">QR mod ${p}:</strong> {${[...residues].sort((a, b) => a - b).slice(0, 10).join(', ')}${residues.size > 10 ? '...' : ''}}<br>
+<strong style="color:var(--acc)">Euler criterion:</strong> a^((p-1)/2) ≡ (a/p) (mod p)<br>
+<strong style="color:var(--acc)">Quadratic reciprocity:</strong> (p/q)(q/p) = (-1)^((p-1)(q-1)/4)
+</div>`;
+
+Plotly.newPlot('pqr1', [{ x: qrData.map(d => d.a), y: qrData.map(d => d.legendre), type: 'bar', marker: { color: qrData.map(d => d.legendre === 1 ? '#00ff88' : '#ff6496') } }], { ...plo(), xaxis: { title: 'a' }, yaxis: { title: '(a/p)', range: [-1.5, 1.5] } });
+}
+
+function csvQuadRes() { let s = 'a,is_residue,legendre\n'; qrData.forEach(d => s += `${d.a},${d.isResidue},${d.legendre}\n`); dl(s, 'quadratic_residues.csv'); }
+async function screenshotQuadRes() { await screenshotUnified('cqr', 'qrLiveStats', 'Quadratic Residues', 'quadres.png'); }
+function exportAllQuadRes() { screenshotTabAll({ canvases: ['cqr'], charts: ['pqr1'], dashId: 'qrLiveStats', title: 'Quadratic Residues', filename: 'quadres_all.png' }); }
+
+// ==================== PARTITION FUNCTION ====================
+let partitionData = [];
+const partitionCache = { 0: 1, 1: 1 };
+
+function partition(n) {
+if (n < 0) return 0;
+if (partitionCache[n] !== undefined) return partitionCache[n];
+let sum = 0;
+for (let k = 1; k <= n; k++) {
+const p1 = n - k * (3 * k - 1) / 2;
+const p2 = n - k * (3 * k + 1) / 2;
+const sign = k % 2 === 1 ? 1 : -1;
+sum += sign * (partition(p1) + partition(p2));
+}
+partitionCache[n] = sum;
+return sum;
+}
+
+function drawPartition() {
+const maxN = +document.getElementById('partNv').value || 50;
+const testN = +document.getElementById('partTest').value || 10;
+const mode = document.getElementById('partMode').value;
+const c = document.getElementById('cpart'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+partitionData = [];
+for (let n = 0; n <= maxN; n++) {
+partitionData.push({ n, p: partition(n) });
+}
+
+if (mode === 'ferrers') {
+// Draw Ferrers diagrams for testN
+const partitions = [];
+function generatePartitions(n, max, current) {
+if (n === 0) { partitions.push([...current]); return; }
+for (let i = Math.min(n, max); i >= 1; i--) {
+current.push(i);
+generatePartitions(n - i, i, current);
+current.pop();
+}
+}
+generatePartitions(Math.min(testN, 12), Math.min(testN, 12), []);
+
+const pad = 40, dotSize = 8;
+const cols = Math.min(4, partitions.length);
+const boxW = (c.width - 2 * pad) / cols;
+const boxH = 60;
+
+partitions.slice(0, 20).forEach((p, idx) => {
+const col = idx % cols;
+const row = Math.floor(idx / cols);
+const bx = pad + col * boxW;
+const by = pad + 40 + row * boxH;
+p.forEach((count, i) => {
+for (let j = 0; j < count; j++) {
+ctx.fillStyle = `hsl(${i * 40}, 70%, 60%)`;
+ctx.beginPath();
+ctx.arc(bx + 10 + j * (dotSize + 2), by + i * (dotSize + 2), dotSize / 2, 0, 2 * PI);
+ctx.fill();
+}
+});
+});
+} else {
+// Growth chart
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+const maxP = Math.max(...partitionData.map(d => d.p));
+ctx.strokeStyle = '#ffd700';
+ctx.lineWidth = 2;
+ctx.beginPath();
+partitionData.forEach((d, i) => {
+const x = pad + (i / maxN) * w;
+const y = c.height - pad - (Math.log(d.p + 1) / Math.log(maxP + 1)) * h;
+if (i === 0) ctx.moveTo(x, y);
+else ctx.lineTo(x, y);
+});
+ctx.stroke();
+}
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Partition Function p(n) — n ≤ ${maxN}`, c.width / 2, 25);
+
+const pTest = partition(testN);
+const hrApprox = Math.exp(PI * Math.sqrt(2 * testN / 3)) / (4 * testN * Math.sqrt(3));
+
+document.getElementById('partLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Partition Function | FIELD: ℤ⁺ | TYPE: p(n) Integer Partitions</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${pTest.toLocaleString()}</div><div style="font-size:.7rem;color:var(--txt2)">p(${testN})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${fmt(hrApprox)}</div><div style="font-size:.7rem;color:var(--txt2)">H-R APPROX</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00ff88">${partition(maxN).toLocaleString()}</div><div style="font-size:.7rem;color:var(--txt2)">p(${maxN})</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Hardy-Ramanujan:</strong> p(n) ~ e^(π√(2n/3)) / (4n√3)<br>
+<strong style="color:var(--acc)">Ramanujan congruences:</strong><br>
+• p(5n+4) ≡ 0 (mod 5)<br>
+• p(7n+5) ≡ 0 (mod 7)<br>
+• p(11n+6) ≡ 0 (mod 11)
+</div>`;
+
+Plotly.newPlot('ppart1', [{ x: partitionData.map(d => d.n), y: partitionData.map(d => d.p), mode: 'lines+markers', line: { color: '#ffd700' } }], { ...plo(), xaxis: { title: 'n' }, yaxis: { title: 'p(n)', type: 'log' } });
+}
+
+function csvPartition() { let s = 'n,p\n'; partitionData.forEach(d => s += `${d.n},${d.p}\n`); dl(s, 'partitions.csv'); }
+async function screenshotPartition() { await screenshotUnified('cpart', 'partLiveStats', 'Partition Function', 'partition.png'); }
+function exportAllPartition() { screenshotTabAll({ canvases: ['cpart'], charts: ['ppart1'], dashId: 'partLiveStats', title: 'Partition Function', filename: 'partition_all.png' }); }
+
+// ==================== BERNOULLI NUMBERS ====================
+let bernoulliData = [];
+
+function bernoulli(n) {
+if (n === 0) return 1;
+if (n === 1) return -0.5;
+if (n % 2 === 1) return 0;
+const A = [1];
+for (let m = 1; m <= n; m++) {
+A[m] = 1 / (m + 1);
+for (let j = m; j >= 1; j--) {
+A[j - 1] = j * (A[j - 1] - A[j]);
+}
+}
+return A[0];
+}
+
+function drawBernoulli() {
+const maxN = +document.getElementById('bernNv').value || 20;
+const mode = document.getElementById('bernMode').value;
+const c = document.getElementById('cbern'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+bernoulliData = [];
+for (let n = 0; n <= maxN; n++) {
+const b = bernoulli(n);
+const zetaNeg = n > 0 ? -b / n : null; // ζ(-n) = -B_{n+1}/(n+1) for n >= 0
+bernoulliData.push({ n, b, zetaNeg });
+}
+
+// Display values
+const pad = 50;
+ctx.font = '12px monospace';
+bernoulliData.filter(d => d.b !== 0).slice(0, 15).forEach((d, i) => {
+const y = pad + 30 + i * 25;
+ctx.fillStyle = d.b > 0 ? '#00ff88' : '#ff6496';
+ctx.textAlign = 'left';
+const bStr = Math.abs(d.b) < 0.001 || Math.abs(d.b) > 1000 ? d.b.toExponential(4) : d.b.toFixed(6);
+ctx.fillText(`B${d.n} = ${bStr}`, pad, y);
+if (d.n > 0 && d.n % 2 === 0) {
+ctx.fillStyle = '#ffd700';
+ctx.fillText(`→ ζ(${d.n}) = ${fmt(Math.abs(d.b) * Math.pow(2 * PI, d.n) / (2 * factorial(d.n)))}`, pad + 200, y);
+}
+});
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Bernoulli Numbers Bₙ — n ≤ ${maxN}`, c.width / 2, 25);
+
+const nonzero = bernoulliData.filter(d => d.b !== 0).length;
+
+document.getElementById('bernLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Bernoulli Numbers | FIELD: ℚ | TYPE: Bₙ Sequence</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${nonzero}</div><div style="font-size:.7rem;color:var(--txt2)">NON-ZERO</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${fmt(bernoulli(2))}</div><div style="font-size:.7rem;color:var(--txt2)">B₂ = 1/6</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff6496">${fmt(bernoulli(4))}</div><div style="font-size:.7rem;color:var(--txt2)">B₄ = -1/30</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Zeta connection:</strong> ζ(2n) = (-1)^(n+1) B_{2n}(2π)^{2n} / (2(2n)!)<br>
+<strong style="color:var(--acc)">Property:</strong> B_{2n+1} = 0 for n ≥ 1<br>
+<strong style="color:var(--acc)">Power sums:</strong> 1^k + 2^k + ... + n^k involves Bₖ
+</div>`;
+
+const nonzeroData = bernoulliData.filter(d => d.b !== 0);
+Plotly.newPlot('pbern1', [{ x: nonzeroData.map(d => d.n), y: nonzeroData.map(d => d.b), type: 'bar', marker: { color: nonzeroData.map(d => d.b > 0 ? '#00ff88' : '#ff6496') } }], { ...plo(), xaxis: { title: 'n' }, yaxis: { title: 'Bₙ' } });
+}
+
+function factorial(n) { let r = 1; for (let i = 2; i <= n; i++) r *= i; return r; }
+function csvBernoulli() { let s = 'n,B_n\n'; bernoulliData.forEach(d => s += `${d.n},${d.b}\n`); dl(s, 'bernoulli.csv'); }
+async function screenshotBernoulli() { await screenshotUnified('cbern', 'bernLiveStats', 'Bernoulli Numbers', 'bernoulli.png'); }
+function exportAllBernoulli() { screenshotTabAll({ canvases: ['cbern'], charts: ['pbern1'], dashId: 'bernLiveStats', title: 'Bernoulli Numbers', filename: 'bernoulli_all.png' }); }
+
+// ==================== FIBONACCI ====================
+let fibData = [];
+
+function drawFibonacci() {
+const maxN = +document.getElementById('fibNv').value || 30;
+const mode = document.getElementById('fibMode').value;
+const c = document.getElementById('cfib'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+fibData = [{ n: 0, f: 0 }, { n: 1, f: 1 }];
+for (let n = 2; n <= maxN; n++) {
+fibData.push({ n, f: fibData[n - 1].f + fibData[n - 2].f });
+}
+
+const phi = (1 + Math.sqrt(5)) / 2;
+
+if (mode === 'spiral') {
+// Draw golden spiral
+const cx = c.width / 2, cy = c.height / 2;
+const scale = Math.min(c.width, c.height) / 30;
+ctx.strokeStyle = '#ffd700';
+ctx.lineWidth = 2;
+ctx.beginPath();
+for (let t = 0; t < 6 * PI; t += 0.05) {
+const r = Math.pow(phi, t * 2 / PI) * scale;
+const x = cx + r * Math.cos(t);
+const y = cy + r * Math.sin(t);
+if (t === 0) ctx.moveTo(x, y);
+else ctx.lineTo(x, y);
+}
+ctx.stroke();
+
+// Draw squares
+let x = cx, y = cy, size = scale;
+for (let i = 0; i < Math.min(10, fibData.length - 1); i++) {
+ctx.strokeStyle = `hsl(${i * 36}, 70%, 50%)`;
+ctx.strokeRect(x, y, size, size);
+size *= phi;
+}
+} else if (mode === 'ratio') {
+// Show convergence to phi
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+ctx.strokeStyle = '#ffd700';
+ctx.lineWidth = 2;
+ctx.beginPath();
+for (let i = 2; i < fibData.length; i++) {
+const ratio = fibData[i].f / fibData[i - 1].f;
+const x = pad + ((i - 2) / (fibData.length - 3)) * w;
+const y = c.height - pad - ((ratio - 1) / (phi - 1 + 0.5)) * h;
+if (i === 2) ctx.moveTo(x, y);
+else ctx.lineTo(x, y);
+}
+ctx.stroke();
+// Draw phi line
+ctx.strokeStyle = '#ff6496';
+ctx.setLineDash([5, 5]);
+const phiY = c.height - pad - ((phi - 1) / (phi - 1 + 0.5)) * h;
+ctx.beginPath();
+ctx.moveTo(pad, phiY);
+ctx.lineTo(c.width - pad, phiY);
+ctx.stroke();
+ctx.setLineDash([]);
+} else if (mode === 'pisano') {
+// Pisano periods
+const periods = [];
+for (let m = 2; m <= 20; m++) {
+let f0 = 0, f1 = 1, period = 0;
+do {
+[f0, f1] = [f1, (f0 + f1) % m];
+period++;
+} while (!(f0 === 0 && f1 === 1) && period < 1000);
+periods.push({ m, period });
+}
+const pad = 50;
+periods.forEach((p, i) => {
+ctx.fillStyle = '#ffd700';
+ctx.fillRect(pad + i * 30, c.height - pad - p.period * 3, 25, p.period * 3);
+ctx.fillStyle = isDark() ? '#fff' : '#000';
+ctx.font = '10px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(p.m.toString(), pad + i * 30 + 12, c.height - pad + 15);
+});
+}
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Fibonacci Sequence — ${maxN} terms, φ = ${phi.toFixed(8)}`, c.width / 2, 25);
+
+const lastRatio = fibData.length > 2 ? fibData[fibData.length - 1].f / fibData[fibData.length - 2].f : 1;
+
+document.getElementById('fibLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Fibonacci | FIELD: ℤ | TYPE: Golden Ratio φ</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#ffd700">${fibData[fibData.length - 1].f.toLocaleString()}</div><div style="font-size:.7rem;color:var(--txt2)">F_${maxN}</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#00d9ff">${phi.toFixed(8)}</div><div style="font-size:.7rem;color:var(--txt2)">φ GOLDEN</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#00ff88">${(lastRatio - phi).toExponential(2)}</div><div style="font-size:.7rem;color:var(--txt2)">RATIO ERROR</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Binet:</strong> Fₙ = (φⁿ - ψⁿ)/√5, ψ = (1-√5)/2<br>
+<strong style="color:var(--acc)">Zeckendorf:</strong> Every n = unique sum of non-adjacent Fᵢ<br>
+<strong style="color:var(--acc)">Pisano:</strong> Fₙ mod m is periodic with period π(m)
+</div>`;
+
+const ratios = fibData.slice(2).map((d, i) => ({ n: i + 2, ratio: d.f / fibData[i + 1].f }));
+Plotly.newPlot('pfib1', [
+{ x: ratios.map(r => r.n), y: ratios.map(r => r.ratio), mode: 'lines+markers', name: 'Fₙ/Fₙ₋₁', line: { color: '#ffd700' } },
+{ x: [ratios[0].n, ratios[ratios.length - 1].n], y: [phi, phi], mode: 'lines', name: 'φ', line: { color: '#ff6496', dash: 'dash' } }
+], { ...plo(), xaxis: { title: 'n' }, yaxis: { title: 'Ratio', range: [1.5, 1.7] } });
+}
+
+function csvFibonacci() { let s = 'n,F_n\n'; fibData.forEach(d => s += `${d.n},${d.f}\n`); dl(s, 'fibonacci.csv'); }
+async function screenshotFibonacci() { await screenshotUnified('cfib', 'fibLiveStats', 'Fibonacci Sequence', 'fibonacci.png'); }
+function exportAllFibonacci() { screenshotTabAll({ canvases: ['cfib'], charts: ['pfib1'], dashId: 'fibLiveStats', title: 'Fibonacci', filename: 'fibonacci_all.png' }); }
+
+// ==================== CATALAN NUMBERS ====================
+let catalanData = [];
+
+function catalan(n) {
+if (n <= 1) return 1;
+let c = 1;
+for (let i = 0; i < n; i++) {
+c = c * 2 * (2 * i + 1) / (i + 2);
+}
+return Math.round(c);
+}
+
+function drawCatalan() {
+const maxN = +document.getElementById('catNv').value || 15;
+const mode = document.getElementById('catMode').value;
+const c = document.getElementById('ccat'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+catalanData = [];
+for (let n = 0; n <= maxN; n++) {
+catalanData.push({ n, c: catalan(n) });
+}
+
+if (mode === 'lattice' || mode === 'dyck') {
+// Draw example Dyck paths for small n
+const testN = Math.min(4, maxN);
+const pad = 50, size = 40;
+const paths = generateDyckPaths(testN);
+
+paths.slice(0, 14).forEach((path, idx) => {
+const col = idx % 7;
+const row = Math.floor(idx / 7);
+const bx = pad + col * 90;
+const by = pad + 40 + row * 90;
+
+ctx.strokeStyle = '#666';
+ctx.lineWidth = 1;
+// Draw grid
+for (let i = 0; i <= testN; i++) {
+ctx.beginPath();
+ctx.moveTo(bx, by + i * 15);
+ctx.lineTo(bx + testN * 15, by + i * 15);
+ctx.moveTo(bx + i * 15, by);
+ctx.lineTo(bx + i * 15, by + testN * 15);
+ctx.stroke();
+}
+
+// Draw path
+ctx.strokeStyle = '#ffd700';
+ctx.lineWidth = 2;
+ctx.beginPath();
+let x = bx, y = by + testN * 15;
+ctx.moveTo(x, y);
+path.forEach(step => {
+if (step === 1) { x += 15; } else { y -= 15; }
+ctx.lineTo(x, y);
+});
+ctx.stroke();
+});
+}
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Catalan Numbers Cₙ — n ≤ ${maxN}`, c.width / 2, 25);
+
+document.getElementById('catLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Catalan Numbers | FIELD: ℤ | TYPE: Cₙ Combinatorics</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#ffd700">${catalan(maxN).toLocaleString()}</div><div style="font-size:.7rem;color:var(--txt2)">C_${maxN}</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#00d9ff">C(2n,n)/(n+1)</div><div style="font-size:.7rem;color:var(--txt2)">FORMULA</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#00ff88">4ⁿ/n^1.5</div><div style="font-size:.7rem;color:var(--txt2)">GROWTH</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Counts:</strong> Dyck paths, binary trees, triangulations, valid parentheses<br>
+<strong style="color:var(--acc)">Recurrence:</strong> Cₙ = Σ Cᵢ Cₙ₋₁₋ᵢ<br>
+<strong style="color:var(--acc)">First values:</strong> 1, 1, 2, 5, 14, 42, 132, 429...
+</div>`;
+
+Plotly.newPlot('pcat1', [{ x: catalanData.map(d => d.n), y: catalanData.map(d => d.c), mode: 'lines+markers', line: { color: '#ffd700' } }], { ...plo(), xaxis: { title: 'n' }, yaxis: { title: 'Cₙ', type: 'log' } });
+}
+
+function generateDyckPaths(n) {
+const paths = [];
+function generate(path, x, y) {
+if (x === n && y === n) { paths.push([...path]); return; }
+if (x < n) { path.push(1); generate(path, x + 1, y); path.pop(); }
+if (y < x) { path.push(0); generate(path, x, y + 1); path.pop(); }
+}
+generate([], 0, 0);
+return paths;
+}
+
+function csvCatalan() { let s = 'n,C_n\n'; catalanData.forEach(d => s += `${d.n},${d.c}\n`); dl(s, 'catalan.csv'); }
+async function screenshotCatalan() { await screenshotUnified('ccat', 'catLiveStats', 'Catalan Numbers', 'catalan.png'); }
+function exportAllCatalan() { screenshotTabAll({ canvases: ['ccat'], charts: ['pcat1'], dashId: 'catLiveStats', title: 'Catalan Numbers', filename: 'catalan_all.png' }); }
+
+// ==================== ALIQUOT SEQUENCES ====================
+let aliquotData = [];
+
+function aliquotSum(n) {
+let sum = 0;
+for (let d = 1; d < n; d++) if (n % d === 0) sum += d;
+return sum;
+}
+
+function drawAliquot() {
+const startN = +document.getElementById('aliqNv').value || 276;
+const maxSteps = +document.getElementById('aliqSteps').value || 100;
+const mode = document.getElementById('aliqMode').value;
+const c = document.getElementById('caliq'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+aliquotData = [];
+
+if (mode === 'single') {
+let n = startN;
+const seen = new Set();
+for (let step = 0; step < maxSteps && n > 0 && n < 1e9; step++) {
+if (seen.has(n)) { aliquotData.push({ step, n, cycle: true }); break; }
+seen.add(n);
+aliquotData.push({ step, n, cycle: false });
+n = aliquotSum(n);
+}
+
+// Draw trajectory
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+const maxVal = Math.max(...aliquotData.map(d => d.n));
+ctx.strokeStyle = '#00d9ff';
+ctx.lineWidth = 2;
+ctx.beginPath();
+aliquotData.forEach((d, i) => {
+const x = pad + (i / aliquotData.length) * w;
+const y = c.height - pad - (Math.log(d.n + 1) / Math.log(maxVal + 1)) * h;
+if (i === 0) ctx.moveTo(x, y);
+else ctx.lineTo(x, y);
+});
+ctx.stroke();
+} else {
+// Classify
+const classifications = { perfect: [], amicable: [], sociable: [], terminating: [], unknown: [] };
+for (let n = 2; n <= Math.min(startN, 1000); n++) {
+let seq = [n], seen = new Set([n]);
+for (let i = 0; i < 50 && seq[seq.length - 1] > 0 && seq[seq.length - 1] < 1e7; i++) {
+const next = aliquotSum(seq[seq.length - 1]);
+if (next === 0) { classifications.terminating.push(n); break; }
+if (next === n && seq.length === 1) { classifications.perfect.push(n); break; }
+if (seen.has(next)) {
+if (next === n && seq.length === 2) classifications.amicable.push(n);
+else classifications.sociable.push(n);
+break;
+}
+seen.add(next);
+seq.push(next);
+}
+}
+
+const pad = 50;
+let y = pad + 30;
+Object.entries(classifications).forEach(([type, nums]) => {
+if (nums.length > 0) {
+ctx.fillStyle = type === 'perfect' ? '#ffd700' : type === 'amicable' ? '#00ff88' : '#00d9ff';
+ctx.font = '12px Segoe UI';
+ctx.fillText(`${type}: ${nums.slice(0, 10).join(', ')}${nums.length > 10 ? '...' : ''}`, pad, y);
+y += 25;
+}
+});
+}
+
+ctx.fillStyle = isDark() ? '#00d9ff' : '#0066cc';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Aliquot Sequence from ${startN}`, c.width / 2, 25);
+
+const finalN = aliquotData.length > 0 ? aliquotData[aliquotData.length - 1].n : startN;
+const maxN = aliquotData.length > 0 ? Math.max(...aliquotData.map(d => d.n)) : startN;
+
+document.getElementById('aliqLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Aliquot Sequences | FIELD: ℤ | TYPE: s(n) = σ(n) - n Iteration</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${startN}</div><div style="font-size:.7rem;color:var(--txt2)">START</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${aliquotData.length}</div><div style="font-size:.7rem;color:var(--txt2)">STEPS</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00ff88">${maxN.toLocaleString()}</div><div style="font-size:.7rem;color:var(--txt2)">MAX VALUE</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Types:</strong> Perfect (n→n), Amicable (n→m→n), Sociable (cycles)<br>
+<strong style="color:var(--acc)">Open problem:</strong> Does 276 sequence terminate?<br>
+<strong style="color:var(--acc)">Perfect numbers:</strong> 6, 28, 496, 8128...
+</div>`;
+
+if (aliquotData.length > 0) {
+Plotly.newPlot('paliq1', [{ x: aliquotData.map(d => d.step), y: aliquotData.map(d => d.n), mode: 'lines+markers', line: { color: '#00d9ff' } }], { ...plo(), xaxis: { title: 'Step' }, yaxis: { title: 'Value', type: 'log' } });
+}
+}
+
+function csvAliquot() { let s = 'step,n\n'; aliquotData.forEach(d => s += `${d.step},${d.n}\n`); dl(s, 'aliquot.csv'); }
+async function screenshotAliquot() { await screenshotUnified('caliq', 'aliqLiveStats', 'Aliquot Sequence', 'aliquot.png'); }
+function exportAllAliquot() { screenshotTabAll({ canvases: ['caliq'], charts: ['paliq1'], dashId: 'aliqLiveStats', title: 'Aliquot Sequences', filename: 'aliquot_all.png' }); }
+
+// ==================== CYCLOTOMIC POLYNOMIALS ====================
+let cycData = [];
+
+function drawCyclotomic() {
+const maxN = +document.getElementById('cycNv').value || 20;
+const mode = document.getElementById('cycMode').value;
+const c = document.getElementById('ccyc'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+cycData = [];
+for (let n = 1; n <= maxN; n++) {
+const phi_n = totient(n);
+cycData.push({ n, degree: phi_n });
+}
+
+if (mode === 'roots') {
+// Draw roots of unity on unit circle
+const cx = c.width / 2, cy = c.height / 2, r = Math.min(cx, cy) - 60;
+
+// Unit circle
+ctx.strokeStyle = gridC();
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.arc(cx, cy, r, 0, 2 * PI);
+ctx.stroke();
+
+// Draw primitive roots for each n
+const testN = Math.min(maxN, 12);
+for (let k = 0; k < testN; k++) {
+if (gcd(k, testN) === 1) {
+const angle = 2 * PI * k / testN;
+const x = cx + r * Math.cos(angle);
+const y = cy - r * Math.sin(angle);
+ctx.fillStyle = '#ffd700';
+ctx.beginPath();
+ctx.arc(x, y, 6, 0, 2 * PI);
+ctx.fill();
+ctx.fillStyle = isDark() ? '#fff' : '#000';
+ctx.font = '10px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`ζ^${k}`, x, y - 10);
+}
+}
+} else {
+// Show degrees
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+const maxDeg = Math.max(...cycData.map(d => d.degree));
+cycData.forEach((d, i) => {
+const x = pad + (i / cycData.length) * w;
+const barH = (d.degree / maxDeg) * h;
+ctx.fillStyle = isPrime(d.n) ? '#ffd700' : '#00d9ff';
+ctx.fillRect(x, c.height - pad - barH, w / cycData.length - 2, barH);
+});
+}
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Cyclotomic Polynomials Φₙ(x) — n ≤ ${maxN}`, c.width / 2, 25);
+
+document.getElementById('cycLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Cyclotomic Polynomials | FIELD: ℂ | TYPE: Φₙ(x) = ∏(x - ζⁿ)</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${maxN}</div><div style="font-size:.7rem;color:var(--txt2)">MAX n</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${totient(maxN)}</div><div style="font-size:.7rem;color:var(--txt2)">deg Φ_${maxN} = φ(${maxN})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00ff88">ζₙ = e^(2πi/n)</div><div style="font-size:.7rem;color:var(--txt2)">ROOT</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Definition:</strong> Φₙ(x) = ∏_{gcd(k,n)=1} (x - e^(2πik/n))<br>
+<strong style="color:var(--acc)">Property:</strong> xⁿ - 1 = ∏_{d|n} Φ_d(x)<br>
+<strong style="color:var(--acc)">Degree:</strong> deg Φₙ = φ(n)
+</div>`;
+
+Plotly.newPlot('pcyc1', [{ x: cycData.map(d => d.n), y: cycData.map(d => d.degree), type: 'bar', marker: { color: cycData.map(d => isPrime(d.n) ? '#ffd700' : '#00d9ff') } }], { ...plo(), xaxis: { title: 'n' }, yaxis: { title: 'φ(n) = deg Φₙ' } });
+}
+
+function csvCyclotomic() { let s = 'n,degree\n'; cycData.forEach(d => s += `${d.n},${d.degree}\n`); dl(s, 'cyclotomic.csv'); }
+async function screenshotCyclotomic() { await screenshotUnified('ccyc', 'cycLiveStats', 'Cyclotomic Polynomials', 'cyclotomic.png'); }
+function exportAllCyclotomic() { screenshotTabAll({ canvases: ['ccyc'], charts: ['pcyc1'], dashId: 'cycLiveStats', title: 'Cyclotomic Polynomials', filename: 'cyclotomic_all.png' }); }
+
+// ==================== COLLATZ CONJECTURE ====================
+let collatzData = [];
+
+function collatzSequence(n, maxSteps = 1000) {
+const seq = [n];
+while (n !== 1 && seq.length < maxSteps) {
+n = n % 2 === 0 ? n / 2 : 3 * n + 1;
+seq.push(n);
+}
+return seq;
+}
+
+function drawCollatz() {
+const startN = +document.getElementById('collNv').value || 27;
+const mode = document.getElementById('collMode').value;
+const c = document.getElementById('ccoll'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+if (mode === 'single') {
+collatzData = collatzSequence(startN).map((n, i) => ({ step: i, n }));
+
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+const maxVal = Math.max(...collatzData.map(d => d.n));
+
+ctx.strokeStyle = '#ff6496';
+ctx.lineWidth = 2;
+ctx.beginPath();
+collatzData.forEach((d, i) => {
+const x = pad + (i / collatzData.length) * w;
+const y = c.height - pad - (d.n / maxVal) * h;
+if (i === 0) ctx.moveTo(x, y);
+else ctx.lineTo(x, y);
+});
+ctx.stroke();
+} else if (mode === 'stopping') {
+// Stopping times
+collatzData = [];
+for (let n = 1; n <= startN; n++) {
+const seq = collatzSequence(n);
+collatzData.push({ n, stopTime: seq.length - 1 });
+}
+
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+const maxStop = Math.max(...collatzData.map(d => d.stopTime));
+collatzData.forEach(d => {
+const x = pad + (d.n / startN) * w;
+const y = c.height - pad - (d.stopTime / maxStop) * h;
+ctx.fillStyle = `hsl(${d.stopTime / maxStop * 240}, 70%, 50%)`;
+ctx.beginPath();
+ctx.arc(x, y, 2, 0, 2 * PI);
+ctx.fill();
+});
+} else {
+// Inverse tree
+const levels = [[1]];
+const seen = new Set([1]);
+for (let lvl = 0; lvl < 8; lvl++) {
+const next = [];
+for (const n of levels[lvl]) {
+const parent1 = 2 * n;
+if (!seen.has(parent1) && parent1 < 10000) { next.push(parent1); seen.add(parent1); }
+if ((n - 1) % 3 === 0 && n > 1) {
+const parent2 = (n - 1) / 3;
+if (parent2 % 2 === 1 && !seen.has(parent2) && parent2 > 1) { next.push(parent2); seen.add(parent2); }
+}
+}
+if (next.length === 0) break;
+levels.push(next.sort((a, b) => a - b));
+}
+
+const pad = 40;
+levels.forEach((level, d) => {
+const y = pad + 40 + d * 50;
+level.slice(0, 20).forEach((n, i) => {
+const x = pad + (i + 0.5) / Math.min(level.length, 20) * (c.width - 2 * pad);
+ctx.fillStyle = '#00d9ff';
+ctx.beginPath();
+ctx.arc(x, y, 8, 0, 2 * PI);
+ctx.fill();
+ctx.fillStyle = isDark() ? '#fff' : '#000';
+ctx.font = '9px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(n.toString(), x, y + 3);
+});
+});
+}
+
+ctx.fillStyle = isDark() ? '#ff6496' : '#cc0044';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Collatz Conjecture (3n+1) — Starting from ${startN}`, c.width / 2, 25);
+
+const seq = collatzSequence(startN);
+const maxVal = Math.max(...seq);
+
+document.getElementById('collLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,100,150,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ff6496">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Collatz Conjecture | FIELD: ℤ⁺ | TYPE: 3n+1 Problem</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff6496">${startN}</div><div style="font-size:.7rem;color:var(--txt2)">START</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${seq.length - 1}</div><div style="font-size:.7rem;color:var(--txt2)">STEPS TO 1</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${maxVal.toLocaleString()}</div><div style="font-size:.7rem;color:var(--txt2)">MAX VALUE</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Conjecture:</strong> Every positive integer eventually reaches 1<br>
+<strong style="color:var(--acc)">Rule:</strong> If even: n/2, if odd: 3n+1<br>
+<strong style="color:var(--acc)">Famous example:</strong> 27 takes 111 steps, reaches 9232
+</div>`;
+
+if (collatzData.length > 0) {
+Plotly.newPlot('pcoll1', [{ x: collatzData.map(d => d.step !== undefined ? d.step : d.n), y: collatzData.map(d => d.n !== undefined ? d.n : d.stopTime), mode: 'lines+markers', line: { color: '#ff6496' } }], { ...plo(), xaxis: { title: mode === 'single' ? 'Step' : 'n' }, yaxis: { title: mode === 'single' ? 'Value' : 'Stopping Time' } });
+}
+}
+
+function csvCollatz() { let s = 'step,n\n'; collatzData.forEach(d => s += `${d.step},${d.n}\n`); dl(s, 'collatz.csv'); }
+async function screenshotCollatz() { await screenshotUnified('ccoll', 'collLiveStats', 'Collatz Conjecture', 'collatz.png'); }
+function exportAllCollatz() { screenshotTabAll({ canvases: ['ccoll'], charts: ['pcoll1'], dashId: 'collLiveStats', title: 'Collatz Conjecture', filename: 'collatz_all.png' }); }
+
+// ==================== HIGHLY COMPOSITE NUMBERS ====================
+let hcData = [];
+
+function countDivisors(n) {
+let count = 0;
+for (let d = 1; d * d <= n; d++) {
+if (n % d === 0) count += (d * d === n) ? 1 : 2;
+}
+return count;
+}
+
+function drawHighComp() {
+const maxN = +document.getElementById('hcNv').value || 10000;
+const mode = document.getElementById('hcMode').value;
+const c = document.getElementById('chc'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+hcData = [];
+let maxDiv = 0;
+
+for (let n = 1; n <= maxN; n++) {
+const d = countDivisors(n);
+if (mode === 'hc' && d > maxDiv) {
+maxDiv = d;
+hcData.push({ n, divisors: d });
+} else if (mode === 'abundant') {
+const sigma = aliquotSum(n) + n;
+if (sigma > 2 * n) hcData.push({ n, divisors: d, sigma });
+}
+}
+
+// Draw
+const pad = 50, w = c.width - 2 * pad, h = c.height - 2 * pad;
+if (mode === 'hc') {
+hcData.forEach((d, i) => {
+const x = pad + (Math.log(d.n) / Math.log(maxN)) * w;
+const y = c.height - pad - (d.divisors / hcData[hcData.length - 1].divisors) * h;
+ctx.fillStyle = '#ffd700';
+ctx.beginPath();
+ctx.arc(x, y, 6, 0, 2 * PI);
+ctx.fill();
+if (d.n < 1000) {
+ctx.fillStyle = isDark() ? '#fff' : '#000';
+ctx.font = '10px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(d.n.toString(), x, y - 10);
+}
+});
+}
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Highly Composite Numbers ≤ ${maxN}`, c.width / 2, 25);
+
+document.getElementById('hcLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Highly Composite | FIELD: ℤ | TYPE: d(n) Records</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${hcData.length}</div><div style="font-size:.7rem;color:var(--txt2)">HC NUMBERS</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${hcData.length > 0 ? hcData[hcData.length - 1].n : 0}</div><div style="font-size:.7rem;color:var(--txt2)">LARGEST</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00ff88">${hcData.length > 0 ? hcData[hcData.length - 1].divisors : 0}</div><div style="font-size:.7rem;color:var(--txt2)">MAX DIVISORS</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Definition:</strong> n is HC if d(n) > d(m) for all m < n<br>
+<strong style="color:var(--acc)">First HC:</strong> ${hcData.slice(0, 8).map(d => d.n).join(', ')}...<br>
+<strong style="color:var(--acc)">Ramanujan:</strong> First systematic study (1915)
+</div>`;
+
+Plotly.newPlot('phc1', [{ x: hcData.map(d => d.n), y: hcData.map(d => d.divisors), mode: 'lines+markers', line: { color: '#ffd700' } }], { ...plo(), xaxis: { title: 'n', type: 'log' }, yaxis: { title: 'd(n)' } });
+}
+
+function csvHighComp() { let s = 'n,divisors\n'; hcData.forEach(d => s += `${d.n},${d.divisors}\n`); dl(s, 'highly_composite.csv'); }
+async function screenshotHighComp() { await screenshotUnified('chc', 'hcLiveStats', 'Highly Composite Numbers', 'highcomp.png'); }
+function exportAllHighComp() { screenshotTabAll({ canvases: ['chc'], charts: ['phc1'], dashId: 'hcLiveStats', title: 'Highly Composite', filename: 'highcomp_all.png' }); }
+
+// ==================== PERFECT NUMBERS ====================
+let perfectData = [];
+
+function drawPerfect() {
+const maxN = +document.getElementById('perfNv').value || 10000;
+const mode = document.getElementById('perfMode').value;
+const c = document.getElementById('cperf'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+perfectData = [];
+let perfect = 0, abundant = 0, deficient = 0;
+
+for (let n = 2; n <= maxN; n++) {
+const s = aliquotSum(n);
+const type = s === n ? 'perfect' : s > n ? 'abundant' : 'deficient';
+if (type === 'perfect') perfect++;
+else if (type === 'abundant') abundant++;
+else deficient++;
+if (type === 'perfect' || (mode === 'sigma' && n <= 500)) {
+perfectData.push({ n, sigma: s + n, type, ratio: (s + n) / n });
+}
+}
+
+// Draw
+const pad = 50;
+if (mode === 'classify') {
+// Pie-like visualization
+const total = perfect + abundant + deficient;
+const angles = [
+{ type: 'deficient', count: deficient, color: '#00d9ff', start: 0 },
+{ type: 'abundant', count: abundant, color: '#ff6496', start: deficient / total * 2 * PI },
+{ type: 'perfect', count: perfect, color: '#ffd700', start: (deficient + abundant) / total * 2 * PI }
+];
+const cx = c.width / 2, cy = c.height / 2 + 20, r = 150;
+angles.forEach(a => {
+const end = a.start + a.count / total * 2 * PI;
+ctx.fillStyle = a.color;
+ctx.beginPath();
+ctx.moveTo(cx, cy);
+ctx.arc(cx, cy, r, a.start - PI / 2, end - PI / 2);
+ctx.closePath();
+ctx.fill();
+});
+} else {
+// σ(n)/n ratio plot
+const ratioData = [];
+for (let n = 2; n <= Math.min(maxN, 500); n++) {
+ratioData.push({ n, ratio: (aliquotSum(n) + n) / n });
+}
+const w = c.width - 2 * pad, h = c.height - 2 * pad;
+ratioData.forEach(d => {
+const x = pad + (d.n / 500) * w;
+const y = c.height - pad - ((d.ratio - 1) / 2) * h;
+ctx.fillStyle = d.ratio === 2 ? '#ffd700' : d.ratio > 2 ? '#ff6496' : '#00d9ff';
+ctx.beginPath();
+ctx.arc(x, y, 2, 0, 2 * PI);
+ctx.fill();
+});
+// Line at ratio = 2
+ctx.strokeStyle = '#ffd700';
+ctx.setLineDash([5, 5]);
+ctx.beginPath();
+const y2 = c.height - pad - h / 2;
+ctx.moveTo(pad, y2);
+ctx.lineTo(c.width - pad, y2);
+ctx.stroke();
+ctx.setLineDash([]);
+}
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Perfect, Abundant, Deficient ≤ ${maxN}`, c.width / 2, 25);
+
+const perfectNums = [6, 28, 496, 8128].filter(p => p <= maxN);
+
+document.getElementById('perfLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Perfect Numbers | FIELD: ℤ | TYPE: σ(n) = 2n Classification</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${perfect}</div><div style="font-size:.7rem;color:var(--txt2)">PERFECT</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ff6496">${abundant}</div><div style="font-size:.7rem;color:var(--txt2)">ABUNDANT</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${deficient}</div><div style="font-size:.7rem;color:var(--txt2)">DEFICIENT</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Perfect in range:</strong> ${perfectNums.join(', ') || 'None'}<br>
+<strong style="color:var(--acc)">Euclid-Euler:</strong> Even perfect ⟺ 2^(p-1)(2^p - 1) with M_p prime<br>
+<strong style="color:var(--acc)">Open:</strong> Are there odd perfect numbers?
+</div>`;
+
+Plotly.newPlot('pperf1', [{ x: ['Deficient', 'Abundant', 'Perfect'], y: [deficient, abundant, perfect], type: 'bar', marker: { color: ['#00d9ff', '#ff6496', '#ffd700'] } }], { ...plo(), xaxis: { title: 'Type' }, yaxis: { title: 'Count' } });
+}
+
+function csvPerfect() { let s = 'n,sigma,type\n'; perfectData.forEach(d => s += `${d.n},${d.sigma},${d.type}\n`); dl(s, 'perfect.csv'); }
+async function screenshotPerfect() { await screenshotUnified('cperf', 'perfLiveStats', 'Perfect Numbers', 'perfect.png'); }
+function exportAllPerfect() { screenshotTabAll({ canvases: ['cperf'], charts: ['pperf1'], dashId: 'perfLiveStats', title: 'Perfect Numbers', filename: 'perfect_all.png' }); }
+
+// ==================== TAXICAB NUMBERS ====================
+let taxicabData = [];
+
+function drawTaxicab() {
+const maxSum = +document.getElementById('taxiNv').value || 20000;
+const minK = +document.getElementById('taxiK').value;
+const c = document.getElementById('ctaxi'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+// Find numbers expressible as sum of two cubes in multiple ways
+const cubeSums = new Map();
+const maxCube = Math.ceil(Math.pow(maxSum, 1 / 3));
+
+for (let a = 1; a <= maxCube; a++) {
+for (let b = a; b <= maxCube; b++) {
+const sum = a * a * a + b * b * b;
+if (sum > maxSum) break;
+if (!cubeSums.has(sum)) cubeSums.set(sum, []);
+cubeSums.get(sum).push([a, b]);
+}
+}
+
+taxicabData = [];
+for (const [sum, ways] of cubeSums) {
+if (ways.length >= minK) {
+taxicabData.push({ n: sum, ways, k: ways.length });
+}
+}
+taxicabData.sort((a, b) => a.n - b.n);
+
+// Draw
+const pad = 50;
+ctx.font = '12px monospace';
+taxicabData.slice(0, 15).forEach((t, i) => {
+const y = pad + 40 + i * 28;
+ctx.fillStyle = t.n === 1729 ? '#ffd700' : '#00d9ff';
+ctx.textAlign = 'left';
+ctx.fillText(`${t.n} = ${t.ways.map(w => `${w[0]}³+${w[1]}³`).join(' = ')}`, pad, y);
+});
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Taxicab Numbers Ta(${minK}) ≤ ${maxSum}`, c.width / 2, 25);
+
+document.getElementById('taxiLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Taxicab Numbers | FIELD: ℤ | TYPE: a³ + b³ = c³ + d³</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${taxicabData.length}</div><div style="font-size:.7rem;color:var(--txt2)">FOUND</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">1729</div><div style="font-size:.7rem;color:var(--txt2)">FAMOUS Ta(2)</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00ff88">${minK}+ ways</div><div style="font-size:.7rem;color:var(--txt2)">MINIMUM</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Hardy-Ramanujan:</strong> 1729 = 1³+12³ = 9³+10³<br>
+<strong style="color:var(--acc)">Ta(2):</strong> ${taxicabData.length > 0 ? taxicabData[0].n : '1729'}<br>
+<strong style="color:var(--acc)">Story:</strong> Hardy's taxi number, Ramanujan recognized instantly
+</div>`;
+
+if (taxicabData.length > 0) {
+Plotly.newPlot('ptaxi1', [{ x: taxicabData.map((_, i) => i + 1), y: taxicabData.map(t => t.n), mode: 'lines+markers', line: { color: '#ffd700' } }], { ...plo(), xaxis: { title: 'Index' }, yaxis: { title: 'Taxicab Number' } });
+}
+}
+
+function csvTaxicab() { let s = 'n,ways,representations\n'; taxicabData.forEach(t => s += `${t.n},${t.k},"${t.ways.map(w => w[0] + '^3+' + w[1] + '^3').join('; ')}"\n`); dl(s, 'taxicab.csv'); }
+async function screenshotTaxicab() { await screenshotUnified('ctaxi', 'taxiLiveStats', 'Taxicab Numbers', 'taxicab.png'); }
+function exportAllTaxicab() { screenshotTabAll({ canvases: ['ctaxi'], charts: ['ptaxi1'], dashId: 'taxiLiveStats', title: 'Taxicab Numbers', filename: 'taxicab_all.png' }); }
+
+// ==================== ELLIPTIC CURVES ====================
+let ellipticData = [];
+
+function drawElliptic() {
+const a = +document.getElementById('ellA').value;
+const b = +document.getElementById('ellB').value;
+const mode = document.getElementById('ellMode').value;
+const p = +document.getElementById('ellP').value;
+const c = document.getElementById('cell'), ctx = c.getContext('2d');
+ctx.fillStyle = canvBg(); ctx.fillRect(0, 0, c.width, c.height);
+
+const discriminant = -16 * (4 * a * a * a + 27 * b * b);
+
+ellipticData = [];
+
+if (mode === 'real') {
+// Plot y² = x³ + ax + b over reals
+const cx = c.width / 2, cy = c.height / 2;
+const scale = 30;
+
+// Axes
+ctx.strokeStyle = gridC();
+ctx.lineWidth = 1;
+ctx.beginPath();
+ctx.moveTo(0, cy);
+ctx.lineTo(c.width, cy);
+ctx.moveTo(cx, 0);
+ctx.lineTo(cx, c.height);
+ctx.stroke();
+
+// Plot curve
+ctx.strokeStyle = '#ffd700';
+ctx.lineWidth = 2;
+for (let px = 0; px < c.width; px++) {
+const x = (px - cx) / scale;
+const y2 = x * x * x + a * x + b;
+if (y2 >= 0) {
+const y = Math.sqrt(y2);
+ctx.beginPath();
+ctx.arc(px, cy - y * scale, 1, 0, 2 * PI);
+ctx.arc(px, cy + y * scale, 1, 0, 2 * PI);
+ctx.fill();
+}
+}
+} else if (mode === 'modp') {
+// Points over F_p
+const points = [];
+for (let x = 0; x < p; x++) {
+const rhs = (x * x * x + a * x + b) % p;
+for (let y = 0; y < p; y++) {
+if ((y * y) % p === (rhs + p) % p) {
+points.push({ x, y });
+ellipticData.push({ x, y });
+}
+}
+}
+
+const pad = 50, size = Math.min((c.width - 2 * pad) / p, (c.height - 2 * pad) / p, 15);
+points.forEach(pt => {
+const px = pad + pt.x * size + size / 2;
+const py = c.height - pad - pt.y * size - size / 2;
+ctx.fillStyle = '#ffd700';
+ctx.beginPath();
+ctx.arc(px, py, size / 3, 0, 2 * PI);
+ctx.fill();
+});
+}
+
+ctx.fillStyle = isDark() ? '#ffd700' : '#cc8800';
+ctx.font = 'bold 14px Segoe UI';
+ctx.textAlign = 'center';
+ctx.fillText(`Elliptic Curve y² = x³ + ${a}x + ${b}`, c.width / 2, 25);
+
+const pointCount = ellipticData.length + 1; // +1 for point at infinity
+
+document.getElementById('ellLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,217,255,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid #ffd700">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Elliptic Curves | FIELD: E(ℚ) or E(𝔽_p) | TYPE: y² = x³ + ax + b</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${a}, ${b}</div><div style="font-size:.7rem;color:var(--txt2)">a, b</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${mode === 'modp' ? pointCount : '∞'}</div><div style="font-size:.7rem;color:var(--txt2)">#E(𝔽_${p})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:${discriminant !== 0 ? '#00ff88' : '#ff6496'}">${discriminant !== 0 ? 'Smooth' : 'Singular'}</div><div style="font-size:.7rem;color:var(--txt2)">TYPE</div></div>
+</div>
+<div style="font-size:.8rem;color:var(--txt2)">
+<strong style="color:var(--acc)">Discriminant:</strong> Δ = -16(4a³ + 27b²) = ${discriminant}<br>
+<strong style="color:var(--acc)">Hasse bound:</strong> |#E(𝔽_p) - p - 1| ≤ 2√p<br>
+<strong style="color:var(--acc)">BSD Conjecture:</strong> Rank related to L-function order at s=1
+</div>`;
+
+if (ellipticData.length > 0) {
+Plotly.newPlot('pell1', [{ x: ellipticData.map(pt => pt.x), y: ellipticData.map(pt => pt.y), mode: 'markers', marker: { color: '#ffd700', size: 6 } }], { ...plo(), xaxis: { title: 'x' }, yaxis: { title: 'y' } });
+}
+}
+
+function csvElliptic() { let s = 'x,y\n'; ellipticData.forEach(pt => s += `${pt.x},${pt.y}\n`); dl(s, 'elliptic.csv'); }
+async function screenshotElliptic() { await screenshotUnified('cell', 'ellLiveStats', 'Elliptic Curve', 'elliptic.png'); }
+function exportAllElliptic() { screenshotTabAll({ canvases: ['cell'], charts: ['pell1'], dashId: 'ellLiveStats', title: 'Elliptic Curves', filename: 'elliptic_all.png' }); }
 
 draw2D();
 </script>
