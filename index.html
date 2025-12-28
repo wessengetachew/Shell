@@ -141,7 +141,8 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <h3>Key Insights</h3>
 <ul>
 <li><strong>ζ(n)^(-1) Density:</strong> The inverse zeta function emerges as the natural density of primitive integers.</li>
-<li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</strong>Multi-Scale Sieve:</strong> The Möbius inversion acts as a geometric filter.</li>
+<li><strong>Shape Independence:</strong> The leading term depends only on Vol(K) and ζ(n), not boundary details.</li>
+<li><strong>Multi-Scale Sieve:</strong> The Möbius inversion acts as a geometric filter.</li>
 <li><strong>Dimension Universal:</strong> The formula holds for all dimensions n ≥ 3.</li>
 <li><strong>GCD Multiplication Table:</strong> The 2D lattice within a circle is fundamentally a bounded GCD multiplication table. Each point (x,y) represents an entry where gcd(x,y) determines the "cell value". The primitive points (GCD=1) correspond to coprime pairs—the units in the multiplicative structure.</li>
 <li><strong>Four-Quadrant Symmetry:</strong> The lattice exhibits 4-fold rotational symmetry, mirroring the structure of modular arithmetic tables when viewed as rings.</li>
@@ -439,6 +440,7 @@ footer{text-align:center;padding:2rem;color:var(--txt2);border-top:1px solid rgb
 <button class="tbtn" onclick="showTab('tprimerace',this)">Prime Races</button>
 <button class="tbtn" onclick="showTab('tlfunc',this)">L-functions</button>
 <button class="tbtn" onclick="showTab('tlfunczeros',this)">L-func Zeros</button>
+<button class="tbtn" onclick="showTab('tquantum',this)">Quantum Orbitals</button>
 </div>
 
 <div id="t2d" class="tab active">
@@ -584,7 +586,7 @@ P(gcd(x,y,z) = 1) = 1/ζ(3) = 0.8319073725807075
 
 <div id="tmob" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Compute μ(n) for n ≤ N">?</span></label><div class="sig"><input type="range" id="mobN" min="10" max="500" step="10" value="100" oninput="document.getElementById('mobNv').value=this.value"><input type="number" id="mobNv" value="100" min="2" max="2000" ></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Compute μ(n) for n ≤ N">?</span></label><div class="sig"><input type="range" id="mobN" min="10" max="500" step="10" value="100" oninput="document.getElementById('mobNv').value=this.value"><input type="number" id="mobNv" value="100" min="2" max="2000"  onkeydown="if(event.key==='Enter')drawMobius()"></div></div>
 <div class="cg"><label>Visualization</label><select id="mobViz" onchange="drawMobius()">
 <option value="strip">μ(n) Strip Chart</option>
 <option value="mertens">Mertens M(x)</option>
@@ -972,7 +974,7 @@ The "gap connections" between consecutive coprime residues within each ring reve
 
 <div id="terr" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max Radius <span class="tip" title="Upper limit for R">?</span></label><div class="sig"><input type="range" id="errR" min="5" max="500" value="25" oninput="document.getElementById('errRv').value=this.value"><input type="number" id="errRv" value="25" min="2" max="1000" ></div></div>
+<div class="cg"><label>Max Radius <span class="tip" title="Upper limit for R">?</span></label><div class="sig"><input type="range" id="errR" min="5" max="500" value="25" oninput="document.getElementById('errRv').value=this.value"><input type="number" id="errRv" value="25" min="2" max="1000"  onkeydown="if(event.key==='Enter')runErrNew()"></div></div>
 <div class="cg"><label>Shape</label><select id="errSh"><option value="circle">Circle</option><option value="square">Square</option></select></div>
 <div class="cg"><label>Step Size</label><select id="errStep"><option value="0.5">0.5</option><option value="1" selected>1</option><option value="2">2</option></select></div>
 <div class="cg"><label>Error Exponent θ</label><div class="sig"><input type="range" id="errTheta" min="0.3" max="1" step="0.05" value="0.5" oninput="document.getElementById('errThetaV').textContent=this.value"><span id="errThetaV" style="color:var(--txt2)">0.5</span></div></div>
@@ -1027,8 +1029,8 @@ N(R) = Vol(K)·R^n / ζ(n) + O(R^(n-1)) &nbsp;|&nbsp; |Error| = O(R^θ)
 
 <div id="tdim" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max Dimension <span class="tip" title="Compute up to this dimension">?</span></label><div class="sig"><input type="range" id="dimMax" min="3" max="30" step="1" value="12" oninput="document.getElementById('dimMaxV').value=this.value"><input type="number" id="dimMaxV" value="12" min="2" max="50" ></div></div>
-<div class="cg"><label>Radius R <span class="tip" title="Ball radius (lower for high dims)">?</span></label><div class="sig"><input type="range" id="rdim" min="1" max="20" step=".5" value="5" oninput="document.getElementById('rdimv').value=this.value"><input type="number" id="rdimv" value="5" min="1" max="50" ></div></div>
+<div class="cg"><label>Max Dimension <span class="tip" title="Compute up to this dimension">?</span></label><div class="sig"><input type="range" id="dimMax" min="3" max="30" step="1" value="12" oninput="document.getElementById('dimMaxV').value=this.value"><input type="number" id="dimMaxV" value="12" min="2" max="50"  onkeydown="if(event.key==='Enter')runDimNew()"></div></div>
+<div class="cg"><label>Radius R <span class="tip" title="Ball radius (lower for high dims)">?</span></label><div class="sig"><input type="range" id="rdim" min="1" max="20" step=".5" value="5" oninput="document.getElementById('rdimv').value=this.value"><input type="number" id="rdimv" value="5" min="1" max="50"  onkeydown="if(event.key==='Enter')runDimNew()"></div></div>
 <div class="cg"><label>Compute Mode</label><select id="dimMode">
 <option value="theory">Theory Only (fast)</option>
 <option value="hybrid">Hybrid (compute ≤5D)</option>
@@ -1146,10 +1148,10 @@ P(6) = L(6) - L(3) - L(2) + L(1) - L(1.5) - L(1.2) + ...
 
 <div id="tgcd" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rgcd" min="1" max="500" value="15" oninput="document.getElementById('rgcdv').value=this.value"><input type="number" id="rgcdv" value="15" min="1" max="1000" ></div></div>
+<div class="cg"><label>Radius R <span class="tip" title="Region radius">?</span></label><div class="sig"><input type="range" id="rgcd" min="1" max="500" value="15" oninput="document.getElementById('rgcdv').value=this.value"><input type="number" id="rgcdv" value="15" min="1" max="1000"  onkeydown="if(event.key==='Enter')runGcdNew()"></div></div>
 <div class="cg"><label>Shape</label><select id="gcdShape" onchange="runGCD()"><option value="circle">Circle (x²+y²≤R²)</option><option value="square">Square (|x|,|y|≤R)</option></select></div>
 <div class="cg"><label>Analysis Mode</label><select id="gcdMode"><option value="full">Full Distribution</option><option value="avg">Average GCD Study</option><option value="coprime">Coprime Focus</option></select></div>
-<div class="cg"><label>Top N GCDs</label><input type="number" id="gcdTopN" value="20" min="5" max="50"></div>
+<div class="cg"><label>Top N GCDs</label><input type="number" id="gcdTopN" value="20" min="5" max="50" onkeydown="if(event.key==='Enter')runGcdNew()"></div>
 </div>
 <div class="bg"><button onclick="runGCD()">Analyze GCD</button><button onclick="runGCDConvergence()">Convergence Study</button><button onclick="screenshotGCD()">Screenshot</button><button class="s" onclick="csvGCD()">Export CSV</button></div>
 <div class="g2">
@@ -1267,9 +1269,9 @@ N(a+bi) = a² + b² &nbsp;|&nbsp; p = a²+b² ⟺ p=2 or p≡1 (mod 4)
 
 <div id="tcirc" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max Radius <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="circR" min="5" max="500" value="25" oninput="document.getElementById('circRv').value=this.value"><input type="number" id="circRv" value="25" min="2" max="1000" ></div></div>
+<div class="cg"><label>Max Radius <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="circR" min="5" max="500" value="25" oninput="document.getElementById('circRv').value=this.value;document.getElementById('circVizR').value=Math.min(30,this.value);drawCircleViz();runCircNew()"><input type="number" id="circRv" value="25" min="2" max="1000" onkeydown="if(event.key==='Enter'){document.getElementById('circVizR').value=Math.min(30,this.value);drawCircleViz();runCircNew()}"></div></div>
 <div class="cg"><label>Step Size</label><select id="circStep"><option value="0.5">0.5</option><option value="1" selected>1</option><option value="2">2</option></select></div>
-<div class="cg"><label>Visualization R</label><input type="number" id="circVizR" value="10" min="2" max="30"></div>
+<div class="cg"><label>Visualization R</label><input type="number" id="circVizR" value="10" min="2" max="30" onkeydown="if(event.key==='Enter')drawCircleViz()"></div>
 <div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
 <label><input type="checkbox" id="circBounds" checked> Error Bounds</label>
 <label><input type="checkbox" id="circPrim"> Primitive Only</label>
@@ -1336,7 +1338,7 @@ N(R) = πR² + r(R) &nbsp;where&nbsp; |r(R)| = O(R^θ), θ ≤ 131/208 ≈ 0.63
 <option value="theory">Theory Only (fast)</option>
 <option value="sample">Monte Carlo Sample</option>
 </select></div>
-<div class="cg"><label>Sample Size</label><input type="number" id="densSample" value="10000" min="1000" max="100000" step="1000"></div>
+<div class="cg"><label>Sample Size</label><input type="number" id="densSample" value="10000" min="1000" max="100000" step="1000" onkeydown="if(event.key==='Enter')runDensity()"></div>
 </div>
 <div class="bg"><button onclick="runDensNew()">Compute All</button><button onclick="runConvergence()">Convergence Test</button><button onclick="screenshotDens()">Screenshot</button><button class="s" onclick="csvDens()">Export CSV</button></div>
 <div class="g2">
@@ -1454,7 +1456,7 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 
 <div id="ttwin" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Search primes up to N">?</span></label><div class="sig"><input type="range" id="twinN" min="100" max="10000" step="100" value="1000" oninput="document.getElementById('twinNv').value=this.value"><input type="number" id="twinNv" value="1000" min="10" max="100000" ></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Search primes up to N">?</span></label><div class="sig"><input type="range" id="twinN" min="100" max="10000" step="100" value="1000" oninput="document.getElementById('twinNv').value=this.value"><input type="number" id="twinNv" value="1000" min="10" max="100000"  onkeydown="if(event.key==='Enter')drawTwin()"></div></div>
 <div class="cg"><label>Gap Size g <span class="tip" title="Find prime pairs (p, p+g)">?</span></label><div class="sig"><input type="range" id="twinG" min="2" max="30" step="2" value="2" oninput="document.getElementById('twinGv').value=this.value;drawTwin()"><input type="number" id="twinGv" value="2" min="2" max="100" step="2" onkeydown="if(event.key==='Enter')drawTwin()"></div></div>
 <div class="cg"><label>Visualization</label><select id="twinViz" onchange="drawTwin()">
 <option value="gaps">Prime Gap Distribution</option>
@@ -1532,7 +1534,7 @@ L(s,χ) = Σ χ(n)/nˢ = ∏_p(1-χ(p)p⁻ˢ)⁻¹ &nbsp;|&nbsp; L(1,χ) ≠ 0 f
 
 <div id="tpi" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max x <span class="tip" title="Count primes up to x">?</span></label><div class="sig"><input type="range" id="piX" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('piXv').value=this.value"><input type="number" id="piXv" value="10000" min="10" max="1000000" ></div></div>
+<div class="cg"><label>Max x <span class="tip" title="Count primes up to x">?</span></label><div class="sig"><input type="range" id="piX" min="100" max="100000" step="100" value="10000" oninput="document.getElementById('piXv').value=this.value"><input type="number" id="piXv" value="10000" min="10" max="1000000"  onkeydown="if(event.key==='Enter')drawPi()"></div></div>
 <div class="cg"><label>Step Size</label><select id="piStep" onchange="drawPi()">
 <option value="10">10</option>
 <option value="50">50</option>
@@ -1722,7 +1724,7 @@ Coprime: 1,5,7,11 | Channels: 12,6,4,3,2,1
 
 <div id="tcopair" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Grid Size N <span class="tip" title="Count coprime pairs in N×N grid">?</span></label><div class="sig"><input type="range" id="copairN" min="10" max="500" value="60" oninput="document.getElementById('copairNv').value=this.value"><input type="number" id="copairNv" value="60" min="5" max="2000" ></div></div>
+<div class="cg"><label>Grid Size N <span class="tip" title="Count coprime pairs in N×N grid">?</span></label><div class="sig"><input type="range" id="copairN" min="10" max="500" value="60" oninput="document.getElementById('copairNv').value=this.value"><input type="number" id="copairNv" value="60" min="5" max="2000"  onkeydown="if(event.key==='Enter')drawCopair()"></div></div>
 <div class="cg"><label>Visualization</label><select id="copairViz" onchange="drawCopair()">
 <option value="grid">Grid Heatmap</option>
 <option value="density">Density Convergence</option>
@@ -1821,7 +1823,7 @@ V(R) = 6R²/π² + E(R) &nbsp;|&nbsp; RH ⟺ |E(R)| = O(R^(½+ε))
 
 <div id="tsierp" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Check which numbers 1..N can be expressed as 6ab±a±b">?</span></label><div class="sig"><input type="range" id="sierpN" min="50" max="500" value="200" oninput="document.getElementById('sierpNv').value=this.value"><input type="number" id="sierpNv" value="200" min="20" max="2000" ></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Check which numbers 1..N can be expressed as 6ab±a±b">?</span></label><div class="sig"><input type="range" id="sierpN" min="50" max="500" value="200" oninput="document.getElementById('sierpNv').value=this.value"><input type="number" id="sierpNv" value="200" min="20" max="2000"  onkeydown="if(event.key==='Enter')drawSierp()"></div></div>
 <div class="cg"><label>Visualization</label><select id="sierpViz" onchange="drawSierp()">
 <option value="coverage">Coverage Map</option>
 <option value="lattice">Lattice Structure</option>
@@ -1841,7 +1843,7 @@ V(R) = 6R²/π² + E(R) &nbsp;|&nbsp; RH ⟺ |E(R)| = O(R^(½+ε))
 </div></div>
 </div>
 <div class="ctrl">
-<div class="cg"><label>Search a,b ≤</label><div class="sig"><input type="range" id="sierpAB" min="10" max="100" value="50" oninput="document.getElementById('sierpABv').value=this.value"><input type="number" id="sierpABv" value="50" min="5" max="200"></div></div>
+<div class="cg"><label>Search a,b ≤</label><div class="sig"><input type="range" id="sierpAB" min="10" max="100" value="50" oninput="document.getElementById('sierpABv').value=this.value"><input type="number" id="sierpABv" value="50" min="5" max="200" onkeydown="if(event.key==='Enter')drawSierp()"></div></div>
 <div class="cg"><label>Test Number</label><input type="number" id="sierpTest" value="1" min="1" style="width:80px"><button onclick="testSierpNum()" style="margin-left:5px">Test</button></div>
 <div class="cg"><label>Presets</label>
 <button onclick="document.getElementById('sierpNv').value=100;drawSierp()" style="padding:2px 6px">100</button>
@@ -1896,7 +1898,7 @@ n = 6ab ± a ± b &nbsp;|&nbsp; Are infinitely many integers uncovered?
 
 <div id="tkfree" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Count k-free integers up to N">?</span></label><div class="sig"><input type="range" id="kfreeN" min="100" max="5000" value="1000" oninput="document.getElementById('kfreeNv').value=this.value"><input type="number" id="kfreeNv" value="1000" min="50" max="50000" ></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Count k-free integers up to N">?</span></label><div class="sig"><input type="range" id="kfreeN" min="100" max="5000" value="1000" oninput="document.getElementById('kfreeNv').value=this.value"><input type="number" id="kfreeNv" value="1000" min="50" max="50000"  onkeydown="if(event.key==='Enter')drawKfree()"></div></div>
 <div class="cg"><label>k (power)</label><select id="kfreeK" onchange="drawKfree()">
 <option value="2">k=2 (Squarefree)</option>
 <option value="3">k=3 (Cubefree)</option>
@@ -1969,7 +1971,7 @@ Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
 <option value="z6">ζ(6) = π⁶/945</option>
 <option value="z8">ζ(8)</option>
 </select></div>
-<div class="cg"><label>Prime Limit <span class="tip" title="Use primes up to this value">?</span></label><div class="sig"><input type="range" id="eulerPmax" min="100" max="10000" value="1000" oninput="document.getElementById('eulerPmaxv').value=this.value"><input type="number" id="eulerPmaxv" value="1000" min="10" max="100000" ></div></div>
+<div class="cg"><label>Prime Limit <span class="tip" title="Use primes up to this value">?</span></label><div class="sig"><input type="range" id="eulerPmax" min="100" max="10000" value="1000" oninput="document.getElementById('eulerPmaxv').value=this.value"><input type="number" id="eulerPmaxv" value="1000" min="10" max="100000"  onkeydown="if(event.key==='Enter')drawEuler()"></div></div>
 <div class="cg"><label>Visualization</label><select id="eulerViz" onchange="drawEuler()">
 <option value="convergence">Convergence</option>
 <option value="contributions">Prime Contributions</option>
@@ -2040,7 +2042,7 @@ Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
 
 <div id="tchord" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max n <span class="tip" title="Analyze chord uniformity for moduli up to n">?</span></label><div class="sig"><input type="range" id="chordN" min="50" max="500" value="200" oninput="document.getElementById('chordNv').value=this.value"><input type="number" id="chordNv" value="200" min="20" max="2000" ></div></div>
+<div class="cg"><label>Max n <span class="tip" title="Analyze chord uniformity for moduli up to n">?</span></label><div class="sig"><input type="range" id="chordN" min="50" max="500" value="200" oninput="document.getElementById('chordNv').value=this.value"><input type="number" id="chordNv" value="200" min="20" max="2000"  onkeydown="if(event.key==='Enter')drawChord()"></div></div>
 <div class="cg"><label>Visualization</label><select id="chordViz" onchange="drawChord()">
 <option value="scatter">CV Scatter (Prime vs Comp)</option>
 <option value="histogram">CV Histogram</option>
@@ -2048,9 +2050,9 @@ Q_k(N) = N/ζ(k) + O(N^(1/k)) &nbsp;|&nbsp; Density = 1/ζ(k)
 <option value="single">Single Modulus Detail</option>
 <option value="compare">Compare 2-3 Moduli</option>
 </select></div>
-<div class="cg"><label>Test n₁</label><input type="number" id="chordTest" value="97" min="3" style="width:60px"></div>
-<div class="cg"><label>Compare n₂</label><input type="number" id="chordTest2" value="100" min="3" style="width:60px"></div>
-<div class="cg"><label>Compare n₃</label><input type="number" id="chordTest3" value="101" min="3" style="width:60px"></div>
+<div class="cg"><label>Test n₁</label><input type="number" id="chordTest" value="97" min="3" style="width:60px" onkeydown="if(event.key==='Enter')drawChord()"></div>
+<div class="cg"><label>Compare n₂</label><input type="number" id="chordTest2" value="100" min="3" style="width:60px" onkeydown="if(event.key==='Enter')drawChord()"></div>
+<div class="cg"><label>Compare n₃</label><input type="number" id="chordTest3" value="101" min="3" style="width:60px" onkeydown="if(event.key==='Enter')drawChord()"></div>
 <div class="cg"><label>Display</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
 <label><input type="checkbox" id="chordThresh" checked onchange="drawChord()"> Threshold</label>
 <label><input type="checkbox" id="chordLabels" onchange="drawChord()"> Labels</label>
@@ -2123,8 +2125,8 @@ CV(n) = σ_L / μ_L &nbsp;|&nbsp; L_i = 2·sin(π·gap_i/n) &nbsp;|&nbsp; Prime:
 
 <div id="tgold" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="goldN" min="10" max="10000" step="10" value="200" oninput="document.getElementById('goldNv').value=this.value"><input type="number" id="goldNv" value="200" min="10" max="50000" ></div></div>
-<div class="cg"><label>Test Even <span class="tip" title="Test specific even number">?</span></label><input type="number" id="goldTest" value="100" min="4" step="2"></div>
+<div class="cg"><label>Max N <span class="tip" title="Upper limit for analysis">?</span></label><div class="sig"><input type="range" id="goldN" min="10" max="10000" step="10" value="200" oninput="document.getElementById('goldNv').value=this.value"><input type="number" id="goldNv" value="200" min="10" max="50000"  onkeydown="if(event.key==='Enter')drawGoldbach()"></div></div>
+<div class="cg"><label>Test Even <span class="tip" title="Test specific even number">?</span></label><input type="number" id="goldTest" value="100" min="4" step="2" onkeydown="if(event.key==='Enter')drawGoldbach()"></div>
 <div class="cg"><label>Visualization</label><select id="goldViz" onchange="drawGoldbach()"><option value="comet">Goldbach Comet</option><option value="partitions">Partition Count</option><option value="single">Single Number</option><option value="heatmap">Heatmap</option></select></div>
 <div class="cg"><label>Color</label><select id="goldCol" onchange="drawGoldbach()"><option value="count">By Count</option><option value="minPrime">By Min Prime</option><option value="maxGap">By Max Gap</option></select></div>
 <div class="cg"><label>Point Size</label><input type="range" id="goldPtSz" min="1" max="8" step="0.5" value="3" onchange="drawGoldbach()"></div>
@@ -2172,7 +2174,7 @@ CV(n) = σ_L / μ_L &nbsp;|&nbsp; L_i = 2·sin(π·gap_i/n) &nbsp;|&nbsp; Prime:
 
 <div id="tgap" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Upper limit for primes">?</span></label><div class="sig"><input type="range" id="gapN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('gapNv').value=this.value"><input type="number" id="gapNv" value="1000" min="100" max="500000" ></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Upper limit for primes">?</span></label><div class="sig"><input type="range" id="gapN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('gapNv').value=this.value"><input type="number" id="gapNv" value="1000" min="100" max="500000"  onkeydown="if(event.key==='Enter')drawGap()"></div></div>
 <div class="cg"><label>Visualization</label><select id="gapViz" onchange="drawGap()"><option value="scatter">Gap Scatter</option><option value="histogram">Gap Histogram</option><option value="records">Record Gaps</option><option value="ratio">Gap/ln(p) Ratio</option></select></div>
 <div class="cg"><label>Color</label><select id="gapCol" onchange="drawGap()"><option value="gap">By Gap Size</option><option value="record">Highlight Records</option><option value="cramér">Cramér Ratio</option></select></div>
 <div class="cg"><label>Point Size</label><input type="range" id="gapPtSz" min="1" max="8" step="0.5" value="2" onchange="drawGap()"></div>
@@ -2222,7 +2224,7 @@ g_n = p_{n+1} - p_n &nbsp;|&nbsp; Cramér: g_n = O((ln p_n)²) &nbsp;|&nbsp; Ave
 
 <div id="tsoph" class="tab">
 <div class="ctrl">
-<div class="cg"><label>Max N <span class="tip" title="Upper limit for search">?</span></label><div class="sig"><input type="range" id="sophN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('sophNv').value=this.value"><input type="number" id="sophNv" value="1000" min="100" max="500000" ></div></div>
+<div class="cg"><label>Max N <span class="tip" title="Upper limit for search">?</span></label><div class="sig"><input type="range" id="sophN" min="100" max="100000" step="100" value="1000" oninput="document.getElementById('sophNv').value=this.value"><input type="number" id="sophNv" value="1000" min="100" max="500000"  onkeydown="if(event.key==='Enter')drawSophie()"></div></div>
 <div class="cg"><label>Type</label><select id="sophType" onchange="drawSophie()"><option value="sophie">Sophie Germain (p, 2p+1)</option><option value="safe">Safe Primes (2p+1)</option><option value="cunningham1">Cunningham Chain 1st</option><option value="cunningham2">Cunningham Chain 2nd</option></select></div>
 <div class="cg"><label>Visualization</label><select id="sophViz" onchange="drawSophie()"><option value="scatter">Scatter Plot</option><option value="density">Density</option><option value="chains">Chain Lengths</option></select></div>
 <div class="cg"><label>Point Size</label><input type="range" id="sophPtSz" min="1" max="8" step="0.5" value="3" onchange="drawSophie()"></div>
@@ -3303,8 +3305,67 @@ N(T,χ) ~ (T/π)log(qT/2πe) &nbsp;&nbsp;|&nbsp;&nbsp; Each L(s,χ) has infinite
 </div>
 </div>
 
+<div id="tquantum" class="tab">
+<div class="ctrl">
+<div class="cg"><label>Principal n <span class="tip" title="Principal quantum number (energy level)">?</span></label><div class="sig"><input type="range" id="quantumN" min="1" max="7" value="3" oninput="document.getElementById('quantumNv').value=this.value;drawQuantum()"><input type="number" id="quantumNv" value="3" min="1" max="10" onkeydown="if(event.key==='Enter')drawQuantum()"></div></div>
+<div class="cg"><label>Angular l <span class="tip" title="Angular momentum quantum number (0=s, 1=p, 2=d, 3=f)">?</span></label><div class="sig"><input type="range" id="quantumL" min="0" max="6" value="1" oninput="document.getElementById('quantumLv').value=this.value;drawQuantum()"><input type="number" id="quantumLv" value="1" min="0" max="9" onkeydown="if(event.key==='Enter')drawQuantum()"></div></div>
+<div class="cg"><label>Magnetic m <span class="tip" title="Magnetic quantum number (-l to +l)">?</span></label><div class="sig"><input type="range" id="quantumM" min="-6" max="6" value="0" oninput="document.getElementById('quantumMv').value=this.value;drawQuantum()"><input type="number" id="quantumMv" value="0" min="-9" max="9" onkeydown="if(event.key==='Enter')drawQuantum()"></div></div>
+<div class="cg"><label>View Mode</label><select id="quantumMode" onchange="drawQuantum()">
+<option value="cloud">Probability Cloud</option>
+<option value="radial">Radial Function</option>
+<option value="angular">Angular Distribution</option>
+<option value="cross">Cross Section</option>
+<option value="all">All Orbitals (n fixed)</option>
+</select></div>
+<div class="cg"><label>Resolution</label><input type="range" id="quantumRes" min="20" max="100" value="50" oninput="drawQuantum()"></div>
+<div class="cg"><label>Show</label><div style="display:flex;gap:.5rem;flex-wrap:wrap">
+<label><input type="checkbox" id="quantumNodes" checked onchange="drawQuantum()"> Nodes</label>
+<label><input type="checkbox" id="quantumAxes" checked onchange="drawQuantum()"> Axes</label>
+<label><input type="checkbox" id="quantumLabels" checked onchange="drawQuantum()"> Labels</label>
+</div></div>
+<div class="cg"><label>Presets</label><div style="display:flex;gap:.3rem;flex-wrap:wrap">
+<button onclick="document.getElementById('quantumN').value=1;document.getElementById('quantumNv').value=1;document.getElementById('quantumL').value=0;document.getElementById('quantumLv').value=0;document.getElementById('quantumM').value=0;document.getElementById('quantumMv').value=0;drawQuantum()">1s</button>
+<button onclick="document.getElementById('quantumN').value=2;document.getElementById('quantumNv').value=2;document.getElementById('quantumL').value=1;document.getElementById('quantumLv').value=1;document.getElementById('quantumM').value=0;document.getElementById('quantumMv').value=0;drawQuantum()">2p</button>
+<button onclick="document.getElementById('quantumN').value=3;document.getElementById('quantumNv').value=3;document.getElementById('quantumL').value=2;document.getElementById('quantumLv').value=2;document.getElementById('quantumM').value=0;document.getElementById('quantumMv').value=0;drawQuantum()">3d</button>
+<button onclick="document.getElementById('quantumN').value=4;document.getElementById('quantumNv').value=4;document.getElementById('quantumL').value=3;document.getElementById('quantumLv').value=3;document.getElementById('quantumM').value=0;document.getElementById('quantumMv').value=0;drawQuantum()">4f</button>
+</div></div>
+</div>
+<div class="bg"><button onclick="drawQuantum()">Compute</button><button onclick="screenshotQuantum()">Screenshot</button><button class="s" onclick="csvQuantum()">Export CSV</button></div>
+<div class="g2">
+<div class="viz"><h3>Quantum Orbital ψ_{n,l,m} — Hydrogen Wavefunction Visualization</h3>
+<p style="color:var(--txt2);font-size:.85rem;margin-bottom:.5rem">Electron probability density |ψ|² for hydrogen-like orbitals. Nodes connect to zeta zeros!</p>
+<canvas id="cquantum" width="700" height="700"></canvas><div class="al" id="alquantum"></div></div>
+<div class="viz"><h3>Live Statistics <button onclick="screenshotDashboard('quantumLiveStats','Quantum_Stats')" style="float:right;padding:2px 8px;font-size:.7rem;border-radius:4px;border:1px solid var(--bord);background:var(--bg2);color:var(--txt);cursor:pointer">4K</button></h3><div id="quantumLiveStats" style="background:var(--bg2);border-radius:8px;padding:1rem;font-size:.9rem"></div></div>
+</div>
+<div style="padding:1rem;background:rgba(100,200,255,.08);border-radius:8px;margin-top:1rem">
+<h4 style="color:var(--acc);margin-bottom:.5rem">Quantum Mechanics & Number Theory Connection</h4>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid var(--acc)">
+<strong style="color:#ffd700">Abstract:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Electron orbitals are described by wavefunctions ψ_{n,l,m}(r,θ,φ) = R_{nl}(r)Y_l^m(θ,φ). The radial part R_{nl} has exactly n-l-1 nodes (zeros), mirroring how ζ(s) zeros control prime distribution. The angular part Y_l^m are spherical harmonics — the same functions appearing in our higher-dimensional primitive counting!
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #00d9ff">
+<strong style="color:#00d9ff">Key Analogy:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+<strong>Radial Nodes ↔ Zeta Zeros:</strong> Both control oscillations. R_{nl}(r) has n-l-1 zeros determining radial probability. ζ(s) zeros at ρ_k control oscillations in π(x). Higher n gives more nodes; higher T gives more zeta zeros.<br>
+<strong>Quantization ↔ Coprimality:</strong> Quantum numbers (n,l,m) are discrete like lattice points. Angular momentum l² = l(l+1)ħ² is quantized like gcd=1 constraint.
+</p>
+</div>
+<div style="margin-bottom:1rem;padding:.75rem;background:rgba(0,0,0,.15);border-radius:6px;border-left:3px solid #ff6496">
+<strong style="color:#ff6496">Spherical Harmonics:</strong>
+<p style="color:var(--txt2);font-size:.85rem;margin-top:.5rem;line-height:1.6">
+Y_l^m(θ,φ) = N_{lm} P_l^m(cos θ) e^{imφ} where P_l^m are associated Legendre polynomials. These are eigenfunctions of angular momentum operators, forming an orthonormal basis on the sphere — exactly what we use to analyze primitive lattice points in k dimensions via the k-ball volume formula!
+</p>
+</div>
+<div class="fm" style="margin:.5rem 0;padding:.75rem;background:var(--bg1);border-radius:6px;text-align:center;font-size:1.1rem">
+ψ_{nlm} = R_{nl}(r)Y_l^m(θ,φ) &nbsp;&nbsp;|&nbsp;&nbsp; Radial nodes: n-l-1 &nbsp;&nbsp;|&nbsp;&nbsp; Angular nodes: l
+</div>
+</div>
+</div>
+
 <div id="ref" class="sec">
-<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>46 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
+<div class="rs"><h3>Möbius Shell Sieve — Complete Platform Overview</h3><p>This comprehensive research platform integrates <strong>47 interactive visualization tools</strong> exploring number theory, from lattice points to the Riemann Hypothesis. Every tab features live dashboards, theory panels, multiple charts, CSV export, and click-to-inspect modals.</p></div>
 
 <div class="rs"><h3>Mathematical Credits & Historical Attribution</h3>
 <p style="color:var(--txt2);margin-bottom:1rem">This platform visualizes theorems and concepts developed by brilliant mathematicians over centuries:</p>
@@ -3397,6 +3458,9 @@ N(T,χ) ~ (T/π)log(qT/2πe) &nbsp;&nbsp;|&nbsp;&nbsp; Each L(s,χ) has infinite
 <h4>L-Functions (Tabs 45-46)</h4>
 <div class="fb"><strong>Dirichlet L-functions</strong> — L(s,χ) = Σχ(n)/nˢ for Dirichlet characters χ mod q. Principal L-function equals ζ(s)×(local factors). Others are entire.</div>
 <div class="fb"><strong>L-function Zeros</strong> — Generalized RH: all nontrivial zeros of all L(s,χ) lie on Re(s)=½. Low-lying zeros cause the Chebyshev bias in prime races.</div>
+
+<h4>Quantum-Number Theory (Tab 47)</h4>
+<div class="fb"><strong>Quantum Orbitals</strong> — ψ_{nlm}(r,θ,φ) = R_{nl}(r)Y_l^m(θ,φ). Radial nodes (n-l-1) mirror zeta zeros. Spherical harmonics Y_l^m connect to k-dimensional ball volumes. Quantization ↔ coprimality.</div>
 </div>
 
 <div class="rs"><h3>Key Theorems Visualized</h3>
@@ -3535,7 +3599,7 @@ const gridC=()=>isDark()?'rgba(0,217,255,0.12)':'rgba(0,102,204,0.15)';
 const bordC=()=>isDark()?'rgba(0,217,255,0.5)':'rgba(0,102,204,0.6)';
 function toggleTheme(){document.body.classList.toggle('light');document.getElementById('thm').textContent=isDark()?'D':'L';draw2D();if(document.getElementById('t3d').classList.contains('active'))draw3D();}
 function showSec(id,btn){document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.snav .nbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
-function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();if(id==='tmert')drawMertens();if(id==='tcheb')drawChebyshev();if(id==='tli')drawLi();if(id==='tdiv')drawDivisor();if(id==='tliou')drawLiouville();if(id==='tmang')drawMangoldt();if(id==='tram')drawRamanujan();if(id==='tulam')drawUlam();if(id==='tsacks')drawSacks();if(id==='thardy')drawHardy();if(id==='tgram')drawGram();if(id==='texplicit')drawExplicit();if(id==='tzerocount')drawZeroCount();if(id==='targand')drawArgand();if(id==='tzetareal')drawZetaReal();if(id==='tmontgomery')drawMontgomery();if(id==='tgue')drawGUE();if(id==='tprimerace')drawPrimeRace();if(id==='tlfunc')drawLfunc();if(id==='tlfunczeros')drawLfuncZeros();}
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');if(id==='t3d')draw3D();if(id==='tcayley')drawCayley();if(id==='tfarey')drawFarey();if(id==='tprim')drawPrimRoot();if(id==='tmod')drawModRings();if(id==='tgaus')drawGaus();if(id==='tmob')drawMobius();if(id==='tdim')runDimNew();if(id==='tcirc'){drawCircleViz();runCircNew();}if(id==='tcomp')drawComp();if(id==='tcopair')drawCopair();if(id==='tsierp')drawSierp();if(id==='tkfree')drawKfree();if(id==='teuler')drawEuler();if(id==='tchord')drawChord();if(id==='tdir')drawDirichlet();if(id==='ttwin')drawTwin();if(id==='tpi')drawPi();if(id==='tgold')drawGoldbach();if(id==='tgap')drawGap();if(id==='tsoph')drawSophie();if(id==='tmert')drawMertens();if(id==='tcheb')drawChebyshev();if(id==='tli')drawLi();if(id==='tdiv')drawDivisor();if(id==='tliou')drawLiouville();if(id==='tmang')drawMangoldt();if(id==='tram')drawRamanujan();if(id==='tulam')drawUlam();if(id==='tsacks')drawSacks();if(id==='thardy')drawHardy();if(id==='tgram')drawGram();if(id==='texplicit')drawExplicit();if(id==='tzerocount')drawZeroCount();if(id==='targand')drawArgand();if(id==='tzetareal')drawZetaReal();if(id==='tmontgomery')drawMontgomery();if(id==='tgue')drawGUE();if(id==='tprimerace')drawPrimeRace();if(id==='tlfunc')drawLfunc();if(id==='tlfunczeros')drawLfuncZeros();if(id==='tquantum')drawQuantum();}
 
 async function screenshotDashboard(elemId, title='Dashboard'){
 const el=document.getElementById(elemId);if(!el)return;
@@ -3590,7 +3654,13 @@ xVals.forEach(x=>{if(Math.abs(x)<0.01)return;const centerY=1/x,radius=1/Math.abs
 
 function draw2D(){
 try{
-const c=document.getElementById('c2d'),ctx=c.getContext('2d'),R=+document.getElementById('r2dv').value||+document.getElementById('r2d').value,sh=document.getElementById('sh2d').value,col=document.getElementById('col2d').value,lbl=document.getElementById('lbl2d').value,zm=+document.getElementById('zm2d').value,lblsz=+document.getElementById('lblsz2d').value,ptSz=+document.getElementById('ptSz2d').value;
+let R=+document.getElementById('r2dv').value||+document.getElementById('r2d').value;
+const maxSafeR=500;
+if(R>maxSafeR){
+if(!confirm(`R=${R} will compute ${Math.round(Math.PI*R*R).toLocaleString()}+ points which may freeze your browser.\n\nContinue anyway?`)){
+R=maxSafeR;document.getElementById('r2dv').value=R;document.getElementById('r2d').value=Math.min(200,R);
+}}
+const c=document.getElementById('c2d'),ctx=c.getContext('2d'),sh=document.getElementById('sh2d').value,col=document.getElementById('col2d').value,lbl=document.getElementById('lbl2d').value,zm=+document.getElementById('zm2d').value,lblsz=+document.getElementById('lblsz2d').value,ptSz=+document.getElementById('ptSz2d').value;
 const smithEnabled=document.getElementById('smith2d').checked,smithAlpha=+document.getElementById('smithA2d').value,smithRMode=document.getElementById('smithR2d').value;
 const smithGrid=document.getElementById('smithGrid2d').checked,smithConstR=document.getElementById('smithCircR2d').checked,smithConstX=document.getElementById('smithArcX2d').checked;
 const modEnabled=document.getElementById('mod2dEnable').checked,modM=+document.getElementById('mod2dM').value||6,modColBy=document.getElementById('mod2dColBy').value,modRings=document.getElementById('mod2dRings').checked;
@@ -3664,10 +3734,24 @@ document.getElementById('st2d').innerHTML='';}
 const gcdDist={};gcds.forEach(g=>{gcdDist[g]=(gcdDist[g]||0)+1;});const gcdKeys=Object.keys(gcdDist).sort((a,b)=>+a-+b);
 const baselRatio=z2>0?(prim/tot)/(1/z2):0;
 document.getElementById('stats2dLive').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: 2D Lattice | FIELD: ℤ² | TYPE: Primitive Lattice Points</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:.75rem">
+<span>R: <strong style="color:#00d9ff">${R}</strong></span>
+<span>Shape: <strong style="color:#ffd700">${sh}</strong></span>
+<span>Color: <strong style="color:#00ff88">${col}</strong></span>
+<span>Zoom: <strong style="color:#ff6496">${zm}x</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.5rem;font-weight:bold;color:#00d9ff">${R}</div><div style="font-size:.75rem;color:var(--txt2)">RADIUS R</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.5rem;font-weight:bold;color:#ffd700">${tot}</div><div style="font-size:.75rem;color:var(--txt2)">TOTAL POINTS</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.5rem;font-weight:bold;color:#00ff88">${prim}</div><div style="font-size:.75rem;color:var(--txt2)">PRIMITIVE</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#9664ff">${fmt(th)}</div><div style="font-size:.65rem;color:var(--txt2)">PREDICTED</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#ff8c00">${fmt(tot/z2)}</div><div style="font-size:.65rem;color:var(--txt2)">BASEL PRED</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:${err<5?'#00ff88':'#ff6496'}">${fmt(err)}</div><div style="font-size:.65rem;color:var(--txt2)">ERROR</div></div>
 </div>
 ${sh==='both'?`<div style="margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Square vs Circle Comparison</strong>
@@ -3847,7 +3931,14 @@ await screenshotUnified('cgaus','gausLiveStats',`Gaussian Integers ℤ[i] — R=
 }
 
 function draw3D(){
-const c=document.getElementById('c3d'),ctx=c.getContext('2d'),R=+document.getElementById('r3dv').value||+document.getElementById('r3d').value,col=document.getElementById('col3d').value,vm=document.getElementById('vm3d').value,zm=+document.getElementById('zm3d').value,ps=+document.getElementById('ps3d').value;
+let R=+document.getElementById('r3dv').value||+document.getElementById('r3d').value;
+const maxSafe3D=70;
+if(R>maxSafe3D){
+const pts=Math.round(4/3*Math.PI*R*R*R);
+if(!confirm(`R=${R} will compute ~${pts.toLocaleString()} 3D points which may freeze your browser.\n\nContinue anyway?`)){
+R=maxSafe3D;document.getElementById('r3dv').value=R;document.getElementById('r3d').value=Math.min(50,R);
+}}
+const c=document.getElementById('c3d'),ctx=c.getContext('2d'),col=document.getElementById('col3d').value,vm=document.getElementById('vm3d').value,zm=+document.getElementById('zm3d').value,ps=+document.getElementById('ps3d').value;
 const smithEnabled=document.getElementById('smith3d').checked,smithAlpha=+document.getElementById('smithA3d').value,smithRMode=document.getElementById('smithR3d').value;
 const smithGrid=document.getElementById('smithGrid3d').checked,smithConstR=document.getElementById('smithCircR3d').checked,smithConstX=document.getElementById('smithArcX3d').checked;
 ctx.fillStyle=canvBg();ctx.fillRect(0,0,c.width,c.height);
@@ -4040,10 +4131,24 @@ Plotly.newPlot('peHist',[{x:errBins.map(b=>b.bin),y:errBins.map(b=>b.count),type
 
 // Live stats
 document.getElementById('errLiveStats').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Error Analysis | FIELD: ℤ² Lattice | TYPE: Primitive Point Counting</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;font-size:.75rem">
+<span>Max R: <strong style="color:#00d9ff">${maxR}</strong></span>
+<span>Shape: <strong style="color:#ffd700">${sh}</strong></span>
+<span>Step: <strong style="color:#00ff88">${step}</strong></span>
+<span>θ: <strong style="color:#ff6496">${theta}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00d9ff">${maxR}</div><div style="font-size:.7rem;color:var(--txt2)">MAX R</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ffd700">${D.err.length}</div><div style="font-size:.7rem;color:var(--txt2)">DATA POINTS</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00ff88">${sh}</div><div style="font-size:.7rem;color:var(--txt2)">SHAPE</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#9664ff">${totals[totals.length-1]}</div><div style="font-size:.65rem;color:var(--txt2)">TOTAL COUNT</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#ff8c00">${fmt(ths[ths.length-1])}</div><div style="font-size:.65rem;color:var(--txt2)">PREDICTED</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:${Math.abs(errs[errs.length-1])<10?'#00ff88':'#ff6496'}">${fmt(errs[errs.length-1])}</div><div style="font-size:.65rem;color:var(--txt2)">ERROR</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Error Statistics</strong>
@@ -4167,10 +4272,22 @@ const sqfreeC=mobData.filter(d=>d.sf).length;
 legend('almob','Möbius Statistics',[['Σμ(n)/n',fmt(sum1),'#00ff88'],['M(N)',M,'#00d9ff']]);
 Plotly.newPlot('pmobDist',[{x:['μ=1','μ=0','μ=-1'],y:[cnt1,cnt0,cntM1],type:'bar',marker:{color:['#4ECDC4','#555','#FF6B6B']}}],{...plo(),xaxis:{title:'μ(n) value'},yaxis:{title:'Count'}});
 document.getElementById('mobLiveStats').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Möbius Function | FIELD: ℤ (Integers) | TYPE: μ(n) Analysis</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>N: <strong style="color:#00d9ff">${N}</strong></span>
+<span>Mode: <strong style="color:#ffd700">${viz}</strong></span>
+<span>M(N): <strong style="color:#00ff88">${M}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#4ECDC4">${cnt1}</div><div style="font-size:.7rem;color:var(--txt2)">μ(n)=+1</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#555">${cnt0}</div><div style="font-size:.7rem;color:var(--txt2)">μ(n)=0</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#FF6B6B">${cntM1}</div><div style="font-size:.7rem;color:var(--txt2)">μ(n)=-1</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#9664ff">${sqfreeC}</div><div style="font-size:.6rem;color:var(--txt2)">SQUAREFREE (ACTUAL)</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1.1rem;font-weight:bold;color:#ff8c00">${Math.round(N*6/Math.PI/Math.PI)}</div><div style="font-size:.6rem;color:var(--txt2)">PREDICTED (6N/π²)</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Key Values</strong>
@@ -4268,10 +4385,23 @@ const z2=zeta(2),z3=zeta(3),z4=zeta(4);
 
 // Live stats
 document.getElementById('dimLiveStats').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Higher Dimensions | FIELD: ℤᵏ Ball | TYPE: Primitive Density 1/ζ(k)</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>Max Dim: <strong style="color:#00d9ff">${maxD}</strong></span>
+<span>R: <strong style="color:#ffd700">${R}</strong></span>
+<span>Mode: <strong style="color:#00ff88">${mode}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00d9ff">${maxD}</div><div style="font-size:.7rem;color:var(--txt2)">MAX DIM</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ffd700">${R}</div><div style="font-size:.7rem;color:var(--txt2)">RADIUS R</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00ff88">${mode}</div><div style="font-size:.7rem;color:var(--txt2)">MODE</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#9664ff">${fmt(1/z2)}</div><div style="font-size:.6rem;color:var(--txt2)">1/ζ(2) DENSITY</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#ff8c00">${fmt(1/z3)}</div><div style="font-size:.6rem;color:var(--txt2)">1/ζ(3) DENSITY</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#00ff88">${fmt(1/zeta(maxD))}</div><div style="font-size:.6rem;color:var(--txt2)">1/ζ(${maxD}) DENSITY</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Key ζ Values</strong>
@@ -4791,10 +4921,23 @@ Plotly.newPlot('pcircAvg',[{x:rs,y:runAvg,mode:'lines',line:{color:'#ffd700',wid
 
 // Live stats
 document.getElementById('circLiveStats').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Circle Problem | FIELD: ℤ² Disc | TYPE: Gauss Lattice Counting</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>Max R: <strong style="color:#00d9ff">${maxR}</strong></span>
+<span>Step: <strong style="color:#ffd700">${step}</strong></span>
+<span>Points: <strong style="color:#00ff88">${D.circ.length}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00d9ff">${maxR}</div><div style="font-size:.7rem;color:var(--txt2)">MAX R</div></div>
-<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ffd700">${cs[cs.length-1]}</div><div style="font-size:.7rem;color:var(--txt2)">N(R)</div></div>
-<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00ff88">${fmt(ths[ths.length-1])}</div><div style="font-size:.7rem;color:var(--txt2)">πR²</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ffd700">${cs[cs.length-1]}</div><div style="font-size:.7rem;color:var(--txt2)">N(R) ACTUAL</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00ff88">${fmt(ths[ths.length-1])}</div><div style="font-size:.7rem;color:var(--txt2)">πR² PREDICTED</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#9664ff">${ps[ps.length-1]}</div><div style="font-size:.6rem;color:var(--txt2)">PRIMITIVE</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#ff8c00">${fmt(es[es.length-1])}</div><div style="font-size:.6rem;color:var(--txt2)">ERROR r(R)</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:${Math.abs(es[es.length-1]/Math.sqrt(maxR))<2?'#00ff88':'#ff6496'}">${fmt(es[es.length-1]/Math.sqrt(maxR))}</div><div style="font-size:.6rem;color:var(--txt2)">r(R)/√R</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Error Statistics</strong>
@@ -6663,10 +6806,22 @@ legend('altwin','Gap Statistics',[['Twin pairs',twins.filter(t=>t.constellation.
 
 // Live stats
 document.getElementById('twinLiveStats').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Twin Primes | FIELD: ℤ (Primes) | TYPE: ${constType} Constellation</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>N: <strong style="color:#00d9ff">${N}</strong></span>
+<span>Type: <strong style="color:#ffd700">${constType}</strong></span>
+<span>Primes: <strong style="color:#00ff88">${primes.length}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00d9ff">${primes.length}</div><div style="font-size:.7rem;color:var(--txt2)">PRIMES ≤ N</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ffd700">${twins.length}</div><div style="font-size:.7rem;color:var(--txt2)">${constType.toUpperCase()}S</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00ff88">${avgGap.toFixed(2)}</div><div style="font-size:.7rem;color:var(--txt2)">AVG GAP</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#9664ff">${fmt(2*1.32*N/(Math.log(N)*Math.log(N)))}</div><div style="font-size:.65rem;color:var(--txt2)">HARDY-LITTLEWOOD PRED</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#ff8c00">${fmt(100*twins.length/primes.length)}%</div><div style="font-size:.65rem;color:var(--txt2)">TWIN RATIO</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Gap Analysis</strong>
@@ -6905,10 +7060,22 @@ legend('alpi','π(x) Statistics',[['π('+X+')',finalPi,'#00d9ff'],['Li error',Ma
 
 // Live stats
 document.getElementById('piLiveStats').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Prime Counting π(x) | FIELD: ℤ (Primes) | TYPE: Counting Function</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>Max x: <strong style="color:#00d9ff">${X}</strong></span>
+<span>π(x): <strong style="color:#ffd700">${finalPi}</strong></span>
+<span>Density: <strong style="color:#00ff88">${fmt(100*finalPi/X)}%</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
-<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00d9ff">${finalPi}</div><div style="font-size:.7rem;color:var(--txt2)">π(${X})</div></div>
-<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00ff88">${finalLi.toFixed(1)}</div><div style="font-size:.7rem;color:var(--txt2)">Li(${X})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00d9ff">${finalPi}</div><div style="font-size:.7rem;color:var(--txt2)">π(${X}) ACTUAL</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#00ff88">${finalLi.toFixed(1)}</div><div style="font-size:.7rem;color:var(--txt2)">Li(${X}) PRED</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.4rem;font-weight:bold;color:#ff8c00">${finalXlnx.toFixed(1)}</div><div style="font-size:.7rem;color:var(--txt2)">x/ln(x)</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#9664ff">${(finalPi-finalLi).toFixed(2)}</div><div style="font-size:.65rem;color:var(--txt2)">Li ERROR</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#ff6496">${(100*(finalPi-finalLi)/finalPi).toFixed(3)}%</div><div style="font-size:.65rem;color:var(--txt2)">REL ERROR</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Error Analysis at x=${X}</strong>
@@ -7428,10 +7595,23 @@ legend('alcopair','Statistics',[['Coprime A_N',coprimeCount,'#00ff88'],['V(R) in
 // Live stats
 const absErr=Math.abs(ratio-theory);
 document.getElementById('copairLiveStats').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Coprime Pairs | FIELD: ℤ×ℤ Grid | TYPE: GCD=1 Counting</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>Grid N: <strong style="color:#00d9ff">${N}</strong></span>
+<span>Total: <strong style="color:#ffd700">${(N*N).toLocaleString()}</strong></span>
+<span>Coprime: <strong style="color:#00ff88">${coprimeCount.toLocaleString()}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${N}</div><div style="font-size:.65rem;color:var(--txt2)">GRID N</div></div>
-<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${coprimeCount.toLocaleString()}</div><div style="font-size:.65rem;color:var(--txt2)">COPRIME A_N</div></div>
-<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${ratio.toFixed(5)}</div><div style="font-size:.65rem;color:var(--txt2)">A_N/N²</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${coprimeCount.toLocaleString()}</div><div style="font-size:.65rem;color:var(--txt2)">COPRIME (ACTUAL)</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${Math.round(N*N*theory).toLocaleString()}</div><div style="font-size:.65rem;color:var(--txt2)">PREDICTED (6N²/π²)</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#9664ff">${ratio.toFixed(5)}</div><div style="font-size:.6rem;color:var(--txt2)">DENSITY A_N/N²</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#ff8c00">${theory.toFixed(6)}</div><div style="font-size:.6rem;color:var(--txt2)">THEORY 6/π²</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:${absErr<0.01?'#00ff88':'#ff6496'}">${absErr.toFixed(6)}</div><div style="font-size:.6rem;color:var(--txt2)">ERROR</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Density Analysis</strong>
@@ -8741,10 +8921,22 @@ legend('algold2','Test n='+(testN%2===0?testN:testN+1),[['Partitions',testParts.
 Plotly.newPlot('pgold',[{x:results.map(r=>r.n),y:results.map(r=>r.count),type:'scatter',mode:'markers',marker:{size:3,color:results.map(r=>`hsl(${120-r.count/maxCount*120},80%,50%)`)}}],{...plo(),xaxis:{title:'n'},yaxis:{title:'G(n)'}});
 
 document.getElementById('goldLiveStats').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Goldbach Conjecture | FIELD: ℤ (Even) | TYPE: Prime Sum Partitions</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>Max N: <strong style="color:#00d9ff">${maxN}</strong></span>
+<span>Test n: <strong style="color:#ffd700">${testN}</strong></span>
+<span>Mode: <strong style="color:#00ff88">${vizMode}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${results.length}</div><div style="font-size:.7rem;color:var(--txt2)">EVEN NUMBERS</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${totalParts}</div><div style="font-size:.7rem;color:var(--txt2)">TOTAL PARTITIONS</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00ff88">${zeros}</div><div style="font-size:.7rem;color:var(--txt2)">COUNTEREXAMPLES</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#9664ff">${maxCount}</div><div style="font-size:.6rem;color:var(--txt2)">MAX G(n) at ${maxCountN.n}</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#ff8c00">${fmt(avgCount)}</div><div style="font-size:.6rem;color:var(--txt2)">AVG PARTITIONS</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Partition Statistics</strong>
@@ -9314,10 +9506,23 @@ const sqfreeRatio=((mu1Count+muNeg1Count)/maxX*100);
 legend('almert','Mertens M(x)',[['M('+maxX+')',finalM,'#00d9ff'],['Max M',maxM,'#00ff88'],['Min M',minM,'#ff6496']]);
 
 document.getElementById('mertLiveStats').innerHTML=`
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Mertens M(x) | FIELD: ℤ | TYPE: Σμ(n) Cumulative Sum</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>Max x: <strong style="color:#00d9ff">${maxX}</strong></span>
+<span>M(x): <strong style="color:#ffd700">${finalM}</strong></span>
+<span>Mode: <strong style="color:#00ff88">${mode}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${maxX}</div><div style="font-size:.7rem;color:var(--txt2)">MAX x</div></div>
-<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${finalM}</div><div style="font-size:.7rem;color:var(--txt2)">M(${maxX})</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${finalM}</div><div style="font-size:.7rem;color:var(--txt2)">M(${maxX}) ACTUAL</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:${Math.abs(ratio)<1?'#00ff88':'#ff6496'}">${fmt(ratio)}</div><div style="font-size:.7rem;color:var(--txt2)">M(x)/√x</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#00ff88">${maxM}</div><div style="font-size:.6rem;color:var(--txt2)">MAX M(x)</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#ff6496">${minM}</div><div style="font-size:.6rem;color:var(--txt2)">MIN M(x)</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#9664ff">±${fmt(sqrtX)}</div><div style="font-size:.6rem;color:var(--txt2)">√x BOUND</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">Mertens Values</strong>
@@ -11281,10 +11486,22 @@ legend('alhardy', 'Hardy Z(t)', [
 ]);
 
 document.getElementById('hardyLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Hardy Z(t) | FIELD: Critical Line σ=½ | TYPE: Real Zeta Proxy</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>t range: <strong style="color:#00d9ff">[${fmt(tMin)}, ${fmt(tMin+tRange)}]</strong></span>
+<span>Mode: <strong style="color:#ffd700">${viz}</strong></span>
+<span>Resolution: <strong style="color:#00ff88">${resolution}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ff6496">${zeros.length}</div><div style="font-size:.7rem;color:var(--txt2)">ZEROS FOUND</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#ffd700">${gramPts.length}</div><div style="font-size:.7rem;color:var(--txt2)">GRAM POINTS</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.3rem;font-weight:bold;color:#00d9ff">${fmt(tMin + tRange)}</div><div style="font-size:.7rem;color:var(--txt2)">MAX t</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#9664ff">${knownInRange.length}</div><div style="font-size:.6rem;color:var(--txt2)">KNOWN ZEROS IN RANGE</div></div>
+<div style="background:var(--bg1);padding:8px;border-radius:6px;text-align:center"><div style="font-size:1rem;font-weight:bold;color:#ff8c00">${zeros.length>0?fmt(zeros[0]):'—'}</div><div style="font-size:.6rem;color:var(--txt2)">FIRST ZERO</div></div>
 </div>
 <div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
 <strong style="color:var(--acc)">First Zeros in Range</strong>
@@ -12928,6 +13145,14 @@ const finalCounts = classes.map(a => counts[a][counts[a].length - 1]);
 legend('alprimerace', 'Prime Race', classes.map((a, i) => [`≡${a} (mod ${q})`, finalCounts[i], colors[i % colors.length]]));
 
 document.getElementById('raceLiveStats').innerHTML = `
+<div style="background:linear-gradient(135deg,rgba(0,217,255,.15),rgba(255,215,0,.1));padding:10px;border-radius:8px;margin-bottom:12px;border:1px solid var(--acc)">
+<div style="font-size:.7rem;color:var(--txt2);margin-bottom:4px">TAB: Prime Races | FIELD: ℤ (mod q) | TYPE: Chebyshev Bias Analysis</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.75rem">
+<span>Max x: <strong style="color:#00d9ff">${maxX.toLocaleString()}</strong></span>
+<span>mod q: <strong style="color:#ffd700">${q}</strong></span>
+<span>Classes: <strong style="color:#00ff88">${classes.length}</strong></span>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00d9ff">${maxX.toLocaleString()}</div><div style="font-size:.7rem;color:var(--txt2)">MAX X</div></div>
 <div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#ffd700">${leadChanges}</div><div style="font-size:.7rem;color:var(--txt2)">LEAD CHANGES</div></div>
@@ -13304,6 +13529,400 @@ return {re, im};
 
 async function screenshotLfuncZeros() {
 await screenshotUnified('clfunczeros', 'lzeroLiveStats', 'L-Function Zeros', 'lfunc_zeros.png');
+}
+
+// ==================== QUANTUM ORBITALS ====================
+let quantumData = {n: 0, l: 0, m: 0, radial: [], angular: []};
+
+// Associated Legendre polynomial P_l^m(x) - simplified for visualization
+function assocLegendre(l, m, x) {
+const absM = Math.abs(m);
+if(l === 0) return 1;
+if(l === 1) {
+if(absM === 0) return x;
+if(absM === 1) return -Math.sqrt(1 - x*x);
+}
+if(l === 2) {
+if(absM === 0) return (3*x*x - 1) / 2;
+if(absM === 1) return -3 * x * Math.sqrt(1 - x*x);
+if(absM === 2) return 3 * (1 - x*x);
+}
+if(l === 3) {
+if(absM === 0) return (5*x*x*x - 3*x) / 2;
+if(absM === 1) return -1.5 * (5*x*x - 1) * Math.sqrt(1 - x*x);
+if(absM === 2) return 15 * x * (1 - x*x);
+if(absM === 3) return -15 * Math.pow(1 - x*x, 1.5);
+}
+// Higher l: use recurrence (simplified)
+let P0 = 1, P1 = x;
+for(let k = 2; k <= l; k++) {
+const Pk = ((2*k-1)*x*P1 - (k-1)*P0) / k;
+P0 = P1; P1 = Pk;
+}
+return P1;
+}
+
+// Spherical harmonic Y_l^m(theta, phi) - returns real part for visualization
+function sphericalHarmonic(l, m, theta, phi) {
+const cosTheta = Math.cos(theta);
+const P = assocLegendre(l, Math.abs(m), cosTheta);
+// Normalization factor (simplified)
+const norm = Math.sqrt((2*l + 1) / (4 * PI));
+if(m === 0) return norm * P;
+if(m > 0) return norm * P * Math.cos(m * phi) * Math.sqrt(2);
+return norm * P * Math.sin(Math.abs(m) * phi) * Math.sqrt(2);
+}
+
+// Radial wavefunction R_nl(r) for hydrogen (simplified, a0=1)
+function radialWavefunction(n, l, r) {
+const rho = 2 * r / n;
+// Laguerre polynomial approximation
+let L = 1;
+if(n - l - 1 >= 1) L = 1 - rho/(n-l);
+if(n - l - 1 >= 2) L = 1 - rho + rho*rho/(2*(n-l));
+const norm = Math.sqrt(Math.pow(2/n, 3) / (2*n));
+return norm * Math.exp(-rho/2) * Math.pow(rho, l) * L;
+}
+
+// Full wavefunction probability |ψ|²
+function psiSquared(n, l, m, r, theta, phi) {
+const R = radialWavefunction(n, l, r);
+const Y = sphericalHarmonic(l, m, theta, phi);
+return R * R * Y * Y;
+}
+
+function drawQuantum() {
+const c = document.getElementById('cquantum'), ctx = c.getContext('2d');
+const n = +document.getElementById('quantumNv').value || 3;
+let l = +document.getElementById('quantumLv').value || 0;
+let m = +document.getElementById('quantumMv').value || 0;
+const mode = document.getElementById('quantumMode').value;
+const res = +document.getElementById('quantumRes').value || 50;
+const showNodes = document.getElementById('quantumNodes').checked;
+const showAxes = document.getElementById('quantumAxes').checked;
+const showLabels = document.getElementById('quantumLabels').checked;
+
+// Enforce quantum number rules
+if(l >= n) l = n - 1;
+if(Math.abs(m) > l) m = m > 0 ? l : -l;
+document.getElementById('quantumL').value = l;
+document.getElementById('quantumLv').value = l;
+document.getElementById('quantumM').value = m;
+document.getElementById('quantumMv').value = m;
+
+ctx.fillStyle = canvBg();
+ctx.fillRect(0, 0, c.width, c.height);
+
+const cx = c.width / 2, cy = c.height / 2;
+const scale = c.width / (4 * n + 2);
+const orbitalNames = ['s', 'p', 'd', 'f', 'g', 'h', 'i'];
+const orbitalName = n + (orbitalNames[l] || 'l=' + l);
+
+// Count radial and angular nodes
+const radialNodes = n - l - 1;
+const angularNodes = l;
+
+if(mode === 'cloud' || mode === 'cross') {
+// Probability cloud visualization
+const maxR = n * n * 3;
+const imgData = ctx.createImageData(c.width, c.height);
+
+for(let py = 0; py < c.height; py++) {
+for(let px = 0; px < c.width; px++) {
+const x = (px - cx) / scale;
+const y = (cy - py) / scale;
+const r = Math.sqrt(x*x + y*y);
+const theta = Math.atan2(Math.sqrt(x*x), y) || 0; // Angle from z-axis
+const phi = Math.atan2(y, x);
+
+const prob = psiSquared(n, l, m, r, theta, phi);
+const intensity = Math.min(1, prob * 500 * n * n);
+
+// Color based on sign of wavefunction (for cross section)
+const R = radialWavefunction(n, l, r);
+const Y = sphericalHarmonic(l, m, theta, phi);
+const psi = R * Y;
+
+let red, green, blue;
+if(mode === 'cross') {
+// Show sign with color
+if(psi > 0) {
+red = Math.floor(intensity * 0); green = Math.floor(intensity * 180); blue = Math.floor(intensity * 255);
+} else {
+red = Math.floor(intensity * 255); green = Math.floor(intensity * 100); blue = Math.floor(intensity * 150);
+}
+} else {
+// Probability density only
+red = Math.floor(intensity * 100);
+green = Math.floor(intensity * 200);
+blue = Math.floor(intensity * 255);
+}
+
+const idx = (py * c.width + px) * 4;
+imgData.data[idx] = red;
+imgData.data[idx + 1] = green;
+imgData.data[idx + 2] = blue;
+imgData.data[idx + 3] = 255;
+}
+}
+ctx.putImageData(imgData, 0, 0);
+
+// Draw axes
+if(showAxes) {
+ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+ctx.lineWidth = 1;
+ctx.setLineDash([5, 5]);
+ctx.beginPath();
+ctx.moveTo(0, cy); ctx.lineTo(c.width, cy);
+ctx.moveTo(cx, 0); ctx.lineTo(cx, c.height);
+ctx.stroke();
+ctx.setLineDash([]);
+}
+
+} else if(mode === 'radial') {
+// Radial function R_nl(r)
+const maxR = n * n * 4;
+const points = [];
+quantumData.radial = [];
+
+ctx.strokeStyle = gridC();
+ctx.lineWidth = 1;
+// Draw grid
+for(let i = 0; i <= 10; i++) {
+const x = 50 + i * (c.width - 100) / 10;
+ctx.beginPath(); ctx.moveTo(x, 50); ctx.lineTo(x, c.height - 50); ctx.stroke();
+const y = 50 + i * (c.height - 100) / 10;
+ctx.beginPath(); ctx.moveTo(50, y); ctx.lineTo(c.width - 50, y); ctx.stroke();
+}
+
+// Plot R_nl(r)
+ctx.strokeStyle = '#00d9ff';
+ctx.lineWidth = 3;
+ctx.beginPath();
+let maxVal = 0;
+for(let i = 0; i <= res * 2; i++) {
+const r = i * maxR / (res * 2);
+const R = radialWavefunction(n, l, r);
+points.push({r, R});
+quantumData.radial.push({r, R});
+maxVal = Math.max(maxVal, Math.abs(R));
+}
+for(let i = 0; i < points.length; i++) {
+const px = 50 + points[i].r / maxR * (c.width - 100);
+const py = cy - points[i].R / maxVal * (c.height / 2 - 60);
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+
+// Plot r²R² (probability)
+ctx.strokeStyle = '#ffd700';
+ctx.lineWidth = 2;
+ctx.beginPath();
+let maxProb = 0;
+const probPoints = points.map(p => ({r: p.r, prob: p.r * p.r * p.R * p.R}));
+probPoints.forEach(p => maxProb = Math.max(maxProb, p.prob));
+for(let i = 0; i < probPoints.length; i++) {
+const px = 50 + probPoints[i].r / maxR * (c.width - 100);
+const py = c.height - 50 - probPoints[i].prob / maxProb * (c.height / 2 - 60);
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.stroke();
+
+// Mark nodes
+if(showNodes) {
+ctx.fillStyle = '#ff6496';
+for(let i = 1; i < points.length - 1; i++) {
+if(points[i-1].R * points[i+1].R < 0) {
+const px = 50 + points[i].r / maxR * (c.width - 100);
+ctx.beginPath(); ctx.arc(px, cy, 6, 0, 2*PI); ctx.fill();
+}
+}
+}
+
+// Labels
+if(showLabels) {
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '12px Segoe UI';
+ctx.fillText('r (Bohr radii)', c.width / 2, c.height - 15);
+ctx.fillText('R_{nl}(r)', 10, 30);
+ctx.fillStyle = '#00d9ff';
+ctx.fillText('Radial wavefunction', c.width - 150, 30);
+ctx.fillStyle = '#ffd700';
+ctx.fillText('Probability r²R²', c.width - 150, 50);
+}
+
+} else if(mode === 'angular') {
+// Angular distribution Y_l^m(θ,φ)
+ctx.strokeStyle = gridC();
+ctx.lineWidth = 1;
+ctx.beginPath(); ctx.arc(cx, cy, c.width/3, 0, 2*PI); ctx.stroke();
+
+// Plot |Y_l^m|² as polar plot
+const maxY = 1;
+const points = [];
+quantumData.angular = [];
+
+for(let i = 0; i <= res * 4; i++) {
+const theta = i * PI / (res * 2);
+const Y = sphericalHarmonic(l, m, theta, 0);
+const val = Y * Y;
+points.push({theta, val});
+quantumData.angular.push({theta: theta * 180 / PI, Y: Y, Ysq: val});
+}
+
+const maxVal = Math.max(...points.map(p => p.val)) || 1;
+
+ctx.fillStyle = 'rgba(0,217,255,0.3)';
+ctx.strokeStyle = '#00d9ff';
+ctx.lineWidth = 2;
+ctx.beginPath();
+for(let i = 0; i < points.length; i++) {
+const r = points[i].val / maxVal * (c.width / 3);
+const angle = points[i].theta - PI/2;
+const px = cx + r * Math.cos(angle);
+const py = cy + r * Math.sin(angle);
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+
+// Mirror for full view
+ctx.beginPath();
+for(let i = 0; i < points.length; i++) {
+const r = points[i].val / maxVal * (c.width / 3);
+const angle = PI + points[i].theta - PI/2;
+const px = cx + r * Math.cos(angle);
+const py = cy + r * Math.sin(angle);
+if(i === 0) ctx.moveTo(px, py);
+else ctx.lineTo(px, py);
+}
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+
+if(showLabels) {
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '14px Segoe UI';
+ctx.fillText('θ = 0 (z-axis)', cx - 40, 30);
+ctx.fillText('θ = π', cx - 20, c.height - 15);
+}
+
+} else if(mode === 'all') {
+// Show all orbitals for given n
+const cols = n;
+const cellW = c.width / cols;
+const cellH = c.height / n;
+
+for(let ll = 0; ll < n; ll++) {
+for(let mm = -ll; mm <= ll; mm++) {
+const col = mm + ll;
+const row = ll;
+const x0 = col * cellW / (2*ll+1) * (2*ll+1) + (c.width - (2*ll+1)*cellW/(2*ll+1)*(2*ll+1>1?1:1))/2;
+// Simplified: just show one per l
+if(mm !== 0) continue;
+const cellX = ll * (c.width / n);
+const cellY = 0;
+const cellSize = c.width / n;
+
+// Mini probability cloud
+for(let py = 0; py < cellSize; py += 4) {
+for(let px = 0; px < cellSize; px += 4) {
+const x = (px - cellSize/2) / (cellSize / (4*n));
+const y = (cellSize/2 - py) / (cellSize / (4*n));
+const r = Math.sqrt(x*x + y*y);
+const theta = Math.atan2(Math.sqrt(x*x), y) || 0;
+const phi = Math.atan2(y, x);
+
+const prob = psiSquared(n, ll, 0, r, theta, phi);
+const intensity = Math.min(1, prob * 500 * n * n);
+
+ctx.fillStyle = `rgba(0,${Math.floor(intensity*200)},${Math.floor(intensity*255)},${intensity})`;
+ctx.fillRect(cellX + px, cellY + py, 4, 4);
+}
+}
+
+// Label
+ctx.fillStyle = isDark() ? '#fff' : '#333';
+ctx.font = '14px Segoe UI';
+ctx.fillText(n + orbitalNames[ll], cellX + cellSize/2 - 10, cellY + cellSize - 10);
+}
+}
+}
+
+// Orbital label
+if(showLabels && mode !== 'all') {
+ctx.fillStyle = '#ffd700';
+ctx.font = 'bold 24px Segoe UI';
+ctx.fillText(`${orbitalName} orbital (n=${n}, l=${l}, m=${m})`, 20, 35);
+}
+
+legend('alquantum', 'Quantum Orbital', [['n', n, '#00d9ff'], ['l', l, '#ffd700'], ['m', m, '#ff6496']]);
+
+// Live stats
+document.getElementById('quantumLiveStats').innerHTML = `
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.5rem;font-weight:bold;color:#00d9ff">${n}</div><div style="font-size:.7rem;color:var(--txt2)">PRINCIPAL n</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.5rem;font-weight:bold;color:#ffd700">${l}</div><div style="font-size:.7rem;color:var(--txt2)">ANGULAR l</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.5rem;font-weight:bold;color:#ff6496">${m}</div><div style="font-size:.7rem;color:var(--txt2)">MAGNETIC m</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#00ff88">${orbitalName}</div><div style="font-size:.7rem;color:var(--txt2)">ORBITAL</div></div>
+<div style="background:var(--bg1);padding:10px;border-radius:6px;text-align:center"><div style="font-size:1.2rem;font-weight:bold;color:#9664ff">${mode}</div><div style="font-size:.7rem;color:var(--txt2)">VIEW MODE</div></div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Node Analysis (↔ Zeta Zeros)</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>Radial nodes:</span><span style="color:#ff6496;font-weight:bold">${radialNodes}</span>
+<span>Angular nodes:</span><span style="color:#ffd700;font-weight:bold">${angularNodes}</span>
+<span>Total nodes:</span><span style="color:#00d9ff;font-weight:bold">${radialNodes + angularNodes}</span>
+<span>Energy level:</span><span style="color:#00ff88">-13.6/${n}² = ${fmt(-13.6/(n*n))} eV</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Quantum Numbers</strong>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;font-size:.8rem">
+<span>n range:</span><span style="color:var(--txt)">1, 2, 3, ... (∞)</span>
+<span>l range:</span><span style="color:var(--txt)">0 to n-1 = 0 to ${n-1}</span>
+<span>m range:</span><span style="color:var(--txt)">-l to +l = -${l} to +${l}</span>
+<span>Orbitals in shell:</span><span style="color:#ffd700">${n*n}</span>
+</div>
+</div>
+<div style="margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bord)">
+<strong style="color:var(--acc)">Number Theory Connection</strong>
+<div style="font-size:.8rem;color:var(--txt2);margin-top:6px;line-height:1.5">
+• Radial nodes (${radialNodes}) ↔ zeros of R_{nl}(r) like zeros of ζ(s)<br>
+• Angular momentum l² = ${l*(l+1)} (quantized like gcd constraint)<br>
+• Spherical harmonics Y_l^m ↔ volume of k-dimensional balls<br>
+• Energy degeneracy n² = ${n*n} (relates to lattice point counting)
+</div>
+</div>
+<div style="background:rgba(0,217,255,.1);padding:8px;border-radius:6px">
+<strong style="color:#00d9ff">Selection Rules</strong>
+<div style="font-size:.75rem;color:var(--txt2);margin-top:4px">
+Allowed transitions: Δl = ±1, Δm = 0, ±1. These discrete rules mirror the coprimality constraint gcd(a,b)=1 in number theory!
+</div>
+</div>`;
+
+quantumData = {n, l, m, radialNodes, angularNodes, orbital: orbitalName};
+}
+
+function csvQuantum() {
+let csv = 'r,R_nl,r2R2,theta_deg,Y_lm,Y2\n';
+if(quantumData.radial) {
+quantumData.radial.forEach(p => {
+const ang = quantumData.angular ? quantumData.angular.find(a => Math.abs(a.theta) < 1) : null;
+csv += `${p.r},${p.R},${p.r*p.r*p.R*p.R},${ang?ang.theta:''},${ang?ang.Y:''},${ang?ang.Ysq:''}\n`;
+});
+}
+dl(csv, `quantum_${quantumData.orbital || 'orbital'}.csv`);
+}
+
+async function screenshotQuantum() {
+await screenshotUnified('cquantum', 'quantumLiveStats', `Quantum Orbital ${quantumData.orbital || ''}`, 'quantum_orbital.png');
 }
 
 draw2D();
