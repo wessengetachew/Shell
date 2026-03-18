@@ -92,6 +92,47 @@ header {
 /* ===== VISUALIZATION TAB ===== */
 #viz-tab { flex-direction: row; overflow: hidden; }
 
+/* ── Fullscreen / Stack mode ── */
+#viz-tab.stack-mode { flex-direction: column; }
+
+#viz-tab.stack-mode #controls {
+  width: 100%;
+  max-height: none;
+  height: auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-right: none;
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  gap: 0;
+  max-height: 45vh;
+}
+
+#viz-tab.stack-mode #canvas-area {
+  flex: none;
+  height: 55vh;
+  min-height: 300px;
+}
+
+#viz-tab.stack-mode #canvas-wrap {
+  height: 100%;
+}
+
+#viz-tab.stack-mode .ctrl-section {
+  min-width: 200px;
+  max-width: 260px;
+  flex: 1 1 200px;
+  border-right: 1px solid var(--border);
+  padding: 8px 14px 8px 0;
+  margin: 4px 14px 4px 0;
+}
+
+#viz-tab.stack-mode .ctrl-section:last-child {
+  border-right: none;
+}
+
 /* CONTROLS SIDEBAR */
 #controls {
   width: 260px;
@@ -427,6 +468,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
     <button class="tab-btn" onclick="switchTab('derivation',this)">Derivation of C</button>
     <button class="tab-btn" onclick="switchTab('calculator',this)">C Calculator</button>
     <button class="tab-btn" onclick="switchTab('refs',this)">References &amp; Credits</button>
+    <button id="stack-btn" class="tab-btn" onclick="toggleStackMode()" title="Toggle canvas fullscreen / side-by-side" style="margin-left:auto;color:var(--text3);font-size:11px;padding-bottom:14px;">⊞ Stack</button>
   </div>
 </header>
 
@@ -470,7 +512,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <label>M from</label>
         <input type="number" id="mFrom" value="1" min="1" max="499" style="width:52px">
         <label>to</label>
-        <input type="number" id="mTo" value="40" min="2" max="500" style="width:52px">
+        <input type="number" id="mTo" value="128" min="2" max="500" style="width:52px">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px;">
         <button class="btn btn-gold" onclick="rebuild()">Rebuild</button>
@@ -578,10 +620,10 @@ select:focus { outline: none; border-color: var(--gold-dim); }
       <div class="ctrl-label">Overlays</div>
       <div class="ctrl-row">
         <input type="checkbox" id="showSpirals">
-        <label>Hyperbolic spirals</label>
+        <label>Hyperbolic spirals <span style="color:var(--text3);font-size:9px;">(click point to show)</span></label>
       </div>
       <div class="ctrl-row">
-        <input type="checkbox" id="highlightPrimes" checked>
+        <input type="checkbox" id="highlightPrimes">
         <label>Highlight prime rings</label>
       </div>
       <div class="ctrl-row">
@@ -784,7 +826,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
     <div id="canvas-wrap">
       <canvas id="glCanvas"></canvas>
       <canvas id="overlay-canvas"></canvas>
-      <div class="canvas-badge" id="canvas-badge">M 1–40 &nbsp;|&nbsp; drag to pan &nbsp;|&nbsp; scroll to zoom &nbsp;|&nbsp; click point to inspect</div>
+      <div class="canvas-badge" id="canvas-badge">M 1–128 &nbsp;|&nbsp; drag to pan &nbsp;|&nbsp; scroll to zoom &nbsp;|&nbsp; click point to inspect</div>
       <div class="inspect-tooltip" id="tooltip"></div>
     </div>
     <div id="data-area">
@@ -2351,12 +2393,22 @@ function render() {
   }
 
   // ── Hyperbolic spirals ──
+  // When residues are tracked: draw their spirals in blue (distinct from gold track dots)
+  // When no tracks and checkbox on: draw sample spirals from the outermost ring
   if (showSpirals && rings.length > 0) {
-    const sourceRing = rings.find(r => r.points.length >= 4) || rings[rings.length-1];
-    const allR = sourceRing.points.map(p => p.r).filter(r => r > 0);
-    const step = Math.max(1, Math.floor(allR.length / 8));
-    const spiralRs = allR.filter((_,i) => i%step===0).slice(0,8);
-    spiralRs.forEach(r => {
+    const spiralRs = trackedResidues.length > 0
+      ? trackedResidues.map(t => t.r)                    // use clicked/tracked residues
+      : (() => {                                           // fallback: sample from outermost ring
+          const src = rings.find(r => r.points.length >= 4) || rings[rings.length-1];
+          const all = src.points.map(p => p.r).filter(r => r > 0);
+          const step = Math.max(1, Math.floor(all.length / 8));
+          return all.filter((_,i) => i%step===0).slice(0,8);
+        })();
+
+    spiralRs.forEach((r, idx) => {
+      const col = trackedResidues.length > 0
+        ? (trackedResidues[idx]?.color || 'rgba(80,150,190,0.7)')
+        : 'rgba(80,150,190,0.55)';
       ctx.beginPath(); let first = true;
       for (const ring of rings) {
         if (ring.M < 2 || gcd(r, ring.M) !== 1) continue;
@@ -2364,7 +2416,17 @@ function render() {
         const {x,y} = worldToScreen(ring.rho, theta, ring);
         if (first) { ctx.moveTo(x,y); first=false; } else ctx.lineTo(x,y);
       }
-      ctx.strokeStyle = `rgba(80,150,190,0.55)`; ctx.lineWidth = 1.2; ctx.stroke();
+      ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke();
+
+      // Label the spiral at the outermost visible ring
+      const labelRing = [...rings].reverse().find(ring => ring.M >= 2 && gcd(r, ring.M) === 1);
+      if (labelRing && zoom > 0.5) {
+        const theta = 2*Math.PI*r/labelRing.M;
+        const {x,y} = worldToScreen(labelRing.rho, theta, labelRing);
+        ctx.font = `bold 9px "JetBrains Mono",monospace`;
+        ctx.fillStyle = col;
+        ctx.fillText(`r=${r}`, x+5, y-3);
+      }
     });
   }
 
@@ -2546,7 +2608,11 @@ function onCanvasClick(e) {
   const hit = findNearestPoint(sx, sy, 16);
   if (hit) {
     inspectedPoint = hit;
-    setTrack(hit.r);  // auto-track clicked residue
+    // Replace all tracks with just this one click — user adds to tracker manually if they want multi
+    trackedResidues = [];
+    trackedR = null;
+    setTrack(hit.r);
+    document.getElementById('showSpirals').checked = true;
     showDataArea(hit);
   } else {
     inspectedPoint = null;
@@ -2770,6 +2836,76 @@ function exportPNG() {
     ly += 26;
   }
 
+  // ── Inspected point data ──
+  if (inspectedPoint) {
+    ly += 12;
+    ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
+    ectx.beginPath(); ectx.moveTo(lx + LP, ly); ectx.lineTo(lx + LEGEND_W - LP, ly); ectx.stroke();
+    ly += 22;
+    ectx.font = '400 12px "JetBrains Mono", monospace';
+    ectx.fillStyle = '#7a6330';
+    ectx.fillText('INSPECTED POINT', lx + LP, ly); ly += 26;
+
+    const ip = inspectedPoint;
+    const ipRing = rings.find(rg => rg.M === ip.M);
+    const ipAngle = (ip.theta / (2*Math.PI) * 360).toFixed(2);
+    const ipSurvived = ip.lifted === null ? 'N/A' : (ip.lifted ? 'Yes' : 'No');
+    const ipSurvRate = ipRing ? (ipRing.lifts.filter(l=>!l.broken).length / ipRing.phiM * 100).toFixed(1) : '—';
+    const ipType = ipRing ? (ipRing.isPrime ? 'Prime' : ipRing.isMersenne ? 'Mersenne' : 'Composite') : '—';
+    const ipLines = [
+      ['r = ' + ip.r + ',  M = ' + ip.M, '#e8c96a'],
+      ['Fraction  ' + ip.r + '/' + ip.M, '#b8b0a0'],
+      ['Angle  ' + ipAngle + '°', '#b8b0a0'],
+      ['φ(M)  ' + (ipRing ? ipRing.phiM : '—'), '#b8b0a0'],
+      ['Lifts → M+1  ' + ipSurvived, ip.lifted ? '#4aac6a' : '#9c4a3a'],
+      ['Ring type  ' + ipType, '#7ba7bc'],
+      ['Ring survival  ' + ipSurvRate + '%', '#b8b0a0'],
+      ['Spiral ρθ = 2π·' + ip.r + ' = ' + (2*Math.PI*ip.r).toFixed(4), '#5a5448'],
+    ];
+    for (const [text, col] of ipLines) {
+      ectx.font = '400 13px "JetBrains Mono", monospace';
+      ectx.fillStyle = col;
+      ectx.fillText(text, lx + LP, ly);
+      ly += 20;
+    }
+  }
+
+  // ── Active controls bar ──
+  ly += 12;
+  ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
+  ectx.beginPath(); ectx.moveTo(lx + LP, ly); ectx.lineTo(lx + LEGEND_W - LP, ly); ectx.stroke();
+  ly += 22;
+  ectx.font = '400 12px "JetBrains Mono", monospace';
+  ectx.fillStyle = '#7a6330';
+  ectx.fillText('ACTIVE SETTINGS', lx + LP, ly); ly += 24;
+
+  const ctrlLines = [
+    ['Coloring',      document.getElementById('colorMode').selectedOptions[0].text],
+    ['Radius',        document.getElementById('radiusMode').selectedOptions[0].text],
+    ['Residue view',  document.getElementById('residueView').selectedOptions[0].text],
+    ['Point size',    document.getElementById('pointSize').value + 'px'],
+    ['Lift opacity',  document.getElementById('liftOpacity').value + '%'],
+    ['Lifts',         document.getElementById('showLifts').checked ? 'On' : 'Off'],
+    ['Broken lifts',  document.getElementById('showBroken').checked ? 'On' : 'Off'],
+    ['Spirals',       document.getElementById('showSpirals').checked ? 'On' : 'Off'],
+    ['Gap chords',    document.getElementById('showGapChords').checked
+                        ? 'On — gap ' + document.getElementById('gapChordClass').value : 'Off'],
+    ['Prime rings',   document.getElementById('highlightPrimes').checked ? 'Highlighted' : 'Off'],
+  ];
+  if (trackedResidues.length > 0) {
+    ctrlLines.push(['Tracked r',  trackedResidues.map(t => t.r).join(', ')]);
+  }
+
+  for (const [k, v] of ctrlLines) {
+    ectx.font = '300 11px "JetBrains Mono", monospace';
+    ectx.fillStyle = '#5a5448';
+    ectx.fillText(k, lx + LP, ly);
+    ectx.font = '400 12px "JetBrains Mono", monospace';
+    ectx.fillStyle = '#8a8070';
+    ectx.fillText(v, lx + LP + 140, ly);
+    ly += 18;
+  }
+
   // Footer
   ectx.font = '300 12px "JetBrains Mono", monospace';
   ectx.fillStyle = '#3d3528';
@@ -2825,6 +2961,16 @@ function exportCSV() {
 //  ROTATION & TRACKING
 // ============================================================
 function resetView() { zoom = 1; panX = 0; panY = 0; render(); }
+
+function toggleStackMode() {
+  const viz   = document.getElementById('viz-tab');
+  const btn   = document.getElementById('stack-btn');
+  const isStack = viz.classList.toggle('stack-mode');
+  btn.textContent = isStack ? '⊟ Side' : '⊞ Stack';
+  btn.style.color = isStack ? 'var(--gold2)' : 'var(--text3)';
+  // Resize canvas after layout settles
+  setTimeout(resizeCanvas, 50);
+}
 
 function stepRotation(deg) {
   globalRotation += deg * Math.PI / 180;
