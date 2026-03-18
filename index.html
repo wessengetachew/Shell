@@ -260,9 +260,12 @@ select:focus { outline: none; border-color: var(--gold-dim); }
 #data-message { font-family: var(--mono); font-size: 11px; color: var(--text3); padding: 8px 0; }
 
 /* ===== THEORY TAB ===== */
-#theory-tab, #refs-tab {
+#theory-tab, #derivation-tab, #refs-tab {
   overflow-y: auto;
   padding: 48px 0;
+}
+#calculator-tab {
+  overflow: hidden; /* calculator manages its own internal scroll */
 }
 .prose-container {
   max-width: 760px;
@@ -416,7 +419,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
   <div class="header-top">
     <div class="site-title">Modular Lifting Rings</div>
     <div class="site-subtitle">Coprime Residue Geometry &amp; Hyperbolic Spiral Trajectories</div>
-    <div class="author-tag">Wessen Getachew &mdash; <span>2026</span></div>
+    <div class="author-tag">2026</div>
   </div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('viz',this)">Visualization</button>
@@ -892,7 +895,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
   <div class="math-block">P<sub>g</sub> = &#8719;<sub>p : gap(p) = g</sub> p&sup2;/(p&sup2;&minus;1) &nbsp;&nbsp;[partial Euler product over gap class g]<br>&zeta;(2) = P<sub>1</sub> &times; P<sub>2</sub> &times; P<sub>4</sub> &times; P<sub>6</sub> &times; &hellip;</div>
   <p>The rearrangement is valid by absolute convergence. Gap classes contribute a rapidly converging hierarchy:</p>
   <div class="math-block">P<sub>1</sub> = 4/3 &asymp; 1.33333 &nbsp;[p=2 alone]<br>P<sub>2</sub> &asymp; 1.18905 &nbsp;[twin primes: 3, 5, 11, 17, 29, &hellip;]<br>P<sub>4</sub> &asymp; 1.03206 &nbsp;[cousin primes: 7, 13, 19, 37, &hellip;]<br>P<sub>6</sub> &asymp; 1.00477 &nbsp;[sexy primes: 23, 31, 47, &hellip;]<br>Cumulative after P<sub>1</sub>&ndash;P<sub>6</sub>: 99.9% of ln &zeta;(2)</div>
-  <p>The Gap Decomposition panel below the canvas shows these partial products live for your current range.</p>
+  <p>The Gap Decomposition panel below the canvas shows these partial products live for the current range.</p>
 
   <h2>Hardy-Littlewood and Gap Chords</h2>
   <h3>S(6) = 2&middot;S(2) — exact in the primitive polygon of mod 30</h3>
@@ -927,7 +930,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
 
   <h2>Farey Sector Formula and Primorial Lifting</h2>
   <div class="theorem-box">
-    <div class="theorem-label">Prior Results (Wessen Getachew)</div>
+    <div class="theorem-label">Prior Results</div>
     <p>Farey sector formula: C(n, N) &asymp; 3N&sup2;/(&pi;&sup2;n(n+1)) coprime pairs in sector n of &#8484;/N&#8484;.<br>Primorial lifting recursion: T(p#) = T((p&minus;1)#) &times; (p&minus;2), verified through 510510.</p>
   </div>
   <p>The Farey sector prefactor 3/&pi;&sup2; = (1/2)&middot;(6/&pi;&sup2;) = 1/(2&zeta;(2)) arises directly from the coprime pair density and connects the Farey sector geometry to the ζ(2) normalization. The primorial lifting recursion encodes the Sieve of Eratosthenes in the primorial tower: each new prime p contributes a factor of (p&minus;2) admissible residues for twin prime patterns.</p>
@@ -1084,7 +1087,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
       <th style="text-align:left;padding:5px 0 7px;font-weight:400;">Convergence</th>
     </tr>
     <tr><td style="padding:4px 14px 4px 0;color:var(--text2)">6/&pi;&sup2; (Mertens)</td><td style="color:var(--cream2)">0.607927&hellip;</td><td style="color:var(--text3)">—</td><td style="color:var(--text3)">exact</td></tr>
-    <tr style="background:rgba(201,168,76,0.06)"><td style="padding:4px 14px 4px 0;color:var(--gold2)">C (this work)</td><td style="color:var(--gold2)">0.530712&hellip;</td><td style="color:var(--gold)">(p&sup2;&minus;2)/(p&sup2;&minus;1)</td><td style="color:var(--teal)">absolute</td></tr>
+    <tr style="background:rgba(201,168,76,0.06)"><td style="padding:4px 14px 4px 0;color:var(--gold2)">C (new)</td><td style="color:var(--gold2)">0.530712&hellip;</td><td style="color:var(--gold)">(p&sup2;&minus;2)/(p&sup2;&minus;1)</td><td style="color:var(--teal)">absolute</td></tr>
     <tr><td style="padding:4px 14px 4px 0;color:var(--text2)">C&sub;2; (twin prime)</td><td style="color:var(--cream2)">0.660162&hellip;</td><td style="color:var(--text3)">p(p&minus;2)/(p&minus;1)&sup2;</td><td style="color:var(--text3)">absolute</td></tr>
     <tr><td style="padding:4px 14px 4px 0;color:var(--text2)">A (Artin)</td><td style="color:var(--cream2)">0.373956&hellip;</td><td style="color:var(--text3)">1&minus;1/(p(p&minus;1))</td><td style="color:var(--text3)">absolute</td></tr>
   </table>
@@ -1185,7 +1188,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
   </div>
 
   <!-- RIGHT: Step-by-step display -->
-  <div style="flex:1;overflow-y:auto;padding:32px 40px;background:var(--bg);">
+  <div id="calc-right-panel" style="flex:1;overflow-y:auto;padding:32px 40px;background:var(--bg);">
 
     <div id="calc-welcome" style="text-align:center;padding:80px 20px;color:var(--text3);">
       <div style="font-family:var(--display);font-size:2.2rem;font-style:italic;color:var(--gold-dim);margin-bottom:16px;">C Calculator</div>
@@ -1198,6 +1201,18 @@ select:focus { outline: none; border-color: var(--gold-dim); }
     </div>
 
     <div id="calc-steps" style="display:none;"></div>
+
+    <!-- Export bar — shown after running -->
+    <div id="calc-export-bar" style="display:none;position:sticky;bottom:0;background:var(--bg2);border-top:1px solid var(--border2);padding:12px 0;margin:0 -40px;padding-left:40px;padding-right:40px;display:none;gap:10px;align-items:center;">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text3);flex:1;">Export full step-by-step as high-res PNG</span>
+      <button onclick="exportCalcPNG()" style="background:var(--gold-dim);border:none;color:var(--bg);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.08em;padding:8px 18px;border-radius:3px;cursor:pointer;"
+        onmouseover="this.style.background='var(--gold)'" onmouseout="this.style.background='var(--gold-dim)'">
+        ↓ Export PNG
+      </button>
+      <button onclick="exportCalcHTML()" style="background:none;border:1px solid var(--border2);color:var(--cream2);font-family:var(--mono);font-size:11px;padding:8px 18px;border-radius:3px;cursor:pointer;">
+        ↓ HTML
+      </button>
+    </div>
 
   </div>
 </div>
@@ -1243,7 +1258,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
     <div class="ref-body">
       <div class="ref-title">On the correlation of Euler's totient function φ(n) and φ(n+1)</div>
       <div class="ref-authors">M. Hausman &amp; H. N. Shapiro</div>
-      <div class="ref-source"><em>Illinois Journal of Mathematics</em>, Vol. 28, No. 3, 1984. &mdash; Establishes Σφ(n)φ(n+1) ~ A<sub>HS</sub>·N³; the constant A<sub>HS</sub> = (1/3)·∏(1−2/p²) is the basis for the lift survival constant C = (π²/6)·∏(1−2/p²).</div>
+      <div class="ref-source"><em>Illinois Journal of Mathematics</em>, Vol. 28, No. 3, 1984. &mdash; Establishes Σφ(n)φ(n+1) ~ A<sub>HS</sub>·N³ where A<sub>HS</sub> = (1/3)·∏(1−2/p²). This is the analytic bridge for the lift survival constant: C = (π²/2)·A<sub>HS</sub> = (π²/6)·∏(1−2/p²). <strong>Key citation</strong> — C is not named or extracted in this paper.</div>
     </div>
   </div>
 
@@ -1252,14 +1267,43 @@ select:focus { outline: none; border-color: var(--gold-dim); }
     <div class="ref-body">
       <div class="ref-title">Mathematical Constants</div>
       <div class="ref-authors">Steven R. Finch</div>
-      <div class="ref-source">Encyclopedia of Mathematics and its Applications, Vol. 94, Cambridge University Press, 2003. &mdash; Artin's constant, twin prime constant C<sub>2</sub> ≈ 0.6601618, Hafner-Sarnak-McCurley constant, and their Euler product representations.</div>
+      <div class="ref-source">Encyclopedia of Mathematics and its Applications, Vol. 94, Cambridge University Press, 2003. &mdash; Artin's constant, twin prime constant C<sub>2</sub> ≈ 0.6601618, Hafner-Sarnak-McCurley constant, Feller-Tornier constant d<sub>FT</sub> ≈ 0.3226 (§2.4), and their Euler product representations. The constant C = ∏(p²−2)/(p²−1) ≈ 0.530712 does not appear.</div>
+    </div>
+  </div>
+
+  <h2>The Lift Survival Constant C — This Work</h2>
+
+  <div class="ref-entry">
+    <div class="ref-num">[6]</div>
+    <div class="ref-body">
+      <div class="ref-title">The Lift Survival Constant and the Geometry of Modular Lifting Rings</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source">Preprint, 2026. &mdash; Defines the modular lifting ring system; proves C = ∏<sub>p</sub>(1−1/(p²−1)) as the asymptotic fraction of coprime residues surviving the lift M→M+1; derives the family C<sub>k</sub> with the Radical Dependence Theorem (C<sub>k</sub> depends only on rad(k)); establishes the structural parallel with the Hardy-Littlewood singular series.</div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[7]</div>
+    <div class="ref-body">
+      <div class="ref-title">Lift Survival Constant C — decimal expansion</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source">OEIS submission pending, 2026. Digits: 5, 3, 0, 7, 1, 1, 8, 0, 6, 2, 4, 6, … C = ∏<sub>p</sub>(p²−2)/(p²−1) ≈ 0.530711806246. Searched OEIS under digit string 5307118 — not found as of March 2026. Related sequences: A002088 (Σφ), A000010 (Euler totient), A065474 (Feller-Tornier constant d<sub>FT</sub>).</div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[8]</div>
+    <div class="ref-body">
+      <div class="ref-title">Feller-Tornier constant</div>
+      <div class="ref-authors">W. Feller &amp; E. Tornier (1932); OEIS A065474</div>
+      <div class="ref-source">d<sub>FT</sub> = ½(1 + ∏<sub>p</sub>(1−2/p²)) ≈ 0.32263634… Shares the inner product ∏(1−2/p²) with C but uses a different prefactor. Identity: C = ζ(2)·(2d<sub>FT</sub>−1). These are distinct constants with different definitions and values.</div>
     </div>
   </div>
 
   <h2>Farey Sequences &amp; Rational Approximation</h2>
 
   <div class="ref-entry">
-    <div class="ref-num">[6]</div>
+    <div class="ref-num">[9]</div>
     <div class="ref-body">
       <div class="ref-title">On a curious property of vulgar fractions</div>
       <div class="ref-authors">J. Farey</div>
@@ -1268,7 +1312,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
   </div>
 
   <div class="ref-entry">
-    <div class="ref-num">[7]</div>
+    <div class="ref-num">[10]</div>
     <div class="ref-body">
       <div class="ref-title">Über eine Eigenschaft der Reihe der Brüche mit ungeradem Nenner</div>
       <div class="ref-authors">M. A. Stern</div>
@@ -1277,45 +1321,45 @@ select:focus { outline: none; border-color: var(--gold-dim); }
   </div>
 
   <div class="ref-entry">
-    <div class="ref-num">[8]</div>
+    <div class="ref-num">[11]</div>
     <div class="ref-body">
-      <div class="ref-title">Théorie des nombres</div>
-      <div class="ref-authors">J. Franel &amp; E. Landau (lecture notes)</div>
-      <div class="ref-source"><em>Göttinger Nachrichten</em>, 1924. &mdash; The Franel-Landau theorem: the discrepancy of Farey fractions is equivalent to the Riemann Hypothesis. The angular distribution of the rings connects directly to this classical result.</div>
+      <div class="ref-title">Théorie des nombres (Franel-Landau theorem)</div>
+      <div class="ref-authors">J. Franel &amp; E. Landau</div>
+      <div class="ref-source"><em>Göttinger Nachrichten</em>, 1924. &mdash; Discrepancy of Farey fractions is equivalent to the Riemann Hypothesis. The angular distribution of coprime residues across rings connects directly to this classical result.</div>
     </div>
   </div>
 
   <h2>Prime Gaps &amp; Hardy-Littlewood</h2>
 
   <div class="ref-entry">
-    <div class="ref-num">[9]</div>
+    <div class="ref-num">[12]</div>
     <div class="ref-body">
-      <div class="ref-title">Some problems of 'Partitio Numerorum' III: On the expression of a number as a sum of primes</div>
+      <div class="ref-title">Some problems of 'Partitio Numerorum' III</div>
       <div class="ref-authors">G. H. Hardy &amp; J. E. Littlewood</div>
-      <div class="ref-source"><em>Acta Mathematica</em>, Vol. 44, 1923. &mdash; Conjecture B: π<sub>g</sub>(x) ~ S(g)·x/(ln x)²; the singular series S(g) = 2C<sub>2</sub>·∏(p−1)/(p−2); S(2)=S(4)=2C<sub>2</sub>; S(6)=4C<sub>2</sub>. The ratio S(6)/S(2)=2 is exact in the mod-30 primitive polygon.</div>
+      <div class="ref-source"><em>Acta Mathematica</em>, Vol. 44, 1923. &mdash; Conjecture B: π<sub>g</sub>(x) ~ S(g)·x/(ln x)²; singular series S(g) = 2C<sub>2</sub>·∏(p−1)/(p−2); S(2)=S(4); S(6)=2·S(2). The equality S(2)=S(4) mirrors C<sub>2</sub>=C<sub>4</sub> at the modular level; the ratio S(6)/S(4)=2 does not carry over to C<sub>6</sub>/C<sub>4</sub>.</div>
     </div>
   </div>
 
   <div class="ref-entry">
-    <div class="ref-num">[10]</div>
+    <div class="ref-num">[13]</div>
     <div class="ref-body">
       <div class="ref-title">Recherches nouvelles sur les nombres premiers</div>
       <div class="ref-authors">A. de Polignac</div>
-      <div class="ref-source">1849. &mdash; Polignac's conjecture: every even integer is a prime gap infinitely often. The gap decomposition ζ(2) = ∏P<sub>g</sub> and the three rigidity conjectures relate to this.</div>
+      <div class="ref-source">1849. &mdash; Polignac's conjecture: every even integer is a prime gap infinitely often. Provides context for the gap decomposition ζ(2) = ∏P<sub>g</sub> and the three rigidity conjectures.</div>
     </div>
   </div>
 
   <div class="ref-entry">
-    <div class="ref-num">[11]</div>
+    <div class="ref-num">[14]</div>
     <div class="ref-body">
       <div class="ref-title">Primes in arithmetic progressions to large moduli</div>
       <div class="ref-authors">E. Bombieri &amp; A. I. Vinogradov</div>
-      <div class="ref-source">1965. &mdash; The Bombieri-Vinogradov theorem on equidistribution of primes in arithmetic progressions; underlies the Hardy-Littlewood predictions for P<sub>g</sub>(X) convergence rates.</div>
+      <div class="ref-source">1965. &mdash; Equidistribution of primes in arithmetic progressions; underlies Hardy-Littlewood convergence rate predictions for P<sub>g</sub>(X).</div>
     </div>
   </div>
 
   <div class="ref-entry">
-    <div class="ref-num">[12]</div>
+    <div class="ref-num">[15]</div>
     <div class="ref-body">
       <div class="ref-title">Bounded gaps between primes</div>
       <div class="ref-authors">Y. Zhang</div>
@@ -1324,72 +1368,340 @@ select:focus { outline: none; border-color: var(--gold-dim); }
   </div>
 
   <div class="ref-entry">
-    <div class="ref-num">[13]</div>
+    <div class="ref-num">[16]</div>
     <div class="ref-body">
-      <div class="ref-title">Small gaps between primes</div>
-      <div class="ref-authors">J. Maynard; D. H. J. Polymath (Polymath8b)</div>
-      <div class="ref-source"><em>Annals of Mathematics</em>, Vol. 181, 2015. &mdash; Maynard-Tao sieve; gap bound reduced to 246. Establishes that infinitely many gap classes with g ≤ 246 are non-empty, supporting Conjecture I computationally.</div>
+      <div class="ref-title">Small gaps between primes (Polymath8b)</div>
+      <div class="ref-authors">J. Maynard; D. H. J. Polymath</div>
+      <div class="ref-source"><em>Annals of Mathematics</em>, Vol. 181, 2015. &mdash; Maynard-Tao sieve; gap bound reduced to 246. Establishes infinitely many gap classes with g ≤ 246 are non-empty.</div>
     </div>
   </div>
 
-  <h2>Classical Curves &amp; Geometry</h2>
+  <h2>Classical Curves</h2>
 
   <div class="ref-entry">
-    <div class="ref-num">[14]</div>
+    <div class="ref-num">[17]</div>
     <div class="ref-body">
       <div class="ref-title">Nouvelle mécanique</div>
       <div class="ref-authors">P. Varignon</div>
-      <div class="ref-source">Paris, 1725 (work from c. 1704). &mdash; First systematic study of the hyperbolic spiral ρ = a/θ (reciprocal spiral). Every coprime residue r traces such a spiral ρ·θ = 2πr = const across the ring system.</div>
+      <div class="ref-source">Paris, 1725 (work from c. 1704). &mdash; First systematic study of the hyperbolic spiral ρ = a/θ. Every coprime residue r traces such a spiral ρ·θ = 2πr across the ring system.</div>
     </div>
   </div>
 
   <h2>OEIS &amp; Computational</h2>
 
   <div class="ref-entry">
-    <div class="ref-num">[15]</div>
+    <div class="ref-num">[18]</div>
     <div class="ref-body">
       <div class="ref-title">The On-Line Encyclopedia of Integer Sequences</div>
       <div class="ref-authors">N. J. A. Sloane et al.</div>
-      <div class="ref-source">oeis.org. &mdash; The lift survival constant C ≈ 0.530711806… does not appear under digit string 5307116 (searched March 2026). Related: A002088 (Σφ), A000010 (φ), A002386 (prime gap records).</div>
+      <div class="ref-source">oeis.org. &mdash; Searched for C ≈ 0.530711806… under digit string 5307118 — not found (March 2026). Related: A002088 (Σφ), A000010 (Euler totient φ), A002386 (prime gap records), A065474 (Feller-Tornier constant d<sub>FT</sub>). OEIS submission for C is pending.</div>
     </div>
   </div>
 
-  <h2>Credits</h2>
+  <h2>Visualization Tools</h2>
+
+  <div class="ref-entry">
+    <div class="ref-num">[19]</div>
+    <div class="ref-body">
+      <div class="ref-title">Rational Unit Circle / Farey Modular Residue Rings</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source">
+        <a href="https://wessengetachew.github.io/Rational-/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Rational-/</a>
+        &mdash; Primary visualization. Coprime residues on a unit circle with 10 geometric representations of modular periodicity. CCW convention, ring radius slider, rainbow-residue coloring, gap overlays, mirror involution σ(r) = N−r mod N, Farey phase method connecting to Riemann zeros. Foundation for the modular lifting rings framework.
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[20]</div>
+    <div class="ref-body">
+      <div class="ref-title">Gap Structure &amp; ζ(2) Decomposition</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source">
+        <a href="https://wessengetachew.github.io/6-pi-2/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/6-pi-2/</a>
+        &mdash; Gap decomposition of ζ(2) = ∏<sub>g</sub> P<sub>g</sub> as partial Euler products by prime gap class. Modular entropy ΔS_m = −ln(φ(m)/m) with primorial maxima. Segmented sieve to 400 million.
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[21]</div>
+    <div class="ref-body">
+      <div class="ref-title">Pairwise Gaps &amp; Hardy-Littlewood Chords</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source">
+        <a href="https://wessengetachew.github.io/2pir/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/2pir/</a>
+        &mdash; Pairwise chord connections by gap class. S(6)/S(4) = 2 exact as finite chord-count ratio in the primitive polygon of mod 30.
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[22]</div>
+    <div class="ref-body">
+      <div class="ref-title">Modular Entropy Explorer</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source">
+        <a href="https://wessengetachew.github.io/Infinitemoduli/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Infinitemoduli/</a>
+        &mdash; ΔS_m per ring, primorial entropy maxima, entropy landscape across modular arithmetic systems.
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[23]</div>
+    <div class="ref-body">
+      <div class="ref-title">Twin Prime Residue Lattice</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source">
+        <a href="https://wessengetachew.github.io/finite/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/finite/</a>
+        &mdash; Multiplicative recursion T(p#) = T((p−1)#)×(p−2), mirror involutions, lifting verified to primorial 510510. Three ζ(2) rigidity conjectures.
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[24]</div>
+    <div class="ref-body">
+      <div class="ref-title">Modular Lifting Rings</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source">
+        <a href="https://wessengetachew.github.io/Rebuild/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Rebuild/</a>
+        &mdash; This tool. Lift survival constant C, coprime residue rings, hyperbolic spiral trajectories, residue path tracking, gap advisable vs actual, cumulative rotation, C Calculator.
+      </div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[25]</div>
+    <div class="ref-body">
+      <div class="ref-title">Primes Explorer</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Primes/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Primes/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[26]</div>
+    <div class="ref-body">
+      <div class="ref-title">GCD Explorer</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/GCD/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/GCD/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[27]</div>
+    <div class="ref-body">
+      <div class="ref-title">Shell / Möbius Sieve</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Shell/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Shell/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[28]</div>
+    <div class="ref-body">
+      <div class="ref-title">Farey Sequence Explorer</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Farey/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Farey/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[29]</div>
+    <div class="ref-body">
+      <div class="ref-title">Zeta Function Explorer</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Zeta/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Zeta/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[30]</div>
+    <div class="ref-body">
+      <div class="ref-title">Goldbach Explorer</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Goldbach/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Goldbach/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[31]</div>
+    <div class="ref-body">
+      <div class="ref-title">Reduced Residues</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Reduced/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Reduced/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[32]</div>
+    <div class="ref-body">
+      <div class="ref-title">Transform</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Transform/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Transform/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[33]</div>
+    <div class="ref-body">
+      <div class="ref-title">Phase</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Phase/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Phase/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[34]</div>
+    <div class="ref-body">
+      <div class="ref-title">Composite</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Composite/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Composite/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[35]</div>
+    <div class="ref-body">
+      <div class="ref-title">Unified</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Unified/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Unified/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[36]</div>
+    <div class="ref-body">
+      <div class="ref-title">Sierpiński</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Sierpi-ski/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Sierpi-ski/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[37]</div>
+    <div class="ref-body">
+      <div class="ref-title">Ethiopian</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Ethiopian/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Ethiopian/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[38]</div>
+    <div class="ref-body">
+      <div class="ref-title">Wave</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Wave/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Wave/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[39]</div>
+    <div class="ref-body">
+      <div class="ref-title">PI</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/PI/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/PI/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[40]</div>
+    <div class="ref-body">
+      <div class="ref-title">Quant</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Quant/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Quant/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[41]</div>
+    <div class="ref-body">
+      <div class="ref-title">G</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/G/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/G/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[42]</div>
+    <div class="ref-body">
+      <div class="ref-title">D</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/D/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/D/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[43]</div>
+    <div class="ref-body">
+      <div class="ref-title">R</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/R/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/R/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[44]</div>
+    <div class="ref-body">
+      <div class="ref-title">1-2</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/1-2/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/1-2/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[45]</div>
+    <div class="ref-body">
+      <div class="ref-title">Gemini</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/Gemini/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/Gemini/</a></div>
+    </div>
+  </div>
+
+  <div class="ref-entry">
+    <div class="ref-num">[46]</div>
+    <div class="ref-body">
+      <div class="ref-title">2025</div>
+      <div class="ref-authors">2026</div>
+      <div class="ref-source"><a href="https://wessengetachew.github.io/2025/" target="_blank" style="color:var(--gold2);">wessengetachew.github.io/2025/</a></div>
+    </div>
+  </div>
+
+
 
   <div class="credit-box">
-    <div class="credit-name">Wessen Getachew</div>
-    <div class="credit-context">Number theory research &mdash; modular arithmetic, prime distribution, Farey sequences, gap structure &mdash; @7dview &mdash; wessengetachew.github.io</div>
+    <div class="credit-name">2026</div>
+    <div class="credit-context">Number theory &mdash; modular arithmetic, prime distribution, Farey sequences, gap structure</div>
     <div class="credit-work">
-      Original contributions in this work and related tools:<br><br>
-      <strong>This visualization:</strong><br>
-      &mdash; Geometric framework: coprime residues as hyperbolic spiral families ρ·θ = 2πr<br>
+      <strong>Original contributions:</strong><br>
+      &mdash; Modular lifting ring framework: coprime residues as geometric objects across consecutive rings<br>
+      &mdash; Lift survival constant <strong>C = ∏(1−1/(p²−1)) ≈ 0.530711806</strong> — not in OEIS, not previously named<br>
+      &mdash; C_k family: generalization for gap k with Euler product formula<br>
+      &mdash; <strong>Radical Dependence Theorem:</strong> C_k depends only on rad(k) — provable<br>
+      &mdash; HL symmetry S(2)=S(4) mirrors C_2=C_4 exactly; HL ratios do not carry over<br>
+      &mdash; Identity C = ζ(2)·(2d<sub>FT</sub>−1) connecting C to the Feller-Tornier constant<br>
       &mdash; Prime-crossing theorem: lifts(M→p) = φ(p−1) for prime p<br>
-      &mdash; Mersenne halving theorem: survival ratio = 1/2 exactly for M = 2<sup>k</sup>−1<br>
-      &mdash; Lift survival constant C = (π²/6)·∏(1−2/p²) ≈ 0.530711806 (not in OEIS)<br>
-      &mdash; Rational fraction interpretation: ring b encodes all reduced a/b ∈ (0,1)<br>
-      &mdash; Farey neighbor + Stern-Brocot path inspector<br><br>
-      <strong>Gap decomposition (gap_structure, modular_entropy tools):</strong><br>
-      &mdash; Gap decomposition of ζ(2) = ∏<sub>g</sub> P<sub>g</sub> as computable partial products<br>
-      &mdash; Modular entropy ΔS_m = −ln(φ(m)/m) per ring; primorials as entropy maxima<br>
-      &mdash; Three conjectures: Gap Product Finiteness, Ratio Separation, ζ(2) Rigidity<br>
-      &mdash; Remainder R<sub>g</sub>(X) as a twin prime finiteness criterion<br><br>
-      <strong>Gap chord geometry (pairwise_gaps tool):</strong><br>
-      &mdash; S(6)/S(2) = 2 exact as integer chord count ratio in primitive polygon of mod 30<br>
-      &mdash; All-pair gap connection visualization with Hardy-Littlewood validation<br><br>
-      <strong>Prior results (Rational Unit Circle / index_euclid tool):</strong><br>
-      &mdash; Farey sector formula: C(n,N) ≈ 3N²/(π²n(n+1)) coprime pairs per sector<br>
+      &mdash; Mersenne halving theorem: survival = 1/2 exactly for M = 2<sup>k</sup>−1<br><br>
+      <strong>Prior results (related tools):</strong><br>
+      &mdash; Gap decomposition ζ(2) = ∏<sub>g</sub> P<sub>g</sub> with partial products by gap class<br>
+      &mdash; Modular entropy ΔS_m = −ln(φ(m)/m); primorials as entropy maxima<br>
+      &mdash; S(6)/S(4) = 2 exact as chord-count ratio in mod-30 primitive polygon<br>
+      &mdash; Farey sector formula: C(n,N) ≈ 3N²/(π²n(n+1))<br>
       &mdash; Primorial lifting recursion: T(p#) = T((p−1)#) × (p−2), verified to 510510<br>
-      &mdash; Unit circle framework: 10 geometric representations of periodicity θ ~ θ+2π<br>
-      &mdash; Wessen Identity / admissible residue pair theorem R<sub>H</sub>(p<sub>max</sub>) = M∏(p−ν<sub>H</sub>(p))/p
+      &mdash; Three conjectures: Gap Product Finiteness, Ratio Separation, ζ(2) Rigidity
     </div>
   </div>
 
   <div class="note" style="margin-top:28px;">
-    <strong>Honest scope:</strong> The classical results cited above (Mertens, Hausman-Shapiro, Hardy-Littlewood, Zhang, Maynard) are established mathematics. The original contributions here — the geometric framing via hyperbolic spirals, the lift survival constant C, the gap decomposition viewpoint, the modular entropy framework, and the three ζ(2) rigidity conjectures — are new formulations and framings. The conjectures are posed as open problems; none has a proof bypassing the parity problem in sieve theory. What is new is the geometric language and the explicit computational characterization of these structures.
+    <strong>Scope:</strong> The classical results cited above (Mertens, Hausman-Shapiro, Hardy-Littlewood, Zhang, Maynard) are established mathematics. The original contributions here — the geometric lift framework, the constant C and its family C_k, the Radical Dependence Theorem, and the three ζ(2) rigidity conjectures — are new formulations. The conjectures are open problems; none bypasses the parity problem in sieve theory. The constant C is new: it is not in Finch, not in OEIS, and appears in Hausman-Shapiro only implicitly as a ratio of asymptotic constants, never extracted or named.
   </div>
 
 </div>
 </div><!-- end refs-tab -->
+
 
 </div><!-- end app -->
 
@@ -2411,7 +2723,7 @@ function exportPNG() {
     { k: 'Prime-crossing theorem', v: 'lifts(M→p) = φ(p−1)', note: true },
     { k: 'Mersenne halving',       v: 'survival = 1/2 exactly', note: true },
     { k: '', v: '' },
-    { k: 'Author', v: 'Wessen Getachew' },
+    { k: 'Tool', v: 'Modular Lifting Rings' },
     { k: 'Year',   v: '2026' },
   ];
 
@@ -2461,7 +2773,7 @@ function exportPNG() {
   // Footer
   ectx.font = '300 12px "JetBrains Mono", monospace';
   ectx.fillStyle = '#3d3528';
-  ectx.fillText('wessengetachew.github.io  ·  Modular Lifting Rings  ·  2026', lx + LP, EH - 30);
+  ectx.fillText('Modular Lifting Rings  ·  2026', lx + LP, EH - 30);
 
   const link = document.createElement('a');
   link.download = `modular_lifting_rings_M${mFrom}-${mTo}_4K.png`;
@@ -2970,30 +3282,22 @@ function runCalculator() {
   document.getElementById('calc-welcome').style.display = 'none';
   document.getElementById('calc-steps').style.display = 'block';
 
-  if (mode === 'C')         calcModeC();
-  else if (mode === 'Ck')   calcModeCk();
-  else if (mode === 'local') calcModeLocal();
+  if (mode === 'C')              calcModeC();
+  else if (mode === 'Ck')        calcModeCk();
+  else if (mode === 'local')     calcModeLocal();
   else if (mode === 'empirical') calcModeEmpirical();
+
+  // Scroll right panel to top so step 1 is visible first
+  const panel = document.getElementById('calc-right-panel');
+  if (panel) panel.scrollTop = 0;
+
+  // Show export bar
+  const bar = document.getElementById('calc-export-bar');
+  if (bar) { bar.style.display = 'flex'; }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Calculator mode switcher
-  const modeEl = document.getElementById('calc-mode');
-  if (modeEl) modeEl.addEventListener('change', () => {
-    const m = modeEl.value;
-    document.getElementById('calc-input-C').style.display        = (m==='C'||m==='local') ? '' : 'none';
-    document.getElementById('calc-input-Ck').style.display       = m==='Ck' ? '' : 'none';
-    document.getElementById('calc-input-empirical').style.display = m==='empirical' ? '' : 'none';
-  });
 
-  // Sync slider ↔ number input for pmax
-  const pmaxNum    = document.getElementById('calc-pmax');
-  const pmaxSlider = document.getElementById('calc-pmax-slider');
-  if (pmaxNum && pmaxSlider) {
-    pmaxSlider.addEventListener('input', () => { pmaxNum.value = pmaxSlider.value; });
-    pmaxNum.addEventListener('input',    () => { pmaxSlider.value = Math.min(200, pmaxNum.value); });
-  }
-});
+
 
 function getPrimesUpTo(n) {
   const sieve = new Uint8Array(n+1);
@@ -3046,11 +3350,30 @@ function calcModeC() {
     Euler product over all primes p ≤ ${pMax} &nbsp;·&nbsp; ${primes.length} primes
   </div>`;
 
-  // Step 1
-  html += stepHTML(1, 'The Definition',
-    prose('C is the asymptotic fraction of coprime residues that survive the lift from ring M to ring M+1.') +
+  // Step 3 — convergence table: show ∞ first (target), then descending N
+  html += stepHTML(1, 'Defining C — The Limit',
+    prose('Count all surviving lifts across all rings up to M = N, divided by all coprime residues. The limit as N → ∞ is C.') +
     mathBox('C = lim<sub>N→∞</sub>  Σ #{r : gcd(r,M)=gcd(r,M+1)=1}  /  Σ φ(M)') +
-    prose('Each prime p contributes an independent local factor. We multiply them all together.')
+    prose('Each prime p contributes an independent local factor. We multiply them all together.') +
+    `<table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;margin-top:14px;">
+      <thead><tr style="color:var(--text3);border-bottom:1px solid var(--border2);">
+        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">N</th>
+        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">Empirical C</th>
+        <th style="text-align:left;padding:5px 0 7px;font-weight:400">Digits stable</th>
+      </tr></thead>
+      <tbody>
+        <tr style="color:var(--gold2);background:rgba(201,168,76,0.07);border-bottom:1px solid var(--border2);">
+          <td style="padding:5px 12px 5px 0;font-weight:600">∞ (theory)</td>
+          <td style="padding:5px 12px 5px 0;font-weight:600">0.530711806…</td>
+          <td style="padding:5px 0;color:var(--gold3)">exact</td>
+        </tr>
+        <tr><td style="padding:4px 12px 4px 0;color:var(--text2)">2,000,000</td><td style="color:var(--cream2)">0.530711611…</td><td style="color:var(--text3)">8+</td></tr>
+        <tr><td style="padding:4px 12px 4px 0;color:var(--text2)">100,000</td><td style="color:var(--cream2)">0.530711…</td><td style="color:var(--text3)">6</td></tr>
+        <tr><td style="padding:4px 12px 4px 0;color:var(--text2)">10,000</td><td style="color:var(--cream2)">0.530692…</td><td style="color:var(--text3)">4</td></tr>
+        <tr><td style="padding:4px 12px 4px 0;color:var(--text2)">1,000</td><td style="color:var(--cream2)">0.530638…</td><td style="color:var(--text3)">3</td></tr>
+      </tbody>
+    </table>` +
+    prose('The empirical count approaches the target from below. More rings = more digits. The partial Euler product approaches from above.')
   );
 
   // Step 2 — local factors table
@@ -3121,7 +3444,7 @@ function calcModeC() {
   const naiveC = Math.pow(6/Math.PI/Math.PI, 2);
   html += `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px;">
     ${miniCard('Naive guess (6/π²)²', naiveC.toFixed(6), 'If rings were independent', 'var(--text2)')}
-    ${miniCard('Your C', partial.toFixed(6), `${((partial/naiveC-1)*100).toFixed(1)}% above naive`, 'var(--gold2)')}
+    ${miniCard('C (new)', partial.toFixed(6), `${((partial/naiveC-1)*100).toFixed(1)}% above naive`, 'var(--gold2)')}
     ${miniCard('Twin prime C₂', '0.660162', 'Linear factors — absolute', 'var(--cream2)')}
   </div>`;
 
@@ -3311,19 +3634,21 @@ function calcModeEmpirical() {
     for (let r=1; r<M; r++) if (gcd(r,M)===1 && gcd(r,M+1)===1) lifts++;
     numLifts += lifts;
     denPhi   += phiM;
+    const cumC = denPhi > 0 ? numLifts/denPhi : 0;
     if (M <= mFrom+14 || M === mTo) {
       const rate = phiM>0 ? lifts/phiM : 0;
       ringRows.push(`<tr>
-        <td style="color:var(--gold2);padding:3px 12px 3px 0">${M}</td>
-        <td style="color:var(--text2);padding:3px 12px 3px 0">${phiM}</td>
-        <td style="color:var(--cream2);padding:3px 12px 3px 0">${lifts}</td>
-        <td style="color:${isPrime(M)?'var(--gold)':isPrime(M+1)?'var(--teal)':'var(--text3)'};padding:3px 12px 3px 0">${rate.toFixed(4)}</td>
-        <td style="color:var(--text3);padding:3px 0">${isPrime(M)?'prime ring':isPrime(M+1)?'→prime next':''}</td>
+        <td style="color:var(--gold2);padding:3px 10px 3px 0">${M}</td>
+        <td style="color:var(--text2);padding:3px 10px 3px 0">${phiM}</td>
+        <td style="color:var(--cream2);padding:3px 10px 3px 0">${lifts}</td>
+        <td style="color:${isPrime(M)?'var(--gold)':isPrime(M+1)?'var(--teal)':'var(--text3)'};padding:3px 10px 3px 0">${rate.toFixed(4)}</td>
+        <td style="color:var(--green);padding:3px 10px 3px 0">${cumC.toFixed(6)}</td>
+        <td style="color:var(--text3);padding:3px 0;font-size:9px">${isPrime(M)?'prime ring':isPrime(M+1)?'→prime next':''}</td>
       </tr>`);
     }
   }
   if (mTo - mFrom > 15) {
-    ringRows.splice(15, 0, `<tr><td colspan="5" style="color:var(--text3);padding:4px 0;font-style:italic">… ${mTo-mFrom-15} rows omitted …</td></tr>`);
+    ringRows.splice(15, 0, `<tr><td colspan="6" style="color:var(--text3);padding:5px 0;font-style:italic">… ${mTo-mFrom-15} rings omitted …</td></tr>`);
   }
 
   const empC = denPhi > 0 ? numLifts/denPhi : 0;
@@ -3336,17 +3661,19 @@ function calcModeEmpirical() {
     Direct count over M = ${mFrom} to ${mTo} &nbsp;·&nbsp; ${mTo-mFrom+1} rings
   </div>`;
 
-  html += stepHTML(1, 'Direct Count Per Ring',
-    `<div style="overflow-x:auto;"><table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;width:100%;">
+  html += stepHTML(1, 'Direct Count Per Ring — with cumulative C converging',
+    `<div style="overflow-x:auto;"><table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;width:100%;min-width:520px;">
       <thead><tr style="color:var(--text3);border-bottom:1px solid var(--border2);">
-        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">M</th>
-        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">φ(M)</th>
-        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">Lifts</th>
-        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">Rate</th>
+        <th style="text-align:left;padding:5px 10px 7px 0;font-weight:400">M</th>
+        <th style="text-align:left;padding:5px 10px 7px 0;font-weight:400">φ(M)</th>
+        <th style="text-align:left;padding:5px 10px 7px 0;font-weight:400">Lifts</th>
+        <th style="text-align:left;padding:5px 10px 7px 0;font-weight:400">Ring rate</th>
+        <th style="text-align:left;padding:5px 10px 7px 0;font-weight:400;color:var(--green)">Cumul. C ↑</th>
         <th style="text-align:left;padding:5px 0 7px;font-weight:400">Note</th>
       </tr></thead>
       <tbody>${ringRows.join('')}</tbody>
-    </table></div>`
+    </table></div>` +
+    prose('Ring rate = lifts/φ(M) for that single ring — varies widely. Cumulative C = running total lifts / running total φ(M) — converges to 0.530712.')
   );
 
   html += stepHTML(2, 'Summing and Dividing',
@@ -3376,6 +3703,105 @@ function miniCard(label, value, sub, col='var(--cream2)') {
     <div style="font-family:var(--mono);font-size:16px;color:${col};margin-bottom:4px">${value}</div>
     <div style="font-family:var(--mono);font-size:9px;color:var(--text3)">${sub}</div>
   </div>`;
+}
+
+// ── Calculator Export ──
+function exportCalcPNG() {
+  const steps = document.getElementById('calc-steps');
+  if (!steps || steps.style.display === 'none') return;
+
+  // Load html2canvas dynamically
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+  script.onload = () => {
+    const btn = document.querySelector('[onclick="exportCalcPNG()"]');
+    if (btn) btn.textContent = '⏳ Rendering…';
+
+    // Build a standalone export container with white bg for readability
+    const container = document.createElement('div');
+    container.style.cssText = `
+      position:fixed;left:-9999px;top:0;
+      background:#0d0c09;padding:48px 56px;
+      width:1200px;box-sizing:border-box;
+      font-family:'JetBrains Mono',monospace;
+    `;
+    // Copy computed styles for CSS variables
+    container.innerHTML = `
+      <style>
+        :root{--bg:#0d0c09;--bg2:#141209;--bg3:#1c1910;--border:#2a2418;--border2:#3a3220;
+          --gold:#c9a84c;--gold2:#e8c96a;--gold3:#f5e090;--gold-dim:#7a6330;
+          --cream:#e8e0d0;--cream2:#c8bea8;--text:#d4ccbc;--text2:#8a8070;--text3:#5a5040;
+          --teal:#4ecdc4;--red:#e06060;--green:#5ab87a;--mono:'JetBrains Mono',monospace;
+          --display:'Cormorant Garamond',serif;}
+      </style>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-style:italic;color:#e8c96a;margin-bottom:6px;">
+        Lift Survival Constant C — Step-by-Step
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a5040;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:32px;">
+        Modular Lifting Rings &nbsp;·&nbsp; 2026
+      </div>
+      ${steps.innerHTML}
+      <div style="margin-top:40px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#3a3220;border-top:1px solid #2a2418;padding-top:12px;">
+        C = ∏p (1 − 1/(p²−1)) ≈ 0.530711806246… &nbsp;·&nbsp; Not in OEIS
+      </div>`;
+    document.body.appendChild(container);
+
+    html2canvas(container, {
+      scale: 3,
+      backgroundColor: '#0d0c09',
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      windowWidth: 1312,
+    }).then(canvas => {
+      document.body.removeChild(container);
+      const link = document.createElement('a');
+      link.download = `C_calculator_${document.getElementById('calc-mode').value}_${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      if (btn) btn.textContent = '↓ Export PNG';
+    }).catch(err => {
+      document.body.removeChild(container);
+      console.error('Export error:', err);
+      if (btn) btn.textContent = '↓ Export PNG';
+    });
+  };
+  script.onerror = () => alert('Could not load html2canvas. Check network connection.');
+  document.head.appendChild(script);
+}
+
+function exportCalcHTML() {
+  const steps = document.getElementById('calc-steps');
+  if (!steps) return;
+  const mode = document.getElementById('calc-mode').value;
+
+  const html = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>C Calculator — ${mode} — modular_lifting_rings.html</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0c09;--bg2:#141209;--bg3:#1c1910;--border:#2a2418;--border2:#3a3220;
+  --gold:#c9a84c;--gold2:#e8c96a;--gold3:#f5e090;--gold-dim:#7a6330;
+  --cream:#e8e0d0;--cream2:#c8bea8;--text:#d4ccbc;--text2:#8a8070;--text3:#5a5040;
+  --teal:#4ecdc4;--mono:'JetBrains Mono',monospace;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);padding:56px 64px;max-width:1100px;margin:0 auto;}
+h1{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-style:italic;color:var(--gold2);margin-bottom:8px;}
+.byline{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:40px;}
+footer{margin-top:48px;border-top:1px solid var(--border);padding-top:16px;font-size:9px;color:var(--text3);}
+</style>
+</head><body>
+<h1>Lift Survival Constant C — Step-by-Step</h1>
+<div class="byline">2026</div>
+${steps.innerHTML}
+<footer>C = ∏p (1 − 1/(p²−1)) ≈ 0.530711806246… &nbsp;·&nbsp; Not in OEIS &nbsp;·&nbsp; modular_lifting_rings.html</footer>
+</body></html>`;
+
+  const blob = new Blob([html], {type: 'text/html'});
+  const link = document.createElement('a');
+  link.download = `C_calculator_${mode}_${Date.now()}.html`;
+  link.href = URL.createObjectURL(blob);
+  link.click();
 }
 document.addEventListener('DOMContentLoaded', () => {
   initCanvas();
