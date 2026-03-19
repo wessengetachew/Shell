@@ -678,13 +678,24 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <input type="checkbox" id="showGapChords">
         <label>Show gap chords</label>
       </div>
-      <div class="ctrl-row">
-        <label>Gap k</label>
-        <input type="number" id="gapChordClass" value="2" min="1" max="100"
-          style="width:58px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:14px;padding:3px 6px;border-radius:2px;text-align:center;">
-        <button class="btn" onclick="document.getElementById('gapChordClass').value='all';render();" style="padding:3px 7px;font-size:10px;">All</button>
+      <!-- Multi-gap input -->
+      <div style="margin-top:4px;">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:4px;">Gaps (comma list or All)</div>
+        <div class="ctrl-row" style="gap:4px;flex-wrap:wrap;">
+          <input type="text" id="gapChordClass" value="2" placeholder="2,4,6"
+            style="flex:1;min-width:60px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:12px;padding:4px 6px;border-radius:2px;">
+          <button class="btn" onclick="setGapChords('all')" style="padding:3px 8px;font-size:10px;">All</button>
+        </div>
+        <!-- Quick presets -->
+        <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;">
+          <button class="btn" onclick="setGapChords('2')"     style="padding:2px 8px;font-size:10px;">g=2</button>
+          <button class="btn" onclick="setGapChords('4')"     style="padding:2px 8px;font-size:10px;">g=4</button>
+          <button class="btn" onclick="setGapChords('6')"     style="padding:2px 8px;font-size:10px;">g=6</button>
+          <button class="btn" onclick="setGapChords('2,4')"   style="padding:2px 8px;font-size:10px;">2,4</button>
+          <button class="btn" onclick="setGapChords('2,4,6')" style="padding:2px 8px;font-size:10px;">2,4,6</button>
+        </div>
       </div>
-      <div class="ctrl-row">
+      <div class="ctrl-row" style="margin-top:6px;">
         <label>Opacity</label>
         <span class="val" id="chordOpVal">25%</span>
       </div>
@@ -714,6 +725,20 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <span class="val" id="ncSzVal">0.5</span>
       </div>
       <input type="range" class="range-full" id="ncSize" min="0.2" max="1.5" value="0.5" step="0.1">
+    </div>
+
+    <div class="ctrl-section">
+      <div class="ctrl-label">Zoom &amp; Pan</div>
+      <div class="ctrl-row">
+        <label>Zoom</label>
+        <span class="val" id="zoomVal">1.0×</span>
+      </div>
+      <input type="range" class="range-full" id="zoomSlider" min="0.2" max="20" value="1" step="0.05">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;">
+        <button class="btn" onclick="stepZoom(1.25)">＋ Zoom in</button>
+        <button class="btn" onclick="stepZoom(0.8)">－ Zoom out</button>
+      </div>
+      <button class="btn" style="width:100%;margin-top:4px;" onclick="resetView()">↺ Reset view</button>
     </div>
 
     <div class="ctrl-section">
@@ -791,22 +816,36 @@ select:focus { outline: none; border-color: var(--gold-dim); }
     </div>
 
     <div class="ctrl-section">
-      <div class="ctrl-label">Gap Advisable vs Actual</div>
+      <div class="ctrl-label">Admissible Gaps &nbsp;<span style="color:var(--text3);font-size:8px;">ζ(2) chord geometry</span></div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);line-height:1.6;margin-bottom:6px;border-left:2px solid var(--gold-dim);padding-left:7px;">
+        For gap k, admissible pairs are residues r where both r and r+k are coprime to M — these are the only positions where a prime k-gap constellation can occur. Connects gap decomposition ζ(2)=∏P_g to the canvas.
+      </div>
       <div class="ctrl-row">
         <label>Gap k</label>
-        <input type="number" id="gapN" value="2" min="1" max="1000"
-          style="width:70px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:16px;padding:4px 8px;border-radius:2px;text-align:center;">
+        <input type="text" id="gapN" value="2" placeholder="2,4,6"
+          style="flex:1;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:13px;padding:4px 8px;border-radius:2px;">
       </div>
-      <div class="ctrl-row" style="margin-top:4px;">
+      <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;">
+        <button class="btn" onclick="setGapN('2')"     style="padding:2px 8px;font-size:10px;">k=2</button>
+        <button class="btn" onclick="setGapN('4')"     style="padding:2px 8px;font-size:10px;">k=4</button>
+        <button class="btn" onclick="setGapN('6')"     style="padding:2px 8px;font-size:10px;">k=6</button>
+        <button class="btn" onclick="setGapN('2,4,6')" style="padding:2px 8px;font-size:10px;">2,4,6</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:6px;">
         <input type="checkbox" id="showAdvisable" checked>
-        <label>Show admissible pairs</label>
+        <label>Draw admissible chords</label>
       </div>
       <div class="ctrl-row">
         <input type="checkbox" id="showActualGap">
-        <label>Show actual prime gaps</label>
+        <label>Highlight actual prime pairs</label>
       </div>
-      <button class="btn" style="margin-top:4px;" onclick="computeGapAdvisable()">Compute</button>
-      <div id="gap-advisable-info" style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:6px;line-height:1.8;"></div>
+      <div class="ctrl-row" style="margin-top:2px;">
+        <label>Chord opacity</label>
+        <span class="val" id="admOpVal">30%</span>
+      </div>
+      <input type="range" class="range-full" id="admOpacity" min="3" max="80" value="30">
+      <button class="btn" style="margin-top:6px;" onclick="computeGapAdvisable()">Compute + Draw</button>
+      <div id="gap-advisable-info" style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:6px;line-height:1.9;"></div>
     </div>
 
     <div class="ctrl-section">
@@ -1991,6 +2030,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
               <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">Cumul. ∏P_g</th>
               <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">% ζ(2)</th>
               <th style="text-align:left;padding:6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">Error</th>
+              <th style="text-align:left;padding:6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">View</th>
             </tr></thead>
             <tbody id="gd-tbody"></tbody>
           </table>
@@ -2630,31 +2670,91 @@ function render() {
 
   // ── Ring index labels for highlighted rings — removed, show rings only ──
 
-  // ── Gap chords ──
+  // ── Gap Chords — admissible pairs only, all rings, wrap-around ──
+  // A chord r↔r+k on ring M is valid iff BOTH gcd(r,M)=1 AND gcd(r+k mod M, M)=1
   if (showGapChords && rings.length > 0) {
-    const targetRing = rings[rings.length - 1];
-    const pts = targetRing.points;
-    const gapColors = {
-      2: `rgba(120,210,120,${chordOpacity})`,
-      4: `rgba(100,170,220,${chordOpacity})`,
-      6: `rgba(200,120,220,${chordOpacity})`
-    };
-    ctx.lineWidth = 0.6;
-    for (let i = 0; i < pts.length; i++) {
-      for (let j = i+1; j < pts.length; j++) {
-        const diff = Math.abs(pts[i].r - pts[j].r);
-        let match = false, col = `rgba(180,160,120,${chordOpacity})`;
-        if (gapChordClass === 'all') { match = diff%2===0; col = gapColors[diff]||`hsla(${(diff*37)%360},60%,65%,${chordOpacity})`; }
-        else { const g=parseInt(gapChordClass); match=diff===g; col=gapColors[g]||col; }
-        if (!match) continue;
-        const p1=worldToScreen(pts[i].rho,pts[i].theta,targetRing), p2=worldToScreen(pts[j].rho,pts[j].theta,targetRing);
-        ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y);
-        ctx.strokeStyle=col; ctx.stroke();
-      }
-    }
+    const gapVal    = document.getElementById('gapChordClass').value.trim();
+    const isAll     = gapVal === 'all';
+    const activeGaps = isAll ? null : gapVal.split(/[,\s]+/).map(v=>parseInt(v)).filter(v=>!isNaN(v)&&v>=1);
+    const hues = [120,200,280,40,320,0,160,60];
+
+    rings.forEach(ring => {
+      if (ring.M < 3) return;
+      const M = ring.M;
+      ctx.lineWidth = 0.6;
+
+      ring.points.forEach(pt => {
+        const r = pt.r;
+        // Determine which gaps to draw for this point
+        const gaps = isAll
+          ? [2,4,6,8,10,12] // common even gaps for "all" mode
+          : activeGaps;
+
+        gaps.forEach((k, ki) => {
+          const r2 = (r + k) % M;
+          if (r2 === 0 || r2 === r) return;          // skip trivial
+          if (gcd(r2, M) !== 1) return;               // r+k must be coprime to M
+          if (r2 < r) return;                         // draw each pair once (lower→higher)
+
+          const col = isAll
+            ? `hsla(${(k*37)%360},65%,65%,${chordOpacity})`
+            : `hsla(${hues[ki%hues.length]},70%,65%,${chordOpacity})`;
+
+          const theta2 = 2*Math.PI*r2/M;
+          const p1 = worldToScreen(pt.rho, pt.theta, ring);
+          const p2 = worldToScreen(pt.rho, theta2, ring);
+          ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y);
+          ctx.strokeStyle = col; ctx.stroke();
+        });
+      });
+    });
   }
 
-  // ── Hyperbolic spirals ──
+  // ── Admissible gap chords (from Admissible Gaps section) ──
+  // Admissible: gcd(r,M)=1 AND gcd((r+k) mod M, M)=1 — connects by gap k within each ring
+  // Actual:     same admissibility + ring M is prime + M+k is also prime in range
+  const showAdm    = document.getElementById('showAdvisable')?.checked;
+  const showActual = document.getElementById('showActualGap')?.checked;
+  if ((showAdm || showActual) && rings.length > 0) {
+    const kRaw  = document.getElementById('gapN').value.trim();
+    const ks    = kRaw.split(/[,\s]+/).map(v=>parseInt(v)).filter(v=>!isNaN(v)&&v>=1);
+    const admOp = parseInt(document.getElementById('admOpacity')?.value || 30) / 100;
+    const hues  = [120,200,280,40,320,0,160,60];
+
+    ks.forEach((k, ki) => {
+      const admCol    = `hsla(${hues[ki%hues.length]},75%,65%,${admOp})`;
+      const actualCol = `hsla(${hues[ki%hues.length]},95%,85%,${Math.min(1, admOp*1.8)})`;
+
+      rings.forEach(ring => {
+        if (ring.M < 3) return;
+        const M = ring.M;
+
+        ring.points.forEach(pt => {
+          const r  = pt.r;
+          const r2 = (r + k) % M;
+          if (r2 === 0 || r2 === r) return;
+          if (gcd(r2, M) !== 1) return;   // r+k NOT coprime to M → not admissible (e.g. r=49,k=2,M=60: r2=51, gcd(51,60)=3)
+          if (r2 < r) return;             // draw each pair once
+
+          const theta2 = 2*Math.PI*r2/M;
+          const p1 = worldToScreen(pt.rho, pt.theta, ring);
+          const p2 = worldToScreen(pt.rho, theta2, ring);
+
+          // Admissible chord: both coprime to M ✓
+          if (showAdm) {
+            ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y);
+            ctx.strokeStyle = admCol; ctx.lineWidth = 0.5; ctx.stroke();
+          }
+
+          // Actual: only on prime rings where M+k is also prime
+          if (showActual && ring.isPrime && isPrime(M + k)) {
+            ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y);
+            ctx.strokeStyle = actualCol; ctx.lineWidth = 1.4; ctx.stroke();
+          }
+        });
+      });
+    });
+  }
   // When residues are tracked: draw their spirals in blue (distinct from gold track dots)
   // When no tracks and checkbox on: draw sample spirals from the outermost ring
   if (showSpirals && rings.length > 0) {
@@ -2840,6 +2940,7 @@ function onWheel(e) {
   e.preventDefault();
   const factor = e.deltaY > 0 ? 0.9 : 1.1;
   zoom = Math.max(0.2, Math.min(20, zoom * factor));
+  syncZoomSlider();
   render();
 }
 function onMouseDown(e) {
@@ -3452,7 +3553,16 @@ function runGapDecomp() {
         <td style="padding:3px 12px 3px 0;color:var(--text3);">${r.pct.toFixed(4)}%</td>
         <td style="padding:3px 12px 3px 0;color:${hl?'var(--teal)':'var(--cream2)'};">${r.cum.toFixed(10)}</td>
         <td style="padding:3px 12px 3px 0;color:var(--text3);">${r.pZ.toFixed(4)}%</td>
-        <td style="padding:3px 0;color:var(--text3);">${r.err.toExponential(3)}</td>`;
+        <td style="padding:3px 12px 3px 0;color:var(--text3);">${r.err.toExponential(3)}</td>
+        <td style="padding:3px 0;">
+          <button onclick="event.stopPropagation();viewGapOnCanvas(${r.g})"
+            style="font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:2px;
+                   border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;white-space:nowrap;"
+            onmouseover="this.style.borderColor='var(--gold-dim)';this.style.color='var(--gold2)'"
+            onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
+            → Canvas
+          </button>
+        </td>`;
       tbody.appendChild(tr);
     });
 
@@ -3827,7 +3937,39 @@ function runGapDecompLegacy() { runGapDecomp(); }
 function gdResizeCanvas() {} // no-op, individual charts resize themselves
 function gdDrawChart() {}    // no-op, replaced by gdRenderAllCharts
 
-function resetView() { zoom = 1; panX = 0; panY = 0; render(); }
+function setGapChords(val) {
+  document.getElementById('gapChordClass').value = val;
+  document.getElementById('showGapChords').checked = true;
+  render();
+}
+
+// Called from Gap ζ(2) tab — sets the gap chord to g, enables chords, switches to viz tab
+function viewGapOnCanvas(g) {
+  setGapChords(String(g));
+  // Switch to viz tab
+  const vizBtn = document.querySelector('.tab-btn[onclick*="viz"]');
+  switchTab('viz', vizBtn);
+  // Scroll sidebar to Gap Chords section
+  setTimeout(() => {
+    const chordSection = document.getElementById('showGapChords')?.closest('.ctrl-section');
+    if (chordSection) chordSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+function stepZoom(factor) {
+  zoom = Math.max(0.2, Math.min(20, zoom * factor));
+  syncZoomSlider();
+  render();
+}
+
+function syncZoomSlider() {
+  const sl = document.getElementById('zoomSlider');
+  const vl = document.getElementById('zoomVal');
+  if (sl) sl.value = zoom;
+  if (vl) vl.textContent = zoom.toFixed(2) + '×';
+}
+
+function resetView() { zoom = 1; panX = 0; panY = 0; syncZoomSlider(); render(); }
 
 function toggleStackMode() {
   const viz   = document.getElementById('viz-tab');
@@ -4015,57 +4157,57 @@ function updateCumOffsets() {
 }
 
 // ── Gap Advisable vs Actual ──
+function setGapN(val) {
+  document.getElementById('gapN').value = val;
+  computeGapAdvisable();
+}
+
 function computeGapAdvisable() {
-  const k   = parseInt(document.getElementById('gapN').value);
-  const mTo = rings.length > 0 ? rings[rings.length-1].M : 40;
-  const info = document.getElementById('gap-advisable-info');
+  const kRaw  = document.getElementById('gapN').value.trim();
+  const ks    = kRaw.split(/[,\s]+/).map(v=>parseInt(v)).filter(v=>!isNaN(v)&&v>=1);
+  if (!ks.length) return;
+  const mTo   = rings.length > 0 ? rings[rings.length-1].M : 40;
+  const info  = document.getElementById('gap-advisable-info');
+  const hues  = [120,200,280,40,320,0,160,60];
 
-  // Admissible pairs: residues r in (Z/mZ)* such that r+k also coprime to m
-  // For each ring M, count admissible pairs
-  let totalAdmissible = 0, totalActual = 0;
-  const admissibleByRing = [];
+  let html = '';
+  ks.forEach((k, ki) => {
+    // Admissible pairs per ring: r∈(Z/MZ)* AND r+k coprime to M
+    let totalAdm = 0;
+    rings.forEach(ring => {
+      if (ring.M < 2) return;
+      ring.points.forEach(pt => {
+        if (gcd(pt.r + k, ring.M) === 1) totalAdm++;
+      });
+    });
 
-  rings.forEach(ring => {
-    if (ring.M < 2) return;
-    let adm = 0;
-    for (const pt of ring.points) {
-      if (gcd(pt.r + k, ring.M) === 1) adm++;
+    // Actual prime k-pairs in range
+    let primePairs = 0;
+    for (let p = 2; p <= mTo; p++) {
+      if (isPrime(p) && isPrime(p+k)) primePairs++;
     }
-    // Actual: count primes p in ring where p+k is also prime and both in range
-    let actual = 0;
-    if (isPrime(ring.M)) {
-      if (ring.M + k <= mTo + 5 && isPrime(ring.M + k)) actual = 1;
-    }
-    totalAdmissible += adm;
-    totalActual += actual;
-    admissibleByRing.push({ M: ring.M, adm, actual });
+
+    // C_k
+    const extraFactor = primeFactors(k).reduce((prod, p) =>
+      prod * (p-1)*(p**2+p-1) / (p*(p**2-2)), 1);
+    const Ck = 0.530712 * extraFactor;
+
+    // Admissibility ratio: what fraction of coprime positions also have r+k coprime
+    const totalCoprime = rings.reduce((s,r)=>s+(r.M>=2?r.phiM:0),0);
+    const admRatio = totalCoprime > 0 ? (totalAdm/totalCoprime*100).toFixed(2) : '—';
+
+    const col = `hsl(${hues[ki%hues.length]},70%,65%)`;
+    html += `<span style="color:${col}">k=${k}</span>  ` +
+      `Adm: <b>${totalAdm.toLocaleString()}</b> (${admRatio}%)<br>` +
+      `Prime k-pairs: <span style="color:var(--teal)">${primePairs}</span>` +
+      `  C_${k}=${Ck.toFixed(6)}<br>` +
+      `rad(${k})={${primeFactors(k).join('·')}}<br>`;
   });
 
-  // Theoretical C_k extra factor
-  const extraFactor = primeFactors(k).reduce((prod, p) =>
-    prod * (p-1)*(p**2+p-1) / (p*(p**2-2)), 1);
-  const Ck = 0.530712 * extraFactor;
+  info.innerHTML = html +
+    `<span style="color:var(--text3);font-size:8px;">Admissible = #{r∈(Z/MZ)*: gcd(r+k,M)=1} across all rings to M=${mTo}</span>`;
 
-  // Count actual prime k-pairs in range
-  let primePairs = 0;
-  for (let p = 2; p <= mTo; p++) {
-    if (isPrime(p) && isPrime(p+k)) primePairs++;
-  }
-
-  info.innerHTML =
-    `<span style="color:var(--gold2)">k = ${k}</span><br>` +
-    `Admissible pairs: <span style="color:var(--cream2)">${totalAdmissible}</span><br>` +
-    `Actual prime k-pairs: <span style="color:var(--green-dim)">${primePairs}</span><br>` +
-    `C_${k} = ${Ck.toFixed(6)}<br>` +
-    `C_${k}/C_1 = ${extraFactor.toFixed(4)}<br>` +
-    `rad(${k}) = ${primeFactors(k).join('·')}<br>` +
-    `<span style="color:var(--text3);font-size:8px;">Admissible = #{r∈(Z/MZ)*: gcd(r+k,M)=1} summed over rings</span>`;
-
-  // Highlight admissible points if checkbox on
-  if (document.getElementById('showAdvisable').checked ||
-      document.getElementById('showActualGap').checked) {
-    render();
-  }
+  render();
 }
 
 function primeFactors(n) {
@@ -4991,6 +5133,18 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('showCumRotation').addEventListener('change', () => render());
 
   document.getElementById('gapN').addEventListener('input', () => computeGapAdvisable());
+  wireSlider('admOpacity', 'admOpVal', '%', 0);
+
+  // Zoom slider
+  const zoomSl = document.getElementById('zoomSlider');
+  if (zoomSl) {
+    zoomSl.addEventListener('input', () => {
+      zoom = parseFloat(zoomSl.value);
+      document.getElementById('zoomVal').textContent = zoom.toFixed(2) + '×';
+      render();
+    });
+  }
+  document.getElementById('gapN').addEventListener('input', () => computeGapAdvisable());
   ['showAdvisable','showActualGap'].forEach(id =>
     document.getElementById(id).addEventListener('change', () => render()));
 
@@ -5017,8 +5171,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'f' || e.key === 'F') document.getElementById('fracA').focus();
     if (e.key === 'ArrowLeft')  stepRotation(-5);
     if (e.key === 'ArrowRight') stepRotation(5);
-    if (e.key === '+' || e.key === '=') { zoom = Math.min(20, zoom*1.2); render(); }
-    if (e.key === '-')                   { zoom = Math.max(0.2, zoom/1.2); render(); }
+    if (e.key === '+' || e.key === '=') { zoom = Math.min(20, zoom*1.2); syncZoomSlider(); render(); }
+    if (e.key === '-')                   { zoom = Math.max(0.2, zoom/1.2); syncZoomSlider(); render(); }
   });
 
   // Enter on fraction inputs
