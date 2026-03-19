@@ -678,6 +678,10 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <input type="checkbox" id="showGapChords">
         <label>Show gap chords</label>
       </div>
+      <div class="ctrl-row" style="margin-top:2px;">
+        <input type="checkbox" id="chordsAllRings">
+        <label>All rings <span style="color:var(--text3);font-size:8px;">(not just outermost)</span></label>
+      </div>
       <!-- Multi-gap input -->
       <div style="margin-top:4px;">
         <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:4px;">Gaps (comma list or All)</div>
@@ -832,7 +836,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <button class="btn" onclick="setGapN('2,4,6')" style="padding:2px 8px;font-size:10px;">2,4,6</button>
       </div>
       <div class="ctrl-row" style="margin-top:6px;">
-        <input type="checkbox" id="showAdvisable" checked>
+        <input type="checkbox" id="showAdvisable">
         <label>Draw admissible chords</label>
       </div>
       <div class="ctrl-row">
@@ -873,7 +877,12 @@ select:focus { outline: none; border-color: var(--gold-dim); }
       <div style="display:flex;flex-direction:column;gap:6px;">
         <input type="text" id="exportTitle" placeholder="Title (optional)" style="background:var(--bg3);border:1px solid var(--border2);color:var(--cream2);font-family:var(--mono);font-size:11px;padding:5px 8px;border-radius:2px;width:100%;">
         <input type="text" id="exportSubtitle" placeholder="Subtitle (optional)" style="background:var(--bg3);border:1px solid var(--border2);color:var(--cream2);font-family:var(--mono);font-size:11px;padding:5px 8px;border-radius:2px;width:100%;">
-        <button class="btn btn-gold" onclick="exportPNG()">Export PNG (4K)</button>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--text3);margin:2px 0 0;">
+          <input type="checkbox" id="exportUseZoom" checked style="accent-color:var(--gold);vertical-align:middle;margin-right:4px;">
+          <label style="cursor:pointer;">Preserve current zoom/pan</label>
+        </div>
+        <button class="btn btn-gold" onclick="exportPNG()">Export 4K + Legend</button>
+        <button class="btn" onclick="exportCanvasOnly()">Export 4K Canvas only</button>
         <button class="btn" onclick="exportCSV()">Export CSV</button>
       </div>
     </div>
@@ -936,6 +945,27 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <div id="path-details-area" style="display:none;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
           <div style="font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Residue Path Details</div>
           <div id="path-details-content" style="font-family:var(--mono);font-size:10px;overflow-x:auto;"></div>
+        </div>
+
+        <!-- Gap chord detail table — shown when gap chords are on -->
+        <div id="gap-chord-detail" style="display:none;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.12em;text-transform:uppercase;">Gap Chord Pairs — click row to highlight</div>
+            <span id="chord-pair-count" style="font-family:var(--mono);font-size:9px;color:var(--text3);"></span>
+          </div>
+          <div style="max-height:160px;overflow-y:auto;border:1px solid var(--border2);border-radius:2px;">
+            <table id="chord-pair-table" style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10px;">
+              <thead><tr style="background:var(--bg3);color:var(--text3);position:sticky;top:0;">
+                <th style="text-align:left;padding:4px 10px 4px 8px;font-weight:400;border-bottom:1px solid var(--border2);">Gap</th>
+                <th style="text-align:left;padding:4px 10px 4px 0;font-weight:400;border-bottom:1px solid var(--border2);">Ring M</th>
+                <th style="text-align:left;padding:4px 10px 4px 0;font-weight:400;border-bottom:1px solid var(--border2);">r₁</th>
+                <th style="text-align:left;padding:4px 10px 4px 0;font-weight:400;border-bottom:1px solid var(--border2);">r₂</th>
+                <th style="text-align:left;padding:4px 10px 4px 0;font-weight:400;border-bottom:1px solid var(--border2);">θ₁</th>
+                <th style="text-align:left;padding:4px 0 4px 0;font-weight:400;border-bottom:1px solid var(--border2);">Type</th>
+              </tr></thead>
+              <tbody id="chord-pair-tbody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -2376,6 +2406,8 @@ function updateStatsPanel() {
     </div>`;
   updateEntropyPanel();
   updateGapDecompPanel();
+  updateChordDetailTable();
+  updateGapClassPanel();
 }
 
 function updateEntropyPanel() {
@@ -2670,43 +2702,61 @@ function render() {
 
   // ── Ring index labels for highlighted rings — removed, show rings only ──
 
-  // ── Gap Chords — admissible pairs only, all rings, wrap-around ──
-  // A chord r↔r+k on ring M is valid iff BOTH gcd(r,M)=1 AND gcd(r+k mod M, M)=1
+  // ── Gap Chords ──
   if (showGapChords && rings.length > 0) {
-    const gapVal    = document.getElementById('gapChordClass').value.trim();
-    const isAll     = gapVal === 'all';
+    const gapVal     = document.getElementById('gapChordClass').value.trim();
+    const isAll      = gapVal === 'all';
+    const allRings   = document.getElementById('chordsAllRings')?.checked;
     const activeGaps = isAll ? null : gapVal.split(/[,\s]+/).map(v=>parseInt(v)).filter(v=>!isNaN(v)&&v>=1);
+    const gapColors  = {
+      2: `rgba(120,210,120,${chordOpacity})`,
+      4: `rgba(100,170,220,${chordOpacity})`,
+      6: `rgba(200,120,220,${chordOpacity})`
+    };
     const hues = [120,200,280,40,320,0,160,60];
+    ctx.lineWidth = 0.6;
 
-    rings.forEach(ring => {
-      if (ring.M < 3) return;
-      const M = ring.M;
-      ctx.lineWidth = 0.6;
+    // Which rings to draw on
+    const ringsToDraw = allRings ? rings.filter(r => r.M >= 3) : [rings[rings.length - 1]];
 
-      ring.points.forEach(pt => {
-        const r = pt.r;
-        // Determine which gaps to draw for this point
-        const gaps = isAll
-          ? [2,4,6,8,10,12] // common even gaps for "all" mode
-          : activeGaps;
+    ringsToDraw.forEach(ring => {
+      const pts = ring.points;
+      const M   = ring.M;
 
-        gaps.forEach((k, ki) => {
-          const r2 = (r + k) % M;
-          if (r2 === 0 || r2 === r) return;          // skip trivial
-          if (gcd(r2, M) !== 1) return;               // r+k must be coprime to M
-          if (r2 < r) return;                         // draw each pair once (lower→higher)
+      if (isAll) {
+        // All mode — pairwise (original behavior)
+        for (let i = 0; i < pts.length; i++) {
+          for (let j = i+1; j < pts.length; j++) {
+            const diff = Math.abs(pts[i].r - pts[j].r);
+            if (diff % 2 !== 0) continue;
+            const col = gapColors[diff] || `hsla(${(diff*37)%360},60%,65%,${chordOpacity})`;
+            const p1 = worldToScreen(pts[i].rho, pts[i].theta, ring);
+            const p2 = worldToScreen(pts[j].rho, pts[j].theta, ring);
+            ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y);
+            ctx.strokeStyle = col; ctx.stroke();
+          }
+        }
+      } else {
+        // Specific gaps — forward scan O(φ(M)) per ring per gap
+        // Build a Set of coprime residues for fast lookup
+        const coprimeSet = new Set(pts.map(p => p.r));
+        // Build a map from r → point for fast worldToScreen lookup
+        const ptMap = new Map(pts.map(p => [p.r, p]));
 
-          const col = isAll
-            ? `hsla(${(k*37)%360},65%,65%,${chordOpacity})`
-            : `hsla(${hues[ki%hues.length]},70%,65%,${chordOpacity})`;
-
-          const theta2 = 2*Math.PI*r2/M;
-          const p1 = worldToScreen(pt.rho, pt.theta, ring);
-          const p2 = worldToScreen(pt.rho, theta2, ring);
-          ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y);
-          ctx.strokeStyle = col; ctx.stroke();
+        activeGaps.forEach((k, ki) => {
+          const col = gapColors[k] || `hsla(${hues[ki%hues.length]},65%,65%,${chordOpacity})`;
+          pts.forEach(pt => {
+            const r2 = pt.r + k;
+            if (r2 >= M) return;                  // only forward, no wrap (avoids double-draw)
+            if (!coprimeSet.has(r2)) return;      // r2 must be coprime to M (gcd check via ring membership)
+            const pt2 = ptMap.get(r2);
+            const p1  = worldToScreen(pt.rho,  pt.theta,           ring);
+            const p2  = worldToScreen(pt2.rho, pt2.theta,          ring);
+            ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y);
+            ctx.strokeStyle = col; ctx.stroke();
+          });
         });
-      });
+      }
     });
   }
 
@@ -3077,67 +3127,132 @@ function rebuild() {
 // ============================================================
 //  EXPORT
 // ============================================================
+// ── Build active features string for export ──
+function getActiveFeatures() {
+  const parts = [];
+  const gapVal = document.getElementById('gapChordClass').value.trim();
+  if (document.getElementById('showGapChords').checked)
+    parts.push(`Gap chords: ${gapVal}${document.getElementById('chordsAllRings')?.checked ? ' (all rings)' : ''}`);
+  if (document.getElementById('showAdvisable')?.checked)
+    parts.push(`Admissible k=${document.getElementById('gapN').value}`);
+  if (document.getElementById('showActualGap')?.checked)
+    parts.push(`Actual prime pairs k=${document.getElementById('gapN').value}`);
+  if (document.getElementById('showSpirals').checked && trackedResidues.length)
+    parts.push(`Spirals r=${trackedResidues.map(t=>t.r).join(',')}`);
+  if (document.getElementById('showLifts').checked) parts.push('Lifts');
+  if (document.getElementById('highlightPrimes').checked) parts.push('Prime rings');
+  return parts.join('  ·  ');
+}
+
+// ── Shared: render to offscreen respecting zoom toggle ──
+function renderToOffscreen(W, H) {
+  const off = document.createElement('canvas');
+  off.width = W; off.height = H;
+  const offCtx = off.getContext('2d');
+  const savedCtx = ctx, savedCanvas = canvas;
+  ctx = offCtx; canvas = off;
+  const useZoom = document.getElementById('exportUseZoom')?.checked;
+  const savedZoom = zoom, savedPanX = panX, savedPanY = panY;
+  if (!useZoom) { zoom = 1; panX = 0; panY = 0; }
+  render();
+  ctx = savedCtx; canvas = savedCanvas;
+  zoom = savedZoom; panX = savedPanX; panY = savedPanY;
+  return off;
+}
+
+// ── Canvas-only 4K export ──
+function exportCanvasOnly() {
+  const titleText = document.getElementById('exportTitle').value || 'Modular Lifting Rings';
+  const mFrom = document.getElementById('mFrom').value;
+  const mTo   = document.getElementById('mTo').value;
+  const features = getActiveFeatures();
+
+  const EW = 3840, EH = 2400;
+  const TITLE_H = 88;
+  const ec = document.createElement('canvas');
+  ec.width = EW; ec.height = EH;
+  const ectx = ec.getContext('2d');
+
+  // Canvas render
+  const off = renderToOffscreen(EW, EH - TITLE_H);
+  ectx.fillStyle = '#0c0b09'; ectx.fillRect(0, 0, EW, EH);
+  ectx.drawImage(off, 0, TITLE_H);
+
+  // Title bar
+  ectx.fillStyle = 'rgba(12,11,9,0.97)'; ectx.fillRect(0, 0, EW, TITLE_H);
+  ectx.strokeStyle = '#2a2218'; ectx.lineWidth = 1;
+  ectx.beginPath(); ectx.moveTo(0, TITLE_H); ectx.lineTo(EW, TITLE_H); ectx.stroke();
+
+  ectx.textAlign = 'center';
+  ectx.font = 'italic 300 44px "Cormorant Garamond", Georgia, serif';
+  ectx.fillStyle = '#e8c96a';
+  ectx.fillText(titleText, EW/2, 44);
+
+  ectx.font = '300 18px "JetBrains Mono", monospace';
+  ectx.fillStyle = '#5a5448';
+  ectx.fillText(`M = ${mFrom}–${mTo}  ·  ${totalPoints.toLocaleString()} residues  ·  ${totalLifts.toLocaleString()} lifts`, EW/2, 66);
+
+  if (features) {
+    ectx.font = '300 14px "JetBrains Mono", monospace';
+    ectx.fillStyle = '#3d3528';
+    ectx.fillText(features, EW/2, 82);
+  }
+
+  const link = document.createElement('a');
+  link.download = `modular_lifting_rings_canvas_M${mFrom}-${mTo}_4K.png`;
+  link.href = ec.toDataURL('image/png');
+  link.click();
+}
+
 function exportPNG() {
   const titleText = document.getElementById('exportTitle').value || 'Modular Lifting Rings';
   const mFrom = document.getElementById('mFrom').value;
   const mTo   = document.getElementById('mTo').value;
+  const features = getActiveFeatures();
 
   const EW = 3840, EH = 2400, LEGEND_W = 520;
-  const MAIN_W = EW - LEGEND_W;
-  const TITLE_H = 72;   // top strip on canvas for title + range
-  const INSTR_H = 36;   // bottom strip for controls hint
+  const MAIN_W  = EW - LEGEND_W;
+  const TITLE_H = 88;   // taller — title 44, subtitle 66, features 82
+  const INSTR_H = 32;
   const ec   = document.createElement('canvas');
   ec.width = EW; ec.height = EH;
   const ectx = ec.getContext('2d');
 
-  // ── Background ──
-  ectx.fillStyle = '#0c0b09';
-  ectx.fillRect(0, 0, EW, EH);
+  ectx.fillStyle = '#0c0b09'; ectx.fillRect(0, 0, EW, EH);
 
-  // ── Render canvas (with top/bottom strips reserved) ──
+  // ── Canvas render ──
   const CANVAS_H = EH - TITLE_H - INSTR_H;
-  const offscreen = document.createElement('canvas');
-  offscreen.width = MAIN_W; offscreen.height = CANVAS_H;
-  const offCtx = offscreen.getContext('2d');
-  const savedCtx = ctx, savedCanvas = canvas;
-  ctx = offCtx; canvas = offscreen;
-  const savedZoom = zoom, savedPanX = panX, savedPanY = panY;
-  zoom = 1; panX = 0; panY = 0;
-  render();
-  ctx = savedCtx; canvas = savedCanvas;
-  zoom = savedZoom; panX = savedPanX; panY = savedPanY;
-  ectx.drawImage(offscreen, 0, TITLE_H);
+  const off = renderToOffscreen(MAIN_W, CANVAS_H);
+  ectx.drawImage(off, 0, TITLE_H);
 
-  // ── Title bar — CENTERED across full canvas width ──
-  ectx.fillStyle = 'rgba(14,13,10,0.95)';
-  ectx.fillRect(0, 0, MAIN_W, TITLE_H);
-  ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
+  // ── Title bar ──
+  ectx.fillStyle = 'rgba(12,11,9,0.97)'; ectx.fillRect(0, 0, MAIN_W, TITLE_H);
+  ectx.strokeStyle = '#2a2218'; ectx.lineWidth = 1;
   ectx.beginPath(); ectx.moveTo(0, TITLE_H); ectx.lineTo(MAIN_W, TITLE_H); ectx.stroke();
 
-  ectx.font = 'italic 300 38px "Cormorant Garamond", Georgia, serif';
-  ectx.fillStyle = '#e8c96a';
   ectx.textAlign = 'center';
-  ectx.fillText(titleText, MAIN_W / 2, 44);
+  ectx.font = 'italic 300 40px "Cormorant Garamond", Georgia, serif';
+  ectx.fillStyle = '#e8c96a';
+  ectx.fillText(titleText, MAIN_W/2, 40);
 
   ectx.font = '300 16px "JetBrains Mono", monospace';
   ectx.fillStyle = '#5a5448';
-  ectx.textAlign = 'center';
-  ectx.fillText(`M = ${mFrom} – ${mTo}  ·  ${totalPoints.toLocaleString()} residues  ·  ${totalLifts.toLocaleString()} lifts  ·  2026`, MAIN_W / 2, 62);
+  ectx.fillText(`M = ${mFrom}–${mTo}  ·  ${totalPoints.toLocaleString()} residues  ·  ${totalLifts.toLocaleString()} lifts  ·  zoom ${zoom.toFixed(2)}×`, MAIN_W/2, 61);
 
-  // ── Controls hint strip (bottom of canvas area) ──
+  if (features) {
+    ectx.font = '300 13px "JetBrains Mono", monospace';
+    ectx.fillStyle = '#4a4030';
+    ectx.fillText(features, MAIN_W/2, 78);
+  }
+
+  // ── Controls hint strip ──
   const instY = TITLE_H + CANVAS_H;
-  ectx.fillStyle = 'rgba(14,13,10,0.92)';
-  ectx.fillRect(0, instY, MAIN_W, INSTR_H);
-  ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
+  ectx.fillStyle = 'rgba(12,11,9,0.92)'; ectx.fillRect(0, instY, MAIN_W, INSTR_H);
+  ectx.strokeStyle = '#2a2218'; ectx.lineWidth = 1;
   ectx.beginPath(); ectx.moveTo(0, instY); ectx.lineTo(MAIN_W, instY); ectx.stroke();
-
-  ectx.font = '300 13px "JetBrains Mono", monospace';
-  ectx.fillStyle = '#3d3528';
+  ectx.font = '300 11px "JetBrains Mono", monospace'; ectx.fillStyle = '#3d3528';
   ectx.textAlign = 'left';
-  ectx.fillText(
-    'scroll: zoom  ·  drag: pan  ·  dbl-click: reset  ·  click point: inspect  ·  S: spirals  ·  L: lifts  ·  A: auto-spin  ·  X: clear track  ·  ←→: rotate  ·  ⊞ Stack: fullscreen mode',
-    40, instY + 23
-  );
+  ectx.fillText('scroll: zoom  ·  drag: pan  ·  dbl-click: reset  ·  click: inspect  ·  +/−: zoom  ·  S: spirals  ·  L: lifts  ·  A: spin  ·  X: clear', 40, instY+21);
 
   // ── Legend panel ──
   const lx = MAIN_W;
@@ -3296,6 +3411,51 @@ function exportPNG() {
     ly += 6; divider();
   }
 
+  // ── Gap chords legend ──
+  if (document.getElementById('showGapChords').checked) {
+    const gapVal   = document.getElementById('gapChordClass').value.trim();
+    const allRings = document.getElementById('chordsAllRings')?.checked;
+    const targetM  = rings[rings.length-1]?.M || 0;
+    const pts      = rings[rings.length-1]?.points || [];
+    // Count admissible pairs for each gap
+    const isAll    = gapVal === 'all';
+    const activeGs = isAll ? [2,4,6] : gapVal.split(/[,\s]+/).map(v=>parseInt(v)).filter(v=>!isNaN(v));
+    divider();
+    lRow('', '', {heading:true, label:`Gap Chords — g=${gapVal}${allRings?' (all rings)':' (outermost)'}`});
+    lRow('Ring', `M = ${targetM}  ·  φ(M) = ${pts.length}`);
+    activeGs.forEach(k => {
+      let cnt = 0;
+      for (let i=0;i<pts.length;i++) for (let j=i+1;j<pts.length;j++) if (Math.abs(pts[i].r-pts[j].r)===k) cnt++;
+      if (cnt > 0) lRow(`Gap ${k}`, `${cnt} admissible pairs`);
+    });
+  }
+
+  // ── Admissible gaps legend ──
+  if (document.getElementById('showAdvisable')?.checked || document.getElementById('showActualGap')?.checked) {
+    const kRaw = document.getElementById('gapN').value.trim();
+    const ks   = kRaw.split(/[,\s]+/).map(v=>parseInt(v)).filter(v=>!isNaN(v)&&v>=1);
+    divider();
+    lRow('', '', {heading:true, label:`Admissible Gaps — k=${kRaw}`});
+    ks.forEach(k => {
+      let admCnt = 0, actualCnt = 0;
+      const mTo2 = rings[rings.length-1]?.M || 0;
+      rings.forEach(rg => {
+        if (rg.M<3) return;
+        const ptMap = new Set(rg.points.map(p=>p.r));
+        rg.points.forEach(pt => {
+          const r2 = (pt.r+k)%rg.M;
+          if (r2>0 && r2!==pt.r && ptMap.has(r2) && r2>pt.r) admCnt++;
+        });
+        if (rg.isPrime && isPrime(rg.M+k)) admCnt && actualCnt++;
+      });
+      for (let p=2;p<=mTo2;p++) if (isPrime(p)&&isPrime(p+k)) actualCnt++;
+      lRow(`k=${k} admissible`, admCnt.toLocaleString() + ' pairs');
+      lRow(`k=${k} prime pairs`, actualCnt.toLocaleString() + ' in range');
+      const ef = primeFactors(k).reduce((a,p)=>a*(p-1)*(p*p+p-1)/(p*(p*p-2)),1);
+      lRow(`C_${k}`, (0.530712*ef).toFixed(8), {gold:true});
+    });
+  }
+
   // ── Settings ──
   lRow('', '', {heading:true, label:'Settings'});
   const settingLines = [
@@ -3303,8 +3463,10 @@ function exportPNG() {
     ['Radius',       document.getElementById('radiusMode').selectedOptions[0].text],
     ['Residue view', document.getElementById('residueView').selectedOptions[0].text],
     ['Point size',   document.getElementById('pointSize').value + 'px'],
+    ['Zoom',         zoom.toFixed(2) + '×' + (document.getElementById('exportUseZoom')?.checked ? ' (preserved)' : ' (reset)')],
     ['Lifts',        document.getElementById('showLifts').checked ? 'On' : 'Off'],
     ['Gap chords',   document.getElementById('showGapChords').checked ? 'On g='+document.getElementById('gapChordClass').value : 'Off'],
+    ['All rings',    document.getElementById('chordsAllRings')?.checked ? 'Yes' : 'No'],
     ['Spirals',      document.getElementById('showSpirals').checked ? 'On' : 'Off'],
   ];
   for (const [k, v] of settingLines) {
@@ -3941,6 +4103,87 @@ function setGapChords(val) {
   document.getElementById('gapChordClass').value = val;
   document.getElementById('showGapChords').checked = true;
   render();
+}
+
+function updateChordDetailTable() {
+  const showChords = document.getElementById('showGapChords')?.checked;
+  const panel      = document.getElementById('gap-chord-detail');
+  if (!panel) return;
+
+  if (!showChords || rings.length === 0) { panel.style.display = 'none'; return; }
+
+  const gapVal     = document.getElementById('gapChordClass').value.trim();
+  const isAll      = gapVal === 'all';
+  const activeGaps = isAll ? null : gapVal.split(/[,\s]+/).map(v=>parseInt(v)).filter(v=>!isNaN(v)&&v>=1);
+  const allRings   = document.getElementById('chordsAllRings')?.checked;
+  const ringsToDraw = allRings ? rings.filter(r=>r.M>=3) : [rings[rings.length-1]];
+
+  const pairs = [];
+  const hues  = [120,200,280,40,320,0,160,60];
+
+  ringsToDraw.forEach(ring => {
+    const pts = ring.points;
+    const M   = ring.M;
+    for (let i=0;i<pts.length;i++) {
+      for (let j=i+1;j<pts.length;j++) {
+        const diff = Math.abs(pts[i].r - pts[j].r);
+        if (isAll && diff%2!==0) continue;
+        if (!isAll && !activeGaps.includes(diff)) continue;
+        pairs.push({
+          k:    diff,
+          M,
+          r1:   pts[i].r,
+          r2:   pts[j].r,
+          theta1: (pts[i].theta/(2*Math.PI)*360).toFixed(1),
+          isPrime: ring.isPrime,
+          isPrimorial: ring.isPrimorial,
+          ki: isAll ? null : activeGaps.indexOf(diff)
+        });
+        if (pairs.length >= 500) return; // cap for performance
+      }
+      if (pairs.length >= 500) break;
+    }
+    if (pairs.length >= 500) return;
+  });
+
+  panel.style.display = 'block';
+  document.getElementById('chord-pair-count').textContent =
+    `${pairs.length}${pairs.length>=500?' (capped at 500)':''} pairs`;
+
+  const tbody = document.getElementById('chord-pair-tbody');
+  tbody.innerHTML = '';
+  pairs.forEach(p => {
+    const tr = document.createElement('tr');
+    const col = isAll
+      ? `hsl(${(p.k*37)%360},65%,55%)`
+      : `hsl(${hues[(p.ki||0)%hues.length]},65%,55%)`;
+    const type = p.isPrimorial ? 'Primorial' : p.isPrime ? 'Prime' : 'Composite';
+    tr.style.cursor = 'pointer';
+    tr.title = `Click to inspect r=${p.r1} on M=${p.M}`;
+    tr.onclick = () => {
+      // Find and select this point on canvas
+      const ring = rings.find(rg=>rg.M===p.M);
+      const pt   = ring?.points.find(pp=>pp.r===p.r1);
+      if (pt && ring) {
+        inspectedPoint = {...pt, ring};
+        trackedResidues = []; trackedR = null;
+        setTrack(p.r1);
+        document.getElementById('showSpirals').checked = true;
+        showDataArea({...pt, ring});
+        render();
+      }
+    };
+    tr.onmouseover = () => tr.style.background = 'rgba(201,168,76,0.07)';
+    tr.onmouseout  = () => tr.style.background = '';
+    tr.innerHTML = `
+      <td style="padding:3px 10px 3px 8px;color:${col};font-weight:500;">${p.k}</td>
+      <td style="padding:3px 10px 3px 0;color:var(--text2);">${p.M}</td>
+      <td style="padding:3px 10px 3px 0;color:var(--cream2);">${p.r1}</td>
+      <td style="padding:3px 10px 3px 0;color:var(--cream2);">${p.r2}</td>
+      <td style="padding:3px 10px 3px 0;color:var(--text3);">${p.theta1}°</td>
+      <td style="padding:3px 0;color:${p.isPrime?'var(--gold2)':'var(--text3)'};">${type}</td>`;
+    tbody.appendChild(tr);
+  });
 }
 
 // Called from Gap ζ(2) tab — sets the gap chord to g, enables chords, switches to viz tab
@@ -5158,7 +5401,8 @@ document.addEventListener('DOMContentLoaded', () => {
    'highlightMersenne','highlightPrimorial','showGapChords',
    'rotCCW','diffRotate'].forEach(id =>
     document.getElementById(id).addEventListener('change', () => render()));
-  document.getElementById('gapChordClass').addEventListener('input', () => render());  // Keyboard shortcuts
+  document.getElementById('gapChordClass').addEventListener('input', () => render());
+  document.getElementById('chordsAllRings')?.addEventListener('change', () => render());
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT') return;
     if (e.key === 'r' || e.key === 'R') resetView();
