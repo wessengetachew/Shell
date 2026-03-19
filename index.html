@@ -565,6 +565,23 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <option value="gapclass">Gap class of ring index</option>
         <option value="mono">Monochrome</option>
       </select>
+
+      <!-- Vibrance controls -->
+      <div class="ctrl-row" style="margin-top:8px;">
+        <label>Brightness</label>
+        <span class="val" id="colorBrightVal">80%</span>
+      </div>
+      <input type="range" class="range-full" id="colorBright" min="30" max="100" value="80" step="1">
+      <div class="ctrl-row">
+        <label>Saturation</label>
+        <span class="val" id="colorSatVal">95%</span>
+      </div>
+      <input type="range" class="range-full" id="colorSat" min="20" max="100" value="95" step="1">
+      <div class="ctrl-row">
+        <label>Hue shift</label>
+        <span class="val" id="colorHueVal">0°</span>
+      </div>
+      <input type="range" class="range-full" id="colorHue" min="0" max="360" value="0" step="1">
       <div class="ctrl-row">
         <label>Labels</label>
       </div>
@@ -2150,19 +2167,12 @@ function isPrime(n) {
 function isMersenne(n) {
   if (n < 1) return false;
   let v = n + 1;
-  return (v & (v - 1)) === 0;
+  return (v & (v - 1)) === 0; // n+1 is a power of 2: n=1,3,7,15,31,63,127…
 }
-// Primorial: 2,6,30,210,2310,30030...
+// Primorial: 2#=2, 3#=6, 5#=30, 7#=210, 11#=2310, 13#=30030
+const PRIMORIALS = new Set([2, 6, 30, 210, 2310, 30030, 510510]);
 function isPrimorial(n) {
-  if (n < 2) return false;
-  let temp = n;
-  for (let p = 2; p <= temp; p++) {
-    if (!isPrime(p)) continue;
-    if (temp % p !== 0) return false;
-    while (temp % p === 0) temp = Math.floor(temp / p);
-    if (temp === 1) return true;
-  }
-  return temp === 1;
+  return PRIMORIALS.has(n);
 }
 function phi(n) {
   let result = n, temp = n;
@@ -2434,6 +2444,19 @@ function initCanvas() {
   });
 }
 
+function updateCanvasFilter() {
+  const bright = parseInt(document.getElementById('colorBright')?.value || 80);
+  const sat    = parseInt(document.getElementById('colorSat')?.value   || 95);
+  const hue    = parseInt(document.getElementById('colorHue')?.value   || 0);
+  // Map: bright 80 = 100% canvas brightness, 100 = 130%, 30 = 60%
+  const brightPct = Math.round(60 + bright * 0.875); // 30→86%, 80→130%, 100→147%
+  const satPct    = Math.round(50 + sat * 1.5);       // 20→80%, 95→192%, 100→200%
+  const glCanvas = document.getElementById('glCanvas');
+  if (glCanvas) {
+    glCanvas.style.filter = `brightness(${brightPct}%) saturate(${satPct}%) hue-rotate(${hue}deg)`;
+  }
+}
+
 function resizeCanvas() {
   const wrap = document.getElementById('canvas-wrap');
   const cssW = wrap.clientWidth;
@@ -2489,45 +2512,48 @@ function screenToNorm(sx, sy) {
 function getColor(pt, ring) {
   const mode  = document.getElementById('colorMode').value;
   const alpha = parseInt(document.getElementById('pointOpacity').value) / 100;
+  const L     = parseInt(document.getElementById('colorBright')?.value || 80);
+  const S     = parseInt(document.getElementById('colorSat')?.value   || 95);
+  const hShift = parseInt(document.getElementById('colorHue')?.value  || 0);
+  const H = h => ((h + hShift) % 360 + 360) % 360;
+
   if (mode === 'rainbow') {
     const h = (pt.theta / (2 * Math.PI)) * 360;
-    return `hsla(${h.toFixed(1)},80%,65%,${alpha})`;
+    return `hsla(${H(h).toFixed(1)},${S}%,${L}%,${alpha})`;
   }
   if (mode === 'survival') {
     const rate = pt.lifted === null ? 0.5 : (pt.lifted ? 1 : 0);
-    return `hsla(${rate * 120},70%,55%,${alpha})`;
+    return `hsla(${H(rate * 120)},${S}%,${Math.round(L*0.85)}%,${alpha})`;
   }
   if (mode === 'entropy') {
-    // ΔS_m = -ln(φ(m)/m): low entropy (prime-like) = cool blue, high entropy (primorial) = warm red
-    const maxEnt = 2.5; // primorial 30 has ΔS ≈ 1.9, 210 ≈ 2.6
+    const maxEnt = 2.5;
     const t = Math.min(1, ring.entropy / maxEnt);
-    const h = 240 - t * 200; // 240=blue → 40=amber
-    const s = 60 + t * 20;
-    return `hsla(${h.toFixed(0)},${s}%,60%,${alpha})`;
+    const h = 240 - t * 200;
+    return `hsla(${H(h).toFixed(0)},${S}%,${L}%,${alpha})`;
   }
   if (mode === 'prime') {
-    if (ring.isPrime) return `hsla(45,90%,65%,${alpha})`;
-    return `hsla(210,40%,55%,${alpha})`;
+    if (ring.isPrime) return `hsla(${H(45)},${S}%,${L}%,${alpha})`;
+    return `hsla(${H(210)},${Math.round(S*0.5)}%,${Math.round(L*0.75)}%,${alpha})`;
   }
   if (mode === 'residue') {
     const h = (pt.r % 6) * 60;
-    return `hsla(${h},70%,60%,${alpha})`;
+    return `hsla(${H(h)},${S}%,${L}%,${alpha})`;
   }
   if (mode === 'mersenne') {
-    if (ring.isMersenne) return `hsla(280,70%,65%,${alpha})`;
-    return `hsla(200,30%,50%,${alpha})`;
+    if (ring.isMersenne) return `hsla(${H(280)},${S}%,${L}%,${alpha})`;
+    return `hsla(${H(200)},${Math.round(S*0.4)}%,${Math.round(L*0.7)}%,${alpha})`;
   }
   if (mode === 'primorial') {
-    if (ring.isPrimorial) return `hsla(45,95%,68%,${alpha})`;
-    if (ring.isPrime)     return `hsla(200,60%,60%,${alpha})`;
-    return `hsla(200,20%,42%,${alpha})`;
+    if (ring.isPrimorial) return `hsla(${H(45)},${S}%,${L}%,${alpha})`;
+    if (ring.isPrime)     return `hsla(${H(200)},${Math.round(S*0.7)}%,${Math.round(L*0.85)}%,${alpha})`;
+    return `hsla(${H(200)},${Math.round(S*0.25)}%,${Math.round(L*0.6)}%,${alpha})`;
   }
   if (mode === 'gapclass') {
-    if (!ring.isPrime) return `hsla(200,20%,42%,${alpha})`;
+    if (!ring.isPrime) return `hsla(${H(200)},${Math.round(S*0.25)}%,${Math.round(L*0.6)}%,${alpha})`;
     const g = primeGapClass(ring.M);
     const gColors = { 1: 45, 2: 120, 4: 200, 6: 280, 8: 320, 10: 0, 12: 30 };
     const h = gColors[g] !== undefined ? gColors[g] : (g * 20) % 360;
-    return `hsla(${h},75%,62%,${alpha})`;
+    return `hsla(${H(h)},${S}%,${L}%,${alpha})`;
   }
   return `rgba(200,185,155,${alpha})`; // mono
 }
@@ -2981,7 +3007,7 @@ function exportPNG() {
   zoom = savedZoom; panX = savedPanX; panY = savedPanY;
   ectx.drawImage(offscreen, 0, TITLE_H);
 
-  // ── Title bar (top of canvas area) ──
+  // ── Title bar — CENTERED across full canvas width ──
   ectx.fillStyle = 'rgba(14,13,10,0.95)';
   ectx.fillRect(0, 0, MAIN_W, TITLE_H);
   ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
@@ -2989,12 +3015,13 @@ function exportPNG() {
 
   ectx.font = 'italic 300 38px "Cormorant Garamond", Georgia, serif';
   ectx.fillStyle = '#e8c96a';
-  ectx.textAlign = 'left';
-  ectx.fillText(titleText, 40, 46);
+  ectx.textAlign = 'center';
+  ectx.fillText(titleText, MAIN_W / 2, 44);
 
-  ectx.font = '300 18px "JetBrains Mono", monospace';
+  ectx.font = '300 16px "JetBrains Mono", monospace';
   ectx.fillStyle = '#5a5448';
-  ectx.fillText(`M = ${mFrom} – ${mTo}  ·  ${totalPoints.toLocaleString()} residues  ·  ${totalLifts.toLocaleString()} lifts  ·  2026`, 40, 62);
+  ectx.textAlign = 'center';
+  ectx.fillText(`M = ${mFrom} – ${mTo}  ·  ${totalPoints.toLocaleString()} residues  ·  ${totalLifts.toLocaleString()} lifts  ·  2026`, MAIN_W / 2, 62);
 
   // ── Controls hint strip (bottom of canvas area) ──
   const instY = TITLE_H + CANVAS_H;
@@ -3077,16 +3104,16 @@ function exportPNG() {
   lRow('Total lifts', totalLifts.toLocaleString());
   lRow('Σ φ(M)', sumPhi.toLocaleString());
   lRow('Prime rings', `${primeCount}  (${(primeCount/rings.length*100).toFixed(1)}%)`);
-  lRow('Mersenne rings', String(mersCount));
-  lRow('Primorial rings', String(primCount));
 
-  // List primorials in range
-  const primorials = rings.filter(r=>r.isPrimorial).map(r=>`M=${r.M}`);
-  if (primorials.length > 0) {
-    ectx.font = '300 10px "JetBrains Mono", monospace';
-    ectx.fillStyle = '#c9a84c';
-    ectx.fillText(primorials.join('  '), lx + LP, ly - 20);
-  }
+  // Mersenne rings — only true 2^n-1
+  const mersRings = rings.filter(r=>r.isMersenne).map(r=>`${r.M}`);
+  lRow('Mersenne rings', `${mersCount}  [${mersRings.slice(0,6).join(', ')}${mersRings.length>6?'…':''}]`);
+
+  // Primorial rings — only exact primorials 2,6,30,210...
+  const primRingList = rings.filter(r=>r.isPrimorial).map(r=>`${r.M}`);
+  lRow('Primorial rings', primRingList.length > 0
+    ? `${primCount}  [${primRingList.join(', ')}]`
+    : '0  (none in range)');
 
   divider();
 
@@ -3120,8 +3147,29 @@ function exportPNG() {
     lRow('Angle θ', `${(ip.theta/(2*Math.PI)*360).toFixed(3)}°`);
     lRow('φ(M)', ipRing ? String(ipRing.phiM) : '—');
     lRow('Lifts to M+1', ip.lifted===null?'N/A':(ip.lifted?'Yes':'No'));
-    lRow('Ring type', ipRing?(ipRing.isPrime?'Prime':ipRing.isMersenne?'Mersenne':'Composite'):'—');
+    lRow('Ring type', ipRing?(ipRing.isPrime?'Prime':ipRing.isMersenne?'Mersenne (2ⁿ−1)':'Composite'):'—');
     lRow('Spiral ρθ', `2π·${ip.r} = ${(2*Math.PI*ip.r).toFixed(5)}`);
+
+    // Trajectory path — which rings r appears on, and lift status at each
+    const trajRings = rings.filter(rg => rg.M >= 2 && gcd(ip.r, rg.M) === 1);
+    lRow('Trajectory', `r=${ip.r} appears on ${trajRings.length} rings`);
+
+    // Show first 8 rings of the trajectory with angles
+    ectx.font = '300 10px "JetBrains Mono", monospace';
+    const trajShow = trajRings.slice(0, 8);
+    trajShow.forEach((rg, i) => {
+      const theta = (2*Math.PI*ip.r/rg.M / (2*Math.PI) * 360).toFixed(1);
+      const liftsNext = gcd(ip.r, rg.M+1) === 1 ? '↑' : '✗';
+      ectx.fillStyle = gcd(ip.r, rg.M+1)===1 ? '#4ecdc4' : '#9c4a3a';
+      ectx.fillText(`  M=${rg.M}  θ=${theta}°  ${liftsNext}`, lx + LP, ly);
+      ly += 15;
+    });
+    if (trajRings.length > 8) {
+      ectx.fillStyle = '#4a4438';
+      ectx.fillText(`  … ${trajRings.length - 8} more rings`, lx + LP, ly);
+      ly += 15;
+    }
+    ly += 4;
     divider();
   }
 
@@ -4925,6 +4973,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Color/label/radius modes
   wireSlider('labelSize', 'labelSzVal', '', 0);
   wireSlider('labelZoom', 'labelZoomVal', '×', 1);
+  wireSlider('colorBright', 'colorBrightVal', '%', 0);
+  wireSlider('colorSat',    'colorSatVal',    '%', 0);
+  wireSlider('colorHue',    'colorHueVal',    '°', 0);
+  ['colorBright','colorSat','colorHue'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => { updateCanvasFilter(); render(); });
+  });
   ['colorMode', 'labelMode'].forEach(id =>
     document.getElementById(id).addEventListener('change', () => render()));
   document.getElementById('radiusMode').addEventListener('change', () => { buildData(); render(); });
@@ -4996,7 +5050,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCumOffsets();
   updateTrackList();
   daTab('inspect');
-  onCalcModeChange(); // populate description for default mode
+  onCalcModeChange();
+  updateCanvasFilter(); // populate description for default mode
   render();
 });
 </script>
