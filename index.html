@@ -471,6 +471,7 @@ select:focus { outline: none; border-color: var(--gold-dim); }
     <button class="tab-btn" onclick="switchTab('theory',this)">Theory</button>
     <button class="tab-btn" onclick="switchTab('derivation',this)">Derivation of C</button>
     <button class="tab-btn" onclick="switchTab('calculator',this)">C Calculator</button>
+    <button class="tab-btn" onclick="switchTab('gap',this)">Gap ζ(2)</button>
     <button class="tab-btn" onclick="switchTab('refs',this)">References &amp; Credits</button>
     <button id="stack-btn" class="tab-btn" onclick="toggleStackMode()" title="Toggle canvas fullscreen / side-by-side" style="margin-left:auto;color:var(--text3);font-size:11px;padding-bottom:14px;">⊞ Stack</button>
   </div>
@@ -847,71 +848,43 @@ select:focus { outline: none; border-color: var(--gold-dim); }
     <div id="data-area">
       <!-- Tab bar -->
       <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg3);">
-        <button id="da-tab-inspect" onclick="daTab('inspect')"
-          style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 16px;border:none;background:none;color:var(--gold2);cursor:pointer;border-bottom:2px solid var(--gold);margin-bottom:-1px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 16px;color:var(--gold2);border-bottom:2px solid var(--gold);margin-bottom:-1px;">
           Inspect
-        </button>
-        <button id="da-tab-gap" onclick="daTab('gap')"
-          style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 16px;border:none;background:none;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;">
-          Gap ζ(2)
-        </button>
+        </div>
         <div style="flex:1;"></div>
-        <span style="font-family:var(--mono);font-size:8px;color:var(--text3);padding:8px 10px;align-self:center;">drag bottom to resize</span>
+        <!-- Trajectory bound toggle -->
+        <div style="display:flex;align-items:center;gap:8px;padding:0 12px;">
+          <span style="font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;">Trajectory</span>
+          <button id="traj-bound-btn" onclick="toggleTrajBound()"
+            style="font-family:var(--mono);font-size:8px;padding:3px 9px;border-radius:2px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;letter-spacing:0.06em;"
+            title="Bounded: spiral stops at (M-1)/M approaching θ=0. Unbounded: continues to M=1">
+            Unbounded
+          </button>
+        </div>
+        <span style="font-family:var(--mono);font-size:8px;color:var(--text3);padding:8px 10px;align-self:center;">drag to resize ↕</span>
       </div>
 
       <!-- Inspect panel -->
       <div id="da-panel-inspect" style="display:flex;flex-direction:column;flex:1;overflow-y:auto;padding:10px 18px;min-height:0;">
-        <div id="data-message" style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:8px 0;">Click any point to inspect it, or enter a fraction a/b in the Fraction Inspector.</div>
+        <div id="data-message" style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:8px 0;">Click any point to inspect it. Click a gap row below to select all residues in that gap class.</div>
         <div class="data-grid" id="data-grid" style="display:none;"></div>
+
+        <!-- Gap class rows — clickable to select on canvas -->
+        <div id="gap-class-panel" style="display:none;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">
+            Gap Classes in Range — click to select &amp; show spiral
+          </div>
+          <div id="gap-class-rows" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        </div>
+
         <div id="path-details-area" style="display:none;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
           <div style="font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Residue Path Details</div>
           <div id="path-details-content" style="font-family:var(--mono);font-size:10px;overflow-x:auto;"></div>
         </div>
       </div>
 
-      <!-- Gap ζ(2) panel -->
-      <div id="da-panel-gap" style="display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0;">
-        <!-- Controls row -->
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;">
-          <span style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;">Sieve to</span>
-          <input type="number" id="gd-limit" value="1000000" min="1000" max="500000000"
-            style="width:110px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:12px;padding:4px 8px;border-radius:2px;text-align:right;">
-          <span style="font-family:var(--mono);font-size:9px;color:var(--text3);">Highlight gaps</span>
-          <input type="text" id="gd-gaps" value="2,4,6" placeholder="2,4,6"
-            style="width:90px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:11px;padding:4px 8px;border-radius:2px;">
-          <button onclick="runGapDecomp()"
-            style="background:var(--gold-dim);border:none;color:var(--bg);font-family:var(--mono);font-size:10px;font-weight:600;padding:5px 14px;border-radius:2px;cursor:pointer;letter-spacing:0.08em;"
-            onmouseover="this.style.background='var(--gold)'" onmouseout="this.style.background='var(--gold-dim)'">
-            ▶ Compute
-          </button>
-          <span id="gd-status" style="font-family:var(--mono);font-size:9px;color:var(--text3);"></span>
-          <div style="flex:1;"></div>
-          <span id="gd-summary" style="font-family:var(--mono);font-size:9px;color:var(--teal);"></span>
-        </div>
-        <!-- Chart + table split -->
-        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
-          <canvas id="gd-canvas" style="width:100%;height:140px;flex-shrink:0;cursor:crosshair;"></canvas>
-          <div style="flex:1;overflow-y:auto;padding:0 16px 8px;">
-            <table id="gd-table" style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10px;display:none;">
-              <thead><tr style="color:var(--text3);border-bottom:1px solid var(--border2);position:sticky;top:0;background:var(--bg2);">
-                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">Gap g</th>
-                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">P_g(X)</th>
-                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">ln P_g</th>
-                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">Count</th>
-                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">% total</th>
-                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">Cumul. ∏P_g</th>
-                <th style="text-align:left;padding:5px 0 5px 0;font-weight:400;">% ζ(2)</th>
-              </tr></thead>
-              <tbody id="gd-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Legacy gap-decomp-area kept for updateGapDecompPanel compat -->
-      <div id="gap-decomp-area" style="display:none;">
-        <div id="gap-decomp-grid"></div>
-      </div>
+      <!-- Legacy compat -->
+      <div id="gap-decomp-area" style="display:none;"><div id="gap-decomp-grid"></div></div>
     </div>
   </div>
 
@@ -1841,6 +1814,178 @@ select:focus { outline: none; border-color: var(--gold-dim); }
 </div>
 </div><!-- end refs-tab -->
 
+<!-- GAP ζ(2) TAB -->
+<div id="gap-tab" class="tab-content">
+<div style="display:flex;height:100%;overflow:hidden;">
+
+  <!-- LEFT SIDEBAR: Controls -->
+  <div style="width:260px;min-width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:16px 14px;display:flex;flex-direction:column;gap:14px;">
+
+    <div style="font-family:var(--display);font-size:1.2rem;font-style:italic;color:var(--gold2);">Gap ζ(2)</div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--text3);line-height:1.7;border-left:2px solid var(--gold-dim);padding-left:8px;">
+      ζ(2) = π²/6 = ∏<sub>g</sub> P<sub>g</sub><br>
+      Each prime gap g contributes a partial product P<sub>g</sub> = ∏<sub>gap(p)=g</sub> p²/(p²−1).
+      Their product converges to π²/6.
+    </div>
+
+    <!-- Sieve limit -->
+    <div>
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;">Sieve to</div>
+      <input type="number" id="gd-limit" value="1000000" min="1000" max="500000000"
+        style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:14px;padding:6px 10px;border-radius:3px;text-align:right;box-sizing:border-box;">
+      <div style="font-family:var(--mono);font-size:8px;color:var(--text3);margin-top:3px;">up to 500,000,000</div>
+    </div>
+
+    <!-- Highlight gaps -->
+    <div>
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;">Highlight gaps (comma list)</div>
+      <input type="text" id="gd-gaps" value="2,4,6" placeholder="2,4,6,8"
+        style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:12px;padding:6px 10px;border-radius:3px;box-sizing:border-box;">
+    </div>
+
+    <!-- Run button -->
+    <button onclick="runGapDecomp()"
+      style="background:var(--gold-dim);border:none;color:var(--bg);font-family:var(--mono);font-size:11px;font-weight:600;padding:11px;border-radius:3px;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;"
+      onmouseover="this.style.background='var(--gold)'" onmouseout="this.style.background='var(--gold-dim)'">
+      ▶ Compute
+    </button>
+
+    <!-- Status -->
+    <div id="gd-status" style="font-family:var(--mono);font-size:9px;color:var(--text3);line-height:1.7;min-height:16px;"></div>
+
+    <!-- Summary -->
+    <div id="gd-summary-box" style="display:none;background:rgba(201,168,76,0.07);border:1px solid var(--gold-dim);border-radius:3px;padding:10px 12px;">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:6px;">Result</div>
+      <div id="gd-summary" style="font-family:var(--mono);font-size:10px;color:var(--teal);line-height:1.8;"></div>
+    </div>
+
+    <!-- Chart toggles -->
+    <div>
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Charts</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        <label style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;">
+          <input type="checkbox" id="gd-show-convergence" checked style="accent-color:var(--gold);">Convergence ∏P_g → ζ(2)
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;">
+          <input type="checkbox" id="gd-show-contrib" checked style="accent-color:var(--gold);">Gap contributions P_g
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;">
+          <input type="checkbox" id="gd-show-dist" checked style="accent-color:var(--gold);">Prime count per gap
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;">
+          <input type="checkbox" id="gd-show-pct" checked style="accent-color:var(--gold);">% of ln ζ(2)
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;">
+          <input type="checkbox" id="gd-show-log" checked style="accent-color:var(--gold);">Log P_g scale
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;">
+          <input type="checkbox" id="gd-show-error" style="accent-color:var(--gold);">Error to ζ(2)
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;">
+          <input type="checkbox" id="gd-show-ratio" style="accent-color:var(--gold);">Gap ratio analysis
+        </label>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div>
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;">Export</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        <button onclick="gdExportCSV()"
+          style="font-family:var(--mono);font-size:10px;padding:7px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;text-align:left;"
+          onmouseover="this.style.borderColor='var(--gold-dim)'" onmouseout="this.style.borderColor='var(--border2)'">
+          ↓ Full CSV
+        </button>
+        <button onclick="gdExportCharts()"
+          style="font-family:var(--mono);font-size:10px;padding:7px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;text-align:left;"
+          onmouseover="this.style.borderColor='var(--gold-dim)'" onmouseout="this.style.borderColor='var(--border2)'">
+          ↓ Charts PNG
+        </button>
+      </div>
+    </div>
+
+  </div><!-- end sidebar -->
+
+  <!-- RIGHT: Charts + table -->
+  <div style="flex:1;overflow-y:auto;min-width:0;background:var(--bg);">
+
+    <!-- Placeholder -->
+    <div id="gd-placeholder" style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:60px 40px;text-align:center;line-height:2;">
+      Set a sieve limit and click ▶ Compute.<br>
+      <span style="font-size:9px;color:var(--text3);">Supports up to 500 million — uses segmented sieve for large ranges.</span>
+    </div>
+
+    <!-- Charts area -->
+    <div id="gd-charts" style="display:none;padding:20px 24px;display:none;flex-direction:column;gap:28px;">
+
+      <!-- Convergence chart -->
+      <div id="gd-wrap-convergence" style="display:flex;flex-direction:column;gap:6px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);">Progressive Convergence ∏P_g → ζ(2)</div>
+        <canvas id="gd-c-convergence" style="width:100%;height:200px;border-radius:3px;"></canvas>
+      </div>
+
+      <!-- Contributions chart -->
+      <div id="gd-wrap-contrib" style="display:flex;flex-direction:column;gap:6px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);">Individual Gap Products P_g</div>
+        <canvas id="gd-c-contrib" style="width:100%;height:200px;border-radius:3px;"></canvas>
+      </div>
+
+      <!-- Distribution chart -->
+      <div id="gd-wrap-dist" style="display:flex;flex-direction:column;gap:6px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);">Prime Count per Gap Family</div>
+        <canvas id="gd-c-dist" style="width:100%;height:200px;border-radius:3px;"></canvas>
+      </div>
+
+      <!-- Percentage chart -->
+      <div id="gd-wrap-pct" style="display:flex;flex-direction:column;gap:6px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);">% Contribution to ln ζ(2)</div>
+        <canvas id="gd-c-pct" style="width:100%;height:200px;border-radius:3px;"></canvas>
+      </div>
+
+      <!-- Log scale chart -->
+      <div id="gd-wrap-log" style="display:flex;flex-direction:column;gap:6px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);">Log Scale — ln P_g per Gap</div>
+        <canvas id="gd-c-log" style="width:100%;height:200px;border-radius:3px;"></canvas>
+      </div>
+
+      <!-- Error chart -->
+      <div id="gd-wrap-error" style="display:none;flex-direction:column;gap:6px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);">Relative Error to ζ(2)</div>
+        <canvas id="gd-c-error" style="width:100%;height:200px;border-radius:3px;"></canvas>
+      </div>
+
+      <!-- Ratio chart -->
+      <div id="gd-wrap-ratio" style="display:none;flex-direction:column;gap:6px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);">Gap Ratio Analysis — Twin Prime Evidence</div>
+        <canvas id="gd-c-ratio" style="width:100%;height:240px;border-radius:3px;"></canvas>
+      </div>
+
+      <!-- Table -->
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);">Full Data Table — click row to highlight</div>
+        <div style="overflow-x:auto;">
+          <table id="gd-table" style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10px;">
+            <thead><tr style="color:var(--text3);border-bottom:1px solid var(--border2);background:var(--bg2);">
+              <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">Gap g</th>
+              <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">P_g(X)</th>
+              <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">ln P_g</th>
+              <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">Primes</th>
+              <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">% primes</th>
+              <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">Cumul. ∏P_g</th>
+              <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">% ζ(2)</th>
+              <th style="text-align:left;padding:6px 0;font-weight:400;position:sticky;top:0;background:var(--bg2);">Error</th>
+            </tr></thead>
+            <tbody id="gd-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- end gd-charts -->
+  </div><!-- end right -->
+
+</div>
+</div><!-- end gap-tab -->
+
 
 </div><!-- end app -->
 
@@ -1982,6 +2127,13 @@ function switchTab(name, btn) {
   document.getElementById(name + '-tab').classList.add('active');
   if (btn) btn.classList.add('active');
   if (name === 'viz') setTimeout(resizeCanvas, 50);
+  if (name === 'gap') {
+    setTimeout(() => {
+      gdResizeCanvas();
+      if (!_gdData) runGapDecomp();
+      else gdDrawChart(_gdData.rows, _gdData.reqG, _gdData.Z2);
+    }, 40);
+  }
 }
 
 // ============================================================
@@ -3076,218 +3228,557 @@ function exportCSV() {
   link.click();
 }
 
+// ── Trajectory bound ──
+let trajectoryBounded = false;
+
+function toggleTrajBound() {
+  trajectoryBounded = !trajectoryBounded;
+  const btn = document.getElementById('traj-bound-btn');
+  if (btn) {
+    btn.textContent       = trajectoryBounded ? 'Bounded' : 'Unbounded';
+    btn.style.color       = trajectoryBounded ? 'var(--gold2)' : 'var(--text2)';
+    btn.style.borderColor = trajectoryBounded ? 'var(--gold-dim)' : 'var(--border2)';
+    btn.style.background  = trajectoryBounded ? 'rgba(201,168,76,0.1)' : 'var(--bg3)';
+  }
+  render();
+}
+
+// ── Gap class clickable rows in inspect panel ──
+function updateGapClassPanel() {
+  const panel  = document.getElementById('gap-class-panel');
+  const rowsEl = document.getElementById('gap-class-rows');
+  if (!panel || !rowsEl || rings.length < 2) { if (panel) panel.style.display='none'; return; }
+
+  const gc = {};
+  for (let i = 0; i < rings.length - 1; i++) {
+    const M1 = rings[i+1].M;
+    if (!isPrime(M1)) continue;
+    const g  = M1 - rings[i].M;
+    if (!gc[g]) gc[g] = { primes: [] };
+    gc[g].primes.push(M1);
+  }
+
+  const gaps = Object.keys(gc).map(Number).sort((a,b) => a-b);
+  if (!gaps.length) { panel.style.display='none'; return; }
+
+  panel.style.display = 'block';
+  rowsEl.innerHTML = gaps.map(g => {
+    const lbl = g===2?'Gap 2 (twins)':g===4?'Gap 4 (cousins)':g===6?'Gap 6 (sexy)':`Gap ${g}`;
+    return `<button onclick="selectGapClass(${g})"
+      style="font-family:var(--mono);font-size:9px;padding:4px 10px;border-radius:2px;
+             border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;white-space:nowrap;"
+      onmouseover="this.style.borderColor='var(--gold-dim)';this.style.color='var(--gold2)'"
+      onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
+      ${lbl} <span style="color:var(--text3)">(${gc[g].primes.length})</span>
+    </button>`;
+  }).join('');
+}
+
+function selectGapClass(g) {
+  const colors = ['#4ecdc4','#e8c96a','#ff6b9d','#a78bfa','#6bff8c','#ff9f43'];
+  trackedResidues = [];
+  let ci = 0;
+  for (let i = 0; i < rings.length - 1 && ci < 6; i++) {
+    const M1 = rings[i+1].M;
+    if (!isPrime(M1) || M1 - rings[i].M !== g) continue;
+    const ring = rings.find(r => r.M === M1);
+    if (!ring || !ring.points.length) continue;
+    const r = ring.points[0].r;
+    if (!trackedResidues.find(t => t.r === r)) {
+      trackedResidues.push({ r, color: colors[ci % colors.length] });
+      ci++;
+    }
+  }
+  document.getElementById('showSpirals').checked = true;
+  updateTrackList();
+  render();
+}
+
+// ── Gap ζ(2) CSV export ──
+function exportGapDecomp() {
+  if (!_gdData) { alert('Run the sieve first.'); return; }
+  let csv = 'Gap g,P_g(X),ln P_g,Count,% primes,Cumul product,% zeta2\n';
+  _gdData.rows.forEach(r => {
+    csv += `${r.g},${r.prod},${r.lnP},${r.cnt},${r.pct.toFixed(6)},${r.cum},${r.pZ.toFixed(6)}\n`;
+  });
+  const a = document.createElement('a');
+  a.download = `gap_zeta2_${document.getElementById('gd-limit').value}.csv`;
+  a.href = 'data:text/csv,' + encodeURIComponent(csv);
+  a.click();
+}
+
 // ============================================================
 //  DATA AREA TABS
 // ============================================================
 function daTab(name) {
-  ['inspect','gap'].forEach(t => {
-    const btn   = document.getElementById('da-tab-' + t);
-    const panel = document.getElementById('da-panel-' + t);
-    const active = t === name;
-    btn.style.color        = active ? 'var(--gold2)' : 'var(--text3)';
-    btn.style.borderBottom = active ? '2px solid var(--gold)' : '2px solid transparent';
-    if (panel) panel.style.display = active ? 'flex' : 'none';
-  });
-  // Auto-run with default limit when gap tab first opened
-  if (name === 'gap' && !_gdData) {
-    // Resize canvas before running
-    setTimeout(() => { gdResizeCanvas(); runGapDecomp(); }, 30);
-  } else if (name === 'gap') {
-    setTimeout(gdResizeCanvas, 30);
-  }
+  // daTab is now only used for inspect (gap moved to top-level tab)
+  // kept for compat
 }
 
 // ============================================================
-//  GAP DECOMPOSITION (dedicated, independent range)
+//  GAP ζ(2) DECOMPOSITION — full engine
 // ============================================================
 let _gdData = null;
+let _gdHighlight = null; // highlighted gap from table click
 
-function runGapDecomp() {
-  const lim  = Math.min(500000000, Math.max(1000, parseInt(document.getElementById('gd-limit').value) || 1000000));
-  const reqG = document.getElementById('gd-gaps').value
-    .split(/[,\s]+/).map(v => parseInt(v)).filter(v => !isNaN(v) && v >= 1);
-
-  document.getElementById('gd-status').textContent = 'Sieving…';
-  document.getElementById('gd-summary').textContent = '';
-
-  // Use setTimeout to let UI update before heavy computation
-  setTimeout(() => {
-    const Z2 = Math.PI * Math.PI / 6;
-
-    // Segmented sieve for large limits
-    const primes = gdSieve(lim);
-    const gc = {};
-    for (let i = 0; i < primes.length - 1; i++) {
-      const g = primes[i+1] - primes[i];
-      if (!gc[g]) gc[g] = { prod: 1, lnP: 0, cnt: 0 };
-      const p = primes[i];
-      const f = (p*p) / (p*p - 1);
-      gc[g].prod *= f;
-      gc[g].lnP  += Math.log(f);
-      gc[g].cnt++;
-    }
-
-    const gkeys = Object.keys(gc).map(Number).sort((a,b) => a-b);
-    let cum = 1;
-    const rows = gkeys.map(g => {
-      cum *= gc[g].prod;
-      return { g, prod: gc[g].prod, lnP: gc[g].lnP, cnt: gc[g].cnt,
-               pct: gc[g].cnt / (primes.length-1) * 100, cum,
-               pZ: cum / Z2 * 100 };
-    });
-
-    _gdData = { rows, reqG, Z2, primeCount: primes.length };
-
-    const last = rows[rows.length - 1];
-    document.getElementById('gd-status').textContent =
-      `${gkeys.length} gap classes · ${primes.length.toLocaleString()} primes`;
-    document.getElementById('gd-summary').textContent =
-      `∏P_g = ${last ? last.cum.toFixed(8) : '—'}  ζ(2) = ${Z2.toFixed(8)}  Δ = ${last ? (Z2 - last.cum).toExponential(3) : '—'}`;
-
-    // Table
-    const tbody = document.getElementById('gd-tbody');
-    tbody.innerHTML = '';
-    rows.forEach(r => {
-      const hl = reqG.includes(r.g);
-      const tr = document.createElement('tr');
-      if (hl) tr.style.background = 'rgba(201,168,76,0.08)';
-      tr.innerHTML = `
-        <td style="padding:3px 10px 3px 0;color:${hl?'var(--gold2)':'var(--text2)'}">${r.g}</td>
-        <td style="padding:3px 10px 3px 0;color:var(--cream2)">${r.prod.toFixed(10)}</td>
-        <td style="padding:3px 10px 3px 0;color:var(--text2)">${r.lnP.toFixed(8)}</td>
-        <td style="padding:3px 10px 3px 0;color:var(--text2)">${r.cnt.toLocaleString()}</td>
-        <td style="padding:3px 10px 3px 0;color:var(--text3)">${r.pct.toFixed(4)}%</td>
-        <td style="padding:3px 10px 3px 0;color:${hl?'var(--teal)':'var(--cream2)'}">${r.cum.toFixed(10)}</td>
-        <td style="padding:3px 0;color:var(--text3)">${r.pZ.toFixed(4)}%</td>`;
-      tbody.appendChild(tr);
-    });
-    document.getElementById('gd-table').style.display = 'table';
-    gdDrawChart(rows, reqG, Z2);
-  }, 20);
-}
-
+// ── Sieve ──
 function gdSieve(n) {
-  // Simple linear sieve — handles up to ~100M well; for 500M uses more memory
-  // For very large n, use segmented approach
   if (n <= 10000000) {
-    const s = new Uint8Array(n + 1);
-    s[0] = s[1] = 1;
+    const s = new Uint8Array(n + 1); s[0] = s[1] = 1;
     for (let i = 2; i * i <= n; i++) if (!s[i]) for (let j = i*i; j <= n; j += i) s[j] = 1;
-    const p = [];
-    for (let i = 2; i <= n; i++) if (!s[i]) p.push(i);
-    return p;
+    const p = []; for (let i = 2; i <= n; i++) if (!s[i]) p.push(i); return p;
   }
-  // Segmented sieve for large n
-  const sqrtN   = Math.ceil(Math.sqrt(n));
-  const small   = new Uint8Array(sqrtN + 1);
-  small[0] = small[1] = 1;
-  for (let i = 2; i * i <= sqrtN; i++) if (!small[i]) for (let j = i*i; j <= sqrtN; j += i) small[j] = 1;
-  const smallP  = [];
-  for (let i = 2; i <= sqrtN; i++) if (!small[i]) smallP.push(i);
-
-  const seg = 1 << 19; // 512K segment
-  const primes = [...smallP];
+  const sqrtN = Math.ceil(Math.sqrt(n));
+  const sm = new Uint8Array(sqrtN + 1); sm[0] = sm[1] = 1;
+  for (let i = 2; i * i <= sqrtN; i++) if (!sm[i]) for (let j = i*i; j <= sqrtN; j += i) sm[j] = 1;
+  const sp = []; for (let i = 2; i <= sqrtN; i++) if (!sm[i]) sp.push(i);
+  const seg = 1 << 19; const primes = [...sp];
   for (let lo = sqrtN + 1; lo <= n; lo += seg) {
-    const hi  = Math.min(lo + seg - 1, n);
-    const s2  = new Uint8Array(hi - lo + 1);
-    for (const sp of smallP) {
-      let start = Math.ceil(lo / sp) * sp;
-      if (start === sp) start += sp;
-      for (let j = start; j <= hi; j += sp) s2[j - lo] = 1;
-    }
+    const hi = Math.min(lo + seg - 1, n); const s2 = new Uint8Array(hi - lo + 1);
+    for (const p of sp) { let st = Math.ceil(lo / p) * p; if (st === p) st += p; for (let j = st; j <= hi; j += p) s2[j-lo] = 1; }
     for (let i = 0; i <= hi - lo; i++) if (!s2[i]) primes.push(lo + i);
   }
   return primes;
 }
 
-function gdResizeCanvas() {
-  const canvas = document.getElementById('gd-canvas');
-  if (!canvas) return null;
+function runGapDecomp() {
+  const lim  = Math.min(500000000, Math.max(1000, parseInt(document.getElementById('gd-limit').value) || 1000000));
+  const reqG = document.getElementById('gd-gaps').value.split(/[,\s]+/).map(v=>parseInt(v)).filter(v=>!isNaN(v)&&v>=1);
+  const Z2   = Math.PI * Math.PI / 6;
+
+  document.getElementById('gd-status').textContent = 'Sieving…';
+  const summaryBox = document.getElementById('gd-summary-box');
+  if (summaryBox) summaryBox.style.display = 'none';
+
+  setTimeout(() => {
+    const primes = gdSieve(lim);
+    const gc = {}; // g -> {prod, lnP, cnt}
+
+    for (let i = 0; i < primes.length - 1; i++) {
+      const g = primes[i+1] - primes[i];
+      if (!gc[g]) gc[g] = { prod: 1, lnP: 0, cnt: 0 };
+      const p = primes[i], f = (p*p)/(p*p-1);
+      gc[g].prod *= f; gc[g].lnP += Math.log(f); gc[g].cnt++;
+    }
+
+    const gkeys = Object.keys(gc).map(Number).sort((a,b)=>a-b);
+    let cum = 1;
+    const rows = gkeys.map(g => {
+      cum *= gc[g].prod;
+      return { g, prod: gc[g].prod, lnP: gc[g].lnP, cnt: gc[g].cnt,
+               pct: gc[g].cnt / (primes.length-1) * 100,
+               pctLnZ: gc[g].lnP / Math.log(Z2) * 100,
+               cum, pZ: cum / Z2 * 100,
+               err: Math.abs(cum - Z2), relErr: Math.abs(cum - Z2) / Z2 };
+    });
+
+    _gdData = { rows, reqG, Z2, primeCount: primes.length, lim };
+    _gdHighlight = null;
+
+    const last = rows[rows.length-1];
+    document.getElementById('gd-status').textContent =
+      `${gkeys.length} gap classes · ${primes.length.toLocaleString()} primes`;
+    if (summaryBox) {
+      summaryBox.style.display = 'block';
+      document.getElementById('gd-summary').innerHTML =
+        `∏P_g = ${last ? last.cum.toFixed(10) : '—'}<br>` +
+        `ζ(2) = ${Z2.toFixed(10)}<br>` +
+        `Δ = ${last ? (Z2-last.cum).toExponential(4) : '—'}<br>` +
+        `Rel err = ${last ? (last.relErr*100).toExponential(3)+'%' : '—'}`;
+    }
+
+    // Build table
+    const tbody = document.getElementById('gd-tbody');
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const hl = reqG.includes(r.g);
+      const tr = document.createElement('tr');
+      tr.style.cursor = 'pointer';
+      tr.onclick = () => { _gdHighlight = r.g; gdRenderAllCharts(); };
+      if (hl) tr.style.background = 'rgba(201,168,76,0.08)';
+      tr.innerHTML = `
+        <td style="padding:3px 12px 3px 0;color:${hl?'var(--gold2)':'var(--text2)'};">${r.g}</td>
+        <td style="padding:3px 12px 3px 0;color:var(--cream2);">${r.prod.toFixed(10)}</td>
+        <td style="padding:3px 12px 3px 0;color:var(--text2);">${r.lnP.toFixed(8)}</td>
+        <td style="padding:3px 12px 3px 0;color:var(--text2);">${r.cnt.toLocaleString()}</td>
+        <td style="padding:3px 12px 3px 0;color:var(--text3);">${r.pct.toFixed(4)}%</td>
+        <td style="padding:3px 12px 3px 0;color:${hl?'var(--teal)':'var(--cream2)'};">${r.cum.toFixed(10)}</td>
+        <td style="padding:3px 12px 3px 0;color:var(--text3);">${r.pZ.toFixed(4)}%</td>
+        <td style="padding:3px 0;color:var(--text3);">${r.err.toExponential(3)}</td>`;
+      tbody.appendChild(tr);
+    });
+
+    // Show charts
+    document.getElementById('gd-placeholder').style.display = 'none';
+    const chartsEl = document.getElementById('gd-charts');
+    chartsEl.style.display = 'flex';
+    gdRenderAllCharts();
+  }, 20);
+}
+
+function gdRenderAllCharts() {
+  if (!_gdData) return;
+  const show = id => document.getElementById(id)?.checked;
+
+  const wrappers = {
+    'convergence': show('gd-show-convergence'),
+    'contrib':     show('gd-show-contrib'),
+    'dist':        show('gd-show-dist'),
+    'pct':         show('gd-show-pct'),
+    'log':         show('gd-show-log'),
+    'error':       show('gd-show-error'),
+    'ratio':       show('gd-show-ratio'),
+  };
+  Object.entries(wrappers).forEach(([key, visible]) => {
+    const el = document.getElementById('gd-wrap-' + key);
+    if (el) el.style.display = visible ? 'flex' : 'none';
+  });
+
+  if (wrappers.convergence) gdChart('gd-c-convergence', gdDrawConvergence);
+  if (wrappers.contrib)     gdChart('gd-c-contrib',     gdDrawContrib);
+  if (wrappers.dist)        gdChart('gd-c-dist',        gdDrawDist);
+  if (wrappers.pct)         gdChart('gd-c-pct',         gdDrawPct);
+  if (wrappers.log)         gdChart('gd-c-log',         gdDrawLog);
+  if (wrappers.error)       gdChart('gd-c-error',       gdDrawError);
+  if (wrappers.ratio)       gdChart('gd-c-ratio',       gdDrawRatio);
+}
+
+// Wire chart toggle checkboxes
+['gd-show-convergence','gd-show-contrib','gd-show-dist','gd-show-pct',
+ 'gd-show-log','gd-show-error','gd-show-ratio'].forEach(id => {
+  document.addEventListener('change', e => { if (e.target.id === id && _gdData) gdRenderAllCharts(); });
+});
+
+// ── Chart helper — resize + draw ──
+function gdChart(canvasId, drawFn) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
   const dpr = window.devicePixelRatio || 1;
   const W   = canvas.offsetWidth || 800;
-  const H   = canvas.offsetHeight || 140;
-  if (W < 10) return null;
+  const H   = canvas.offsetHeight || 200;
+  if (W < 10) return;
   canvas.width  = Math.round(W * dpr);
   canvas.height = Math.round(H * dpr);
-  return { dpr, W, H };
-}
-
-function gdDrawChart(rows, reqG, Z2) {
-  const canvas = document.getElementById('gd-canvas');
-  if (!canvas) return;
-  const dims = gdResizeCanvas();
-  if (!dims) return;
-  const { dpr, W, H } = dims;
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
-
-  ctx.fillStyle = '#0f0e0c';
-  ctx.fillRect(0, 0, W, H);
-
-  const pad = { l: 60, r: 16, t: 20, b: 28 };
-  const pw  = W - pad.l - pad.r;
-  const ph  = H - pad.t - pad.b;
-  const n   = Math.min(rows.length, 60);
-  const lo  = 1.0, hi = Z2 * 1.02;
-
-  function xp(i) { return pad.l + (i + 0.5) * (pw / n); }
-  function yp(v) { return pad.t + ph * (1 - (v - lo) / (hi - lo)); }
-
-  // Grid lines
-  ctx.strokeStyle = 'rgba(60,50,35,0.6)'; ctx.lineWidth = 0.5;
-  [Z2, 1.5, 1.4, 1.3, 1.2, 1.1].forEach(v => {
-    if (v < lo || v > hi) return;
-    ctx.beginPath(); ctx.moveTo(pad.l, yp(v)); ctx.lineTo(W - pad.r, yp(v)); ctx.stroke();
-    ctx.fillStyle = 'rgba(90,80,60,0.7)'; ctx.font = `9px "JetBrains Mono",monospace`;
-    ctx.textAlign = 'right';
-    ctx.fillText(v.toFixed(v === Z2 ? 4 : 2), pad.l - 3, yp(v) + 3);
-  });
-
-  // ζ(2) reference line
-  ctx.strokeStyle = 'rgba(78,205,196,0.4)'; ctx.lineWidth = 1;
-  ctx.setLineDash([4,4]);
-  ctx.beginPath(); ctx.moveTo(pad.l, yp(Z2)); ctx.lineTo(W - pad.r, yp(Z2)); ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Bars (P_g height relative to largest)
-  const maxProd = rows[0] ? rows[0].prod : 1;
-  rows.slice(0, n).forEach((r, i) => {
-    const bw  = Math.max(2, pw / n - 1.5);
-    const bh  = (r.prod / maxProd) * ph * 0.35;
-    const hl  = reqG.includes(r.g);
-    ctx.fillStyle = hl ? 'rgba(232,201,106,0.85)' : 'rgba(201,168,76,0.3)';
-    ctx.fillRect(xp(i) - bw/2, pad.t + ph - bh, bw, bh);
-  });
-
-  // Cumulative product line
-  ctx.beginPath();
-  rows.slice(0, n).forEach((r, i) => {
-    const y = yp(r.cum);
-    i === 0 ? ctx.moveTo(xp(i), y) : ctx.lineTo(xp(i), y);
-  });
-  ctx.strokeStyle = 'rgba(232,201,106,0.9)'; ctx.lineWidth = 1.8; ctx.stroke();
-
-  // Highlighted gap dots on cumulative line
-  rows.slice(0, n).forEach((r, i) => {
-    if (!reqG.includes(r.g)) return;
-    ctx.beginPath(); ctx.arc(xp(i), yp(r.cum), 4, 0, 2*Math.PI);
-    ctx.fillStyle = 'var(--gold2)'; ctx.fill();
-  });
-
-  // X axis gap labels
-  ctx.fillStyle = 'rgba(90,80,60,0.8)'; ctx.font = `8px "JetBrains Mono",monospace`;
-  ctx.textAlign = 'center';
-  rows.slice(0, n).forEach((r, i) => {
-    if (r.g <= 12 || r.g % 10 === 0 || reqG.includes(r.g))
-      ctx.fillText('g=' + r.g, xp(i), H - pad.b + 12);
-  });
-
-  // Title
-  ctx.fillStyle = 'rgba(200,180,130,0.6)'; ctx.font = `9px "JetBrains Mono",monospace`;
-  ctx.textAlign = 'left';
-  ctx.fillText('P_g products (bars) · cumulative ∏P_g → ζ(2) (line) · gold=selected gaps', pad.l + 4, pad.t - 5);
-  ctx.textAlign = 'left';
+  ctx.fillStyle = '#0c0b09'; ctx.fillRect(0, 0, W, H);
+  drawFn(ctx, W, H, _gdData, _gdHighlight);
 }
+
+// ── Shared axis helpers ──
+function gdAxes(ctx, pad, W, H, yVals, fmt, title, yLabel) {
+  // Grid
+  ctx.strokeStyle = 'rgba(50,42,28,0.7)'; ctx.lineWidth = 0.5;
+  const mn = Math.min(...yVals), mx = Math.max(...yVals);
+  const steps = 5;
+  for (let i = 0; i <= steps; i++) {
+    const v  = mn + (mx-mn)*(1-i/steps);
+    const yp = pad.t + (H-pad.t-pad.b)*(i/steps);
+    ctx.beginPath(); ctx.moveTo(pad.l, yp); ctx.lineTo(W-pad.r, yp); ctx.stroke();
+    ctx.fillStyle='rgba(90,80,60,0.8)'; ctx.font=`9px "JetBrains Mono",monospace`;
+    ctx.textAlign='right'; ctx.fillText(fmt(v), pad.l-3, yp+3);
+  }
+  // Title
+  ctx.fillStyle='rgba(200,180,130,0.7)'; ctx.font=`bold 9px "JetBrains Mono",monospace`;
+  ctx.textAlign='left'; ctx.fillText(title, pad.l+4, 13);
+}
+
+// ── 1. Convergence ──
+function gdDrawConvergence(ctx, W, H, d, hl) {
+  const { rows, reqG, Z2 } = d;
+  const pad = {l:58,r:16,t:18,b:26};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const n = Math.min(rows.length, 80);
+  const lo = Math.max(0.9, rows[0].cum*0.99), hi = Z2*1.015;
+  const xp = i => pad.l + (i+0.5)*(pw/n);
+  const yp = v => pad.t + ph*(1-(v-lo)/(hi-lo));
+
+  gdAxes(ctx, pad, W, H, [lo,hi], v=>v.toFixed(3), 'Convergence ∏Pg → ζ(2)', '');
+
+  // ζ(2) line
+  ctx.strokeStyle='rgba(78,205,196,0.5)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(pad.l,yp(Z2)); ctx.lineTo(W-pad.r,yp(Z2)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(78,205,196,0.6)'; ctx.font=`8px "JetBrains Mono",monospace`;
+  ctx.textAlign='left'; ctx.fillText('ζ(2)='+Z2.toFixed(6), W-pad.r-70, yp(Z2)-4);
+
+  // Bars (product height)
+  const maxP = rows[0]?.prod||1;
+  rows.slice(0,n).forEach((r,i) => {
+    const bw=Math.max(1.5,pw/n-1), bh=(r.prod/maxP)*ph*0.3;
+    ctx.fillStyle = reqG.includes(r.g) ? 'rgba(232,201,106,0.7)' : 'rgba(201,168,76,0.2)';
+    ctx.fillRect(xp(i)-bw/2, pad.t+ph-bh, bw, bh);
+  });
+
+  // Cumulative line
+  ctx.beginPath();
+  rows.slice(0,n).forEach((r,i) => { i===0?ctx.moveTo(xp(i),yp(r.cum)):ctx.lineTo(xp(i),yp(r.cum)); });
+  ctx.strokeStyle='rgba(232,201,106,0.95)'; ctx.lineWidth=1.8; ctx.stroke();
+
+  // Dots on highlighted gaps
+  rows.slice(0,n).forEach((r,i) => {
+    if (!reqG.includes(r.g) && r.g!==hl) return;
+    ctx.beginPath(); ctx.arc(xp(i),yp(r.cum),r.g===hl?5:3,0,2*Math.PI);
+    ctx.fillStyle=r.g===hl?'#fff':'var(--gold2)'; ctx.fill();
+  });
+
+  // X labels
+  ctx.fillStyle='rgba(90,80,60,0.8)'; ctx.font=`8px "JetBrains Mono",monospace`;
+  ctx.textAlign='center';
+  rows.slice(0,n).forEach((r,i) => {
+    if (r.g<=12||r.g%10===0||reqG.includes(r.g)||r.g===hl)
+      ctx.fillText('g='+r.g, xp(i), H-pad.b+11);
+  });
+}
+
+// ── 2. Gap contributions ──
+function gdDrawContrib(ctx, W, H, d, hl) {
+  const { rows, reqG } = d;
+  const pad = {l:58,r:16,t:18,b:26};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const n = Math.min(rows.length, 80);
+  const maxP = Math.max(...rows.slice(0,n).map(r=>r.prod));
+  const xp = i => pad.l + (i+0.5)*(pw/n);
+
+  ctx.fillStyle='rgba(90,80,60,0.7)'; ctx.font=`bold 9px "JetBrains Mono",monospace`;
+  ctx.textAlign='left'; ctx.fillText('Gap Products P_g', pad.l+4, 13);
+
+  // Grid
+  ctx.strokeStyle='rgba(50,42,28,0.7)'; ctx.lineWidth=0.5;
+  [0.25,0.5,0.75,1].forEach(f => {
+    const y=pad.t+ph*(1-f);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='rgba(90,80,60,0.7)'; ctx.font=`9px "JetBrains Mono",monospace`;
+    ctx.textAlign='right'; ctx.fillText((maxP*f).toFixed(6), pad.l-3, y+3);
+  });
+
+  rows.slice(0,n).forEach((r,i) => {
+    const bw=Math.max(1.5,pw/n-1), bh=(r.prod/maxP)*ph;
+    const isHL=r.g===hl, isReq=reqG.includes(r.g);
+    ctx.fillStyle = isHL?'#fff3' : isReq?'rgba(232,201,106,0.8)':'rgba(201,168,76,0.35)';
+    ctx.fillRect(xp(i)-bw/2, pad.t+ph-bh, bw, bh);
+    if (isHL||isReq) {
+      ctx.strokeStyle=isHL?'#fff':'var(--gold2)'; ctx.lineWidth=isHL?2:1;
+      ctx.strokeRect(xp(i)-bw/2, pad.t+ph-bh, bw, bh);
+    }
+  });
+
+  ctx.fillStyle='rgba(90,80,60,0.8)'; ctx.font=`8px "JetBrains Mono",monospace`;
+  ctx.textAlign='center';
+  rows.slice(0,n).forEach((r,i) => {
+    if (r.g<=12||r.g%10===0||reqG.includes(r.g)||r.g===hl) ctx.fillText('g='+r.g, xp(i), H-pad.b+11);
+  });
+}
+
+// ── 3. Prime count distribution ──
+function gdDrawDist(ctx, W, H, d, hl) {
+  const { rows, reqG } = d;
+  const pad={l:64,r:16,t:18,b:26};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const n=Math.min(rows.length,80);
+  const maxC=Math.max(...rows.slice(0,n).map(r=>r.cnt));
+  const xp=i=>pad.l+(i+0.5)*(pw/n);
+
+  ctx.fillStyle='rgba(90,80,60,0.7)'; ctx.font=`bold 9px "JetBrains Mono",monospace`;
+  ctx.textAlign='left'; ctx.fillText('Primes per Gap Family', pad.l+4, 13);
+
+  ctx.strokeStyle='rgba(50,42,28,0.7)'; ctx.lineWidth=0.5;
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const y=pad.t+ph*(1-f);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.fillStyle='rgba(90,80,60,0.7)';ctx.font=`9px "JetBrains Mono",monospace`;
+    ctx.textAlign='right';ctx.fillText(Math.round(maxC*f).toLocaleString(),pad.l-3,y+3);
+  });
+
+  rows.slice(0,n).forEach((r,i)=>{
+    const bw=Math.max(1.5,pw/n-1),bh=(r.cnt/maxC)*ph;
+    const isHL=r.g===hl,isReq=reqG.includes(r.g);
+    ctx.fillStyle=isHL?'rgba(78,205,196,0.6)':isReq?'rgba(78,205,196,0.4)':'rgba(78,205,196,0.18)';
+    ctx.fillRect(xp(i)-bw/2,pad.t+ph-bh,bw,bh);
+  });
+
+  ctx.fillStyle='rgba(90,80,60,0.8)';ctx.font=`8px "JetBrains Mono",monospace`;ctx.textAlign='center';
+  rows.slice(0,n).forEach((r,i)=>{
+    if(r.g<=12||r.g%10===0||reqG.includes(r.g)||r.g===hl) ctx.fillText('g='+r.g,xp(i),H-pad.b+11);
+  });
+}
+
+// ── 4. % of ln ζ(2) ──
+function gdDrawPct(ctx, W, H, d, hl) {
+  const { rows, reqG } = d;
+  const pad={l:52,r:16,t:18,b:26};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const n=Math.min(rows.length,80);
+  const maxP=Math.max(...rows.slice(0,n).map(r=>r.pctLnZ));
+  const xp=i=>pad.l+(i+0.5)*(pw/n);
+
+  ctx.fillStyle='rgba(90,80,60,0.7)';ctx.font=`bold 9px "JetBrains Mono",monospace`;
+  ctx.textAlign='left';ctx.fillText('% Contribution to ln ζ(2)', pad.l+4, 13);
+
+  ctx.strokeStyle='rgba(50,42,28,0.7)';ctx.lineWidth=0.5;
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const y=pad.t+ph*(1-f);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.fillStyle='rgba(90,80,60,0.7)';ctx.font=`9px "JetBrains Mono",monospace`;
+    ctx.textAlign='right';ctx.fillText((maxP*f).toFixed(1)+'%',pad.l-3,y+3);
+  });
+
+  rows.slice(0,n).forEach((r,i)=>{
+    const bw=Math.max(1.5,pw/n-1),bh=(r.pctLnZ/maxP)*ph;
+    const isHL=r.g===hl,isReq=reqG.includes(r.g);
+    ctx.fillStyle=isHL?'rgba(255,107,107,0.7)':isReq?'rgba(255,107,107,0.5)':'rgba(255,107,107,0.2)';
+    ctx.fillRect(xp(i)-bw/2,pad.t+ph-bh,bw,bh);
+  });
+
+  ctx.fillStyle='rgba(90,80,60,0.8)';ctx.font=`8px "JetBrains Mono",monospace`;ctx.textAlign='center';
+  rows.slice(0,n).forEach((r,i)=>{
+    if(r.g<=12||r.g%10===0||reqG.includes(r.g)||r.g===hl) ctx.fillText('g='+r.g,xp(i),H-pad.b+11);
+  });
+}
+
+// ── 5. Log scale ──
+function gdDrawLog(ctx, W, H, d, hl) {
+  const { rows, reqG } = d;
+  const pad={l:60,r:16,t:18,b:26};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const n=Math.min(rows.length,80);
+  const maxL=Math.max(...rows.slice(0,n).map(r=>r.lnP));
+  const xp=i=>pad.l+(i+0.5)*(pw/n);
+
+  ctx.fillStyle='rgba(90,80,60,0.7)';ctx.font=`bold 9px "JetBrains Mono",monospace`;
+  ctx.textAlign='left';ctx.fillText('Log-Scale ln P_g', pad.l+4, 13);
+
+  ctx.strokeStyle='rgba(50,42,28,0.7)';ctx.lineWidth=0.5;
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const y=pad.t+ph*(1-f);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.fillStyle='rgba(90,80,60,0.7)';ctx.font=`9px "JetBrains Mono",monospace`;
+    ctx.textAlign='right';ctx.fillText((maxL*f).toFixed(5),pad.l-3,y+3);
+  });
+
+  rows.slice(0,n).forEach((r,i)=>{
+    const bw=Math.max(1.5,pw/n-1),bh=(r.lnP/maxL)*ph;
+    const isHL=r.g===hl,isReq=reqG.includes(r.g);
+    ctx.fillStyle=isHL?'rgba(167,139,250,0.7)':isReq?'rgba(167,139,250,0.5)':'rgba(167,139,250,0.22)';
+    ctx.fillRect(xp(i)-bw/2,pad.t+ph-bh,bw,bh);
+  });
+
+  ctx.fillStyle='rgba(90,80,60,0.8)';ctx.font=`8px "JetBrains Mono",monospace`;ctx.textAlign='center';
+  rows.slice(0,n).forEach((r,i)=>{
+    if(r.g<=12||r.g%10===0||reqG.includes(r.g)||r.g===hl) ctx.fillText('g='+r.g,xp(i),H-pad.b+11);
+  });
+}
+
+// ── 6. Error to ζ(2) ──
+function gdDrawError(ctx, W, H, d, hl) {
+  const { rows, Z2 } = d;
+  const pad={l:72,r:16,t:18,b:26};
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const n=Math.min(rows.length,80);
+  const xp=i=>pad.l+(i+0.5)*(pw/n);
+  const errs=rows.slice(0,n).map(r=>r.relErr);
+  const maxE=Math.max(...errs),minE=Math.min(...errs)||1e-10;
+  const yp=v=>pad.t+ph*(1-(Math.log10(v)-Math.log10(minE))/(Math.log10(maxE)-Math.log10(minE)));
+
+  ctx.fillStyle='rgba(90,80,60,0.7)';ctx.font=`bold 9px "JetBrains Mono",monospace`;
+  ctx.textAlign='left';ctx.fillText('Relative Error (log scale)', pad.l+4, 13);
+
+  [minE,Math.sqrt(minE*maxE),maxE].forEach(v=>{
+    const y=yp(v);
+    ctx.strokeStyle='rgba(50,42,28,0.7)';ctx.lineWidth=0.5;
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.fillStyle='rgba(90,80,60,0.7)';ctx.font=`9px "JetBrains Mono",monospace`;
+    ctx.textAlign='right';ctx.fillText((v*100).toExponential(1)+'%',pad.l-3,y+3);
+  });
+
+  ctx.beginPath();
+  rows.slice(0,n).forEach((r,i)=>{i===0?ctx.moveTo(xp(i),yp(r.relErr)):ctx.lineTo(xp(i),yp(r.relErr));});
+  ctx.strokeStyle='rgba(78,205,196,0.9)';ctx.lineWidth=1.5;ctx.stroke();
+  rows.slice(0,n).forEach((r,i)=>{
+    if(!d.reqG.includes(r.g)&&r.g!==hl)return;
+    ctx.beginPath();ctx.arc(xp(i),yp(r.relErr),3,0,2*Math.PI);
+    ctx.fillStyle=r.g===hl?'#fff':'var(--teal)';ctx.fill();
+  });
+
+  ctx.fillStyle='rgba(90,80,60,0.8)';ctx.font=`8px "JetBrains Mono",monospace`;ctx.textAlign='center';
+  rows.slice(0,n).forEach((r,i)=>{
+    if(r.g<=12||r.g%10===0||d.reqG.includes(r.g)||r.g===hl) ctx.fillText('g='+r.g,xp(i),H-pad.b+11);
+  });
+}
+
+// ── 7. Ratio analysis ──
+function gdDrawRatio(ctx, W, H, d, hl) {
+  if (!d.rows.length) return;
+  const getG = g => d.rows.find(r=>r.g===g);
+  const g2=getG(2),g4=getG(4),g6=getG(6);
+  if (!g2||!g4||!g6) { ctx.fillStyle='rgba(90,80,60,0.5)';ctx.font='11px monospace';ctx.textAlign='center';ctx.fillText('Need gap 2, 4, 6 in range',W/2,H/2);return; }
+  const ratio24=g2.cnt/g4.cnt, ratio26=g2.cnt/g6.cnt, ratio46=g4.cnt/g6.cnt;
+
+  ctx.fillStyle='rgba(90,80,60,0.7)';ctx.font=`bold 9px "JetBrains Mono",monospace`;
+  ctx.textAlign='left';ctx.fillText('Gap Ratio Convergence — Twin Prime Evidence', 10, 13);
+
+  const pad=18,bw=(W-pad*2)/5,bh=H-50;
+  const bars=[
+    {label:'g2/g4', val:ratio24, exp:1.0, col:'rgba(232,201,106,0.7)'},
+    {label:'g2/g6', val:ratio26, exp:0.5, col:'rgba(78,205,196,0.7)'},
+    {label:'g4/g6', val:ratio46, exp:0.5, col:'rgba(167,139,250,0.7)'},
+    {label:'Gap 2 %', val:g2.pct, exp:null, col:'rgba(255,107,107,0.5)', isPct:true},
+    {label:'Gap 4 %', val:g4.pct, exp:null, col:'rgba(255,107,107,0.3)', isPct:true},
+  ];
+  const maxVal=Math.max(...bars.map(b=>b.val));
+  bars.forEach((b,i)=>{
+    const x=pad+i*bw, bH=(b.val/maxVal)*(bh-30), y=H-20-bH;
+    ctx.fillStyle=b.col; ctx.fillRect(x+4,y,bw-8,bH);
+    // Expected line
+    if (b.exp!==null) {
+      const ey=H-20-(b.exp/maxVal)*(bh-30);
+      ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+      ctx.beginPath();ctx.moveTo(x,ey);ctx.lineTo(x+bw,ey);ctx.stroke();ctx.setLineDash([]);
+    }
+    ctx.fillStyle='rgba(200,180,130,0.8)';ctx.font=`9px "JetBrains Mono",monospace`;
+    ctx.textAlign='center';
+    ctx.fillText(b.label,x+bw/2,H-6);
+    ctx.fillText(b.isPct?b.val.toFixed(2)+'%':b.val.toFixed(4),x+bw/2,y-4);
+  });
+
+  ctx.fillStyle='rgba(90,80,60,0.5)';ctx.font=`8px "JetBrains Mono",monospace`;ctx.textAlign='right';
+  ctx.fillText(`${d.primeCount.toLocaleString()} primes to ${d.lim.toLocaleString()}`,W-10,H-6);
+}
+
+// ── Exports ──
+function gdExportCSV() {
+  if (!_gdData) { alert('Run the sieve first.'); return; }
+  const Z2=_gdData.Z2;
+  let csv='Gap-Class Decomposition of zeta(2)\n';
+  csv+=`Sieve limit,${_gdData.lim}\nTotal primes,${_gdData.primeCount}\nTarget zeta(2),${Z2}\n\n`;
+  csv+='Gap g,P_g(X),ln P_g,Prime count,% primes,% ln zeta(2),Cumul product,% zeta(2),Error\n';
+  _gdData.rows.forEach(r=>{
+    csv+=`${r.g},${r.prod},${r.lnP},${r.cnt},${r.pct.toFixed(6)},${r.pctLnZ.toFixed(6)},${r.cum},${r.pZ.toFixed(6)},${r.err.toExponential(6)}\n`;
+  });
+  const a=document.createElement('a');
+  a.download=`gap_zeta2_${_gdData.lim}.csv`;
+  a.href='data:text/csv,'+encodeURIComponent(csv); a.click();
+}
+
+function gdExportCharts() {
+  if (!_gdData) { alert('Run the sieve first.'); return; }
+  const ids=['gd-c-convergence','gd-c-contrib','gd-c-dist','gd-c-pct','gd-c-log','gd-c-error','gd-c-ratio'];
+  const names=['convergence','contributions','distribution','percentage','log_scale','error','ratio'];
+  ids.forEach((id,i)=>{
+    const c=document.getElementById(id);
+    if (!c||c.width===0) return;
+    const a=document.createElement('a');
+    a.download=`gap_${names[i]}_${_gdData.lim}.png`;
+    a.href=c.toDataURL('image/png'); a.click();
+  });
+}
+
+// Legacy compat
+function exportGapDecomp() { gdExportCSV(); }
+function runGapDecompLegacy() { runGapDecomp(); }
+function gdResizeCanvas() {} // no-op, individual charts resize themselves
+function gdDrawChart() {}    // no-op, replaced by gdRenderAllCharts
+
 function resetView() { zoom = 1; panX = 0; panY = 0; render(); }
 
 function toggleStackMode() {
