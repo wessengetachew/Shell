@@ -283,11 +283,15 @@ select:focus { outline: none; border-color: var(--gold-dim); }
 #data-area {
   background: var(--bg2);
   border-top: 1px solid var(--border);
-  padding: 12px 20px;
+  padding: 0;
   flex-shrink: 0;
-  min-height: 100px;
-  max-height: 140px;
-  overflow-y: auto;
+  height: 280px;
+  min-height: 120px;
+  max-height: 60vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  resize: vertical;
 }
 .data-grid {
   display: grid;
@@ -510,18 +514,22 @@ select:focus { outline: none; border-color: var(--gold-dim); }
       <div class="ctrl-label">Modulus Range</div>
       <div class="ctrl-row">
         <label>M from</label>
-        <input type="number" id="mFrom" value="1" min="1" max="499" style="width:52px">
+        <input type="number" id="mFrom" value="1" min="1" style="width:56px">
         <label>to</label>
-        <input type="number" id="mTo" value="128" min="2" max="500" style="width:52px">
+        <input type="number" id="mTo" value="128" min="2" style="width:56px">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px;">
         <button class="btn btn-gold" onclick="rebuild()">Rebuild</button>
         <button class="btn" id="playRangeBtn" onclick="togglePlayRange()">&#9654; Play</button>
       </div>
-      <div style="margin-top:6px;">
+      <div style="margin-top:8px;font-family:var(--mono);font-size:9px;color:var(--text3);line-height:1.7;border-left:2px solid var(--border2);padding-left:8px;">
+        ▶ Play starts from M=1 and grows to <em>Play to</em>.<br>
+        Set M to→from (e.g. 128→1) then ▶ to reverse.
+      </div>
+      <div style="margin-top:8px;">
         <div class="ctrl-row">
           <label>Play to</label>
-          <input type="number" id="playEnd" value="100" min="3" max="500" style="width:52px">
+          <input type="number" id="playEnd" value="128" min="3" style="width:56px">
           <label>step</label>
           <input type="number" id="playStep" value="1" min="1" max="20" style="width:42px">
         </div>
@@ -565,15 +573,25 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <option value="rings">Ring indices</option>
         <option value="both">Both</option>
       </select>
+      <div class="ctrl-row" style="margin-top:4px;">
+        <label>Label size</label>
+        <span class="val" id="labelSzVal">11</span>
+      </div>
+      <input type="range" class="range-full" id="labelSize" min="6" max="32" value="11" step="1">
+      <div class="ctrl-row" style="margin-top:2px;">
+        <label>Show at zoom</label>
+        <span class="val" id="labelZoomVal">1.0×</span>
+      </div>
+      <input type="range" class="range-full" id="labelZoom" min="0.1" max="5" value="1.0" step="0.1">
     </div>
 
     <div class="ctrl-section">
       <div class="ctrl-label">Points</div>
       <div class="ctrl-row">
         <label>Size</label>
-        <span class="val" id="ptSzVal">4</span>
+        <span class="val" id="ptSzVal">1</span>
       </div>
-      <input type="range" class="range-full" id="pointSize" min="1" max="12" value="4" step="0.5">
+      <input type="range" class="range-full" id="pointSize" min="1" max="12" value="1" step="0.5">
       <div class="ctrl-row">
         <label>Opacity</label>
         <span class="val" id="ptOpVal">90%</span>
@@ -643,13 +661,10 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <label>Show gap chords</label>
       </div>
       <div class="ctrl-row">
-        <label>Gap class</label>
-        <select id="gapChordClass" style="width:90px;background:var(--bg3);border:1px solid var(--border2);color:var(--cream2);font-family:var(--mono);font-size:11px;padding:3px 5px;border-radius:2px;">
-          <option value="2">Gap 2 (twins)</option>
-          <option value="4">Gap 4 (cousins)</option>
-          <option value="6">Gap 6 (sexy)</option>
-          <option value="all">All even gaps</option>
-        </select>
+        <label>Gap k</label>
+        <input type="number" id="gapChordClass" value="2" min="1" max="100"
+          style="width:58px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:14px;padding:3px 6px;border-radius:2px;text-align:center;">
+        <button class="btn" onclick="document.getElementById('gapChordClass').value='all';render();" style="padding:3px 7px;font-size:10px;">All</button>
       </div>
       <div class="ctrl-row">
         <label>Opacity</label>
@@ -729,14 +744,20 @@ select:focus { outline: none; border-color: var(--gold-dim); }
         <input type="checkbox" id="cumRotate">
         <label>Differential accumulate</label>
       </div>
-      <div class="ctrl-row">
-        <label>Rate (°/ring)</label>
-        <span class="val" id="cumRateVal">5.0</span>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin:4px 0 6px;line-height:1.6;">
+        Offset per ring = M × (a/b) × 360°<br>
+        e.g. 1/2 → each ring offset by M × 180°
       </div>
-      <input type="range" class="range-full" id="cumRate" min="0.5" max="30" value="5" step="0.5">
-      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px;line-height:1.6;">
-        Each ring M gets offset M × rate°. Creates spiral-unwrap effect.
+      <div class="ctrl-row" style="gap:6px;align-items:center;">
+        <input type="number" id="cumA" value="1" min="1" max="999"
+          style="width:52px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:15px;padding:4px 6px;border-radius:2px;text-align:center;">
+        <span style="font-family:var(--mono);font-size:18px;color:var(--text3);line-height:1">/</span>
+        <input type="number" id="cumB" value="12" min="1" max="999"
+          style="width:52px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:15px;padding:4px 6px;border-radius:2px;text-align:center;">
+        <span id="cumRateVal" style="font-family:var(--mono);font-size:10px;color:var(--text2);margin-left:4px;">30°/ring</span>
       </div>
+      <!-- hidden range kept for wireSlider compat — unused visually -->
+      <input type="range" id="cumRate" style="display:none" min="0.5" max="360" value="30" step="0.001">
     </div>
 
     <div class="ctrl-section">
@@ -755,14 +776,8 @@ select:focus { outline: none; border-color: var(--gold-dim); }
       <div class="ctrl-label">Gap Advisable vs Actual</div>
       <div class="ctrl-row">
         <label>Gap k</label>
-        <select id="gapN" style="flex:1;background:var(--bg3);border:1px solid var(--border2);color:var(--cream2);font-family:var(--mono);font-size:11px;padding:3px 5px;border-radius:2px;">
-          <option value="2">k = 2 (twin primes)</option>
-          <option value="4">k = 4 (cousin primes)</option>
-          <option value="6">k = 6 (sexy primes)</option>
-          <option value="8">k = 8</option>
-          <option value="10">k = 10</option>
-          <option value="12">k = 12</option>
-        </select>
+        <input type="number" id="gapN" value="2" min="1" max="1000"
+          style="width:70px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:16px;padding:4px 8px;border-radius:2px;text-align:center;">
       </div>
       <div class="ctrl-row" style="margin-top:4px;">
         <input type="checkbox" id="showAdvisable" checked>
@@ -830,15 +845,72 @@ select:focus { outline: none; border-color: var(--gold-dim); }
       <div class="inspect-tooltip" id="tooltip"></div>
     </div>
     <div id="data-area">
-      <div id="data-message">Click any point to inspect it, or enter a fraction a/b in the Fraction Inspector to locate any reduced rational in the visualization.</div>
-      <div class="data-grid" id="data-grid" style="display:none;"></div>
-      <div id="gap-decomp-area" style="display:none;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Gap Decomposition of ζ(2) — partial products over primes in range</div>
-        <div id="gap-decomp-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px 20px;font-family:var(--mono);font-size:10px;"></div>
+      <!-- Tab bar -->
+      <div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg3);">
+        <button id="da-tab-inspect" onclick="daTab('inspect')"
+          style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 16px;border:none;background:none;color:var(--gold2);cursor:pointer;border-bottom:2px solid var(--gold);margin-bottom:-1px;">
+          Inspect
+        </button>
+        <button id="da-tab-gap" onclick="daTab('gap')"
+          style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 16px;border:none;background:none;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;">
+          Gap ζ(2)
+        </button>
+        <div style="flex:1;"></div>
+        <span style="font-family:var(--mono);font-size:8px;color:var(--text3);padding:8px 10px;align-self:center;">drag bottom to resize</span>
       </div>
-      <div id="path-details-area" style="display:none;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
-        <div style="font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Residue Path Details</div>
-        <div id="path-details-content" style="font-family:var(--mono);font-size:10px;overflow-x:auto;"></div>
+
+      <!-- Inspect panel -->
+      <div id="da-panel-inspect" style="display:flex;flex-direction:column;flex:1;overflow-y:auto;padding:10px 18px;min-height:0;">
+        <div id="data-message" style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:8px 0;">Click any point to inspect it, or enter a fraction a/b in the Fraction Inspector.</div>
+        <div class="data-grid" id="data-grid" style="display:none;"></div>
+        <div id="path-details-area" style="display:none;border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--gold-dim);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Residue Path Details</div>
+          <div id="path-details-content" style="font-family:var(--mono);font-size:10px;overflow-x:auto;"></div>
+        </div>
+      </div>
+
+      <!-- Gap ζ(2) panel -->
+      <div id="da-panel-gap" style="display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0;">
+        <!-- Controls row -->
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;">
+          <span style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;">Sieve to</span>
+          <input type="number" id="gd-limit" value="1000000" min="1000" max="500000000"
+            style="width:110px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:12px;padding:4px 8px;border-radius:2px;text-align:right;">
+          <span style="font-family:var(--mono);font-size:9px;color:var(--text3);">Highlight gaps</span>
+          <input type="text" id="gd-gaps" value="2,4,6" placeholder="2,4,6"
+            style="width:90px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:11px;padding:4px 8px;border-radius:2px;">
+          <button onclick="runGapDecomp()"
+            style="background:var(--gold-dim);border:none;color:var(--bg);font-family:var(--mono);font-size:10px;font-weight:600;padding:5px 14px;border-radius:2px;cursor:pointer;letter-spacing:0.08em;"
+            onmouseover="this.style.background='var(--gold)'" onmouseout="this.style.background='var(--gold-dim)'">
+            ▶ Compute
+          </button>
+          <span id="gd-status" style="font-family:var(--mono);font-size:9px;color:var(--text3);"></span>
+          <div style="flex:1;"></div>
+          <span id="gd-summary" style="font-family:var(--mono);font-size:9px;color:var(--teal);"></span>
+        </div>
+        <!-- Chart + table split -->
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+          <canvas id="gd-canvas" style="width:100%;height:140px;flex-shrink:0;cursor:crosshair;"></canvas>
+          <div style="flex:1;overflow-y:auto;padding:0 16px 8px;">
+            <table id="gd-table" style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:10px;display:none;">
+              <thead><tr style="color:var(--text3);border-bottom:1px solid var(--border2);position:sticky;top:0;background:var(--bg2);">
+                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">Gap g</th>
+                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">P_g(X)</th>
+                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">ln P_g</th>
+                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">Count</th>
+                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">% total</th>
+                <th style="text-align:left;padding:5px 10px 5px 0;font-weight:400;">Cumul. ∏P_g</th>
+                <th style="text-align:left;padding:5px 0 5px 0;font-weight:400;">% ζ(2)</th>
+              </tr></thead>
+              <tbody id="gd-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legacy gap-decomp-area kept for updateGapDecompPanel compat -->
+      <div id="gap-decomp-area" style="display:none;">
+        <div id="gap-decomp-grid"></div>
       </div>
     </div>
   </div>
@@ -1170,18 +1242,22 @@ select:focus { outline: none; border-color: var(--gold-dim); }
 <div style="display:flex;height:100%;overflow:hidden;">
 
   <!-- LEFT: Controls -->
-  <div style="width:280px;min-width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:18px;">
+  <div style="width:300px;min-width:240px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);padding:20px 18px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
 
     <div>
       <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px;">What to compute</div>
-      <select id="calc-mode" style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--cream2);font-family:var(--mono);font-size:11px;padding:6px 8px;border-radius:3px;">
+      <select id="calc-mode" onchange="onCalcModeChange()" style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--cream2);font-family:var(--mono);font-size:11px;padding:6px 8px;border-radius:3px;">
         <option value="C">C — Lift Survival Constant</option>
         <option value="Ck">C_k — Generalized gap k</option>
         <option value="local">Local factors at each prime</option>
         <option value="empirical">Empirical vs Theory comparison</option>
       </select>
+
+      <!-- Mode description — updates on select -->
+      <div id="calc-mode-desc" style="margin-top:10px;padding:10px 12px;background:var(--bg3);border-left:2px solid var(--gold-dim);border-radius:0 3px 3px 0;font-family:var(--mono);font-size:10px;color:var(--text2);line-height:1.75;"></div>
     </div>
 
+    <!-- C inputs -->
     <div id="calc-input-C">
       <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Primes to include</div>
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
@@ -1190,26 +1266,47 @@ select:focus { outline: none; border-color: var(--gold-dim); }
           style="width:70px;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:13px;padding:5px 8px;border-radius:3px;text-align:center;">
       </div>
       <input type="range" id="calc-pmax-slider" min="2" max="200" value="100" style="width:100%;accent-color:var(--gold);">
-      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px;">More primes = closer to true C</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px;">More primes → closer to true C &nbsp;·&nbsp; error ≈ 1/(p ln p)</div>
+
+      <!-- Formula toggle — only shown in C mode -->
+      <div style="margin-top:14px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Display formula</div>
+        <div style="display:flex;flex-direction:column;gap:4px;" id="calc-form-toggles">
+          <button id="ftbtn-f1" onclick="setCalcFormula('f1')"
+            style="font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:3px;cursor:pointer;text-align:left;border:1px solid var(--gold-dim);background:rgba(201,168,76,0.1);color:var(--gold2);">
+            ∏(1 − 1/(p²−1)) &nbsp;<span style="color:var(--gold-dim);font-size:8px;">cleanest</span>
+          </button>
+          <button id="ftbtn-f2" onclick="setCalcFormula('f2')"
+            style="font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:3px;cursor:pointer;text-align:left;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);">
+            ∏(p²−2)/(p²−1) &nbsp;<span style="color:var(--text3);font-size:8px;">explicit</span>
+          </button>
+          <button id="ftbtn-f3" onclick="setCalcFormula('f3')"
+            style="font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:3px;cursor:pointer;text-align:left;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);">
+            (π²/6)·∏(1−2/p²) &nbsp;<span style="color:var(--text3);font-size:8px;">Hausman-Shapiro</span>
+          </button>
+        </div>
+      </div>
     </div>
 
+    <!-- Ck inputs -->
     <div id="calc-input-Ck" style="display:none;">
       <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Gap k</div>
       <input type="number" id="calc-k" value="2" min="1" max="100"
         style="width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:20px;padding:8px;border-radius:3px;text-align:center;">
       <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:6px;">
         k=2: twin primes &nbsp;·&nbsp; k=6: sexy primes<br>
-        C_k = C_1 × extra factors for primes dividing k
+        C_k depends only on rad(k) — the radical theorem
       </div>
     </div>
 
+    <!-- Empirical inputs -->
     <div id="calc-input-empirical" style="display:none;">
       <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Empirical range M from/to</div>
       <div style="display:flex;gap:8px;">
-        <input type="number" id="calc-mfrom" value="2" min="2" max="500"
+        <input type="number" id="calc-mfrom" value="2" min="2"
           style="flex:1;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:14px;padding:6px;border-radius:3px;text-align:center;">
         <span style="color:var(--text3);font-family:var(--mono);line-height:2.2">→</span>
-        <input type="number" id="calc-mto" value="100" min="3" max="2000"
+        <input type="number" id="calc-mto" value="100" min="3"
           style="flex:1;background:var(--bg3);border:1px solid var(--border2);color:var(--gold2);font-family:var(--mono);font-size:14px;padding:6px;border-radius:3px;text-align:center;">
       </div>
     </div>
@@ -1807,8 +1904,8 @@ function inspectFraction() {
     if (pt) {
       // Center view on this point
       const scale = Math.min(canvas.width, canvas.height) / 2.2 * zoom;
-      const tx = canvas.width/2 + panX + pt.rho * Math.cos(pt.theta - Math.PI/2) * scale;
-      const ty = canvas.height/2 + panY + pt.rho * Math.sin(pt.theta - Math.PI/2) * scale;
+      const tx = canvas.width/2 + panX + pt.rho * Math.cos(pt.theta) * scale;
+      const ty = canvas.height/2 + panY - pt.rho * Math.sin(pt.theta) * scale;
       // Nudge pan to center it
       panX += canvas.width/2 - tx;
       panY += canvas.height/2 - ty;
@@ -2223,9 +2320,9 @@ function worldToScreen(rho, theta, ringObj) {
   const cumOff  = (ringObj && document.getElementById('cumRotate') &&
                    document.getElementById('cumRotate').checked)
                   ? (ringCumOffsets[ringObj.M] || 0) : 0;
-  const eff = theta - Math.PI / 2 + globalRotation + diffOff + cumOff;
+  const eff = theta + globalRotation + diffOff + cumOff;
   const x = cx + rho * Math.cos(eff) * scale;
-  const y = cy + rho * Math.sin(eff) * scale;
+  const y = cy - rho * Math.sin(eff) * scale;  // negate: canvas Y inverted, gives true CCW
   return {x, y};
 }
 
@@ -2353,20 +2450,7 @@ function render() {
     });
   });
 
-  // ── Ring index labels for highlighted rings ──
-  if (highlightPrimes || highlightMers || highlightPrimor) {
-    ctx.font = `bold ${Math.max(9, Math.min(13, zoom * 5))}px "JetBrains Mono", monospace`;
-    rings.forEach(ring => {
-      const show = (highlightPrimes && ring.isPrime)||(highlightMers && ring.isMersenne)||(highlightPrimor && ring.isPrimorial);
-      if (!show) return;
-      const labelX = cx + ring.rho * scale + 4, labelY = cy + 3;
-      let lc = 'rgba(200,170,60,0.75)';
-      if (highlightMers && ring.isMersenne && !(highlightPrimes && ring.isPrime)) lc = 'rgba(160,100,210,0.75)';
-      if (highlightPrimor && ring.isPrimorial) lc = 'rgba(232,201,106,0.9)';
-      ctx.fillStyle = lc;
-      ctx.fillText(ring.isPrimorial ? `P#${ring.M}` : `M${ring.M}`, labelX, labelY);
-    });
-  }
+  // ── Ring index labels for highlighted rings — removed, show rings only ──
 
   // ── Gap chords ──
   if (showGapChords && rings.length > 0) {
@@ -2479,16 +2563,17 @@ function render() {
 
   // ── Coprime points ──
   if (residueView !== 'noncoprime') {
-    const labelFontSize = Math.max(9, Math.min(14, 9*zoom*0.5));
+    const labelFontSize = parseInt(document.getElementById('labelSize').value) || 11;
+    const labelZoomMin  = parseFloat(document.getElementById('labelZoom').value) || 1.0;
     rings.forEach(ring => {
       ring.points.forEach(pt => {
         const {x, y} = worldToScreen(pt.rho, pt.theta, ring);
         const col = getColor(pt, ring);
         ctx.beginPath(); ctx.arc(x, y, pointSize, 0, 2*Math.PI);
         ctx.fillStyle = col; ctx.fill();
-        if (labelMode !== 'none' && zoom > 2.0) {
+        if (labelMode !== 'none' && zoom >= labelZoomMin) {
           ctx.font = `${labelFontSize}px "JetBrains Mono", monospace`;
-          ctx.fillStyle = 'rgba(220,205,175,0.75)';
+          ctx.fillStyle = 'rgba(220,205,175,0.85)';
           const label = labelMode==='residue' ? String(pt.r) : labelMode==='rings' ? String(pt.M) : `${pt.r}/${pt.M}`;
           ctx.fillText(label, x+pointSize+2, y+3);
         }
@@ -2714,202 +2799,236 @@ function rebuild() {
 //  EXPORT
 // ============================================================
 function exportPNG() {
-  const title    = document.getElementById('exportTitle').value    || 'Modular Lifting Rings';
-  const subtitle = document.getElementById('exportSubtitle').value ||
-    `M ${document.getElementById('mFrom').value}–${document.getElementById('mTo').value}  ·  ${totalPoints} residues  ·  ${totalLifts} lifts`;
+  const titleText = document.getElementById('exportTitle').value || 'Modular Lifting Rings';
+  const mFrom = document.getElementById('mFrom').value;
+  const mTo   = document.getElementById('mTo').value;
 
-  const EW = 3840, EH = 2400, LEGEND_W = 460, MAIN_W = EW - LEGEND_W;
-  const ec  = document.createElement('canvas');
+  const EW = 3840, EH = 2400, LEGEND_W = 520;
+  const MAIN_W = EW - LEGEND_W;
+  const TITLE_H = 72;   // top strip on canvas for title + range
+  const INSTR_H = 36;   // bottom strip for controls hint
+  const ec   = document.createElement('canvas');
   ec.width = EW; ec.height = EH;
   const ectx = ec.getContext('2d');
 
-  // Background
-  ectx.fillStyle = '#0f0e0c';
+  // ── Background ──
+  ectx.fillStyle = '#0c0b09';
   ectx.fillRect(0, 0, EW, EH);
 
-  // Render main visualization onto offscreen canvas (fit all data, ignore current pan/zoom)
+  // ── Render canvas (with top/bottom strips reserved) ──
+  const CANVAS_H = EH - TITLE_H - INSTR_H;
   const offscreen = document.createElement('canvas');
-  offscreen.width = MAIN_W; offscreen.height = EH;
+  offscreen.width = MAIN_W; offscreen.height = CANVAS_H;
   const offCtx = offscreen.getContext('2d');
-
-  // Temporarily redirect ctx and canvas globals for render
   const savedCtx = ctx, savedCanvas = canvas;
   ctx = offCtx; canvas = offscreen;
   const savedZoom = zoom, savedPanX = panX, savedPanY = panY;
-  zoom = 1; panX = 0; panY = 0; // fit to frame
+  zoom = 1; panX = 0; panY = 0;
   render();
   ctx = savedCtx; canvas = savedCanvas;
   zoom = savedZoom; panX = savedPanX; panY = savedPanY;
+  ectx.drawImage(offscreen, 0, TITLE_H);
 
-  ectx.drawImage(offscreen, 0, 0);
-
-  // Legend panel
-  const lx = MAIN_W;
-  ectx.fillStyle = '#161411';
-  ectx.fillRect(lx, 0, LEGEND_W, EH);
+  // ── Title bar (top of canvas area) ──
+  ectx.fillStyle = 'rgba(14,13,10,0.95)';
+  ectx.fillRect(0, 0, MAIN_W, TITLE_H);
   ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
-  ectx.beginPath(); ectx.moveTo(lx, 0); ectx.lineTo(lx, EH); ectx.stroke();
+  ectx.beginPath(); ectx.moveTo(0, TITLE_H); ectx.lineTo(MAIN_W, TITLE_H); ectx.stroke();
 
-  const LP = 40;
-  // Title
-  ectx.font = 'italic 300 48px "Cormorant Garamond", Georgia, serif';
+  ectx.font = 'italic 300 38px "Cormorant Garamond", Georgia, serif';
   ectx.fillStyle = '#e8c96a';
-  ectx.fillText(title, lx + LP, 72);
-  ectx.font = '300 17px "JetBrains Mono", monospace';
+  ectx.textAlign = 'left';
+  ectx.fillText(titleText, 40, 46);
+
+  ectx.font = '300 18px "JetBrains Mono", monospace';
   ectx.fillStyle = '#5a5448';
-  wrapText(ectx, subtitle, lx + LP, 102, LEGEND_W - LP * 2, 22);
+  ectx.fillText(`M = ${mFrom} – ${mTo}  ·  ${totalPoints.toLocaleString()} residues  ·  ${totalLifts.toLocaleString()} lifts  ·  2026`, 40, 62);
 
-  // Divider
+  // ── Controls hint strip (bottom of canvas area) ──
+  const instY = TITLE_H + CANVAS_H;
+  ectx.fillStyle = 'rgba(14,13,10,0.92)';
+  ectx.fillRect(0, instY, MAIN_W, INSTR_H);
   ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
-  ectx.beginPath(); ectx.moveTo(lx + LP, 120); ectx.lineTo(lx + LEGEND_W - LP, 120); ectx.stroke();
+  ectx.beginPath(); ectx.moveTo(0, instY); ectx.lineTo(MAIN_W, instY); ectx.stroke();
 
-  // Stats
-  const mFrom = document.getElementById('mFrom').value;
-  const mTo   = document.getElementById('mTo').value;
-  const sumPhi = rings.reduce((s,r)=>s+r.phiM, 0);
-  const primeCount = rings.filter(r=>r.isPrime).length;
-  const mersCount  = rings.filter(r=>r.isMersenne).length;
-  const empiricalC = sumPhi > 0 ? (totalLifts/sumPhi).toFixed(8) : '—';
+  ectx.font = '300 13px "JetBrains Mono", monospace';
+  ectx.fillStyle = '#3d3528';
+  ectx.textAlign = 'left';
+  ectx.fillText(
+    'scroll: zoom  ·  drag: pan  ·  dbl-click: reset  ·  click point: inspect  ·  S: spirals  ·  L: lifts  ·  A: auto-spin  ·  X: clear track  ·  ←→: rotate  ·  ⊞ Stack: fullscreen mode',
+    40, instY + 23
+  );
 
-  const statLines = [
-    { k: 'Modulus range',    v: `M = ${mFrom} to ${mTo}` },
-    { k: 'Total residues',   v: totalPoints.toLocaleString() },
-    { k: 'Total lifts',      v: totalLifts.toLocaleString() },
-    { k: 'Σ φ(M)',           v: sumPhi.toLocaleString() },
-    { k: 'Prime rings',      v: String(primeCount) },
-    { k: 'Mersenne rings',   v: String(mersCount) },
-    { k: '', v: '' },
-    { k: 'Coloring',         v: document.getElementById('colorMode').selectedOptions[0].text },
-    { k: 'Radius scaling',   v: document.getElementById('radiusMode').selectedOptions[0].text },
-    { k: '', v: '' },
-    { k: 'Lift survival constant', v: '', heading: true },
-    { k: 'C = (π²/6)·∏(1−2/p²)', v: '≈ 0.530711806…', gold: true },
-    { k: 'Empirical C (this range)', v: empiricalC, gold: true },
-    { k: '', v: '' },
-    { k: 'Prime-crossing theorem', v: 'lifts(M→p) = φ(p−1)', note: true },
-    { k: 'Mersenne halving',       v: 'survival = 1/2 exactly', note: true },
-    { k: '', v: '' },
-    { k: 'Tool', v: 'Modular Lifting Rings' },
-    { k: 'Year',   v: '2026' },
-  ];
+  // ── Legend panel ──
+  const lx = MAIN_W;
+  ectx.fillStyle = '#111009';
+  ectx.fillRect(lx, 0, LEGEND_W, EH);
+  ectx.strokeStyle = '#2a2218'; ectx.lineWidth = 1;
+  ectx.beginPath(); ectx.moveTo(lx, 0); ectx.lineTo(lx, EH); ectx.stroke();
+  // Inner border indent
+  ectx.strokeStyle = '#1e1c14'; ectx.lineWidth = 1;
+  ectx.beginPath(); ectx.moveTo(lx + 1, 0); ectx.lineTo(lx + 1, EH); ectx.stroke();
 
-  let ly = 148;
-  for (const line of statLines) {
-    if (!line.k && !line.v) { ly += 16; continue; }
-    if (line.heading) {
-      ectx.font = '400 13px "JetBrains Mono", monospace';
+  const LP = 52;   // inset from legend left edge
+  const RW = LEGEND_W - LP - 28;  // content width
+  let ly = 58;
+
+  // Legend title
+  ectx.font = 'italic 300 34px "Cormorant Garamond", Georgia, serif';
+  ectx.fillStyle = '#e8c96a';
+  ectx.textAlign = 'left';
+  ectx.fillText('Data', lx + LP, ly); ly += 28;
+
+  ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
+  ectx.beginPath(); ectx.moveTo(lx + LP, ly); ectx.lineTo(lx + LP + RW, ly); ectx.stroke();
+  ly += 20;
+
+  // ── Helper to draw a stat row ──
+  function lRow(label, value, {gold=false, teal=false, dim=false, heading=false, gap=0}={}) {
+    if (heading) {
+      ectx.font = '500 11px "JetBrains Mono", monospace';
       ectx.fillStyle = '#7a6330';
-      ectx.fillText(line.k.toUpperCase(), lx + LP, ly);
-      ly += 26; continue;
+      ectx.fillText(label.toUpperCase(), lx + LP, ly);
+      ly += 22 + gap; return;
     }
-    ectx.font = '300 13px "JetBrains Mono", monospace';
-    ectx.fillStyle = '#5a5448';
-    ectx.fillText(line.k, lx + LP, ly);
-    ectx.font = line.gold ? '500 15px "JetBrains Mono", monospace' : '400 15px "JetBrains Mono", monospace';
-    ectx.fillStyle = line.gold ? '#e8c96a' : line.note ? '#7ba7bc' : '#b8b0a0';
-    ectx.fillText(line.v, lx + LP, ly + 19);
-    ly += 44;
+    if (!label && !value) { ly += 12 + gap; return; }
+    ectx.font = '300 11px "JetBrains Mono", monospace';
+    ectx.fillStyle = '#4a4438';
+    ectx.fillText(label, lx + LP, ly);
+    ectx.font = gold ? '500 13px "JetBrains Mono", monospace' :
+                teal ? '400 13px "JetBrains Mono", monospace' :
+                       '400 13px "JetBrains Mono", monospace';
+    ectx.fillStyle = gold ? '#e8c96a' : teal ? '#4ecdc4' : dim ? '#4a4438' : '#a09888';
+    ectx.fillText(value, lx + LP, ly + 16);
+    ly += 38 + gap;
   }
 
-  // Color legend
-  ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
-  ectx.beginPath(); ectx.moveTo(lx + LP, ly); ectx.lineTo(lx + LEGEND_W - LP, ly); ectx.stroke();
-  ly += 22;
-  ectx.font = '400 12px "JetBrains Mono", monospace';
-  ectx.fillStyle = '#7a6330';
-  ectx.fillText('COLOR KEY', lx + LP, ly); ly += 26;
+  function divider() {
+    ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
+    ectx.beginPath(); ectx.moveTo(lx + LP, ly); ectx.lineTo(lx + LP + RW, ly); ectx.stroke();
+    ly += 16;
+  }
 
+  // ── Ring stats ──
+  const sumPhi      = rings.reduce((s,r)=>s+r.phiM, 0);
+  const primeCount  = rings.filter(r=>r.isPrime).length;
+  const mersCount   = rings.filter(r=>r.isMersenne).length;
+  const primCount   = rings.filter(r=>r.isPrimorial).length;
+  const empiricalC  = sumPhi > 0 ? (totalLifts/sumPhi) : 0;
+  const theoryC     = 0.530711806246;
+  const errPct      = sumPhi > 0 ? ((empiricalC - theoryC)/theoryC*100) : 0;
+  const naiveC      = (6/Math.PI/Math.PI)**2;
+
+  lRow('Range', `M = ${mFrom} to ${mTo}`);
+  lRow('Rings', String(rings.length));
+  lRow('Total residues', totalPoints.toLocaleString());
+  lRow('Total lifts', totalLifts.toLocaleString());
+  lRow('Σ φ(M)', sumPhi.toLocaleString());
+  lRow('Prime rings', `${primeCount}  (${(primeCount/rings.length*100).toFixed(1)}%)`);
+  lRow('Mersenne rings', String(mersCount));
+  lRow('Primorial rings', String(primCount));
+
+  // List primorials in range
+  const primorials = rings.filter(r=>r.isPrimorial).map(r=>`M=${r.M}`);
+  if (primorials.length > 0) {
+    ectx.font = '300 10px "JetBrains Mono", monospace';
+    ectx.fillStyle = '#c9a84c';
+    ectx.fillText(primorials.join('  '), lx + LP, ly - 20);
+  }
+
+  divider();
+
+  // ── C constant ──
+  lRow('', '', {heading:true, label:'Lift Survival Constant C'});
+  lRow('C = ∏p (1−1/(p²−1))', '≈ 0.530711806246…', {gold:true});
+  lRow('Empirical C (range)', empiricalC.toFixed(10), {gold:true});
+  lRow('Error from theory', `${errPct >= 0 ? '+' : ''}${errPct.toFixed(5)}%`, {teal: Math.abs(errPct)<0.1});
+  lRow('Naive (6/π²)²', naiveC.toFixed(8), {dim:true});
+  lRow('C / naive', (empiricalC/naiveC).toFixed(6) + '×');
+
+  divider();
+
+  // ── Tracked residues ──
+  if (trackedResidues.length > 0) {
+    lRow('', '', {heading:true, label:'Tracked Residues'});
+    trackedResidues.forEach(({r}) => {
+      const appearances = rings.filter(rg=>rg.M>=2 && gcd(r,rg.M)===1).length;
+      lRow(`r = ${r}`, `${appearances} rings  ·  ρθ = ${(2*Math.PI*r).toFixed(4)}`);
+    });
+    divider();
+  }
+
+  // ── Inspected point ──
+  if (inspectedPoint) {
+    const ip = inspectedPoint;
+    const ipRing = rings.find(rg=>rg.M===ip.M);
+    lRow('', '', {heading:true, label:'Inspected Point'});
+    lRow('Point', `r = ${ip.r},  M = ${ip.M}`, {gold:true});
+    lRow('Farey fraction', `${ip.r}/${ip.M}`);
+    lRow('Angle θ', `${(ip.theta/(2*Math.PI)*360).toFixed(3)}°`);
+    lRow('φ(M)', ipRing ? String(ipRing.phiM) : '—');
+    lRow('Lifts to M+1', ip.lifted===null?'N/A':(ip.lifted?'Yes':'No'));
+    lRow('Ring type', ipRing?(ipRing.isPrime?'Prime':ipRing.isMersenne?'Mersenne':'Composite'):'—');
+    lRow('Spiral ρθ', `2π·${ip.r} = ${(2*Math.PI*ip.r).toFixed(5)}`);
+    divider();
+  }
+
+  // ── Color key ──
   const mode = document.getElementById('colorMode').value;
   const legendItems =
-    mode === 'rainbow'  ? [['Angle 0°','#ff6b6b'],['90°','#6bd96b'],['180°','#6b8cff'],['270°','#d96bff']] :
-    mode === 'prime'    ? [['Prime ring','#c9a84c'],['Composite','#5a8a9f']] :
-    mode === 'survival' ? [['Survives lift','#4aac6a'],['Broken lift','#9c4a3a']] :
-    mode === 'mersenne' ? [['Mersenne ring','#9b6bc9'],['Other','#5a8a9f']] :
-    mode === 'residue'  ? [[' r mod 6 = 0','#ff6b6b'],[' r mod 6 = 1','#ffd56b'],[' r mod 6 = 2','#6bff8c'],[' r mod 6 = 3','#6bd9ff'],[' r mod 6 = 4','#6b8cff'],[' r mod 6 = 5','#d96bff']] : [];
+    mode==='rainbow' ? [['Angle 0°','#ff6b6b'],['90°','#6bd96b'],['180°','#6b8cff'],['270°','#d96bff']] :
+    mode==='prime'   ? [['Prime ring','#c9a84c'],['Composite','#5a8a9f']] :
+    mode==='survival'? [['Survives lift','#4aac6a'],['Broken','#9c4a3a']] :
+    mode==='mersenne'? [['Mersenne','#9b6bc9'],['Other','#5a8a9f']] :
+    mode==='residue' ? [['r mod6=0','#ff6b6b'],['r mod6=1','#ffd56b'],['r mod6=2','#6bff8c'],['r mod6=3','#6bd9ff'],['r mod6=4','#6b8cff'],['r mod6=5','#d96bff']] : [];
 
-  for (const [label, col] of legendItems) {
-    ectx.beginPath(); ectx.arc(lx + LP + 8, ly - 5, 6, 0, 2*Math.PI);
-    ectx.fillStyle = col; ectx.fill();
-    ectx.font = '400 14px "JetBrains Mono", monospace';
-    ectx.fillStyle = '#8a8070';
-    ectx.fillText(label, lx + LP + 22, ly);
-    ly += 26;
-  }
-
-  // ── Inspected point data ──
-  if (inspectedPoint) {
-    ly += 12;
-    ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
-    ectx.beginPath(); ectx.moveTo(lx + LP, ly); ectx.lineTo(lx + LEGEND_W - LP, ly); ectx.stroke();
-    ly += 22;
-    ectx.font = '400 12px "JetBrains Mono", monospace';
-    ectx.fillStyle = '#7a6330';
-    ectx.fillText('INSPECTED POINT', lx + LP, ly); ly += 26;
-
-    const ip = inspectedPoint;
-    const ipRing = rings.find(rg => rg.M === ip.M);
-    const ipAngle = (ip.theta / (2*Math.PI) * 360).toFixed(2);
-    const ipSurvived = ip.lifted === null ? 'N/A' : (ip.lifted ? 'Yes' : 'No');
-    const ipSurvRate = ipRing ? (ipRing.lifts.filter(l=>!l.broken).length / ipRing.phiM * 100).toFixed(1) : '—';
-    const ipType = ipRing ? (ipRing.isPrime ? 'Prime' : ipRing.isMersenne ? 'Mersenne' : 'Composite') : '—';
-    const ipLines = [
-      ['r = ' + ip.r + ',  M = ' + ip.M, '#e8c96a'],
-      ['Fraction  ' + ip.r + '/' + ip.M, '#b8b0a0'],
-      ['Angle  ' + ipAngle + '°', '#b8b0a0'],
-      ['φ(M)  ' + (ipRing ? ipRing.phiM : '—'), '#b8b0a0'],
-      ['Lifts → M+1  ' + ipSurvived, ip.lifted ? '#4aac6a' : '#9c4a3a'],
-      ['Ring type  ' + ipType, '#7ba7bc'],
-      ['Ring survival  ' + ipSurvRate + '%', '#b8b0a0'],
-      ['Spiral ρθ = 2π·' + ip.r + ' = ' + (2*Math.PI*ip.r).toFixed(4), '#5a5448'],
-    ];
-    for (const [text, col] of ipLines) {
-      ectx.font = '400 13px "JetBrains Mono", monospace';
-      ectx.fillStyle = col;
-      ectx.fillText(text, lx + LP, ly);
-      ly += 20;
+  if (legendItems.length) {
+    lRow('', '', {heading:true, label:'Color Key'});
+    for (const [label, col] of legendItems) {
+      ectx.beginPath(); ectx.arc(lx + LP + 7, ly - 5, 5, 0, 2*Math.PI);
+      ectx.fillStyle = col; ectx.fill();
+      ectx.font = '400 12px "JetBrains Mono", monospace';
+      ectx.fillStyle = '#7a7060';
+      ectx.fillText(label, lx + LP + 20, ly);
+      ly += 22;
     }
+    ly += 6; divider();
   }
 
-  // ── Active controls bar ──
-  ly += 12;
-  ectx.strokeStyle = '#2e2820'; ectx.lineWidth = 1;
-  ectx.beginPath(); ectx.moveTo(lx + LP, ly); ectx.lineTo(lx + LEGEND_W - LP, ly); ectx.stroke();
-  ly += 22;
-  ectx.font = '400 12px "JetBrains Mono", monospace';
-  ectx.fillStyle = '#7a6330';
-  ectx.fillText('ACTIVE SETTINGS', lx + LP, ly); ly += 24;
-
-  const ctrlLines = [
-    ['Coloring',      document.getElementById('colorMode').selectedOptions[0].text],
-    ['Radius',        document.getElementById('radiusMode').selectedOptions[0].text],
-    ['Residue view',  document.getElementById('residueView').selectedOptions[0].text],
-    ['Point size',    document.getElementById('pointSize').value + 'px'],
-    ['Lift opacity',  document.getElementById('liftOpacity').value + '%'],
-    ['Lifts',         document.getElementById('showLifts').checked ? 'On' : 'Off'],
-    ['Broken lifts',  document.getElementById('showBroken').checked ? 'On' : 'Off'],
-    ['Spirals',       document.getElementById('showSpirals').checked ? 'On' : 'Off'],
-    ['Gap chords',    document.getElementById('showGapChords').checked
-                        ? 'On — gap ' + document.getElementById('gapChordClass').value : 'Off'],
-    ['Prime rings',   document.getElementById('highlightPrimes').checked ? 'Highlighted' : 'Off'],
+  // ── Settings ──
+  lRow('', '', {heading:true, label:'Settings'});
+  const settingLines = [
+    ['Coloring',     document.getElementById('colorMode').selectedOptions[0].text],
+    ['Radius',       document.getElementById('radiusMode').selectedOptions[0].text],
+    ['Residue view', document.getElementById('residueView').selectedOptions[0].text],
+    ['Point size',   document.getElementById('pointSize').value + 'px'],
+    ['Lifts',        document.getElementById('showLifts').checked ? 'On' : 'Off'],
+    ['Gap chords',   document.getElementById('showGapChords').checked ? 'On g='+document.getElementById('gapChordClass').value : 'Off'],
+    ['Spirals',      document.getElementById('showSpirals').checked ? 'On' : 'Off'],
   ];
-  if (trackedResidues.length > 0) {
-    ctrlLines.push(['Tracked r',  trackedResidues.map(t => t.r).join(', ')]);
-  }
-
-  for (const [k, v] of ctrlLines) {
+  for (const [k, v] of settingLines) {
     ectx.font = '300 11px "JetBrains Mono", monospace';
-    ectx.fillStyle = '#5a5448';
+    ectx.fillStyle = '#4a4438';
     ectx.fillText(k, lx + LP, ly);
     ectx.font = '400 12px "JetBrains Mono", monospace';
-    ectx.fillStyle = '#8a8070';
-    ectx.fillText(v, lx + LP + 140, ly);
+    ectx.fillStyle = '#7a7060';
+    ectx.fillText(v, lx + LP + 130, ly);
     ly += 18;
   }
 
-  // Footer
-  ectx.font = '300 12px "JetBrains Mono", monospace';
-  ectx.fillStyle = '#3d3528';
-  ectx.fillText('Modular Lifting Rings  ·  2026', lx + LP, EH - 30);
+  // ── Theorems ──
+  ly += 16; divider();
+  lRow('', '', {heading:true, label:'Key Results'});
+  lRow('C = ∏(1−1/(p²−1))', '≈ 0.530711806246', {gold:true});
+  lRow('C_k = C × ∏p|k extra(p)', 'rad(k) theorem', {dim:false});
+  lRow('lifts(M→p) = φ(p−1)', 'Prime-crossing', {teal:true});
+  lRow('survival = ½ for M=2ᵏ−1', 'Mersenne halving', {teal:true});
+
+  // ── Footer ──
+  ectx.font = '300 11px "JetBrains Mono", monospace';
+  ectx.fillStyle = '#2e2820';
+  ectx.textAlign = 'left';
+  ectx.fillText('Modular Lifting Rings  ·  2026', lx + LP, EH - 22);
 
   const link = document.createElement('a');
   link.download = `modular_lifting_rings_M${mFrom}-${mTo}_4K.png`;
@@ -2958,8 +3077,217 @@ function exportCSV() {
 }
 
 // ============================================================
-//  ROTATION & TRACKING
+//  DATA AREA TABS
 // ============================================================
+function daTab(name) {
+  ['inspect','gap'].forEach(t => {
+    const btn   = document.getElementById('da-tab-' + t);
+    const panel = document.getElementById('da-panel-' + t);
+    const active = t === name;
+    btn.style.color        = active ? 'var(--gold2)' : 'var(--text3)';
+    btn.style.borderBottom = active ? '2px solid var(--gold)' : '2px solid transparent';
+    if (panel) panel.style.display = active ? 'flex' : 'none';
+  });
+  // Auto-run with default limit when gap tab first opened
+  if (name === 'gap' && !_gdData) {
+    // Resize canvas before running
+    setTimeout(() => { gdResizeCanvas(); runGapDecomp(); }, 30);
+  } else if (name === 'gap') {
+    setTimeout(gdResizeCanvas, 30);
+  }
+}
+
+// ============================================================
+//  GAP DECOMPOSITION (dedicated, independent range)
+// ============================================================
+let _gdData = null;
+
+function runGapDecomp() {
+  const lim  = Math.min(500000000, Math.max(1000, parseInt(document.getElementById('gd-limit').value) || 1000000));
+  const reqG = document.getElementById('gd-gaps').value
+    .split(/[,\s]+/).map(v => parseInt(v)).filter(v => !isNaN(v) && v >= 1);
+
+  document.getElementById('gd-status').textContent = 'Sieving…';
+  document.getElementById('gd-summary').textContent = '';
+
+  // Use setTimeout to let UI update before heavy computation
+  setTimeout(() => {
+    const Z2 = Math.PI * Math.PI / 6;
+
+    // Segmented sieve for large limits
+    const primes = gdSieve(lim);
+    const gc = {};
+    for (let i = 0; i < primes.length - 1; i++) {
+      const g = primes[i+1] - primes[i];
+      if (!gc[g]) gc[g] = { prod: 1, lnP: 0, cnt: 0 };
+      const p = primes[i];
+      const f = (p*p) / (p*p - 1);
+      gc[g].prod *= f;
+      gc[g].lnP  += Math.log(f);
+      gc[g].cnt++;
+    }
+
+    const gkeys = Object.keys(gc).map(Number).sort((a,b) => a-b);
+    let cum = 1;
+    const rows = gkeys.map(g => {
+      cum *= gc[g].prod;
+      return { g, prod: gc[g].prod, lnP: gc[g].lnP, cnt: gc[g].cnt,
+               pct: gc[g].cnt / (primes.length-1) * 100, cum,
+               pZ: cum / Z2 * 100 };
+    });
+
+    _gdData = { rows, reqG, Z2, primeCount: primes.length };
+
+    const last = rows[rows.length - 1];
+    document.getElementById('gd-status').textContent =
+      `${gkeys.length} gap classes · ${primes.length.toLocaleString()} primes`;
+    document.getElementById('gd-summary').textContent =
+      `∏P_g = ${last ? last.cum.toFixed(8) : '—'}  ζ(2) = ${Z2.toFixed(8)}  Δ = ${last ? (Z2 - last.cum).toExponential(3) : '—'}`;
+
+    // Table
+    const tbody = document.getElementById('gd-tbody');
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const hl = reqG.includes(r.g);
+      const tr = document.createElement('tr');
+      if (hl) tr.style.background = 'rgba(201,168,76,0.08)';
+      tr.innerHTML = `
+        <td style="padding:3px 10px 3px 0;color:${hl?'var(--gold2)':'var(--text2)'}">${r.g}</td>
+        <td style="padding:3px 10px 3px 0;color:var(--cream2)">${r.prod.toFixed(10)}</td>
+        <td style="padding:3px 10px 3px 0;color:var(--text2)">${r.lnP.toFixed(8)}</td>
+        <td style="padding:3px 10px 3px 0;color:var(--text2)">${r.cnt.toLocaleString()}</td>
+        <td style="padding:3px 10px 3px 0;color:var(--text3)">${r.pct.toFixed(4)}%</td>
+        <td style="padding:3px 10px 3px 0;color:${hl?'var(--teal)':'var(--cream2)'}">${r.cum.toFixed(10)}</td>
+        <td style="padding:3px 0;color:var(--text3)">${r.pZ.toFixed(4)}%</td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('gd-table').style.display = 'table';
+    gdDrawChart(rows, reqG, Z2);
+  }, 20);
+}
+
+function gdSieve(n) {
+  // Simple linear sieve — handles up to ~100M well; for 500M uses more memory
+  // For very large n, use segmented approach
+  if (n <= 10000000) {
+    const s = new Uint8Array(n + 1);
+    s[0] = s[1] = 1;
+    for (let i = 2; i * i <= n; i++) if (!s[i]) for (let j = i*i; j <= n; j += i) s[j] = 1;
+    const p = [];
+    for (let i = 2; i <= n; i++) if (!s[i]) p.push(i);
+    return p;
+  }
+  // Segmented sieve for large n
+  const sqrtN   = Math.ceil(Math.sqrt(n));
+  const small   = new Uint8Array(sqrtN + 1);
+  small[0] = small[1] = 1;
+  for (let i = 2; i * i <= sqrtN; i++) if (!small[i]) for (let j = i*i; j <= sqrtN; j += i) small[j] = 1;
+  const smallP  = [];
+  for (let i = 2; i <= sqrtN; i++) if (!small[i]) smallP.push(i);
+
+  const seg = 1 << 19; // 512K segment
+  const primes = [...smallP];
+  for (let lo = sqrtN + 1; lo <= n; lo += seg) {
+    const hi  = Math.min(lo + seg - 1, n);
+    const s2  = new Uint8Array(hi - lo + 1);
+    for (const sp of smallP) {
+      let start = Math.ceil(lo / sp) * sp;
+      if (start === sp) start += sp;
+      for (let j = start; j <= hi; j += sp) s2[j - lo] = 1;
+    }
+    for (let i = 0; i <= hi - lo; i++) if (!s2[i]) primes.push(lo + i);
+  }
+  return primes;
+}
+
+function gdResizeCanvas() {
+  const canvas = document.getElementById('gd-canvas');
+  if (!canvas) return null;
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.offsetWidth || 800;
+  const H   = canvas.offsetHeight || 140;
+  if (W < 10) return null;
+  canvas.width  = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  return { dpr, W, H };
+}
+
+function gdDrawChart(rows, reqG, Z2) {
+  const canvas = document.getElementById('gd-canvas');
+  if (!canvas) return;
+  const dims = gdResizeCanvas();
+  if (!dims) return;
+  const { dpr, W, H } = dims;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  ctx.fillStyle = '#0f0e0c';
+  ctx.fillRect(0, 0, W, H);
+
+  const pad = { l: 60, r: 16, t: 20, b: 28 };
+  const pw  = W - pad.l - pad.r;
+  const ph  = H - pad.t - pad.b;
+  const n   = Math.min(rows.length, 60);
+  const lo  = 1.0, hi = Z2 * 1.02;
+
+  function xp(i) { return pad.l + (i + 0.5) * (pw / n); }
+  function yp(v) { return pad.t + ph * (1 - (v - lo) / (hi - lo)); }
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(60,50,35,0.6)'; ctx.lineWidth = 0.5;
+  [Z2, 1.5, 1.4, 1.3, 1.2, 1.1].forEach(v => {
+    if (v < lo || v > hi) return;
+    ctx.beginPath(); ctx.moveTo(pad.l, yp(v)); ctx.lineTo(W - pad.r, yp(v)); ctx.stroke();
+    ctx.fillStyle = 'rgba(90,80,60,0.7)'; ctx.font = `9px "JetBrains Mono",monospace`;
+    ctx.textAlign = 'right';
+    ctx.fillText(v.toFixed(v === Z2 ? 4 : 2), pad.l - 3, yp(v) + 3);
+  });
+
+  // ζ(2) reference line
+  ctx.strokeStyle = 'rgba(78,205,196,0.4)'; ctx.lineWidth = 1;
+  ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(pad.l, yp(Z2)); ctx.lineTo(W - pad.r, yp(Z2)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Bars (P_g height relative to largest)
+  const maxProd = rows[0] ? rows[0].prod : 1;
+  rows.slice(0, n).forEach((r, i) => {
+    const bw  = Math.max(2, pw / n - 1.5);
+    const bh  = (r.prod / maxProd) * ph * 0.35;
+    const hl  = reqG.includes(r.g);
+    ctx.fillStyle = hl ? 'rgba(232,201,106,0.85)' : 'rgba(201,168,76,0.3)';
+    ctx.fillRect(xp(i) - bw/2, pad.t + ph - bh, bw, bh);
+  });
+
+  // Cumulative product line
+  ctx.beginPath();
+  rows.slice(0, n).forEach((r, i) => {
+    const y = yp(r.cum);
+    i === 0 ? ctx.moveTo(xp(i), y) : ctx.lineTo(xp(i), y);
+  });
+  ctx.strokeStyle = 'rgba(232,201,106,0.9)'; ctx.lineWidth = 1.8; ctx.stroke();
+
+  // Highlighted gap dots on cumulative line
+  rows.slice(0, n).forEach((r, i) => {
+    if (!reqG.includes(r.g)) return;
+    ctx.beginPath(); ctx.arc(xp(i), yp(r.cum), 4, 0, 2*Math.PI);
+    ctx.fillStyle = 'var(--gold2)'; ctx.fill();
+  });
+
+  // X axis gap labels
+  ctx.fillStyle = 'rgba(90,80,60,0.8)'; ctx.font = `8px "JetBrains Mono",monospace`;
+  ctx.textAlign = 'center';
+  rows.slice(0, n).forEach((r, i) => {
+    if (r.g <= 12 || r.g % 10 === 0 || reqG.includes(r.g))
+      ctx.fillText('g=' + r.g, xp(i), H - pad.b + 12);
+  });
+
+  // Title
+  ctx.fillStyle = 'rgba(200,180,130,0.6)'; ctx.font = `9px "JetBrains Mono",monospace`;
+  ctx.textAlign = 'left';
+  ctx.fillText('P_g products (bars) · cumulative ∏P_g → ζ(2) (line) · gold=selected gaps', pad.l + 4, pad.t - 5);
+  ctx.textAlign = 'left';
+}
 function resetView() { zoom = 1; panX = 0; panY = 0; render(); }
 
 function toggleStackMode() {
@@ -3135,7 +3463,13 @@ function clearTrack() { clearAllTracks(); }
 
 // ── Cumulative Rotation ──
 function updateCumOffsets() {
-  const rate = parseFloat(document.getElementById('cumRate').value);
+  const a = parseFloat(document.getElementById('cumA').value) || 1;
+  const b = parseFloat(document.getElementById('cumB').value) || 12;
+  const rate = (a / b) * 360; // degrees per ring
+  // Update hidden range and display
+  document.getElementById('cumRate').value = rate;
+  document.getElementById('cumRateVal').textContent =
+    `${(rate).toFixed(2)}°/ring  (${a}/${b})`;
   rings.forEach(ring => {
     ringCumOffsets[ring.M] = ring.M * rate * Math.PI / 180;
   });
@@ -3310,8 +3644,72 @@ function applyPreset(key) {
 }
 
 // ============================================================
-//  PLAY RANGE
+//  CALCULATOR LEFT PANEL — MODE DESCRIPTIONS & FORMULA TOGGLE
 // ============================================================
+const CALC_MODE_DESCS = {
+  C: `Computes the <strong style="color:var(--gold2)">Lift Survival Constant C</strong> — the limiting fraction of coprime residues that survive a lift from ring M to ring M+1, averaged over all M.<br><br>
+      Euler product over all primes:<br>
+      <span style="color:var(--cream2)">C = ∏<sub>p</sub> (p²−2)/(p²−1)</span><br><br>
+      C ≈ 0.530711806246… Not in OEIS. Choose how many primes to include — more primes converges closer to the true infinite product from above.`,
+
+  Ck: `Computes <strong style="color:var(--gold2)">C_k</strong> — the lift survival rate for gap k (residues coprime to both M and M+k).<br><br>
+       Primes <em>not</em> dividing k contribute the usual factor (p²−2)/(p²−1). Primes <em>dividing</em> k get an extra boost because the two exclusion classes become correlated.<br><br>
+       <span style="color:var(--cream2)">Radical Dependence Theorem:</span> C_k depends only on rad(k), so C₂ = C₄ = C₈ = … and C₆ = C₁₂ = C₃₀ = …`,
+
+  local: `Shows the <strong style="color:var(--gold2)">local factor</strong> each prime p contributes to C.<br><br>
+          At each prime p, exactly two residue classes block the lift: r ≡ 0 mod p (excluded by M) and r ≡ −1 mod p (excluded by M+1). These never coincide, giving a cost of 1/(p²−1).<br><br>
+          Local factor: <span style="color:var(--cream2)">(p²−2)/(p²−1) = 1 − 1/(p²−1)</span><br><br>
+          Visualized as a bar chart — costs decay rapidly as 1/p², so convergence is absolute.`,
+
+  empirical: `<strong style="color:var(--gold2)">Directly counts</strong> surviving lifts ring by ring and compares the ratio to the theoretical C.<br><br>
+              For each ring M: count r with gcd(r,M)=1 <em>and</em> gcd(r,M+1)=1. Sum over all M, divide by Σφ(M).<br><br>
+              Empirical C approaches the true C <span style="color:var(--teal)">from below</span> as M→∞. The Euler product converges from above. Both limits equal 0.530711806246…<br><br>
+              The cumulative C column shows convergence row by row.`,
+};
+
+const CALC_FORMULA_ACTIVE = {
+  background: 'rgba(201,168,76,0.1)',
+  border: '1px solid var(--gold-dim)',
+  color: 'var(--gold2)',
+};
+const CALC_FORMULA_IDLE = {
+  background: 'var(--bg3)',
+  border: '1px solid var(--border2)',
+  color: 'var(--text2)',
+};
+
+let _calcFormula = 'f1'; // currently active formula toggle
+
+function onCalcModeChange() {
+  const mode = document.getElementById('calc-mode').value;
+
+  // Show/hide input sections
+  document.getElementById('calc-input-C').style.display        = (mode==='C'||mode==='local') ? '' : 'none';
+  document.getElementById('calc-input-Ck').style.display       = mode==='Ck'        ? '' : 'none';
+  document.getElementById('calc-input-empirical').style.display = mode==='empirical' ? '' : 'none';
+
+  // Show/hide formula toggles (only meaningful for C mode)
+  const ft = document.getElementById('calc-form-toggles');
+  if (ft) ft.closest('div[style*="margin-top:14px"]') && (ft.closest('div').style.display = mode==='C' ? '' : 'none');
+
+  // Update description
+  const desc = document.getElementById('calc-mode-desc');
+  if (desc) desc.innerHTML = CALC_MODE_DESCS[mode] || '';
+}
+
+function setCalcFormula(id) {
+  _calcFormula = id;
+  ['f1','f2','f3'].forEach(fid => {
+    const btn = document.getElementById('ftbtn-' + fid);
+    if (!btn) return;
+    const active = fid === id;
+    btn.style.background   = active ? 'rgba(201,168,76,0.1)' : 'var(--bg3)';
+    btn.style.border       = active ? '1px solid var(--gold-dim)' : '1px solid var(--border2)';
+    btn.style.color        = active ? 'var(--gold2)' : 'var(--text2)';
+  });
+  // If Step 4 form display is present in the right panel, update it
+  if (window.switchCalcForm) window.switchCalcForm(id);
+}
 let playRangeId = null;
 let playDir = 1; // 1=forward, -1=backward for bounce
 
@@ -3325,14 +3723,24 @@ function startPlayRange() {
   btn.textContent = '⏹ Stop';
   btn.style.borderColor = 'var(--gold)';
   btn.style.color = 'var(--gold)';
-  playDir = 1;
 
-  // Fix the radius denominator to playEnd so rings never shift position
-  radiusMaxM = parseInt(document.getElementById('playEnd').value) || 40;
+  const mFrom  = parseInt(document.getElementById('mFrom').value) || 1;
+  const mTo    = parseInt(document.getElementById('mTo').value)   || 128;
+  const playTo = parseInt(document.getElementById('playEnd').value) || mTo;
 
-  // Always start from mFrom+1
-  const mFrom = parseInt(document.getElementById('mFrom').value) || 1;
-  document.getElementById('mTo').value = mFrom + 1;
+  // Direction: if mTo > mFrom play forward from mFrom; if mTo < mFrom play backward
+  if (mFrom < mTo) {
+    // Forward: start from mFrom+1, play to playEnd (or mTo if playEnd not set)
+    playDir = 1;
+    radiusMaxM = Math.max(playTo, mTo);
+    document.getElementById('mTo').value = mFrom + 1;
+  } else {
+    // Reverse: start from mFrom, shrink down to 2
+    playDir = -1;
+    radiusMaxM = mFrom;
+    // mTo is already less, keep it — play will shrink mTo toward mFrom
+    document.getElementById('mTo').value = mFrom;
+  }
 
   panX = 0; panY = 0;
   scheduleNextStep();
@@ -3340,7 +3748,7 @@ function startPlayRange() {
 
 function stopPlayRange() {
   if (playRangeId !== null) { clearTimeout(playRangeId); playRangeId = null; }
-  radiusMaxM = null; // restore normal normalization
+  radiusMaxM = null;
   const btn = document.getElementById('playRangeBtn');
   btn.textContent = '▶ Play';
   btn.style.borderColor = '';
@@ -3522,45 +3930,39 @@ function calcModeC() {
     prose('The empirical count approaches the target from below. More rings = more digits. The partial Euler product approaches from above.')
   );
 
-  // Step 2 — local factors table
+  // Step 2 — local factors table — ALL rows, scrollable, no truncation
   let tableRows = '';
   let running = 1.0;
-  const showPrimes = primes.slice(0, Math.min(primes.length, 25));
-  for (const p of showPrimes) {
+  for (const p of primes) {
     const num = p*p - 2, den = p*p - 1;
     const factor = num/den;
     running *= factor;
     const cost = (1/den*100).toFixed(4);
     tableRows += `<tr>
-      <td style="color:var(--gold2);padding:4px 12px 4px 0">${p}</td>
-      <td style="color:var(--text2);padding:4px 12px 4px 0">${p*p-1}</td>
-      <td style="color:var(--cream2);padding:4px 12px 4px 0">${num}/${den}</td>
-      <td style="color:var(--text3);padding:4px 12px 4px 0">−${cost}%</td>
-      <td style="color:var(--teal);padding:4px 0">${running.toFixed(10)}</td>
-    </tr>`;
-  }
-  // If more primes, finish product silently
-  if (primes.length > 25) {
-    for (const p of primes.slice(25)) running *= (p*p-2)/(p*p-1);
-    tableRows += `<tr style="color:var(--text3)">
-      <td colspan="4" style="padding:6px 0;font-style:italic;">… ${primes.length-25} more primes …</td>
-      <td style="color:var(--teal);padding:6px 0">${running.toFixed(10)}</td>
+      <td style="color:var(--gold2);padding:3px 12px 3px 0">${p}</td>
+      <td style="color:var(--text2);padding:3px 12px 3px 0">${p*p-1}</td>
+      <td style="color:var(--cream2);padding:3px 12px 3px 0">${num}/${den}</td>
+      <td style="color:var(--text3);padding:3px 12px 3px 0">−${cost}%</td>
+      <td style="color:var(--teal);padding:3px 0">${running.toFixed(10)}</td>
     </tr>`;
   }
 
   html += stepHTML(2, 'Local Factor at Each Prime  f_p = (p²−2)/(p²−1) = 1 − 1/(p²−1)', `
     ${prose('At prime p, exactly two residue classes fail the joint lift condition — r≡0 (excluded by M) and r≡−1 (excluded by M+1). These never coincide, so the cost is exactly 1/(p²−1).')}
-    <div style="overflow-x:auto;">
+    <div style="height:220px;overflow-y:auto;border:1px solid var(--border2);border-radius:3px;margin-top:8px;">
     <table style="border-collapse:collapse;font-family:var(--mono);font-size:11px;width:100%;min-width:420px;">
-      <thead><tr style="color:var(--text3);border-bottom:1px solid var(--border2);">
-        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">p</th>
-        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">p²−1</th>
-        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">Factor (p²−2)/(p²−1)</th>
-        <th style="text-align:left;padding:5px 12px 7px 0;font-weight:400">Cost</th>
-        <th style="text-align:left;padding:5px 0 7px;font-weight:400">Running ∏</th>
+      <thead><tr style="color:var(--text3);border-bottom:1px solid var(--border2);position:sticky;top:0;background:var(--bg3);z-index:1;">
+        <th style="text-align:left;padding:6px 12px 6px 8px;font-weight:400">p</th>
+        <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400">p²−1</th>
+        <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400">Factor (p²−2)/(p²−1)</th>
+        <th style="text-align:left;padding:6px 12px 6px 0;font-weight:400">Cost</th>
+        <th style="text-align:left;padding:6px 8px 6px 0;font-weight:400">Running ∏</th>
       </thead>
       <tbody>${tableRows}</tbody>
-    </table></div>`, true);
+    </table></div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:5px;">
+      ${primes.length} primes shown · scroll to see all · running product converges from above
+    </div>`, true);
 
   // Step 3 — convergence
   const partial = running;
@@ -3573,12 +3975,56 @@ function calcModeC() {
     The partial product starts at 2/3 (p=2) and decreases monotonically from above toward C. Costs decay as 1/p², so convergence is absolute.`)
   );
 
-  // Step 4 — algebra
-  html += stepHTML(4, 'Three Equivalent Forms',
-    mathBox(`C = ∏<sub>p</sub> (1 − 1/(p²−1))  &nbsp;←&nbsp; <span style="color:var(--gold)">cleanest</span><br>
-  C = ∏<sub>p</sub> (p²−2)/(p²−1)   &nbsp;←&nbsp; explicit fraction<br>
-  C = (π²/6) · ∏<sub>p</sub>(1−2/p²) &nbsp;←&nbsp; via Hausman-Shapiro`) +
-    prose('All three are identical by algebra: (p²−2)/(p²−1) = 1 − 1/(p²−1), and π²/6 = ∏p²/(p²−1) so multiplying by ∏(p²−2)/p² gives ∏(p²−2)/(p²−1).')
+  // Step 4 — interactive three equivalent forms
+  const formDefs = [
+    { id:'f1', label:'1 − 1/(p²−1)', tag:'cleanest',
+      formula:`C &nbsp;=&nbsp; ∏<sub>p</sub> &#8203;(1 &minus; 1/(p²&minus;1))`,
+      note:`Each factor = 1 minus the cost 1/(p²−1). Costs decay as 1/p². Simplest form.` },
+    { id:'f2', label:'(p²−2)/(p²−1)', tag:'explicit fraction',
+      formula:`C &nbsp;=&nbsp; ∏<sub>p</sub> &#8203;(p²&minus;2)/(p²&minus;1)`,
+      note:`Explicit ratio: numerator p²−2, denominator p²−1. Same as form 1 by algebra: (p²−1−1)/(p²−1).` },
+    { id:'f3', label:'(π²/6)·∏(1−2/p²)', tag:'via Hausman-Shapiro',
+      formula:`C &nbsp;=&nbsp; (π²/6) &middot; ∏<sub>p</sub> &#8203;(1 &minus; 2/p²)`,
+      note:`ζ(2) = π²/6 = ∏ p²/(p²−1). Multiply by ∏(p²−2)/p² to get ∏(p²−2)/(p²−1). Connects to Hausman-Shapiro A_HS = (1/3)·∏(1−2/p²), giving C = (π²/2)·A_HS.` },
+  ];
+
+  const formBtns = formDefs.map(f =>
+    `<button id="calc-form-${f.id}" onclick="switchCalcForm('${f.id}')"
+      style="font-family:var(--mono);font-size:10px;padding:5px 12px;border-radius:3px;cursor:pointer;
+             border:1px solid var(--border2);background:var(--bg3);color:var(--text2);transition:all 0.15s;"
+      onmouseover="if(this.id!=='calc-form-active')this.style.borderColor='var(--gold-dim)'"
+      onmouseout="if(this.id!=='calc-form-active')this.style.borderColor='var(--border2)'">
+      ${f.label}
+    </button>`
+  ).join('');
+
+  html += stepHTML(4, 'Three Equivalent Forms — click to switch',
+    `<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">${formBtns}</div>
+    <div id="calc-form-display"></div>
+    <script>
+      (function(){
+        const forms = ${JSON.stringify(formDefs)};
+        window.switchCalcForm = function(id) {
+          forms.forEach(f => {
+            const btn = document.getElementById('calc-form-' + f.id);
+            if (!btn) return;
+            const active = f.id === id;
+            btn.style.background = active ? 'rgba(201,168,76,0.12)' : 'var(--bg3)';
+            btn.style.color = active ? 'var(--gold2)' : 'var(--text2)';
+            btn.style.borderColor = active ? 'var(--gold-dim)' : 'var(--border2)';
+            btn.id = active ? 'calc-form-active' : 'calc-form-' + f.id;
+          });
+          const f = forms.find(x => x.id === id);
+          if (!f) return;
+          document.getElementById('calc-form-display').innerHTML =
+            '<div style="background:var(--bg3);border:1px solid var(--border2);border-radius:3px;padding:18px 22px;margin-bottom:12px;">' +
+            '<span style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dim);">' + f.tag + '</span>' +
+            '<div style="font-family:var(--mono);font-size:18px;color:var(--cream2);margin:10px 0 4px;line-height:1.6;">' + f.formula + '</div></div>' +
+            '<div style="font-family:var(--mono);font-size:11px;color:var(--text2);line-height:1.7;">' + f.note + '</div>';
+        };
+        window.switchCalcForm('f1');
+      })();
+    <\/script>`
   );
 
   // Final result
@@ -3986,16 +4432,20 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('residueView').addEventListener('change', () => render());
 
   // Color/label/radius modes
+  wireSlider('labelSize', 'labelSzVal', '', 0);
+  wireSlider('labelZoom', 'labelZoomVal', '×', 1);
   ['colorMode', 'labelMode'].forEach(id =>
     document.getElementById(id).addEventListener('change', () => render()));
   document.getElementById('radiusMode').addEventListener('change', () => { buildData(); render(); });
 
-  wireSlider('cumRate', 'cumRateVal', '', 1);
-  document.getElementById('cumRate').addEventListener('input', () => { updateCumOffsets(); render(); });
+  wireSlider('cumRate', 'cumRateVal', '', 1); // hidden, kept for compat
+  ['cumA','cumB'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => { updateCumOffsets(); render(); });
+  });
   document.getElementById('cumRotate').addEventListener('change', () => { updateCumOffsets(); render(); });
   document.getElementById('showCumRotation').addEventListener('change', () => render());
 
-  document.getElementById('gapN').addEventListener('change', () => computeGapAdvisable());
+  document.getElementById('gapN').addEventListener('input', () => computeGapAdvisable());
   ['showAdvisable','showActualGap'].forEach(id =>
     document.getElementById(id).addEventListener('change', () => render()));
 
@@ -4009,9 +4459,7 @@ document.addEventListener('DOMContentLoaded', () => {
    'highlightMersenne','highlightPrimorial','showGapChords',
    'rotCCW','diffRotate'].forEach(id =>
     document.getElementById(id).addEventListener('change', () => render()));
-  document.getElementById('gapChordClass').addEventListener('change', () => render());
-
-  // Keyboard shortcuts
+  document.getElementById('gapChordClass').addEventListener('input', () => render());  // Keyboard shortcuts
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT') return;
     if (e.key === 'r' || e.key === 'R') resetView();
@@ -4056,6 +4504,8 @@ document.addEventListener('DOMContentLoaded', () => {
   buildData();
   updateCumOffsets();
   updateTrackList();
+  daTab('inspect');
+  onCalcModeChange(); // populate description for default mode
   render();
 });
 </script>
